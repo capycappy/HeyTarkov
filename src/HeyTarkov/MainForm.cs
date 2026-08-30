@@ -53,8 +53,34 @@ public sealed class MainForm : Form
         StartPosition = FormStartPosition.CenterScreen;
         Font = new Font("Yu Gothic UI", 9.75f);
 
+        ApplyIcon();
         BuildLayout();
         Load += async (_, _) => await InitializeAsync();
+    }
+
+    /// <summary>
+    /// The window and taskbar icons come from Form.Icon, which is separate from
+    /// the exe's own icon: without this the title bar keeps WinForms' default.
+    /// The multi-size .ico is loaded whole so Windows can pick the right frame
+    /// for the title bar, the taskbar and Alt+Tab.
+    /// </summary>
+    private void ApplyIcon()
+    {
+        try
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var name = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.EndsWith("app.ico", StringComparison.Ordinal));
+
+            if (name is null) return;
+
+            using var stream = assembly.GetManifestResourceStream(name);
+            if (stream is not null) Icon = new Icon(stream);
+        }
+        catch (Exception)
+        {
+            // An icon is cosmetic; never let it stop the app from opening.
+        }
     }
 
     private RecognitionLanguage SelectedLanguage =>

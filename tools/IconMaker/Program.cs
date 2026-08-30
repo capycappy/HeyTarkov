@@ -14,8 +14,8 @@ using System.Drawing.Imaging;
 // "a window with a microphone": a list panel with one row picked out, and a
 // microphone badge over the corner.
 //
-// Sizes below 40px get their own drawing. A list plus a mic turns to mush well
-// before 32px, so those show the badge alone - the same mark, just on its own.
+// The same composition is drawn at every size: dropping the list at small
+// sizes made the taskbar icon look like a different app.
 
 internal static class Program
 {
@@ -111,16 +111,10 @@ internal static class Program
         float U(float v) => v * size;
         var rim = Math.Max(1f, U(0.016f));
 
-        if (size < 40)
-        {
-            DrawSmall(g, U, rim, variant);
-            return bitmap;
-        }
-
         switch (variant)
         {
             case Variant.Deck: DrawDeck(g, U, rim); break;
-            case Variant.ListBadge: DrawListBadge(g, U, rim); break;
+            case Variant.ListBadge: DrawListBadge(g, U, rim, size); break;
         }
 
         return bitmap;
@@ -150,8 +144,13 @@ internal static class Program
     }
 
     /// <summary>A list of rows with one highlighted, and a mic badge over the corner.</summary>
-    private static void DrawListBadge(Graphics g, Func<float, float> U, float rim)
+    private static void DrawListBadge(Graphics g, Func<float, float> U, float rim, int size)
     {
+        // Same composition at every size; only the weights change. Below 32px
+        // the mic needs the heavier strokes to survive, and the badge grows a
+        // little to give it room.
+        var tiny = size < 32;
+
         using (var path = Rounded(U(0.04f), U(0.04f), U(0.74f), U(0.74f), U(0.15f)))
         {
             using var brush = new SolidBrush(P.Panel);
@@ -173,8 +172,8 @@ internal static class Program
         }
 
         // Mic badge, overlapping the lower-right corner.
-        var bx = 0.70f;
-        var br = 0.27f;
+        var bx = tiny ? 0.69f : 0.70f;
+        var br = tiny ? 0.31f : 0.27f;
 
         using (var badge = new GraphicsPath())
         {
@@ -185,41 +184,7 @@ internal static class Program
             g.DrawPath(pen, badge);
         }
 
-        DrawMic(g, U(bx), U(bx), U(br * 1.85f), rim, P.Ink, filled: false);
-    }
-
-    // ---------------------------------------------------------------- small
-
-    /// <summary>
-    /// At 16-32px only one idea survives. Deck keeps its card, the list variants
-    /// keep two rows plus a mic - the smallest arrangement that still says
-    /// "pick one of several".
-    /// </summary>
-    private static void DrawSmall(Graphics g, Func<float, float> U, float rim, Variant variant)
-    {
-        if (variant == Variant.Deck)
-        {
-            using var path = Rounded(U(0.04f), U(0.04f), U(0.92f), U(0.92f), U(0.24f));
-            using var brush = new SolidBrush(P.Accent);
-            g.FillPath(brush, path);
-            using var pen = new Pen(P.Ink, rim);
-            g.DrawPath(pen, path);
-            DrawMic(g, U(0.50f), U(0.50f), U(0.92f), rim, P.Ink, filled: false, bold: true);
-            return;
-        }
-
-        // The badge on its own. Rows do not survive 16px, and the badge is the
-        // mark that carries over from the large sizes.
-        using (var badge = new GraphicsPath())
-        {
-            badge.AddEllipse(U(0.04f), U(0.04f), U(0.92f), U(0.92f));
-            using var brush = new SolidBrush(P.Accent);
-            g.FillPath(brush, badge);
-            using var pen = new Pen(P.Ink, rim);
-            g.DrawPath(pen, badge);
-        }
-
-        DrawMic(g, U(0.50f), U(0.50f), U(0.86f), rim, P.Ink, filled: false, bold: true);
+        DrawMic(g, U(bx), U(bx), U(br * (tiny ? 1.70f : 1.85f)), rim, P.Ink, filled: false, bold: tiny);
     }
 
     // ------------------------------------------------------------------ mic
@@ -305,11 +270,12 @@ internal static class Program
     private static void WriteComparison(string path)
     {
         int[] shown = { 16, 24, 32, 48, 64, 128, 256 };
+        int[] zoom = { 16, 24, 32 };
         const int pad = 22;
         const int labelW = 130;
 
         var rowH = 256 + pad * 2 + 18;
-        var width = labelW + shown.Sum(s => s + pad) + pad;
+        var width = labelW + shown.Sum(s => s + pad) + zoom.Sum(s => s * 8 + pad) + pad;
         var height = rowH * Palettes.Length * 2;
 
         using var sheet = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -349,6 +315,24 @@ internal static class Program
 
                     x += size + pad;
                 }
+
+                // The small sizes again at 8x, nearest-neighbour, so the actual
+                // pixels can be judged rather than guessed at.
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.PixelOffsetMode = PixelOffsetMode.Half;
+
+                foreach (var size in zoom)
+                {
+                    using var icon = Render(size, Variant.ListBadge);
+                    var box = size * 8;
+                    g.DrawImage(icon, x, y + pad + (256 - box), box, box);
+                    using var b2 = new SolidBrush(text);
+                    g.DrawString($"{size} x8", small, b2, x, y + pad + 258);
+                    x += box + pad;
+                }
+
+                g.InterpolationMode = InterpolationMode.Default;
+                g.PixelOffsetMode = PixelOffsetMode.Default;
 
                 y += rowH;
             }
