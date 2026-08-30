@@ -19,23 +19,34 @@ using System.Drawing.Imaging;
 
 internal static class Program
 {
-    /// <summary>Panel, unselected rows, the highlight/badge, and the outline.</summary>
-    private sealed record Palette(string Name, Color Panel, Color Dim, Color Accent, Color Ink);
+    /// <summary>
+    /// Panel, unselected rows, the highlight/badge, the mic glyph, and the
+    /// outline.
+    ///
+    /// Rim is separate from Ink on purpose. An outline darker than the panel
+    /// only works on a light background: against a dark taskbar the whole shape
+    /// dissolves. A mid-tone rim reads against both.
+    /// </summary>
+    private sealed record Palette(
+        string Name, Color Panel, Color Dim, Color Accent, Color Ink, Color Rim);
 
     private static readonly Palette[] Palettes =
     {
         // Closest to the in-game UI: warm gunmetal with the tan the interface
         // uses for text, and its muted gold for anything important.
-        new("A-Gunmetal", Color.FromArgb(0x24, 0x22, 0x1E), Color.FromArgb(0x7C, 0x74, 0x63),
-            Color.FromArgb(0xC9, 0x9B, 0x4B), Color.FromArgb(0x0E, 0x0D, 0x0B)),
+        new("A-Gunmetal", Color.FromArgb(0x35, 0x31, 0x2A), Color.FromArgb(0x8A, 0x81, 0x6E),
+            Color.FromArgb(0xD2, 0xA3, 0x51), Color.FromArgb(0x14, 0x12, 0x0F),
+            Color.FromArgb(0x6E, 0x64, 0x53)),
 
         // Military olive with a scavenged-orange accent. Reads as field kit.
-        new("B-Olive", Color.FromArgb(0x39, 0x3E, 0x2E), Color.FromArgb(0x8C, 0x8E, 0x74),
-            Color.FromArgb(0xD1, 0x72, 0x2A), Color.FromArgb(0x14, 0x16, 0x10)),
+        new("B-Olive", Color.FromArgb(0x45, 0x4B, 0x37), Color.FromArgb(0x98, 0x99, 0x7E),
+            Color.FromArgb(0xD9, 0x7B, 0x2E), Color.FromArgb(0x14, 0x16, 0x10),
+            Color.FromArgb(0x7A, 0x7F, 0x5E)),
 
         // Cold steel and bone: no strong hue, the highest contrast of the three.
-        new("C-Steel", Color.FromArgb(0x25, 0x28, 0x2B), Color.FromArgb(0x73, 0x7B, 0x80),
-            Color.FromArgb(0xD8, 0xCE, 0xB6), Color.FromArgb(0x0F, 0x11, 0x12)),
+        new("C-Steel", Color.FromArgb(0x33, 0x3A, 0x3E), Color.FromArgb(0x80, 0x88, 0x90),
+            Color.FromArgb(0xDC, 0xD3, 0xBC), Color.FromArgb(0x0F, 0x11, 0x12),
+            Color.FromArgb(0x6E, 0x77, 0x7D)),
     };
 
     /// <summary>The shipped palette. Change the index to switch, or add one.</summary>
@@ -135,7 +146,7 @@ internal static class Program
             using var path = Rounded(U(0.04f + o), U(0.04f + o), U(side), U(side), U(0.15f));
             using var brush = new SolidBrush(last ? P.Accent : P.Panel);
             g.FillPath(brush, path);
-            using var pen = new Pen(P.Ink, rim);
+            using var pen = new Pen(P.Rim, rim);
             g.DrawPath(pen, path);
         }
 
@@ -155,7 +166,7 @@ internal static class Program
         {
             using var brush = new SolidBrush(P.Panel);
             g.FillPath(brush, path);
-            using var pen = new Pen(P.Ink, rim);
+            using var pen = new Pen(P.Rim, rim);
             g.DrawPath(pen, path);
         }
 
@@ -180,7 +191,7 @@ internal static class Program
             badge.AddEllipse(U(bx - br), U(bx - br), U(br * 2), U(br * 2));
             using var brush = new SolidBrush(P.Accent);
             g.FillPath(brush, badge);
-            using var pen = new Pen(P.Ink, rim);
+            using var pen = new Pen(P.Rim, rim);
             g.DrawPath(pen, badge);
         }
 
