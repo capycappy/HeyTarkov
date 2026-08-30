@@ -1,0 +1,5399 @@
+{
+  "UpdatedAt": "2026-08-30T18:36:40.4570487+08:00",
+  "Tasks": [
+    {
+      "Trader": "Ragman",
+      "Name": "A Big Loss",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/A%20Big%20Loss",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Big_Loss"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "A Bitter Victory",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/A%20Bitter%20Victory",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Bitter_Victory"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "A Difficult Choice",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/A%20Difficult%20Choice",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Difficult_Choice"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "A Fuel Matter",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/A%20Fuel%20Matter",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Fuel_Matter"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "A Healthy Alternative",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/A%20Healthy%20Alternative",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Healthy_Alternative"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "A Helping Hand",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/A%20Helping%20Hand",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Helping_Hand"
+    },
+    {
+      "Trader": "",
+      "Name": "A Key to Salvation",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Key_to_Salvation"
+    },
+    {
+      "Trader": "",
+      "Name": "A Kind Snow Maiden",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Kind_Snow_Maiden"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "A Life Lesson",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/A%20Life%20Lesson",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Life_Lesson"
+    },
+    {
+      "Trader": "",
+      "Name": "A New Hope",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_New_Hope"
+    },
+    {
+      "Trader": "",
+      "Name": "A Small Celebration",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Small_Celebration"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "A Wedge Between Us",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/A%20Wedge%20Between%20Us",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Wedge_Between_Us"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Abandoned Cargo",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Abandoned%20Cargo",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Abandoned_Cargo"
+    },
+    {
+      "Trader": "",
+      "Name": "Accept Delivery",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Accept_Delivery"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Accidental Witness",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Accidental%20Witness",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Accidental_Witness"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Acquaintance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Acquaintance",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Acquaintance"
+    },
+    {
+      "Trader": "",
+      "Name": "Action test",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Action_test"
+    },
+    {
+      "Trader": "",
+      "Name": "Adaptive Diplomacy",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Adaptive_Diplomacy"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_4"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_5"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Advertising Business - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Advertising%20Business%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Advertising_Business_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "Afterparty",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Afterparty"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Against the Conscience - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Against%20the%20Conscience%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Against_the_Conscience_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Against the Conscience - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Against%20the%20Conscience%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Against_the_Conscience_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Aid Stations",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Aid%20Stations",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Aid_Stations"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Airmail",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Airmail",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Airmail"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Death from Above",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Death%20from%20Above",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Death_from_Above"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Heroism",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Heroism",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Heroism"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Major Sponsor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Major%20Sponsor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Major_Sponsor"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Pyrotechnics",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Pyrotechnics",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Pyrotechnics"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Soldier",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Soldier",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Soldier"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "All for the Show - Supremacy",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/All%20for%20the%20Show%20-%20Supremacy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Supremacy"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "All Is Revealed",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/All%20Is%20Revealed",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_Is_Revealed"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "All This Filth...",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/All%20This%20Filth...",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_This_Filth..."
+    },
+    {
+      "Trader": "",
+      "Name": "Alloy",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Alloy"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Ambulance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Ambulance",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "An Alternative",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/An%20Alternative",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/An_Alternative"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "An Apple a Day Keeps the Doctor Away",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/An%20Apple%20a%20Day%20Keeps%20the%20Doctor%20Away",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/An_Apple_a_Day_Keeps_the_Doctor_Away"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Anesthesia",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Anesthesia",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Anesthesia"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Another Shipping Delay",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Another%20Shipping%20Delay",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Another_Shipping_Delay"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Antique Enthusiast",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Antique%20Enthusiast",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Antique_Enthusiast"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Arena Business",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Arena%20Business",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Arena_Business"
+    },
+    {
+      "Trader": "",
+      "Name": "Arena Masquerade",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Arena_Masquerade"
+    },
+    {
+      "Trader": "",
+      "Name": "Arena Pantheon",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Arena_Pantheon"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Ask for Directions",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Ask%20for%20Directions",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ask_for_Directions"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Assessment - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Assessment%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Assessment_-_Part_1"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Assessment - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Assessment%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Assessment_-_Part_2"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Assessment - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Assessment%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Assessment_-_Part_3"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Athlete",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Athlete",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Athlete"
+    },
+    {
+      "Trader": "",
+      "Name": "Atonement",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Atonement"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Audiophile",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Audiophile",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Audiophile"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Audit",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Audit",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Audit"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Back Door",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Back%20Door",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Back_Door"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Background Check",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Background%20Check",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Background_Check"
+    },
+    {
+      "Trader": "",
+      "Name": "Backup Plan",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Backup_Plan"
+    },
+    {
+      "Trader": "",
+      "Name": "Bad Feeling",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bad_Feeling"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Bad Habit",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Bad%20Habit",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bad_Habit"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Bad Rep Evidence",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Bad%20Rep%20Evidence",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bad_Rep_Evidence"
+    },
+    {
+      "Trader": "",
+      "Name": "Bad Santa",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bad_Santa"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Balancing - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Balancing%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Balancing_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Balancing - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Balancing%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Balancing_-_Part_2"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Ballet Lover",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Ballet%20Lover",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ballet_Lover"
+    },
+    {
+      "Trader": "",
+      "Name": "Barrel warm-up",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Barrel_warm-up"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Battery Change",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Battery%20Change",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Battery_Change"
+    },
+    {
+      "Trader": "",
+      "Name": "Battle of the Duelists",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Battle_of_the_Duelists"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Batya",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Batya",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Batya"
+    },
+    {
+      "Trader": "",
+      "Name": "Before the Rain",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Before_the_Rain"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Belka and Strelka",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Belka%20and%20Strelka",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Belka_and_Strelka"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Beneath The Streets",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Beneath%20The%20Streets",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Beneath_The_Streets"
+    },
+    {
+      "Trader": "",
+      "Name": "Berserker",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Berserker"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Best Job in the World",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Best%20Job%20in%20the%20World",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Best_Job_in_the_World"
+    },
+    {
+      "Trader": "",
+      "Name": "Best Served Cold",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Best_Served_Cold"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Between Two Fires",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Between%20Two%20Fires",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Between_Two_Fires"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Beyond the Red Meat",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Beyond%20the%20Red%20Meat",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Beyond_the_Red_Meat"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Big Customer",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Big%20Customer",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Big_Customer"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Big Sale",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Big%20Sale",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Big_Sale"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Biochemistry",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Biochemistry",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Biochemistry"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Black Swan",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Black%20Swan",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Black_Swan"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Blood in the Water",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Blood%20in%20the%20Water",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Blood_in_the_Water"
+    },
+    {
+      "Trader": "",
+      "Name": "Blood on the Snow",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Blood_on_the_Snow"
+    },
+    {
+      "Trader": "",
+      "Name": "Bloodhounds",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bloodhounds_(quest)"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Blue Fire",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Blue%20Fire",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Blue_Fire"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Booze",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Booze",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Booze"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Boreas",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Boreas",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Boreas"
+    },
+    {
+      "Trader": "",
+      "Name": "Brain Matter Distribution",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Brain_Matter_Distribution"
+    },
+    {
+      "Trader": "",
+      "Name": "Break the Chain",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_the_Chain"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Break the Deal",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Break%20the%20Deal",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_the_Deal"
+    },
+    {
+      "Trader": "",
+      "Name": "Break Through",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_Through"
+    },
+    {
+      "Trader": "",
+      "Name": "Breathing Room",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Breathing_Room"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Broadcast - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Broadcast%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_1"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Broadcast - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Broadcast%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_2"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Broadcast - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Broadcast%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_3"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Broadcast - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Broadcast%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_4"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Broadcast - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Broadcast%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Broadcast_-_Part_5"
+    },
+    {
+      "Trader": "",
+      "Name": "Bucket of Nothing",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bucket_of_Nothing"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Building Foundations",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Building%20Foundations",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Building_Foundations"
+    },
+    {
+      "Trader": "",
+      "Name": "Bulldogs Under The Rug",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bulldogs_Under_The_Rug"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Bullshit",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Bullshit",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Bullshit"
+    },
+    {
+      "Trader": "",
+      "Name": "Burn It Down",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Burn_It_Down"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Burning Rubber",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Burning%20Rubber",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Burning_Rubber"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Calibration",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Calibration",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Calibration"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Camera Action!",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Camera%20Action%21",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Camera,_Action!"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Capacity Check",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Capacity%20Check",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Capacity_Check"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Capturing Outposts",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Capturing%20Outposts",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Capturing_Outposts"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Car Repair",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Car%20Repair",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Car_Repair"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Cargo X",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Cargo%20X",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cargo_X"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Cargo X - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Cargo%20X%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Cargo X - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Cargo%20X%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cargo_X_-_Part_3"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Cargo X - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Cargo%20X%20-%20Part%204",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "Cast the Net",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cast_the_Net"
+    },
+    {
+      "Trader": "",
+      "Name": "Casus belli",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Casus_belli"
+    },
+    {
+      "Trader": "",
+      "Name": "Caught Red-Handed",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Caught_Red-Handed"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Cease Fire!",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Cease%20Fire%21",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cease_Fire!"
+    },
+    {
+      "Trader": "",
+      "Name": "Ceasefire - Information",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ceasefire_-_Information"
+    },
+    {
+      "Trader": "",
+      "Name": "Ceasefire - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ceasefire_-_Part_2"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Charisma Brings Success",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Charisma%20Brings%20Success",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Charisma_Brings_Success"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Charity",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Charity",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Charity"
+    },
+    {
+      "Trader": "",
+      "Name": "Cheer Up",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cheer_Up"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Chemical - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Chemical%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemical_-_Part_1"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Chemical - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Chemical%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemical_-_Part_2"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Chemical - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Chemical%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemical_-_Part_3"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Chemical - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Chemical%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemical_-_Part_4"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Chemical Experiments",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Chemical%20Experiments",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemical_Experiments"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Chemistry Closet",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Chemistry%20Closet",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chemistry_Closet"
+    },
+    {
+      "Trader": "",
+      "Name": "Chilly",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chilly"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Choose Your Friends Wisely",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Choose%20Your%20Friends%20Wisely",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Choose_Your_Friends_Wisely"
+    },
+    {
+      "Trader": "",
+      "Name": "Chop the Thieving Hand",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chop_the_Thieving_Hand"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Dinner",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Dinner"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Finale",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Finale"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_3"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 4",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_4"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 5",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_5"
+    },
+    {
+      "Trader": "",
+      "Name": "Christmas Time - Part 6",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Christmas_Time_-_Part_6"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Chumming",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Chumming",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Chumming"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Circulate",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Circulate",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Circulate"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Classified Technologies",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Classified%20Technologies",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Classified_Technologies"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Claustrophobia",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Claustrophobia",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Claustrophobia"
+    },
+    {
+      "Trader": "",
+      "Name": "Clear Conscience",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Clear_Conscience"
+    },
+    {
+      "Trader": "",
+      "Name": "Clearing the Way",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Clearing_the_Way"
+    },
+    {
+      "Trader": "",
+      "Name": "Clip Their Wings",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Clip_Their_Wings"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Closer to the People",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Closer%20to%20the%20People",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Closer_to_the_People"
+    },
+    {
+      "Trader": "",
+      "Name": "Cocktail Tasting",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cocktail_Tasting"
+    },
+    {
+      "Trader": "",
+      "Name": "Cold Start",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cold_Start"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Colleagues",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Colleagues",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Colleagues"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Collector",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Collector",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Collector"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Combat Proven",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Combat%20Proven",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Combat_Proven"
+    },
+    {
+      "Trader": "",
+      "Name": "Come by the Fire",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Come_by_the_Fire"
+    },
+    {
+      "Trader": "",
+      "Name": "Comfort Zone",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Comfort_Zone"
+    },
+    {
+      "Trader": "",
+      "Name": "Communication Difficulties",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Communication_Difficulties"
+    },
+    {
+      "Trader": "",
+      "Name": "Compensation for Damage - Barkeep",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compensation_for_Damage_-_Barkeep"
+    },
+    {
+      "Trader": "",
+      "Name": "Compensation for Damage - Collection",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compensation_for_Damage_-_Collection"
+    },
+    {
+      "Trader": "",
+      "Name": "Compensation for Damage - Trust",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compensation_for_Damage_-_Trust"
+    },
+    {
+      "Trader": "",
+      "Name": "Compensation for Damage - Wager",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compensation_for_Damage_-_Wager"
+    },
+    {
+      "Trader": "",
+      "Name": "Compensation for Damage - Wergild",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compensation_for_Damage_-_Wergild"
+    },
+    {
+      "Trader": "",
+      "Name": "Competition Protection",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Competition_Protection"
+    },
+    {
+      "Trader": "",
+      "Name": "Compromise",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Compromise"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Confidential Info",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Confidential%20Info",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Confidential_Info"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Connections Up North",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Connections%20Up%20North",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Connections_Up_North"
+    },
+    {
+      "Trader": "",
+      "Name": "Consequences of Our Decisions",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Consequences_of_Our_Decisions"
+    },
+    {
+      "Trader": "",
+      "Name": "Conservation Area",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Conservation_Area"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Consolation Prize",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Consolation%20Prize",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Consolation_Prize"
+    },
+    {
+      "Trader": "",
+      "Name": "Contagious Beast",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Contagious_Beast"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Corporate Perks",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Corporate%20Perks",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Corporate_Perks"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Corporate Secrets",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Corporate%20Secrets",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Corporate_Secrets"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Counteraction",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Counteraction",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Counteraction"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Courtesy Visit",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Courtesy%20Visit",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Courtesy_Visit"
+    },
+    {
+      "Trader": "",
+      "Name": "Cream of the Crop",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cream_of_the_Crop"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Create a Distraction - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Create%20a%20Distraction%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Create_a_Distraction_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Create a Distraction - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Create%20a%20Distraction%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Create_a_Distraction_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Creator Inspiration - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Creator_Inspiration_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Creator Inspiration - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Creator_Inspiration_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Crisis",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Crisis",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Crisis"
+    },
+    {
+      "Trader": "",
+      "Name": "Customer Communication",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Customer_Communication"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Dandies",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Dandies",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dandies"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Dangerous Props",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Dangerous%20Props",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dangerous_Props"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Dangerous Road",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Dangerous%20Road",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dangerous_Road"
+    },
+    {
+      "Trader": "",
+      "Name": "Dark Times",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dark_Times"
+    },
+    {
+      "Trader": "",
+      "Name": "Darkest Hour Is Just Before Dawn",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Darkest_Hour_Is_Just_Before_Dawn"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Debtor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Debtor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Debtor"
+    },
+    {
+      "Trader": "",
+      "Name": "Debts",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Debts"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Debut",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Debut",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Debut"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Decisions, Decisions",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Decisions%2C%20Decisions",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decisions,_Decisions"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Decontamination Service",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Decontamination%20Service",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decontamination_Service"
+    },
+    {
+      "Trader": "",
+      "Name": "Decryption Hurdles - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decryption_Hurdles_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Decryption Hurdles - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decryption_Hurdles_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Decryption Hurdles - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decryption_Hurdles_-_Part_3"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Delivery From the Past",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Delivery%20From%20the%20Past",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Delivery_From_the_Past"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Demonstration Model",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Demonstration%20Model",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Demonstration_Model"
+    },
+    {
+      "Trader": "",
+      "Name": "Desperate Assault",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Desperate_Assault"
+    },
+    {
+      "Trader": "",
+      "Name": "Digital Puzzle",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Digital_Puzzle"
+    },
+    {
+      "Trader": "",
+      "Name": "Ding-Ding-Ding",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ding-Ding-Ding"
+    },
+    {
+      "Trader": "",
+      "Name": "Dirty Blood",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dirty_Blood"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Discombobulate",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Discombobulate",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Discombobulate"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Disease History",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Disease%20History",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Disease_History"
+    },
+    {
+      "Trader": "",
+      "Name": "Dish Served Cold",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dish_Served_Cold"
+    },
+    {
+      "Trader": "",
+      "Name": "Disrupting the Party",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Disrupting_the_Party"
+    },
+    {
+      "Trader": "",
+      "Name": "Distributed Strike",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Distributed_Strike"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "District Patrol",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/District%20Patrol",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/District_Patrol"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Documents",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Documents",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Documents"
+    },
+    {
+      "Trader": "",
+      "Name": "Domain Expansion",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Domain_Expansion"
+    },
+    {
+      "Trader": "",
+      "Name": "Don\u2019t Believe Your Eyes",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Don%E2%80%99t_Believe_Your_Eyes"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_3"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 4",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_4"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 5",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_5"
+    },
+    {
+      "Trader": "",
+      "Name": "Down the Rabbit Hole - Part 6",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Down_the_Rabbit_Hole_-_Part_6"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Dragnet",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Dragnet",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dragnet"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Dressed to Kill",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Dressed%20to%20Kill",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Dressed_to_Kill"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Drip-Out - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Drip-Out%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Drip-Out_-_Part_1"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Drip-Out - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Drip-Out%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Drip-Out_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Drug Trafficking",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Drug%20Trafficking",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Drug_Trafficking"
+    },
+    {
+      "Trader": "",
+      "Name": "Duck Hunt",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Duck_Hunt"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Eagle Eye",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Eagle%20Eye",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Eagle_Eye"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Easy Job",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Easy%20Job",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Easy_Job"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Easy Job - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Easy%20Job%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Easy_Job_-_Part_2"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Easy Money - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Easy%20Money%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Easy_Money_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Easy Money - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Easy%20Money%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Easy_Money_-_Part_2"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Easy-Breezy",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Easy-Breezy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Easy-Breezy"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Energy Crisis",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Energy%20Crisis",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Energy_Crisis"
+    },
+    {
+      "Trader": "",
+      "Name": "Enough Drinks for That One",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Enough_Drinks_for_That_One"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Escort",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Escort",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Escort"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Establish Contact",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Establish%20Contact",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Establish_Contact"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Every Hunter Knows This",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Every%20Hunter%20Knows%20This",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Every_Hunter_Knows_This"
+    },
+    {
+      "Trader": "",
+      "Name": "Every Man for Himself",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Every_Man_for_Himself"
+    },
+    {
+      "Trader": "",
+      "Name": "Evil Spirits",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Evil_Spirits"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_3"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 4",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_4"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 5",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_5"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 6",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 7",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_7"
+    },
+    {
+      "Trader": "",
+      "Name": "Examinatio - Part 8",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Examinatio_-_Part_8"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Exit Here",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Exit%20Here",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Exit_Here"
+    },
+    {
+      "Trader": "",
+      "Name": "External Interest",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/External_Interest"
+    },
+    {
+      "Trader": "",
+      "Name": "Failed Setup",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Failed_Setup"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Fair Price - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Fair%20Price%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fair_Price_-_Part_1"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Fair Price - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Fair%20Price%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fair_Price_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Fairy Tale Showdown",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fairy_Tale_Showdown"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Fall Ailment",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Fall%20Ailment",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fall_Ailment"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Falling Skies",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Falling%20Skies",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Falling_Skies"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Farming",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Farming",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Farming"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Farming - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Farming%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Farming_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Fearless Beast",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fearless_Beast"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Fertilizers",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Fertilizers",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fertilizers"
+    },
+    {
+      "Trader": "",
+      "Name": "Field Testing",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Field_Testing"
+    },
+    {
+      "Trader": "",
+      "Name": "Fight Back",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fight_Back"
+    },
+    {
+      "Trader": "",
+      "Name": "Final Stretch",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Final_Stretch"
+    },
+    {
+      "Trader": "",
+      "Name": "Find the Source",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Find_the_Source"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "First Aid",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/First%20Aid",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/First_Aid"
+    },
+    {
+      "Trader": "",
+      "Name": "First Blood",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/First_Blood"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "First in Line",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/First%20in%20Line",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/First_in_Line"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "First Introdcution",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/First%20Introdcution",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "First Introduction",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/First_Introduction"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Fishing Gear",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Fishing%20Gear",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fishing_Gear"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Fishing Place",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Fishing%20Place",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fishing_Place"
+    },
+    {
+      "Trader": "",
+      "Name": "Fishing With Shishiga",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fishing_With_Shishiga"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Flint",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Flint",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Flint"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Following the Bread Crumbs",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Following%20the%20Bread%20Crumbs",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Following_the_Bread_Crumbs"
+    },
+    {
+      "Trader": "",
+      "Name": "Forbidden Knowledge",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forbidden_Knowledge"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Forced Alliance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Forced%20Alliance",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forced_Alliance"
+    },
+    {
+      "Trader": "",
+      "Name": "Forced Measure",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forced_Measure"
+    },
+    {
+      "Trader": "",
+      "Name": "Foreign Support",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Foreign_Support"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Forester\u0027s Duty",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Forester%27s%20Duty",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forester\u0027s_Duty"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Forge a Friendship",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Forge%20a%20Friendship",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forge_a_Friendship"
+    },
+    {
+      "Trader": "",
+      "Name": "Forgotten Acquaintance",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forgotten_Acquaintance"
+    },
+    {
+      "Trader": "",
+      "Name": "Forgotten Oaths",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forgotten_Oaths"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Forklift Certified",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Forklift%20Certified",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forklift_Certified"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Fresh Stock",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Fresh%20Stock",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fresh_Stock"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Friend Among Strangers",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Friend%20Among%20Strangers",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_Among_Strangers"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Alternative Solution",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Alternative_Solution"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Part_3"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Part 4",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Part_4"
+    },
+    {
+      "Trader": "",
+      "Name": "Friend from Norvinsk - Part 5",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_from_Norvinsk_-_Part_5"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Friend From the West",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Friend%20From%20the%20West",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_From_the_West"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Friend from the West - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Friend%20from%20the%20West%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Friend_From_the_West_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "From Beginning To End",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/From_Beginning_To_End"
+    },
+    {
+      "Trader": "",
+      "Name": "From Hand to Hand",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/From_Hand_to_Hand"
+    },
+    {
+      "Trader": "",
+      "Name": "Frost and Sun",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Frost_and_Sun"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Fuel Crisis",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Fuel%20Crisis",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fuel_Crisis"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Fuel Shortage",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Fuel%20Shortage",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fuel_Shortage"
+    },
+    {
+      "Trader": "",
+      "Name": "Game Review - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Game_Review_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Game Review - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Game_Review_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Game Review - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Game_Review_-_Part_3"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Gendarmerie - Mall Cop",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Gendarmerie%20-%20Mall%20Cop",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gendarmerie_-_Mall_Cop"
+    },
+    {
+      "Trader": "",
+      "Name": "Gendarmerie - School Guard",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gendarmerie_-_School_Guard"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Gendarmerie - Tickets Please",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Gendarmerie%20-%20Tickets%20Please",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gendarmerie_-_Tickets,_Please"
+    },
+    {
+      "Trader": "",
+      "Name": "General Cleanup",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/General_Cleanup"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "General Wares",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/General%20Wares",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/General_Wares"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Get a Foothold",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Get%20a%20Foothold",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Get_a_Foothold"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Getting Acquainted",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Getting%20Acquainted",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Getting_Acquainted"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Getting Some Air",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Getting%20Some%20Air",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Getting_Some_Air"
+    },
+    {
+      "Trader": "",
+      "Name": "Getting to the Core",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Getting_to_the_Core"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Gifts from Tarkov",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Gifts%20from%20Tarkov",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gifts_from_Tarkov"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Doping - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Doping%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Doping_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Doping - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Doping%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Doping_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Doping - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Doping%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Doping_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Doping - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Doping%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Doping_-_Part_4"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Final Exam",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Final%20Exam",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Final_Exam"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 10",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%2010",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_10"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_4"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_5"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_6"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 7",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%207",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_7"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 8",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%208",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_8"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Gladiator Life - Part 9",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Gladiator%20Life%20-%20Part%209",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gladiator_Life_-_Part_9"
+    },
+    {
+      "Trader": "",
+      "Name": "Global Threat",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Global_Threat"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Glory to CPSU",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Glory%20to%20CPSU",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Glory_to_CPSU"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Glory to CPSU - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Glory%20to%20CPSU%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Glory_to_CPSU_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Gloves Off",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gloves_Off"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Goals and Means",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Goals%20and%20Means",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Goals_and_Means"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Golden Swag",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Golden%20Swag",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Golden_Swag"
+    },
+    {
+      "Trader": "",
+      "Name": "Granny\u0027s Tales",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Granny\u0027s_Tales"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Gratitude",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Gratitude",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gratitude"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Green Corridor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Green%20Corridor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Green_Corridor"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Grenadier",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Grenadier",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Grenadier"
+    },
+    {
+      "Trader": "",
+      "Name": "Guardian of Nature",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Guardian_of_Nature"
+    },
+    {
+      "Trader": "",
+      "Name": "Gun Connoisseur",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gun_Connoisseur"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - AK-105",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20AK-105",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_AK-105"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - AKM",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20AKM",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_AKM"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - AKS-74N",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20AKS-74N",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_AKS-74N"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - AKS-74U",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20AKS-74U",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_AKS-74U"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - AS VAL",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20AS%20VAL",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_AS_VAL"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - HK MP5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20HK%20MP5",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_HK_MP5"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - M4A1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20M4A1",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_M4A1"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - Model 870",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20Model%20870",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_Model_870"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - MP-133",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20MP-133",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_MP-133"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - MPX",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20MPX",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_MPX"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - OP-SKS",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20OP-SKS",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_OP-SKS"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - P226R",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20P226R",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_P226R"
+    },
+    {
+      "Trader": "",
+      "Name": "Gunsmith - Special Order",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_Special_Order"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith - Vector 9x19",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20-%20Vector%209x19",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_-_Vector_9x19"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_1"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 10",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%2010",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_10"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 11",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%2011",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_11"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 12",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%2012",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_12"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 13",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%2013",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_13"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_2"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_3"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_4"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_5"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_6"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 7",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%207",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_7"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 8",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%208",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_8"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Gunsmith Master - Part 9",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Gunsmith%20Master%20-%20Part%209",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Gunsmith_Master_-_Part_9"
+    },
+    {
+      "Trader": "",
+      "Name": "Habet, hoc habet!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Habet,_hoc_habet!"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Half Empty",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Half%20Empty",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Half-Empty"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Hangover",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Hangover",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hangover"
+    },
+    {
+      "Trader": "",
+      "Name": "Harley Forever",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Harley_Forever"
+    },
+    {
+      "Trader": "",
+      "Name": "Healer",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Healer"
+    },
+    {
+      "Trader": "",
+      "Name": "Healing",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Healing"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_1"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_3"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_4"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_5"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Health Care Privacy - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Health%20Care%20Privacy%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Health_Care_Privacy_-_Part_6"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Hell on Earth - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Hell%20on%20Earth%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hell_on_Earth_-_Part_1"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Hell on Earth - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Hell%20on%20Earth%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hell_on_Earth_-_Part_2"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Hidden Layer",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Hidden%20Layer",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hidden_Layer"
+    },
+    {
+      "Trader": "",
+      "Name": "Hide in Plain Sight",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hide_in_Plain_Sight"
+    },
+    {
+      "Trader": "",
+      "Name": "High Voltage",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/High_Voltage"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Hiking",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Hiking",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hiking"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Hindsight 20/20",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Hindsight%2020/20",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hindsight_20%2F20"
+    },
+    {
+      "Trader": "",
+      "Name": "Hint",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hint"
+    },
+    {
+      "Trader": "",
+      "Name": "Hippocratic Oath",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hippocratic_Oath"
+    },
+    {
+      "Trader": "",
+      "Name": "Historical Perspectives",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Historical_Perspectives"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Hobby Club",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Hobby%20Club",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hobby_Club"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Hold the Lead",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Hold%20the%20Lead",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hold_the_Lead"
+    },
+    {
+      "Trader": "",
+      "Name": "Holiday Beyond the Means",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Holiday_Beyond_the_Means"
+    },
+    {
+      "Trader": "",
+      "Name": "Home Comfort",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Home_Comfort"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Hot Delivery",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Hot%20Delivery",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hot_Delivery"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Hot Wheels",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Hot%20Wheels",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hot_Wheels"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Hot Wheels - Let\u0027s Try Again",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Hot%20Wheels%20-%20Let%27s%20Try%20Again",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hot_Wheels_-_Let\u0027s_Try_Again"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Hot Zone",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Hot%20Zone",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hot_Zone"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "House Arrest",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/House%20Arrest",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/House_Arrest"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "House Arrest - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/House%20Arrest%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/House_Arrest_-_Part_2"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Humanitarian Supplies",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Humanitarian%20Supplies",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Humanitarian_Supplies"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Hunter",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Hunter",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Hunting Trip",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Hunting%20Trip",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hunting_Trip"
+    },
+    {
+      "Trader": "",
+      "Name": "Hustle (2023)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hustle_(2023)"
+    },
+    {
+      "Trader": "",
+      "Name": "Hustle (2024)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hustle_(2024)"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Hypotheses Testing",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Hypotheses%20Testing",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hypotheses_Testing"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "I Am Speed - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/I%20Am%20Speed%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/I_Am_Speed_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "I Am Speed - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/I%20Am%20Speed%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/I_Am_Speed_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "I Am Speed - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/I%20Am%20Speed%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/I_Am_Speed_-_Part_3"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "I Need More Power",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/I%20Need%20More%20Power",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/I_Need_More_Power"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Ice Cream Cones",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Ice%20Cream%20Cones",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ice_Cream_Cones"
+    },
+    {
+      "Trader": "",
+      "Name": "If I Can\u0027t Have It",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/If_I_Can\u0027t_Have_It"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Ill-Wisher",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Ill-Wisher",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ill-Wisher"
+    },
+    {
+      "Trader": "",
+      "Name": "Illegal Logging",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Illegal_Logging"
+    },
+    {
+      "Trader": "",
+      "Name": "Illusion of Mercy",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Illusion_of_Mercy"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Immunity",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Immunity",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Immunity_(quest)"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Import",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Import",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Import"
+    },
+    {
+      "Trader": "",
+      "Name": "Import Control",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Import_Control"
+    },
+    {
+      "Trader": "",
+      "Name": "Important Patient",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Important_Patient"
+    },
+    {
+      "Trader": "",
+      "Name": "In and Out",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/In_and_Out"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Indisputable Authority",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Indisputable%20Authority",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Indisputable_Authority"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Inevitable Response",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Inevitable%20Response",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Inevitable_Response"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Information Source",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Information%20Source",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Information_Source"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Informed Means Armed",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Informed%20Means%20Armed",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Informed_Means_Armed"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Insider",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Insider",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Insider"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Insomnia",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Insomnia",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Insomnia"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Intimidator",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Intimidator",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Intimidator"
+    },
+    {
+      "Trader": "",
+      "Name": "Into the Inferno",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Into_the_Inferno"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Introduction",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Introduction",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Introduction"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Inventory Files",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Inventory%20Files",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Inventory_Files"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Ironclad Proof",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Ironclad%20Proof",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ironclad_Proof"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Irresistible",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Irresistible",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Irresistible"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Is This a Reference?",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Is%20This%20a%20Reference%3F",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Is_This_a_Reference%3F"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Jack of All Trades",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Jack%20of%20All%20Trades",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Jack_of_All_Trades"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Jack of All Trades - Pro",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Jack%20of%20All%20Trades%20-%20Pro",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Jack_of_All_Trades_-_Pro"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Job for a Patriot",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Job%20for%20a%20Patriot",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Job_for_a_Patriot"
+    },
+    {
+      "Trader": "",
+      "Name": "Job That Kills",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Job_That_Kills"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Keeper\u0027s Word",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Keeper%27s%20Word",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Keeper\u0027s_Word"
+    },
+    {
+      "Trader": "",
+      "Name": "Key Component",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_Component"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Key Partner",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Key%20Partner",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_Partner"
+    },
+    {
+      "Trader": "",
+      "Name": "Key to Every Door",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_Every_Door"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Key to the City",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Key%20to%20the%20City",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_the_City"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Key to the Tower",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Key%20to%20the%20Tower",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_the_Tower"
+    },
+    {
+      "Trader": "",
+      "Name": "Key to Understanding",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_Understanding"
+    },
+    {
+      "Trader": "",
+      "Name": "Khorovod",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Khorovod"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Killer Argument",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Killer%20Argument",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Killer_Argument"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Kind of Sabotage",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Kind%20of%20Sabotage",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Kind_of_Sabotage"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Kings of the Rooftops",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Kings%20of%20the%20Rooftops",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Kings_of_the_Rooftops"
+    },
+    {
+      "Trader": "",
+      "Name": "KnivesOut - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/KnivesOut_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "KnivesOut - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/KnivesOut_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "KnivesOut - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/KnivesOut_-_Part_3"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Knock-Knock",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Knock-Knock",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Knock-Knock"
+    },
+    {
+      "Trader": "",
+      "Name": "Know Your Enemy",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Know_Your_Enemy"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Know Your Place!",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Know%20Your%20Place%21",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Know_Your_Place!"
+    },
+    {
+      "Trader": "",
+      "Name": "Knuckle Sandwich",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Knuckle_Sandwich"
+    },
+    {
+      "Trader": "",
+      "Name": "Kolotun",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Kolotun"
+    },
+    {
+      "Trader": "",
+      "Name": "Last Spurt - Pioneer",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Last_Spurt_-_Pioneer"
+    },
+    {
+      "Trader": "",
+      "Name": "Lay Low",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Lay_Low"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Lend-Lease - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Lend-Lease%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Lend-Lease - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Lend-Lease%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "Letters",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Letters"
+    },
+    {
+      "Trader": "",
+      "Name": "Liaison",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Liaison"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Living High is Not a Crime",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Living%20High%20is%20Not%20a%20Crime",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Living_High_is_Not_a_Crime"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Long Line",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Long%20Line",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Long_Line"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Long Road",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Long%20Road",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Long_Road"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Lost Contact",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Lost%20Contact",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Lost_Contact"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Loyalty Buyout",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Loyalty%20Buyout",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Loyalty_Buyout"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Luxurious Life",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Luxurious%20Life",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Luxurious_Life"
+    },
+    {
+      "Trader": "",
+      "Name": "Magazines Are for the Weak",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Magazines_Are_for_the_Weak"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Make Amends",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Make Amends - Buyout",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Buyout",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Buyout"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Make Amends - Equipment",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Equipment",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Equipment"
+    },
+    {
+      "Trader": "",
+      "Name": "Make Amends - Quarantine",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Quarantine"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Make Amends - Security",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Security",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Security"
+    },
+    {
+      "Trader": "",
+      "Name": "Make Amends - Software",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Software"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Make Amends - Sweep Up",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Sweep%20Up",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Sweep_Up"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Make an Impression",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Make%20an%20Impression",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_an_Impression"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Make ULTRA Great Again",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Make%20ULTRA%20Great%20Again",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_ULTRA_Great_Again"
+    },
+    {
+      "Trader": "",
+      "Name": "Martial arts course",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Martial_arts_course"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Master Key",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Master%20Key",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Master_Key"
+    },
+    {
+      "Trader": "",
+      "Name": "Matter of Technique",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Matter_of_Technique"
+    },
+    {
+      "Trader": "",
+      "Name": "Mayday",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Mayday"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Mentor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Mentor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Mentor"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Metal Birds",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Metal%20Birds",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Metal_Birds"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Minibus",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Minibus",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Minibus"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Minute of Fame",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Minute%20of%20Fame",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Minute_of_Fame"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Missing Cargo",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Missing%20Cargo",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Missing_Cargo"
+    },
+    {
+      "Trader": "",
+      "Name": "Missing in Action",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Missing_in_Action"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Missing Informant",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Missing%20Informant",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Missing_Informant"
+    },
+    {
+      "Trader": "",
+      "Name": "More Red",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/More_Red"
+    },
+    {
+      "Trader": "",
+      "Name": "Morituri te salutant",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Morituri_te_salutant"
+    },
+    {
+      "Trader": "",
+      "Name": "Munchkin",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Munchkin"
+    },
+    {
+      "Trader": "",
+      "Name": "Musketeers",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Musketeers"
+    },
+    {
+      "Trader": "",
+      "Name": "My Blood Type Mark is on the Sleeve",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/My_Blood_Type_Mark_is_on_the_Sleeve"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Natural Exchange",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Natural%20Exchange",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Natural_Exchange"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Needle in a Haystack",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Needle%20in%20a%20Haystack",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Needle_in_a_Haystack"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Network Provider - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Network%20Provider%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Network_Provider_-_Part_1"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Network Provider - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Network%20Provider%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Network_Provider_-_Part_2"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Never Too Late To Learn",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Never%20Too%20Late%20To%20Learn",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Never_Too_Late_To_Learn"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 1)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%201%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_1)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 2)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%202%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_2)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 3)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%203%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_3)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 4)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%204%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_4)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 5)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%205%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_5)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "New Beginning (Prestige 6)",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/New%20Beginning%20%28Prestige%206%29",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Beginning_(Prestige_6)"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "New Paths",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/New%20Paths",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/New_Paths"
+    },
+    {
+      "Trader": "",
+      "Name": "Night of The Cult",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Night_of_The_Cult"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Night Sweep",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Night%20Sweep",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Night_Sweep"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "No Fuss Needed",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/No%20Fuss%20Needed",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Fuss_Needed"
+    },
+    {
+      "Trader": "",
+      "Name": "No Gifts for You",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Gifts_for_You"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_4"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_5"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_6"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 7",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%207",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_7"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 8",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%208",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_8"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "No Limit to Perfection - Part 9",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/No%20Limit%20to%20Perfection%20-%20Part%209",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Limit_to_Perfection_-_Part_9"
+    },
+    {
+      "Trader": "",
+      "Name": "No Man Is an Island",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Man_Is_an_Island"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "No Offence",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/No%20Offence",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "No Peeking!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Peeking!"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "No Place for Renegades",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/No%20Place%20for%20Renegades",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Place_for_Renegades"
+    },
+    {
+      "Trader": "",
+      "Name": "No Smoke Without Fire",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Smoke_Without_Fire"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "No Swiping",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/No%20Swiping",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/No_Swiping"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Nostalgia",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Nostalgia",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Nostalgia"
+    },
+    {
+      "Trader": "",
+      "Name": "Not a Step Back!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Not_a_Step_Back!"
+    },
+    {
+      "Trader": "",
+      "Name": "Not Below Zero",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Not_Below_Zero"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Nothing Fishy About This",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Nothing%20Fishy%20About%20This",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Nothing_Fishy_About_This"
+    },
+    {
+      "Trader": "",
+      "Name": "Obstacle Course",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Obstacle_Course"
+    },
+    {
+      "Trader": "",
+      "Name": "Obstruction Destruction",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Obstruction_Destruction"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Offensive Reconnaissance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Offensive%20Reconnaissance",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Offensive_Reconnaissance"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Oil Change",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Oil%20Change",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Oil_Change"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Oil Run",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Oil%20Run",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Oil_Run"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Old Patterns",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Old%20Patterns",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Old_Patterns"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "One Less Loose End",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/One%20Less%20Loose%20End",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/One_Less_Loose_End"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "One-Way Ticket",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/One-Way%20Ticket",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/One-Way_Ticket"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Only Business",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Only%20Business",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Only_Business"
+    },
+    {
+      "Trader": "",
+      "Name": "Only Victories",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Only_Victories"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Operation Aquarius",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Operation%20Aquarius",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Operation_Aquarius"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Order From Outside",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Order%20From%20Outside",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Order_From_Outside"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Our Own Land",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Our%20Own%20Land",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Our_Own_Land"
+    },
+    {
+      "Trader": "",
+      "Name": "Ours by Right",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ours_by_Right"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Out of Curiosity",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Out%20of%20Curiosity",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Out_of_Curiosity"
+    },
+    {
+      "Trader": "",
+      "Name": "Out of Time",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Out_of_Time"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Overpopulation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Overpopulation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Overpopulation"
+    },
+    {
+      "Trader": "",
+      "Name": "Overseas Trust - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Overseas_Trust_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Overseas Trust - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Overseas_Trust_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Painkiller",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Painkiller",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Paramedic",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Paramedic",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Paramedic"
+    },
+    {
+      "Trader": "",
+      "Name": "Parasites",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Parasites"
+    },
+    {
+      "Trader": "",
+      "Name": "Party Preparations",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Party_Preparations"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Passion for Ergonomics",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Passion%20for%20Ergonomics",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Passion_for_Ergonomics"
+    },
+    {
+      "Trader": "",
+      "Name": "Patch the Vulnerability",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Patch_the_Vulnerability"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Pathfinder",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Pathfinder",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pathfinder"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Payback",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Payback",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Payback"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Peaceful Atom",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Peaceful%20Atom",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Peaceful_Atom"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Peacekeeping Mission",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Peacekeeping%20Mission",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Peacekeeping_Mission"
+    },
+    {
+      "Trader": "",
+      "Name": "Pecunia Non Olet",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pecunia_Non_Olet"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Perfect Mediator",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Perfect%20Mediator",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Perfect_Mediator"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Pest Control",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Pest%20Control",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pest_Control"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Pets Won\u0027t Need It",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Pets%20Won%27t%20Need%20It",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pets_Won\u0027t_Need_It"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Pets Won\u0027t Need It - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Pets%20Won%27t%20Need%20It%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pets_Won\u0027t_Need_It_-_Part_2"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Pharmacist",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Pharmacist",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pharmacist"
+    },
+    {
+      "Trader": "",
+      "Name": "Photo Hunt",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Photo_Hunt"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Playing the Market",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Playing%20the%20Market",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Playing_the_Market"
+    },
+    {
+      "Trader": "",
+      "Name": "Poisoning",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Poisoning"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Polikhim Hobo",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Polikhim%20Hobo",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Polikhim_Hobo"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Population Census",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Population%20Census",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Population_Census"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Possessor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Possessor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Possessor"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Postman Pat - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Postman%20Pat%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Postman_Pat_-_Part_1"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Postman Pat - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Postman%20Pat%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Postman_Pat_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Postponed Reward",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Postponed%20Reward",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Postponed_Reward"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Power of Persuasion",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Power%20of%20Persuasion",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Power_of_Persuasion"
+    },
+    {
+      "Trader": "",
+      "Name": "Preemptive Strike",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Preemptive_Strike"
+    },
+    {
+      "Trader": "",
+      "Name": "Pressured by Circumstances",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pressured_by_Circumstances"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Private Clinic",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Private%20Clinic",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Private_Clinic"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Private Club",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Private%20Club",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Private_Club"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Professional - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Professional%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Professional_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Professional - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Professional%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Professional_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Professional - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Professional%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Professional_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Professional Fitness \u2014 Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Professional%20Fitness%20%E2%80%94%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Professional_Fitness_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Professional Fitness \u2014 Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Professional%20Fitness%20%E2%80%94%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Professional_Fitness_-_Part_2"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Profit Retention",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Profit%20Retention",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Profit_Retention"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Profitable Venture",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Profitable%20Venture",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Profitable_Venture"
+    },
+    {
+      "Trader": "",
+      "Name": "Progression Difficulties - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Progression_Difficulties_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Progression Difficulties - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Progression_Difficulties_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Project of the Century (Consequences)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Project_of_the_Century_(Consequences)"
+    },
+    {
+      "Trader": "",
+      "Name": "Project of the Century (Finale)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Project_of_the_Century_(Finale)"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Proper Comeback",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Proper%20Comeback",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Proper_Comeback"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Properties All Around",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Properties%20All%20Around",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Properties_All_Around"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Protect the Sky",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Protect%20the%20Sky",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Protect_the_Sky"
+    },
+    {
+      "Trader": "",
+      "Name": "Protection of Interests",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Protection_of_Interests"
+    },
+    {
+      "Trader": "",
+      "Name": "Provide Cover",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Provide_Cover"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Provide Viewership",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Provide%20Viewership",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Provide_Viewership"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Provocation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Provocation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Provocation"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Psycho Sniper",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Psycho%20Sniper",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Psycho_Sniper"
+    },
+    {
+      "Trader": "",
+      "Name": "Pursuit of Power",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pursuit_of_Power"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Pyramid Scheme",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Pyramid%20Scheme",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Pyramid_Scheme"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Quality Standard",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Quality%20Standard",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Quality_Standard"
+    },
+    {
+      "Trader": "",
+      "Name": "Radical Treatment",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Radical_Treatment"
+    },
+    {
+      "Trader": "",
+      "Name": "Radio Club",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Radio_Club"
+    },
+    {
+      "Trader": "",
+      "Name": "Rat Hunter",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rat_Hunter"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Rat Hunting",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Rat%20Hunting",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rat_Hunting"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Reconnaissance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Reconnaissance",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reconnaissance"
+    },
+    {
+      "Trader": "",
+      "Name": "Redemption",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Redemption"
+    },
+    {
+      "Trader": "",
+      "Name": "Reduce the Distance",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reduce_the_Distance"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Regulated Materials",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Regulated%20Materials",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Regulated_Materials"
+    },
+    {
+      "Trader": "",
+      "Name": "Remedy",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Remedy"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Reserve",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Reserve",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reserve_(quest)"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Reserve Expert",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Reserve%20Expert",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reserve_Expert"
+    },
+    {
+      "Trader": "",
+      "Name": "Restocking Supplies",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Restocking_Supplies"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Return the Favor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Return%20the%20Favor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Return_the_Favor"
+    },
+    {
+      "Trader": "",
+      "Name": "Reverse Gear",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reverse_Gear"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Revision - Lighthouse",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Revision%20-%20Lighthouse",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Revision_-_Lighthouse"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Revision - Reserve",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Revision%20-%20Reserve",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Revision_-_Reserve"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Revision - Streets of Tarkov",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Revision%20-%20Streets%20of%20Tarkov",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Revision_-_Streets_of_Tarkov"
+    },
+    {
+      "Trader": "",
+      "Name": "Riding the Wave",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Riding_the_Wave"
+    },
+    {
+      "Trader": "",
+      "Name": "Rigged",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rigged"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Rigged Game",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Rigged%20Game",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rigged_Game"
+    },
+    {
+      "Trader": "",
+      "Name": "Risks of Small Business",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Risks_of_Small_Business"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Rite of Passage",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Rite%20of%20Passage",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rite_of_Passage"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Road Closed",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Road%20Closed",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Road_Closed"
+    },
+    {
+      "Trader": "",
+      "Name": "Root of All Evil",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Root_of_All_Evil"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Rough Tarkov",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Rough%20Tarkov",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Rough_Tarkov"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Route Deviation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Route%20Deviation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Route_Deviation"
+    },
+    {
+      "Trader": "",
+      "Name": "Run Aground",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Run_Aground"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Safe Corridor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Safe%20Corridor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Safe_Corridor"
+    },
+    {
+      "Trader": "",
+      "Name": "Safety First",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Safety_First"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Safety Guarantee",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Safety%20Guarantee",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Safety_Guarantee"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sales Night",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sales%20Night",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "Sample IV - A New Hope",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sample_IV_-_A_New_Hope"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Samples",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Samples",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Samples"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Sanitary Standards",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Sanitary%20Standards",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sanitary_Standards"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Sanitary Standards - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Sanitary%20Standards%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sanitary_Standards_-_Part_2"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Saving Private Roman",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Saving%20Private%20Roman",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Saving_Private_Roman"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Saving the Mole",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Saving%20the%20Mole",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Saving_the_Mole"
+    },
+    {
+      "Trader": "",
+      "Name": "SBEU Mimicry",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/SBEU_Mimicry"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Scavenger",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Scavenger",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Scavenger"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Scout",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Scout",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Scout"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Scrap Metal",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Scrap%20Metal",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Scrap_Metal"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Search Mission",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Search%20Mission",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Search_Mission"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Seaside Vacation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Seaside%20Vacation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Seaside_Vacation"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Secret Benefactor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Secret%20Benefactor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Secret_Benefactor"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Secret Message",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Secret%20Message",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Secret_Message"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Secrets of Polikhim",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Secrets%20of%20Polikhim",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Secrets_of_Polikhim"
+    },
+    {
+      "Trader": "",
+      "Name": "Seeking Information",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Seeking_Information"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Seizing the Initiative",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Seizing%20the%20Initiative",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Seizing_the_Initiative"
+    },
+    {
+      "Trader": "",
+      "Name": "Self-Employed",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Self-Employed"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Semiconductor Crisis",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Semiconductor%20Crisis",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Semiconductor_Crisis"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sensory Analysis - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sensory%20Analysis%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sensory_Analysis_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Sensory Analysis - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sensory_Analysis_-_Part_2"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Serious Allegations",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Serious%20Allegations",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Serious_Allegations"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Setting Priorities",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Setting%20Priorities",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Setting_Priorities"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Setup",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Setup",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Setup"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sew it Good - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sew%20it%20Good%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sew_it_Good_-_Part_1"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sew it Good - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sew%20it%20Good%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sew_it_Good_-_Part_2"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sew it Good - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sew%20it%20Good%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sew_it_Good_-_Part_3"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Sew it Good - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sew%20it%20Good%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sew_it_Good_-_Part_4"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Shady Business",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Shady%20Business",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shady_Business"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Shady Contractor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Shady%20Contractor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shady_Contractor"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Shaking up the Teller",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Shaking%20up%20the%20Teller",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shaking_Up_the_Teller"
+    },
+    {
+      "Trader": "",
+      "Name": "Sharpest Shooter",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sharpest_Shooter"
+    },
+    {
+      "Trader": "",
+      "Name": "Sheep in Wolf\u0027s Clothing",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sheep_in_Wolf\u0027s_Clothing"
+    },
+    {
+      "Trader": "",
+      "Name": "Shell Game",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shell_Game"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Shipment Tracking",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Shipment%20Tracking",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shipment_Tracking"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Shipping Delay - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Shipping%20Delay%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shipping_Delay_-_Part_1"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Shipping Delay - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Shipping%20Delay%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shipping_Delay_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "Shoot First",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shoot_First"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Shooter Born in Heaven",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Shooter%20Born%20in%20Heaven",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shooter_Born_in_Heaven"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Shooting Cans",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Shooting%20Cans",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shooting_Cans"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Shootout Picnic",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Shootout%20Picnic",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shootout_Picnic"
+    },
+    {
+      "Trader": "",
+      "Name": "Short on Hands",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Short_on_Hands"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Shortage",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Shortage",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shortage"
+    },
+    {
+      "Trader": "",
+      "Name": "Sightseeing",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sightseeing"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Signal - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Signal%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Signal - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Signal%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "Signal - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Signal_-_Part_3"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Signal - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Signal%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Signal_-_Part_4"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Silent Caliber",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Silent%20Caliber",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Silent_Caliber"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Simple Side Job",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Simple%20Side%20Job",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Simple_Side_Job"
+    },
+    {
+      "Trader": "",
+      "Name": "Skiing with Skier",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Skiing_with_Skier"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Slaughterhouse",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Slaughterhouse",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Slaughterhouse"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Small Business - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Small%20Business%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Small_Business_-_Part_1"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Small Business - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Small%20Business%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Small_Business_-_Part_2"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "Small Business - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Small%20Business%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Small_Business_-_Part_3"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Small Things, Big Help",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Small%20Things%2C%20Big%20Help",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Small_Things,_Big_Help"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Snatch",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Snatch",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Snatch"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Spa Tour - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Spa%20Tour%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Spa Tour - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Spa%20Tour%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spa_Tour_-_Part_2"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Spa Tour - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Spa%20Tour%20-%20Part%203",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Spa Tour - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Spa%20Tour%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spa_Tour_-_Part_6"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Spa Tour - Part 7",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Spa%20Tour%20-%20Part%207",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Special Comms",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Special%20Comms",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Special_Comms"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Special Equipment",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Special%20Equipment",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Special_Equipment"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Special Offer",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Special%20Offer",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Special_Offer"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Special Order",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Special%20Order",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Special_Order"
+    },
+    {
+      "Trader": "",
+      "Name": "Spinning the drums",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spinning_the_drums"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Spotter",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Spotter",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spotter"
+    },
+    {
+      "Trader": "",
+      "Name": "Spread the Damage",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spread_the_Damage"
+    },
+    {
+      "Trader": "",
+      "Name": "Spring Never Changes",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spring_Never_Changes"
+    },
+    {
+      "Trader": "",
+      "Name": "Spring!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Spring!"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Stabilize Business",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Stabilize%20Business",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stabilize_Business"
+    },
+    {
+      "Trader": "",
+      "Name": "Staff Shortage",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Staff_Shortage"
+    },
+    {
+      "Trader": "",
+      "Name": "Stay Clear of Blast Zone",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_Clear_of_Blast_Zone"
+    },
+    {
+      "Trader": "",
+      "Name": "Stay Frosty",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_Frosty"
+    },
+    {
+      "Trader": "",
+      "Name": "Stay on Top",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_on_Top"
+    },
+    {
+      "Trader": "",
+      "Name": "Staying Light",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Staying_Light"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Steady Signal",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Steady%20Signal",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Steady_Signal"
+    },
+    {
+      "Trader": "",
+      "Name": "Stealing the Stolen",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stealing_the_Stolen"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Stick in the Wheel",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Stick%20in%20the%20Wheel",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stick_in_the_Wheel"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Stick to It",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Stick%20to%20It",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stick_to_It"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Stirrup",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Stirrup",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stirrup"
+    },
+    {
+      "Trader": "",
+      "Name": "Stop the Fight!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stop_the_Fight!"
+    },
+    {
+      "Trader": "",
+      "Name": "Straw",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Straw"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Stray Dogs",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Stray%20Dogs",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stray_Dogs"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Superhuman",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Superhuman",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Superhuman"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Supervisor",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Supervisor",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Supervisor"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Supplements",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Supplements",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Supplements"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Supplier",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Supplier",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Supplier"
+    },
+    {
+      "Trader": "",
+      "Name": "Supply and Demand",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Supply_and_Demand"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Supply Plans",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Supply%20Plans",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Supply_Plans"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Surplus Goods",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Surplus%20Goods",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Surplus_Goods"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "Surprise",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Surprise",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Surprise"
+    },
+    {
+      "Trader": "",
+      "Name": "Surprise Gift",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Surprise_Gift"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Surveillance",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Surveillance",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Surveillance"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Swift",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Swift",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Swift"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Swift One",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Swift%20One",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "Swift Retribution",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Swift%20Retribution",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Swift_Retribution"
+    },
+    {
+      "Trader": "",
+      "Name": "Take Two",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Take_Two"
+    },
+    {
+      "Trader": "",
+      "Name": "Taking What\u0027s Mine",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Taking_What\u0027s_Mine"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Tarkov-Style Diplomacy",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Tarkov-Style%20Diplomacy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tarkov-Style_Diplomacy"
+    },
+    {
+      "Trader": "",
+      "Name": "Teacher",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Teacher"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "TerraGroup Employee",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/TerraGroup%20Employee",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/TerraGroup_Employee"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%203",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%204",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%205",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Test Drive - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Test%20Drive%20-%20Part%206",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Textile - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Textile%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Textile_-_Part_1"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Textile - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Textile%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Textile_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "That\u2019s a Great Plan, Walter",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/That%E2%80%99s_a_Great_Plan,_Walter"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Art of Explosion",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Art%20of%20Explosion",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Art_of_Explosion"
+    },
+    {
+      "Trader": "",
+      "Name": "The Bad Batch",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Bad_Batch"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "The Blood of War - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/The%20Blood%20of%20War%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "The Blood of War - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/The%20Blood%20of%20War%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Blood_of_War_-_Part_2"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "The Blood of War - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/The%20Blood%20of%20War%20-%20Part%203",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "The Bosses gathering",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Bosses_gathering"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Bunker",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Bunker",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Bunker"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Bunker - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Bunker%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Bunker_-_Part_2"
+    },
+    {
+      "Trader": "Fence",
+      "Name": "The Choice",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/The%20Choice",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Choice"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "The Cleaner",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/The%20Cleaner",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Cleaner"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "The Courier",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/The%20Courier",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Courier"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "The Cult",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/The%20Cult",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Cult"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "The Cult - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/The%20Cult%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Delicious Sausage",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Delicious%20Sausage",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Delicious_Sausage"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "The Door",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/The%20Door",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Door"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "The Extortionist",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/The%20Extortionist",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Extortionist"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Good Times - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Good%20Times%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Good_Times_-_Part_1"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Good Times - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Good%20Times%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Good_Times_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "The Graven Image",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Graven_Image"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "The Guide",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/The%20Guide",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Guide"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Hermit",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Hermit",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Hermit"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "The Higher They Fly",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/The%20Higher%20They%20Fly",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Higher_They_Fly"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Administrator",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Administrator",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Administrator"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Angry Watchman",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Angry%20Watchman",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Angry_Watchman"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Big Game",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Big%20Game",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Big_Game"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Control",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Control",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Control"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Controller",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Controller",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Controller"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Crooked Cop",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Crooked%20Cop",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Crooked_Cop"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Eraser",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Eraser",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Eraser"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Factory Chief",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Factory%20Chief",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Factory_Chief"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Forest Cleaning",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Forest%20Cleaning",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Forest_Cleaning"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Justice",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Justice",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Justice"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Liberation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Liberation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Liberation"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Outcasts",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Outcasts",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Outcasts"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Relentless",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Relentless",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Relentless"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Sadist",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Sadist",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Sadist"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Secured Perimeter",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Secured%20Perimeter",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Secured_Perimeter"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Sellout",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Sellout",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Sellout"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Trophy",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Trophy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Trophy"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Huntsman Path - Woods Keeper",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Huntsman%20Path%20-%20Woods%20Keeper",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Huntsman_Path_-_Woods_Keeper"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "The Invisible Hand",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/The%20Invisible%20Hand",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Invisible_Hand"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "The Key to Success",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/The%20Key%20to%20Success",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Key_to_Success"
+    },
+    {
+      "Trader": "Story",
+      "Name": "The Labyrinth",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/The%20Labyrinth",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Labyrinth_(story_chapter)"
+    },
+    {
+      "Trader": "",
+      "Name": "The Old-Fashioned Way",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Old-Fashioned_Way"
+    },
+    {
+      "Trader": "",
+      "Name": "The Price of Celebration",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Price_of_Celebration"
+    },
+    {
+      "Trader": "BTR Driver",
+      "Name": "The Price of Independence",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/The%20Price%20of%20Independence",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Price_of_Independence"
+    },
+    {
+      "Trader": "",
+      "Name": "The Punisher - Harvest",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Harvest"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_1"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_2"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_3"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_4"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_5"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Punisher - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Punisher%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Punisher_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "The Root Cause",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Root_Cause"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "The Secret Recipe",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/The%20Secret%20Recipe",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Secret_Recipe"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "The Secret to Productivity",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/The%20Secret%20to%20Productivity",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Secret_to_Productivity"
+    },
+    {
+      "Trader": "",
+      "Name": "The Stylish One",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Stylish_One"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Cold Blooded",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Cold%20Blooded",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Cold_Blooded"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Combat Medic",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Combat%20Medic",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Combat_Medic"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Eagle-Owl",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Eagle-Owl",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Eagle-Owl"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Junkie",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Junkie",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Junkie"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Thrifty",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Thrifty",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Thrifty"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Tough Guy",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Tough%20Guy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Tough_Guy"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Unprotected but Dangerous",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Unprotected%20but%20Dangerous",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Unprotected_but_Dangerous"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Wounded Beast",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Wounded%20Beast",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Wounded_Beast"
+    },
+    {
+      "Trader": "",
+      "Name": "The Survivalist Path - Zatoichi",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Zatoichi"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Survivalist Path - Zhivchik",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Survivalist%20Path%20-%20Zhivchik",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Survivalist_Path_-_Zhivchik"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "The Tarkov Butcher",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/The%20Tarkov%20Butcher",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Butcher"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "The Tarkov Import",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/The%20Tarkov%20Import",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Import"
+    },
+    {
+      "Trader": "",
+      "Name": "The Tarkov Mystery",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Mystery"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_1"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_2"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_3"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_4"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_5"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_6"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 7",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%207",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Shooter_-_Part_7"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "The Tarkov Shooter - Part 8",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/The%20Tarkov%20Shooter%20-%20Part%208",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 10",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_10"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 11",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_11"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 12",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_12"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 13",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_13"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 14",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_14"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 15",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_15"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 16",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_16"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 17",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_17"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 18",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_18"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 19",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_19"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_2"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 3",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_3"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 4",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_4"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 5",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_5"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 6",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 7",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_7"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 8",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_8"
+    },
+    {
+      "Trader": "",
+      "Name": "The TerraGroup Trail - Part 9",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_TerraGroup_Trail_-_Part_9"
+    },
+    {
+      "Trader": "Story",
+      "Name": "The Ticket",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/The%20Ticket",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Ticket"
+    },
+    {
+      "Trader": "Story",
+      "Name": "The Unheard",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/The%20Unheard",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Unheard"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "The Walls Have Eyes",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/The%20Walls%20Have%20Eyes",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Walls_Have_Eyes"
+    },
+    {
+      "Trader": "Story",
+      "Name": "They Are Already Here",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/They%20Are%20Already%20Here",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/They_Are_Already_Here"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Thirsty - Breadwinner",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Thirsty%20-%20Breadwinner",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirsty_-_Breadwinner"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Thirsty - Delivery",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Thirsty%20-%20Delivery",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirsty_-_Delivery"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Thirsty - Echo",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Thirsty%20-%20Echo",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirsty_-_Echo"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Thirsty - Hounds",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Thirsty%20-%20Hounds",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirsty_-_Hounds"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Thirsty - Secrets",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Thirsty%20-%20Secrets",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirsty_-_Secrets"
+    },
+    {
+      "Trader": "",
+      "Name": "Thirty Pieces of Silver",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Thirty_Pieces_of_Silver"
+    },
+    {
+      "Trader": "",
+      "Name": "This Is My Party",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/This_Is_My_Party"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "This Tape Sucks",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/This%20Tape%20Sucks",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/This_Tape_Sucks"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Tigr Safari",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Tigr%20Safari",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tigr_Safari"
+    },
+    {
+      "Trader": "",
+      "Name": "Time-Tested",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Time-Tested"
+    },
+    {
+      "Trader": "",
+      "Name": "Timeout",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Timeout"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_1"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_2"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_3"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_4"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_5"
+    },
+    {
+      "Trader": "Ref",
+      "Name": "To Great Heights! - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/To%20Great%20Heights%21%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_Great_Heights!_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "To the Tree!",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Tree!"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Top Secret",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Top%20Secret",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Top_Secret"
+    },
+    {
+      "Trader": "Story",
+      "Name": "Tour",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AA%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AF/Tour",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tour"
+    },
+    {
+      "Trader": "",
+      "Name": "Tourists",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tourists"
+    },
+    {
+      "Trader": "",
+      "Name": "Tournament",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tournament"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Tracker",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Tracker",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Tracker"
+    },
+    {
+      "Trader": "",
+      "Name": "Trade Embargo",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Trade_Embargo"
+    },
+    {
+      "Trader": "",
+      "Name": "Trade Embargo - Last Chance",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Trade_Embargo_-_Last_Chance"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Trophies",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Trophies",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Trophies"
+    },
+    {
+      "Trader": "Lightkeeper",
+      "Name": "Trouble in the Big City",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Trouble%20in%20the%20Big%20City",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Trouble_in_the_Big_City"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Trust Regain",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Trust%20Regain",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "",
+      "Name": "U Turn",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/U_Turn"
+    },
+    {
+      "Trader": "",
+      "Name": "Unanswered Calls",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unanswered_Calls"
+    },
+    {
+      "Trader": "",
+      "Name": "Uninvited Guests - Part 1",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_1"
+    },
+    {
+      "Trader": "",
+      "Name": "Uninvited Guests - Part 2",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_2"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Unique Experience",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Unique%20Experience",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unique_Experience"
+    },
+    {
+      "Trader": "",
+      "Name": "Unsurpassed Skill",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unsurpassed_Skill"
+    },
+    {
+      "Trader": "",
+      "Name": "Until Dawn",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Until_Dawn"
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "Urban Medicine",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Urban%20Medicine",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Urban_Medicine"
+    },
+    {
+      "Trader": "Ragman",
+      "Name": "Vacate the Premises",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Vacate%20the%20Premises",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Vacate_the_Premises"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "Viewer",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Viewer",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Viewer"
+    },
+    {
+      "Trader": "",
+      "Name": "Virtue",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Virtue"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Vitamins",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Vitamins",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Vitamins"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Vitamins - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Vitamins%20-%20Part%201",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Skier",
+      "Name": "Vitamins - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Vitamins%20-%20Part%202",
+      "EnglishUrl": null
+    },
+    {
+      "Trader": "Therapist",
+      "Name": "War Never Changes",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/War%20Never%20Changes",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/War_Never_Changes"
+    },
+    {
+      "Trader": "",
+      "Name": "Watch the Watcher",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Watch_the_Watcher"
+    },
+    {
+      "Trader": "Mechanic",
+      "Name": "Watching You",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Watching%20You",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Watching_You"
+    },
+    {
+      "Trader": "",
+      "Name": "Weak Compromise",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Weak_Compromise"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Weapons Circulation",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Weapons%20Circulation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Weapons_Circulation"
+    },
+    {
+      "Trader": "",
+      "Name": "Weather the Blizzard",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Weather_the_Blizzard"
+    },
+    {
+      "Trader": "",
+      "Name": "Western Quality Standards",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Western_Quality_Standards"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 1",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_1"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 2",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_2"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 3",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%203",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_3"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 4",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%204",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_4"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 5",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%205",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_5"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wet Job - Part 6",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wet%20Job%20-%20Part%206",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wet_Job_-_Part_6"
+    },
+    {
+      "Trader": "",
+      "Name": "What\u0027s in the Bag?",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/What\u0027s_in_the_Bag%3F"
+    },
+    {
+      "Trader": "Skier",
+      "Name": "What\u2019s on the Flash Drive?",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/What%E2%80%99s%20on%20the%20Flash%20Drive%3F",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/What%E2%80%99s_on_the_Flash_Drive%3F"
+    },
+    {
+      "Trader": "",
+      "Name": "What\u2019s Your Evidence?",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/What%E2%80%99s_Your_Evidence%3F"
+    },
+    {
+      "Trader": "",
+      "Name": "Wild Wild Woods",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wild_Wild_Woods"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Wiring the Vessel",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Wiring%20the%20Vessel",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wiring_the_Vessel"
+    },
+    {
+      "Trader": "",
+      "Name": "Wolf\u0027s Grip (Consequences)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wolf\u0027s_Grip_(Consequences)"
+    },
+    {
+      "Trader": "",
+      "Name": "Wolf\u0027s Grip (Finale)",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wolf\u0027s_Grip_(Finale)"
+    },
+    {
+      "Trader": "Jaeger",
+      "Name": "Work Smarter",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Work%20Smarter",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Work_Smarter"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Worst Job in the World",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Worst%20Job%20in%20the%20World",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Worst_Job_in_the_World"
+    },
+    {
+      "Trader": "",
+      "Name": "Wrench and Waterboarding",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wrench_and_Waterboarding"
+    },
+    {
+      "Trader": "Prapor",
+      "Name": "You\u0027ve Got Mail",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/You%27ve%20Got%20Mail",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/You\u0027ve_Got_Mail"
+    },
+    {
+      "Trader": "Peacekeeper",
+      "Name": "Your Car Needs a Service",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Your%20Car%20Needs%20a%20Service",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Your_Car_Needs_a_Service"
+    }
+  ]
+}

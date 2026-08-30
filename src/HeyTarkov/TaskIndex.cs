@@ -1,0 +1,144 @@
+namespace HeyTarkov;
+
+public readonly record struct TaskMatch(TaskEntry Task, double Score, string MatchedPhrase);
+
+/// <summary>
+/// Maps a recognized phrase back to a task. Because the recognizer runs on a
+/// closed vocabulary, the common case is an exact hit; the fuzzy pass only
+/// covers a result that came back slightly reshaped.
+/// </summary>
+public sealed class TaskIndex
+{
+    private readonly IPhraseScheme _scheme;
+    private readonly Dictionary<string, TaskEntry> _byPhrase = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, TaskEntry> _byFuzzyKey = new(StringComparer.Ordinal);
+    private readonly List<(string Key, TaskEntry Task)> _all = new();
+    private readonly HashSet<TaskEntry> _covered = new();
+    private readonly HashSet<TaskEntry> _spellOnly = new();
+
+    public TaskIndex(IEnumerable<TaskEntry> tasks, IPhraseScheme scheme)
+    {
+        _scheme = scheme;
+
+        // The grammar gets the phrases as written; the dictionaries are keyed by
+        // the normalized form. Keeping these separate matters for Japanese,
+        // where normalizing strips the spaces that the grammar wants to keep.
+        var grammar = new List<string>();
+        var deferred = new List<string>();
+        var grammarSeen = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var task in tasks)
+        {
+            var phrases = scheme.Phrases(task.Name);
+            var spelled = scheme.DeferredPhrases(task.Name);
+
+            // Spelling a name out needs no dictionary - just the letters - so a
+            // task whose words have no reading yet is still reachable that way.
+            // Dropping it entirely would make a freshly added task invisible
+            // until someone extends the lexicon.
+            if (phrases.Count == 0 && spelled.Count == 0) continue;
+
+            _covered.Add(task);
+            if (phrases.Count == 0) _spellOnly.Add(task);
+
+            foreach (var phrase in phrases)
+            {
+                if (grammarSeen.Add(phrase)) grammar.Add(phrase);
+
+                _all.Add((scheme.FuzzyKey(phrase), task));
+
+                // First writer wins: two tasks sharing a phrase is possible in
+                // principle, and the ranked fallback will still surface both.
+                _byPhrase.TryAdd(scheme.Key(phrase), task);
+                _byFuzzyKey.TryAdd(scheme.FuzzyKey(phrase), task);
+            }
+
+            foreach (var phrase in spelled)
+            {
+                if (grammarSeen.Add(phrase)) deferred.Add(phrase);
+
+                // Spelled phrases resolve exactly, but they are deliberately kept
+                // out of the fuzzy pool: edit distance between two long letter
+                // sequences is noise.
+                _byPhrase.TryAdd(scheme.Key(phrase), task);
+                _byFuzzyKey.TryAdd(scheme.FuzzyKey(phrase), task);
+            }
+        }
+
+        GrammarPhrases = grammar;
+        DeferredGrammarPhrases = deferred;
+    }
+
+    /// <summary>Phrases loaded into the recognizer up front.</summary>
+    public IReadOnlyList<string> GrammarPhrases { get; }
+
+    /// <summary>Phrases loaded afterwards, once the microphone is already usable.</summary>
+    public IReadOnlyList<string> DeferredGrammarPhrases { get; }
+
+    /// <summary>Tasks that made it into the grammar.</summary>
+    public int TaskCount => _covered.Count;
+
+    /// <summary>
+    /// Tasks with no word reading, reachable only by spelling them out. These
+    /// are the ones worth adding to the lexicon.
+    /// </summary>
+    public IReadOnlyCollection<TaskEntry> SpellOnlyTasks => _spellOnly;
+
+    public TaskEntry? Exact(string recognizedText)
+    {
+        if (_byPhrase.TryGetValue(_scheme.Key(recognizedText), out var hit)) return hit;
+        return _byFuzzyKey.TryGetValue(_scheme.FuzzyKey(recognizedText), out hit) ? hit : null;
+    }
+
+    public IReadOnlyList<TaskMatch> Rank(string recognizedText, int max = 5)
+    {
+        var key = _scheme.FuzzyKey(recognizedText);
+        if (key.Length == 0) return Array.Empty<TaskMatch>();
+
+        var best = new Dictionary<TaskEntry, TaskMatch>();
+
+        foreach (var (phraseKey, task) in _all)
+        {
+            var score = Similarity(key, phraseKey);
+            if (best.TryGetValue(task, out var existing) && existing.Score >= score) continue;
+            best[task] = new TaskMatch(task, score, phraseKey);
+        }
+
+        return best.Values
+            .OrderByDescending(m => m.Score)
+            .ThenBy(m => m.Task.Name, StringComparer.OrdinalIgnoreCase)
+            .Take(max)
+            .ToArray();
+    }
+
+    private static double Similarity(string a, string b)
+    {
+        if (a == b) return 1.0;
+        var longest = Math.Max(a.Length, b.Length);
+        if (longest == 0) return 1.0;
+        return 1.0 - (double)Levenshtein(a, b) / longest;
+    }
+
+    private static int Levenshtein(string a, string b)
+    {
+        var previous = new int[b.Length + 1];
+        var current = new int[b.Length + 1];
+
+        for (var j = 0; j <= b.Length; j++) previous[j] = j;
+
+        for (var i = 1; i <= a.Length; i++)
+        {
+            current[0] = i;
+            for (var j = 1; j <= b.Length; j++)
+            {
+                var cost = a[i - 1] == b[j - 1] ? 0 : 1;
+                current[j] = Math.Min(
+                    Math.Min(current[j - 1] + 1, previous[j] + 1),
+                    previous[j - 1] + cost);
+            }
+            (previous, current) = (current, previous);
+        }
+
+        return previous[b.Length];
+    }
+}

@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>HeyTarkov</AssemblyName>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>Hey Tarkov</Product>
+    <RootNamespace>HeyTarkov</RootNamespace>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <!-- No obfuscation / no packing: keep the binary plain so neither Defender
+         heuristics nor an anti-cheat scanner has anything to be suspicious of. -->
+    <DebugType>embedded</DebugType>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Framework-dependent: the machine already has the .NET Desktop runtime,
+         so the exe stays a couple of MB instead of ~90. -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!-- Compression would make the exe look like a packed binary to Defender's
+         heuristics. Not worth the few MB. -->
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Speech" Version="9.0.0" />
+    <!-- WinMM audio capture only: lets the user pick which input device to use
+         (System.Speech can only target the Windows default on its own). -->
+    <PackageReference Include="NAudio.WinMM" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Embedded so the single-file exe carries its data with it. The catalog
+         is generated ahead of time by tools/CatalogBuilder; the app never
+         fetches it. -->
+    <EmbeddedResource Include="japanese-lexicon.json" />
+    <EmbeddedResource Include="tasks.json" />
+  </ItemGroup>
+
+</Project>
