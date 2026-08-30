@@ -1,5 +1,9 @@
 bin/
 obj/
 dist/
+build/
 *.user
 tools/*.log
+
+# Landing page for the website, kept out of this repository
+site/
