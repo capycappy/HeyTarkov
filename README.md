@@ -15,6 +15,16 @@
 
 アプリが通信するのは1点のみ、**GitHub Releases に新しいバージョンがあるかの確認**です。
 
+## ダウンロード
+
+[Releases](https://github.com/capycappy/HeyTarkov/releases) から ZIP を取得して展開するだけ。
+インストーラはない。
+
+| | サイズ | 必要なもの |
+|---|---|---|
+| `HeyTarkov-v1.0.0-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.0.0-win-x64-framework-dependent.zip` | 0.5MB | .NET 10 Desktop Runtime |
+
 ## つかいかた
 
 1. `HeyTarkov.exe` を起動（Alt+Tab で切り替えて使う想定）
@@ -89,7 +99,7 @@ WinForms はプロセス起動時に描画方式を決めるため、切り替�
 
 ## 必要なもの
 
-- Windows 11 / .NET 10 Desktop Runtime
+- Windows 11（自己完結版ならランタイムの導入は不要）
 - 日本語モード: 日本語の音声認識（Windows 標準で入っていることが多い）
 - 英語モード: 英語(米国)の音声認識
   - 設定 → 時刻と言語 → 言語と地域 → English (United States) → 言語のオプション → 音声認識
@@ -233,7 +243,11 @@ HeyTarkov.exe --checkupdate  # 起動時バージョン確認が何をするか�
 
 結果は `%LOCALAPPDATA%\HeyTarkov\` に `*-report.txt` として出力される。
 
-## ライセンスと出典
+## ライセンス
+
+MIT License — Copyright (c) 2026 capycappy（[LICENSE](LICENSE)）
+
+## 出典
 
 タスク名は Escape from Tarkov（Battlestate Games）のゲーム内名称。
 リンク先は [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) と
