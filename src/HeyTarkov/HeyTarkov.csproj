@@ -46,6 +46,11 @@
          fetches it. -->
     <EmbeddedResource Include="japanese-lexicon.json" />
     <EmbeddedResource Include="tasks.json" />
+    <!-- ApplicationIcon only sets the icon on the exe file itself. The window
+         and taskbar read Form.Icon, which WinForms leaves at its own default
+         unless it is assigned, so the same .ico is embedded and loaded at
+         startup. -->
+    <EmbeddedResource Include="app.ico" />
   </ItemGroup>
 
 </Project>
