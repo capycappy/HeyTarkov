@@ -941,8 +941,12 @@ public sealed class MainForm : Form
         var matches = BuildCandidates(outcome);
         Populate(matches);
 
-        // Never jump to a page off a rejected result - show the list instead.
+        // Never jump to a page off a rejected result, and never off a fragment:
+        // "broadcast" means six different pages, so the list is the answer.
+        var wholeName = _speechIndex?.Exact(outcome.Text) is not null;
+
         if (!outcome.Rejected
+            && wholeName
             && _autoOpen.Checked
             && outcome.Confidence >= AutoOpenConfidence
             && matches.Count > 0
@@ -977,6 +981,16 @@ public sealed class MainForm : Form
             if (hit is not null) Add(new TaskMatch(hit, 1.0, text));
         }
 
+        // Saying only the start of a name is normal - "broadcast" for
+        // "Broadcast - Part 4". A fragment cannot pick one entry, so everything
+        // under it is offered.
+        foreach (var entry in _speechIndex.StartingWith(outcome.Text))
+            Add(new TaskMatch(entry, 1.0, outcome.Text));
+
+        foreach (var (text, _) in outcome.Alternates)
+        foreach (var entry in _speechIndex.StartingWith(text))
+            Add(new TaskMatch(entry, 1.0, text));
+
         foreach (var match in _speechIndex.Rank(outcome.Text, 6)) Add(match);
 
         return result;
@@ -995,7 +1009,14 @@ public sealed class MainForm : Form
             return;
         }
 
-        Populate(_typedIndex.Rank(text, 12));
+        var starting = _typedIndex.StartingWith(text)
+            .Select(e => new TaskMatch(e, 1.0, text))
+            .ToList();
+
+        var ranked = _typedIndex.Rank(text, 12)
+            .Where(m => starting.All(s => s.Task != m.Task));
+
+        Populate(starting.Concat(ranked).Take(14).ToList());
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches)

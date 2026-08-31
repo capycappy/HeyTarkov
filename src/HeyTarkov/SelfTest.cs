@@ -58,6 +58,9 @@ public static class SelfTest
             failed |= !CheckMapsAndExtracts(report, catalog);
             report.AppendLine();
 
+            failed |= !CheckPrefixes(report, catalog);
+            report.AppendLine();
+
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
             report.AppendLine();
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.Japanese);
@@ -167,6 +170,48 @@ public static class SelfTest
         report.AppendLine($"        got      {known?.JapaneseUrl ?? "(missing)"}");
         if (!urlOk) report.AppendLine($"        expected {expectedUrl}");
 
+        return ok;
+    }
+
+    /// <summary>
+    /// Saying the start of a name finds it. A fragment resolves to everything
+    /// under it, never to one entry.
+    /// </summary>
+    private static bool CheckPrefixes(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== speaking only the start of a name ===");
+
+        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+        var ok = true;
+
+        void Check(string said, string mustInclude, int atLeast)
+        {
+            var hits = index.StartingWith(said);
+            var names = hits.Select(h => h.Name).ToList();
+            var found = names.Any(n => n.StartsWith(mustInclude, StringComparison.OrdinalIgnoreCase));
+            var enough = hits.Count >= atLeast;
+
+            ok &= found && enough;
+
+            report.AppendLine($"  {(found && enough ? "PASS" : "FAIL")}  \"{said}\" -> "
+                              + $"{hits.Count} entries"
+                              + (hits.Count > 0 ? $": {string.Join(", ", names.Take(4))}" : ""));
+        }
+
+        Check("broadcast", "Broadcast", 2);
+        Check("gunsmith", "Gunsmith", 10);
+        Check("wet job", "Wet Job", 4);
+        Check("ground zero emercom", "Emercom", 1);
+
+        // A whole name is not a fragment: it must keep resolving to itself.
+        var whole = index.Exact("debut");
+        var notPrefix = index.StartingWith("debut").Count == 0;
+        ok &= whole is not null && notPrefix;
+
+        report.AppendLine($"  {(whole is not null && notPrefix ? "PASS" : "FAIL")}  "
+                          + "a whole name still resolves to itself, not a fragment list");
+
+        report.AppendLine($"  grammar with fragments: {index.GrammarPhrases.Count} phrases");
         return ok;
     }
 

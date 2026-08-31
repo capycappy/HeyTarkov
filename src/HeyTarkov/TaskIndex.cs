@@ -16,6 +16,9 @@ public sealed class TaskIndex
     private readonly HashSet<WikiEntry> _covered = new();
     private readonly HashSet<WikiEntry> _spellOnly = new();
 
+    /// <summary>Leading fragments of a name to everything that starts with it.</summary>
+    private readonly Dictionary<string, List<WikiEntry>> _byPrefix = new(StringComparer.Ordinal);
+
     public TaskIndex(IEnumerable<WikiEntry> tasks, IPhraseScheme scheme)
     {
         _scheme = scheme;
@@ -68,8 +71,46 @@ public sealed class TaskIndex
             }
         }
 
+        // Prefixes go in last so a fragment never displaces a whole name that
+        // happens to read the same way.
+        foreach (var task in _covered)
+        {
+            foreach (var variant in task.SpokenVariants())
+            {
+                foreach (var prefix in Prefixes.Of(variant))
+                {
+                    foreach (var phrase in scheme.Phrases(prefix))
+                    {
+                        var key = scheme.Key(phrase);
+                        if (_byPhrase.ContainsKey(key)) continue;   // a real name wins
+
+                        if (!_byPrefix.TryGetValue(key, out var list))
+                        {
+                            list = new List<WikiEntry>();
+                            _byPrefix[key] = list;
+                        }
+
+                        if (!list.Contains(task)) list.Add(task);
+                        if (grammarSeen.Add(phrase)) grammar.Add(phrase);
+                    }
+                }
+            }
+        }
+
         GrammarPhrases = grammar;
         DeferredGrammarPhrases = deferred;
+    }
+
+    /// <summary>
+    /// Everything whose name starts with what was said. Empty when the phrase is
+    /// a whole name rather than a fragment.
+    /// </summary>
+    public IReadOnlyList<WikiEntry> StartingWith(string recognizedText)
+    {
+        var key = _scheme.Key(recognizedText);
+        return _byPrefix.TryGetValue(key, out var list)
+            ? list
+            : Array.Empty<WikiEntry>();
     }
 
     /// <summary>Phrases loaded into the recognizer up front.</summary>
