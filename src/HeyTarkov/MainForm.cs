@@ -27,7 +27,7 @@ public sealed class MainForm : Form
 
     private Settings _settings = new();
     private SpeechService? _speech;
-    private TaskCatalogFile? _catalog;
+    private WikiCatalog? _catalog;
 
     /// <summary>Grammar for the language the microphone is currently using.</summary>
     private TaskIndex? _speechIndex;
@@ -705,7 +705,7 @@ public sealed class MainForm : Form
     }
 
     private static SpeechSetup BuildSpeech(
-        List<TaskEntry>? tasks, JapaneseLexicon? lexicon, RecognitionLanguage language)
+        List<WikiEntry>? tasks, JapaneseLexicon? lexicon, RecognitionLanguage language)
     {
         if (tasks is null) return new SpeechSetup(null, "", null, null);
 
@@ -858,7 +858,7 @@ public sealed class MainForm : Form
 
         var wiki = SelectedWiki;
         var onWiki = _catalog.CountOn(wiki);
-        var other = _catalog.Tasks.Count - onWiki;
+        var other = _catalog.Entries.Count - onWiki;
         var label = wiki == WikiSource.Japanese ? "日本語 Wiki" : "英語 Wiki";
 
         SetStatus(other == 0
@@ -1010,7 +1010,7 @@ public sealed class MainForm : Form
     }
 
     /// <summary>The katakana reading, so the list also teaches how to say it.</summary>
-    private string? ReadingHint(TaskEntry task)
+    private string? ReadingHint(WikiEntry task)
     {
         if (SelectedLanguage != RecognitionLanguage.Japanese || _hintForms is null) return null;
 
@@ -1023,7 +1023,7 @@ public sealed class MainForm : Form
         if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task);
     }
 
-    private void OpenTask(TaskEntry task)
+    private void OpenTask(WikiEntry task)
     {
         var wiki = SelectedWiki;
         var url = task.Url(wiki);
@@ -1091,8 +1091,17 @@ public sealed class MainForm : Form
 
         public override string ToString()
         {
-            var trader = Match.Task.Trader.Length > 0 ? $"  /  {Match.Task.Trader}" : "";
-            var row = $"{Match.Task.Name}{trader}   [{Match.Score:P0}]";
+            // Kind first, because "Ground Zero" as a map and as the map an
+            // extract belongs to are different answers to the same words.
+            var kind = Match.Task.Kind switch
+            {
+                EntryKind.Map => "[マップ] ",
+                EntryKind.Extract => "[出口] ",
+                _ => "",
+            };
+
+            var group = Match.Task.Group.Length > 0 ? $"  /  {Match.Task.Group}" : "";
+            var row = $"{kind}{Match.Task.Display}{group}   [{Match.Score:P0}]";
 
             return reading is null ? row : $"{row}   {reading}";
         }
