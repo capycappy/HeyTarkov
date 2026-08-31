@@ -97,6 +97,20 @@ public sealed class TaskIndex
             }
         }
 
+        // Read in name order, so "Broadcast - Part 1" through "Part 5" come out
+        // in that order rather than in whatever order the catalog held them.
+        foreach (var list in _byPrefix.Values)
+        {
+            list.Sort((a, b) =>
+            {
+                var byName = NaturalOrder.Instance.Compare(a.Name, b.Name);
+                if (byName != 0) return byName;
+
+                var byFaction = string.CompareOrdinal(a.Faction ?? "", b.Faction ?? "");
+                return byFaction != 0 ? byFaction : string.CompareOrdinal(a.Group, b.Group);
+            });
+        }
+
         GrammarPhrases = grammar;
         DeferredGrammarPhrases = deferred;
     }
@@ -150,7 +164,7 @@ public sealed class TaskIndex
 
         return best.Values
             .OrderByDescending(m => m.Score)
-            .ThenBy(m => m.Task.Name, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(m => m.Task.Name, NaturalOrder.Instance)
             .Take(max)
             .ToArray();
     }

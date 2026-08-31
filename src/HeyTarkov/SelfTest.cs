@@ -199,9 +199,22 @@ public static class SelfTest
         }
 
         Check("broadcast", "Broadcast", 2);
+        CheckOrder("broadcast");
+        CheckOrder("gunsmith master");
         Check("gunsmith", "Gunsmith", 10);
         Check("wet job", "Wet Job", 4);
         Check("ground zero emercom", "Emercom", 1);
+
+        void CheckOrder(string said)
+        {
+            var names = index.StartingWith(said).Select(h => h.Name).ToList();
+            var sorted = names.OrderBy(n => n, NaturalOrder.Instance).ToList();
+            var inOrder = names.SequenceEqual(sorted);
+            ok &= inOrder;
+
+            report.AppendLine($"  {(inOrder ? "PASS" : "FAIL")}  \"{said}\" reads in order: "
+                              + string.Join(", ", names.Take(6)));
+        }
 
         // A whole name is not a fragment: it must keep resolving to itself.
         var whole = index.Exact("debut");
