@@ -49,10 +49,16 @@ public static class SelfTest
         {
             var catalog = TaskCatalog.Load();
 
-            report.AppendLine($"tasks: {catalog.Tasks.Count}");
+            report.AppendLine($"tasks: {catalog.Entries.Count}");
             report.AppendLine();
 
             failed |= !CheckUnknownWordFallback(report);
+            report.AppendLine();
+
+            failed |= !CheckMapsAndExtracts(report, catalog);
+            report.AppendLine();
+
+            failed |= !CheckPrefixes(report, catalog);
             report.AppendLine();
 
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
@@ -83,10 +89,10 @@ public static class SelfTest
     {
         report.AppendLine("=== unknown-word fallback ===");
 
-        var invented = new TaskEntry
+        var invented = new WikiEntry
         {
             Name = "Zzyzx Grobnar",   // deliberately absent from the lexicon
-            Trader = "Test",
+            Group = "Test",
             JapaneseUrl = "https://example.invalid/",
         };
 
@@ -113,8 +119,117 @@ public static class SelfTest
         return ok;
     }
 
+    /// <summary>
+    /// Maps and extracts resolve, and an extract's link carries the anchor that
+    /// jumps to its section. An extract can be said with or without its map.
+    /// </summary>
+    private static bool CheckMapsAndExtracts(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== maps and extracts ===");
+
+        var maps = catalog.Entries.Count(e => e.Kind == EntryKind.Map);
+        var extracts = catalog.Entries.Count(e => e.Kind == EntryKind.Extract);
+        report.AppendLine($"catalog: {maps} maps, {extracts} extracts");
+
+        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+        var ok = true;
+
+        void Check(string said, string expected, EntryKind kind, bool wantAnchor)
+        {
+            var hit = index.Exact(said);
+            var right = hit is not null
+                        && hit.Kind == kind
+                        && string.Equals(hit.Name, expected, StringComparison.OrdinalIgnoreCase);
+
+            var anchored = hit?.JapaneseUrl?.Contains('#') == true;
+            if (wantAnchor && !anchored) right = false;
+
+            ok &= right;
+
+            report.AppendLine($"  {(right ? "PASS" : "FAIL")}  \"{said}\" -> "
+                              + $"{hit?.Kind.ToString() ?? "(none)"} {hit?.Display ?? ""}"
+                              + (anchored ? "  [anchored]" : ""));
+        }
+
+        Check("ground zero", "Ground Zero", EntryKind.Map, wantAnchor: false);
+        Check("customs", "Customs", EntryKind.Map, wantAnchor: false);
+        Check("ground zero emercom checkpoint", "Emercom Checkpoint", EntryKind.Extract, true);
+        Check("emercom checkpoint", "Emercom Checkpoint", EntryKind.Extract, true);
+        Check("customs crossroads", "Crossroads", EntryKind.Extract, true);
+
+        // The anchor has to be the one the user was shown originally.
+        var known = catalog.Entries.FirstOrDefault(e =>
+            e.Kind == EntryKind.Extract && e.Group == "Ground Zero"
+            && e.Name == "Emercom Checkpoint" && e.Faction == "PMC");
+
+        var expectedUrl = "https://wikiwiki.jp/eft/GROUND%20ZERO#j60a102a";
+        var urlOk = known?.JapaneseUrl == expectedUrl;
+        ok &= urlOk;
+
+        report.AppendLine($"  {(urlOk ? "PASS" : "FAIL")}  Emercom Checkpoint (PMC) url");
+        report.AppendLine($"        got      {known?.JapaneseUrl ?? "(missing)"}");
+        if (!urlOk) report.AppendLine($"        expected {expectedUrl}");
+
+        return ok;
+    }
+
+    /// <summary>
+    /// Saying the start of a name finds it. A fragment resolves to everything
+    /// under it, never to one entry.
+    /// </summary>
+    private static bool CheckPrefixes(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== speaking only the start of a name ===");
+
+        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+        var ok = true;
+
+        void Check(string said, string mustInclude, int atLeast)
+        {
+            var hits = index.StartingWith(said);
+            var names = hits.Select(h => h.Name).ToList();
+            var found = names.Any(n => n.StartsWith(mustInclude, StringComparison.OrdinalIgnoreCase));
+            var enough = hits.Count >= atLeast;
+
+            ok &= found && enough;
+
+            report.AppendLine($"  {(found && enough ? "PASS" : "FAIL")}  \"{said}\" -> "
+                              + $"{hits.Count} entries"
+                              + (hits.Count > 0 ? $": {string.Join(", ", names.Take(4))}" : ""));
+        }
+
+        Check("broadcast", "Broadcast", 2);
+        CheckOrder("broadcast");
+        CheckOrder("gunsmith master");
+        Check("gunsmith", "Gunsmith", 10);
+        Check("wet job", "Wet Job", 4);
+        Check("ground zero emercom", "Emercom", 1);
+
+        void CheckOrder(string said)
+        {
+            var names = index.StartingWith(said).Select(h => h.Name).ToList();
+            var sorted = names.OrderBy(n => n, NaturalOrder.Instance).ToList();
+            var inOrder = names.SequenceEqual(sorted);
+            ok &= inOrder;
+
+            report.AppendLine($"  {(inOrder ? "PASS" : "FAIL")}  \"{said}\" reads in order: "
+                              + string.Join(", ", names.Take(6)));
+        }
+
+        // A whole name is not a fragment: it must keep resolving to itself.
+        var whole = index.Exact("debut");
+        var notPrefix = index.StartingWith("debut").Count == 0;
+        ok &= whole is not null && notPrefix;
+
+        report.AppendLine($"  {(whole is not null && notPrefix ? "PASS" : "FAIL")}  "
+                          + "a whole name still resolves to itself, not a fragment list");
+
+        report.AppendLine($"  grammar with fragments: {index.GrammarPhrases.Count} phrases");
+        return ok;
+    }
+
     private static bool RunLanguage(
-        StringBuilder report, TaskCatalogFile catalog, RecognitionLanguage language)
+        StringBuilder report, WikiCatalog catalog, RecognitionLanguage language)
     {
         report.AppendLine($"=== {language} ===");
 
@@ -126,8 +241,8 @@ public static class SelfTest
             ? new JapaneseScheme(japaneseForms)
             : new EnglishScheme();
 
-        var index = new TaskIndex(catalog.Tasks, scheme);
-        report.AppendLine($"covered tasks : {index.TaskCount}/{catalog.Tasks.Count}");
+        var index = new TaskIndex(catalog.Entries, scheme);
+        report.AppendLine($"covered tasks : {index.TaskCount}/{catalog.Entries.Count}");
         report.AppendLine($"phrases       : {index.GrammarPhrases.Count}");
 
         if (scheme is JapaneseScheme japanese && japanese.UnknownWords.Count > 0)
@@ -382,14 +497,14 @@ public static class SelfTest
     }
 
     private static void Probe(
-        StringBuilder report, TaskCatalogFile catalog, TaskIndex index,
+        StringBuilder report, WikiCatalog catalog, TaskIndex index,
         SpeechRecognitionEngine engine, SpeechSynthesizer synth,
         RecognitionLanguage language, string taskName, string spoken,
         ref int passed, ref int attempted, ref int probeNumber, int pauseMs = 0)
     {
         probeNumber++;
 
-        var expected = catalog.Tasks.FirstOrDefault(t =>
+        var expected = catalog.Entries.FirstOrDefault(t =>
             string.Equals(t.Name, taskName, StringComparison.OrdinalIgnoreCase));
 
         if (expected is null)

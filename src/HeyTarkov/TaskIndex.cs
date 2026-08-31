@@ -1,6 +1,6 @@
 namespace HeyTarkov;
 
-public readonly record struct TaskMatch(TaskEntry Task, double Score, string MatchedPhrase);
+public readonly record struct TaskMatch(WikiEntry Task, double Score, string MatchedPhrase);
 
 /// <summary>
 /// Maps a recognized phrase back to a task. Because the recognizer runs on a
@@ -10,13 +10,16 @@ public readonly record struct TaskMatch(TaskEntry Task, double Score, string Mat
 public sealed class TaskIndex
 {
     private readonly IPhraseScheme _scheme;
-    private readonly Dictionary<string, TaskEntry> _byPhrase = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, TaskEntry> _byFuzzyKey = new(StringComparer.Ordinal);
-    private readonly List<(string Key, TaskEntry Task)> _all = new();
-    private readonly HashSet<TaskEntry> _covered = new();
-    private readonly HashSet<TaskEntry> _spellOnly = new();
+    private readonly Dictionary<string, WikiEntry> _byPhrase = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, WikiEntry> _byFuzzyKey = new(StringComparer.Ordinal);
+    private readonly List<(string Key, WikiEntry Task)> _all = new();
+    private readonly HashSet<WikiEntry> _covered = new();
+    private readonly HashSet<WikiEntry> _spellOnly = new();
 
-    public TaskIndex(IEnumerable<TaskEntry> tasks, IPhraseScheme scheme)
+    /// <summary>Leading fragments of a name to everything that starts with it.</summary>
+    private readonly Dictionary<string, List<WikiEntry>> _byPrefix = new(StringComparer.Ordinal);
+
+    public TaskIndex(IEnumerable<WikiEntry> tasks, IPhraseScheme scheme)
     {
         _scheme = scheme;
 
@@ -29,8 +32,11 @@ public sealed class TaskIndex
 
         foreach (var task in tasks)
         {
-            var phrases = scheme.Phrases(task.Name);
-            var spelled = scheme.DeferredPhrases(task.Name);
+            // An entry can be said more than one way; every variant resolves to
+            // the same entry.
+            var phrases = task.SpokenVariants().SelectMany(scheme.Phrases).Distinct().ToList();
+            var spelled = task.SpokenVariants().SelectMany(scheme.DeferredPhrases)
+                .Distinct().ToList();
 
             // Spelling a name out needs no dictionary - just the letters - so a
             // task whose words have no reading yet is still reachable that way.
@@ -65,8 +71,60 @@ public sealed class TaskIndex
             }
         }
 
+        // Prefixes go in last so a fragment never displaces a whole name that
+        // happens to read the same way.
+        foreach (var task in _covered)
+        {
+            foreach (var variant in task.SpokenVariants())
+            {
+                foreach (var prefix in Prefixes.Of(variant))
+                {
+                    foreach (var phrase in scheme.Phrases(prefix))
+                    {
+                        var key = scheme.Key(phrase);
+                        if (_byPhrase.ContainsKey(key)) continue;   // a real name wins
+
+                        if (!_byPrefix.TryGetValue(key, out var list))
+                        {
+                            list = new List<WikiEntry>();
+                            _byPrefix[key] = list;
+                        }
+
+                        if (!list.Contains(task)) list.Add(task);
+                        if (grammarSeen.Add(phrase)) grammar.Add(phrase);
+                    }
+                }
+            }
+        }
+
+        // Read in name order, so "Broadcast - Part 1" through "Part 5" come out
+        // in that order rather than in whatever order the catalog held them.
+        foreach (var list in _byPrefix.Values)
+        {
+            list.Sort((a, b) =>
+            {
+                var byName = NaturalOrder.Instance.Compare(a.Name, b.Name);
+                if (byName != 0) return byName;
+
+                var byFaction = string.CompareOrdinal(a.Faction ?? "", b.Faction ?? "");
+                return byFaction != 0 ? byFaction : string.CompareOrdinal(a.Group, b.Group);
+            });
+        }
+
         GrammarPhrases = grammar;
         DeferredGrammarPhrases = deferred;
+    }
+
+    /// <summary>
+    /// Everything whose name starts with what was said. Empty when the phrase is
+    /// a whole name rather than a fragment.
+    /// </summary>
+    public IReadOnlyList<WikiEntry> StartingWith(string recognizedText)
+    {
+        var key = _scheme.Key(recognizedText);
+        return _byPrefix.TryGetValue(key, out var list)
+            ? list
+            : Array.Empty<WikiEntry>();
     }
 
     /// <summary>Phrases loaded into the recognizer up front.</summary>
@@ -82,9 +140,9 @@ public sealed class TaskIndex
     /// Tasks with no word reading, reachable only by spelling them out. These
     /// are the ones worth adding to the lexicon.
     /// </summary>
-    public IReadOnlyCollection<TaskEntry> SpellOnlyTasks => _spellOnly;
+    public IReadOnlyCollection<WikiEntry> SpellOnlyTasks => _spellOnly;
 
-    public TaskEntry? Exact(string recognizedText)
+    public WikiEntry? Exact(string recognizedText)
     {
         if (_byPhrase.TryGetValue(_scheme.Key(recognizedText), out var hit)) return hit;
         return _byFuzzyKey.TryGetValue(_scheme.FuzzyKey(recognizedText), out hit) ? hit : null;
@@ -95,7 +153,7 @@ public sealed class TaskIndex
         var key = _scheme.FuzzyKey(recognizedText);
         if (key.Length == 0) return Array.Empty<TaskMatch>();
 
-        var best = new Dictionary<TaskEntry, TaskMatch>();
+        var best = new Dictionary<WikiEntry, TaskMatch>();
 
         foreach (var (phraseKey, task) in _all)
         {
@@ -106,7 +164,7 @@ public sealed class TaskIndex
 
         return best.Values
             .OrderByDescending(m => m.Score)
-            .ThenBy(m => m.Task.Name, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(m => m.Task.Name, NaturalOrder.Instance)
             .Take(max)
             .ToArray();
     }
