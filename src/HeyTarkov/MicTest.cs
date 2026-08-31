@@ -26,7 +26,7 @@ public static class MicTest
                 ? new JapaneseScheme(new JapaneseForms(JapaneseLexicon.Load()))
                 : new EnglishScheme();
 
-            var index = new TaskIndex(catalog.Tasks, scheme);
+            var index = new TaskIndex(catalog.Entries, scheme);
 
             var recognizerInfo = SpeechService.FindRecognizer(language);
             if (recognizerInfo is null)
