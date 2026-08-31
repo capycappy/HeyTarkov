@@ -1,6 +1,6 @@
 namespace HeyTarkov;
 
-public readonly record struct TaskMatch(TaskEntry Task, double Score, string MatchedPhrase);
+public readonly record struct TaskMatch(WikiEntry Task, double Score, string MatchedPhrase);
 
 /// <summary>
 /// Maps a recognized phrase back to a task. Because the recognizer runs on a
@@ -10,13 +10,13 @@ public readonly record struct TaskMatch(TaskEntry Task, double Score, string Mat
 public sealed class TaskIndex
 {
     private readonly IPhraseScheme _scheme;
-    private readonly Dictionary<string, TaskEntry> _byPhrase = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, TaskEntry> _byFuzzyKey = new(StringComparer.Ordinal);
-    private readonly List<(string Key, TaskEntry Task)> _all = new();
-    private readonly HashSet<TaskEntry> _covered = new();
-    private readonly HashSet<TaskEntry> _spellOnly = new();
+    private readonly Dictionary<string, WikiEntry> _byPhrase = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, WikiEntry> _byFuzzyKey = new(StringComparer.Ordinal);
+    private readonly List<(string Key, WikiEntry Task)> _all = new();
+    private readonly HashSet<WikiEntry> _covered = new();
+    private readonly HashSet<WikiEntry> _spellOnly = new();
 
-    public TaskIndex(IEnumerable<TaskEntry> tasks, IPhraseScheme scheme)
+    public TaskIndex(IEnumerable<WikiEntry> tasks, IPhraseScheme scheme)
     {
         _scheme = scheme;
 
@@ -29,8 +29,11 @@ public sealed class TaskIndex
 
         foreach (var task in tasks)
         {
-            var phrases = scheme.Phrases(task.Name);
-            var spelled = scheme.DeferredPhrases(task.Name);
+            // An entry can be said more than one way; every variant resolves to
+            // the same entry.
+            var phrases = task.SpokenVariants().SelectMany(scheme.Phrases).Distinct().ToList();
+            var spelled = task.SpokenVariants().SelectMany(scheme.DeferredPhrases)
+                .Distinct().ToList();
 
             // Spelling a name out needs no dictionary - just the letters - so a
             // task whose words have no reading yet is still reachable that way.
@@ -82,9 +85,9 @@ public sealed class TaskIndex
     /// Tasks with no word reading, reachable only by spelling them out. These
     /// are the ones worth adding to the lexicon.
     /// </summary>
-    public IReadOnlyCollection<TaskEntry> SpellOnlyTasks => _spellOnly;
+    public IReadOnlyCollection<WikiEntry> SpellOnlyTasks => _spellOnly;
 
-    public TaskEntry? Exact(string recognizedText)
+    public WikiEntry? Exact(string recognizedText)
     {
         if (_byPhrase.TryGetValue(_scheme.Key(recognizedText), out var hit)) return hit;
         return _byFuzzyKey.TryGetValue(_scheme.FuzzyKey(recognizedText), out hit) ? hit : null;
@@ -95,7 +98,7 @@ public sealed class TaskIndex
         var key = _scheme.FuzzyKey(recognizedText);
         if (key.Length == 0) return Array.Empty<TaskMatch>();
 
-        var best = new Dictionary<TaskEntry, TaskMatch>();
+        var best = new Dictionary<WikiEntry, TaskMatch>();
 
         foreach (var (phraseKey, task) in _all)
         {

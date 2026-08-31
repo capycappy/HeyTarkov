@@ -33,7 +33,7 @@ public static class TaskCatalog
     /// missing or unreadable resource is a packaging error, not a runtime state
     /// the UI should try to recover from.
     /// </summary>
-    public static TaskCatalogFile Load()
+    public static WikiCatalog Load()
     {
         var assembly = Assembly.GetExecutingAssembly();
         var name = assembly.GetManifestResourceNames()
@@ -43,11 +43,11 @@ public static class TaskCatalog
 
         using var stream = assembly.GetManifestResourceStream(name)!;
 
-        var catalog = JsonSerializer.Deserialize<TaskCatalogFile>(stream, JsonOptions)
+        var catalog = JsonSerializer.Deserialize<WikiCatalog>(stream, JsonOptions)
                       ?? throw new InvalidOperationException("tasks.json を読み取れませんでした。");
 
-        if (catalog.Tasks.Count == 0)
-            throw new InvalidOperationException("tasks.json にタスクが入っていません。");
+        if (catalog.Entries.Count == 0)
+            throw new InvalidOperationException("tasks.json に項目が入っていません。");
 
         return catalog;
     }
