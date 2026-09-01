@@ -9,10 +9,10 @@ public sealed class MainForm : Form
     private const string MicReady = "押して話す ／ 打つ";
     private const string MicListening = "聞き取り中… 離すと検索します";
 
-    private readonly ComboBox _languageBox = new();
-    private readonly ComboBox _wikiBox = new();
-    private readonly ComboBox _browserBox = new();
-    private readonly ComboBox _deviceBox = new();
+    private readonly ModernCombo _languageBox = new();
+    private readonly ModernCombo _wikiBox = new();
+    private readonly ModernCombo _browserBox = new();
+    private readonly ModernCombo _deviceBox = new();
     private readonly PillButton _rescanButton = new();
     private readonly PillButton _levelTestButton = new();
     private readonly Label _grammarLabel = new();
@@ -28,7 +28,7 @@ public sealed class MainForm : Form
     private readonly Label _countLabel = new();
     private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
-    private readonly ComboBox _themeBox = new();
+    private readonly ModernCombo _themeBox = new();
     private readonly Label _statusLabel = new();
 
     private Settings _settings = new();
@@ -171,30 +171,23 @@ public sealed class MainForm : Form
         Margin = new Padding(0, 8, 0, 8),
     };
 
-    /// <summary>
-    /// Only the style: WinForms renders combo boxes for the active theme
-    /// itself, and overriding the colours costs a pale border and a blue
-    /// selection block that neither theme asked for.
-    /// </summary>
-    private static void StyleCombo(ComboBox box) => box.DropDownStyle = ComboBoxStyle.DropDownList;
+    /// <summary>Every combo box in the window, so the palette reaches all five.</summary>
+    private ModernCombo[] Combos =>
+        new[] { _languageBox, _wikiBox, _browserBox, _deviceBox, _themeBox };
 
     /// <summary>Set once and then ignored, so it is boxed off and quiet.</summary>
     private Card BuildSettingsCard()
     {
-        StyleCombo(_languageBox);
         _languageBox.Items.AddRange(new object[] { "日本語で言う", "英語で言う" });
         _languageBox.SelectedIndex = 0;
         _languageBox.SelectedIndexChanged += async (_, _) => await OnLanguageChangedAsync();
 
-        StyleCombo(_wikiBox);
         _wikiBox.Items.AddRange(new object[] { "日本語 Wiki", "英語 Wiki" });
         _wikiBox.SelectedIndex = 0;
         _wikiBox.SelectedIndexChanged += async (_, _) => await OnWikiChangedAsync();
 
-        StyleCombo(_browserBox);
         _browserBox.SelectedIndexChanged += (_, _) => OnBrowserChanged();
 
-        StyleCombo(_deviceBox);
         _deviceBox.SelectedIndexChanged += (_, _) => OnDeviceChanged();
 
         var choices = new TableLayoutPanel
@@ -480,8 +473,7 @@ public sealed class MainForm : Form
             _settings.Save();
         };
 
-        StyleCombo(_themeBox);
-        _themeBox.Width = 118;
+        _themeBox.Width = 152;
         _themeBox.Anchor = AnchorStyles.Right;
         _themeBox.Margin = new Padding(8, 0, 0, 0);
         _themeBox.Items.AddRange(new object[] { "システムに従う", "ライト", "ダーク" });
@@ -842,7 +834,9 @@ public sealed class MainForm : Form
             }, token);
 
             _levelTestButton.Text = "確認を停止";
-            SetMicState(false, "レベル確認中");
+            _dial.Metering = true;
+            _micHint.Text = "レベル確認中";
+            _micHint.ForeColor = Theme.Faint;
             SetStatus($"「{device}」を聞いています。話してみてください。");
         }
         catch (Exception ex)
@@ -854,9 +848,13 @@ public sealed class MainForm : Form
     }
 
     /// <summary>
-    /// dBFS, not a linear percentage: normal speech peaks around a tenth of full
-    /// scale, which reads as "10%" and looks broken when it is in fact fine.
-    /// 0 dBFS is the clipping point, so healthy speech sits near -20.
+    /// The disc is the meter: the fill is the level now, the held line is the
+    /// loudest so far, and its colour is the verdict. A peak line that never
+    /// leaves the bottom of the disc says "too quiet" without a sentence.
+    ///
+    /// The decibels still go to the status line, because dBFS is what tells a
+    /// broken gain stage from a quiet voice, and this app exists partly to
+    /// answer that. It is diagnostic, so it lives where diagnostics live.
     /// </summary>
     private void ShowLevel(AudioLevel level)
     {
@@ -864,7 +862,8 @@ public sealed class MainForm : Form
 
         if (level.PeakDb > _levelTestPeakDb) _levelTestPeakDb = level.PeakDb;
 
-        _heardLabel.ForeColor = _levelTestPeakDb switch
+        _dial.Peak = AudioLevel.ToMeter(_levelTestPeakDb);
+        _dial.PeakTone = _levelTestPeakDb switch
         {
             < AudioLevel.SilenceDb => Theme.Danger,
             < -35 => Theme.Warning,
@@ -875,7 +874,7 @@ public sealed class MainForm : Form
         var now = level.PeakDb <= AudioLevel.FloorDb ? "-∞" : $"{level.PeakDb:0} dBFS";
         var held = _levelTestPeakDb <= AudioLevel.FloorDb ? "-∞" : $"{_levelTestPeakDb:0} dBFS";
 
-        _heardLabel.Text = $"入力 {now}　ピーク {held}　— {AudioLevel.Verdict(_levelTestPeakDb)}";
+        SetStatus($"入力 {now}　ピーク {held}　— {AudioLevel.Verdict(_levelTestPeakDb)}");
     }
 
     private void StopLevelTest()
@@ -889,7 +888,9 @@ public sealed class MainForm : Form
         _levelTest.Dispose();
         _levelTest = null;
 
+        _dial.Metering = false;
         _dial.Reset();
+        _dial.PeakTone = Color.Empty;
         _levelTestButton.Text = "レベル確認";
         SetMicState(_speech is not null, _speech is not null ? MicReady : "使用できません",
             warn: _speech is null);
@@ -1348,6 +1349,8 @@ public sealed class MainForm : Form
         _countLabel.ForeColor = Theme.Faint;
         _autoOpen.ForeColor = Theme.Muted;
         _noticeLabel.ForeColor = _pendingRelease is null ? Theme.Good : Theme.Info;
+
+        foreach (var box in Combos) box.ApplyColours();
 
         _typedBox.BackColor = Theme.Panel;
         _typedBox.ForeColor = Theme.Text;
