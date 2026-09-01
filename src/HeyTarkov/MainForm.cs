@@ -1,28 +1,34 @@
+using System.Runtime.InteropServices;
+
 namespace HeyTarkov;
 
 public sealed class MainForm : Form
 {
     private const double AutoOpenConfidence = 0.55;
-    private const string MicIdleText = "\U0001F3A4  押している間だけ聞き取ります";
-    private const string MicActiveText = "● 聞き取り中… 離すと検索します";
 
+    private const string MicReady = "押して話す ／ 打つ";
+    private const string MicListening = "聞き取り中… 離すと検索します";
 
-    private readonly ComboBox _languageBox = new();
-    private readonly ComboBox _wikiBox = new();
-    private readonly ComboBox _browserBox = new();
-    private readonly ComboBox _deviceBox = new();
-    private readonly Button _rescanButton = new();
-    private readonly Button _levelTestButton = new();
+    private readonly ModernCombo _languageBox = new();
+    private readonly ModernCombo _wikiBox = new();
+    private readonly ModernCombo _browserBox = new();
+    private readonly ModernCombo _deviceBox = new();
+    private readonly PillButton _rescanButton = new();
+    private readonly PillButton _levelTestButton = new();
     private readonly Label _grammarLabel = new();
     private readonly Label _noticeLabel = new();
-    private readonly Button _micButton = new();
-    private readonly ProgressBar _levelBar = new();
+
+    /// <summary>The hold button and the input meter in one control.</summary>
+    private readonly LevelDial _dial = new();
+
+    private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
-    private readonly ListBox _candidates = new();
-    private readonly Button _openButton = new();
+    private readonly CandidateList _candidates = new();
+    private readonly Label _countLabel = new();
+    private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
-    private readonly ComboBox _themeBox = new();
+    private readonly ModernCombo _themeBox = new();
     private readonly Label _statusLabel = new();
 
     private Settings _settings = new();
@@ -48,13 +54,25 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Text = AppInfo.TitleBar;
-        MinimumSize = new Size(600, 660);
+
+        // Every size below is written for 96 DPI. Saying so explicitly is what
+        // makes the window survive a move to a monitor that scales differently:
+        // WinForms then multiplies the whole layout - control bounds,
+        // MinimumSize, and TableLayoutPanel's absolute rows - by the DPI ratio,
+        // at startup and again on every DPI change. Left unset it resizes the
+        // window but not its contents, and the layout comes apart.
+        AutoScaleDimensions = new SizeF(96f, 96f);
+        AutoScaleMode = AutoScaleMode.Dpi;
+
+        MinimumSize = new Size(600, 620);
         Size = new Size(680, 740);
         StartPosition = FormStartPosition.CenterScreen;
         Font = new Font("Yu Gothic UI", 9.75f);
+        BackColor = Theme.Page;
 
         ApplyIcon();
         BuildLayout();
+        ActiveControl = _typedBox;
         Load += async (_, _) => await InitializeAsync();
     }
 
@@ -96,211 +114,197 @@ public sealed class MainForm : Form
 
     // ---------------------------------------------------------------- layout
 
+    /// <summary>
+    /// Speaking and typing are two doors to the same thing, so they share a row:
+    /// the dial to hold, the box to type in. Everything set once - language,
+    /// wiki, browser, microphone - is boxed off at the top and then ignored,
+    /// which leaves the rest of the window to the candidates.
+    /// </summary>
     private void BuildLayout()
     {
         var root = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(14),
+            BackColor = Theme.Page,
             ColumnCount = 1,
-            RowCount = 11,
+            RowCount = 8,
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        ConfigureMic();
-        ConfigureResults();
-
-        root.Controls.Add(BuildChoiceRow());
-        root.Controls.Add(BuildDeviceRow());
-        root.Controls.Add(BuildStateLabels());
-        root.Controls.Add(_micButton);
-        root.Controls.Add(_levelBar);
-        root.Controls.Add(_heardLabel);
-        root.Controls.Add(_typedBox);
-        root.Controls.Add(_candidates);
-        root.Controls.Add(_openButton);
+        root.Controls.Add(BuildSettingsCard());
+        root.Controls.Add(BuildInputRow());
+        root.Controls.Add(BuildHeard());
+        root.Controls.Add(BuildResultsCard());
+        root.Controls.Add(BuildNotice());
+        root.Controls.Add(BuildOpenButton());
         root.Controls.Add(BuildBottomRow());
-        root.Controls.Add(_statusLabel);
+        root.Controls.Add(BuildFooter());
 
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // language / wiki / browser
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // input device
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // grammar + notice
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // mic
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));   // level
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));   // heard
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // typed
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // settings
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // dial + search
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // heard
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));   // candidates
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // notice
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // open
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // bottom
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));   // status
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // auto-open / theme
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));       // status / vocabulary
 
         Controls.Add(root);
     }
 
-    /// <summary>
-    /// A grid, not a flow: the combo boxes give up width as the window narrows,
-    /// so the buttons on the right can never be pushed off the edge.
-    /// </summary>
-    private static TableLayoutPanel Grid(int columns)
-    {
-        var grid = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            ColumnCount = columns,
-            RowCount = 1,
-            Margin = new Padding(0, 0, 0, 6),
-        };
-        grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        return grid;
-    }
-
-    private static Label FieldLabel(string text) => new()
+    private static Label Micro(string text) => new()
     {
         Text = text,
         AutoSize = true,
-        Anchor = AnchorStyles.Left,
-        Margin = new Padding(0, 6, 6, 0),
+        BackColor = Color.Transparent,
+        ForeColor = Theme.Faint,
+        Font = new Font("Yu Gothic UI", 8.25f),
+        Margin = new Padding(1, 0, 0, 1),
     };
 
-    private TableLayoutPanel BuildChoiceRow()
+    private static Panel Divider() => new()
     {
-        // Anchored, not docked. Dock.Fill stretches a ComboBox to the row
-        // height and the bottom edge ends up clipped; anchoring left+right
-        // stretches the width only and keeps its natural height.
-        _languageBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _languageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _languageBox.Margin = new Padding(0, 3, 12, 3);
+        Dock = DockStyle.Fill,
+        Height = 1,
+        BackColor = Theme.Edge,
+        Margin = new Padding(0, 8, 0, 8),
+    };
+
+    /// <summary>Every combo box in the window, so the palette reaches all five.</summary>
+    private ModernCombo[] Combos =>
+        new[] { _languageBox, _wikiBox, _browserBox, _deviceBox, _themeBox };
+
+    /// <summary>Set once and then ignored, so it is boxed off and quiet.</summary>
+    private Card BuildSettingsCard()
+    {
         _languageBox.Items.AddRange(new object[] { "日本語で言う", "英語で言う" });
         _languageBox.SelectedIndex = 0;
         _languageBox.SelectedIndexChanged += async (_, _) => await OnLanguageChangedAsync();
 
-        _wikiBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _wikiBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _wikiBox.Margin = new Padding(0, 3, 12, 3);
         _wikiBox.Items.AddRange(new object[] { "日本語 Wiki", "英語 Wiki" });
         _wikiBox.SelectedIndex = 0;
         _wikiBox.SelectedIndexChanged += async (_, _) => await OnWikiChangedAsync();
 
-        _browserBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _browserBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _browserBox.Margin = new Padding(0, 3, 0, 3);
         _browserBox.SelectedIndexChanged += (_, _) => OnBrowserChanged();
 
-        var grid = Grid(6);
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
-
-        grid.Controls.Add(FieldLabel("言語"), 0, 0);
-        grid.Controls.Add(_languageBox, 1, 0);
-        grid.Controls.Add(FieldLabel("Wiki"), 2, 0);
-        grid.Controls.Add(_wikiBox, 3, 0);
-        grid.Controls.Add(FieldLabel("ブラウザ"), 4, 0);
-        grid.Controls.Add(_browserBox, 5, 0);
-
-        return grid;
-    }
-
-    private TableLayoutPanel BuildDeviceRow()
-    {
-        var buttonSize = new Size(96, 26);
-
-        _deviceBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _deviceBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _deviceBox.Margin = new Padding(0, 3, 6, 3);
         _deviceBox.SelectedIndexChanged += (_, _) => OnDeviceChanged();
+
+        foreach (var box in new[] { _languageBox, _wikiBox, _browserBox, _deviceBox })
+            box.OnCard = true;
+
+        var choices = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 3,
+            RowCount = 2,
+            Margin = new Padding(0),
+        };
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+        choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+        choices.Controls.Add(Micro("言語"), 0, 0);
+        choices.Controls.Add(Micro("Wiki"), 1, 0);
+        choices.Controls.Add(Micro("ブラウザ"), 2, 0);
+
+        // Anchored, not docked: Dock.Fill stretches a ComboBox to the row height
+        // and clips its bottom edge. Left+Right stretches the width only.
+        foreach (var (box, column) in new[] { (_languageBox, 0), (_wikiBox, 1), (_browserBox, 2) })
+        {
+            box.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            box.Margin = new Padding(0, 0, column == 2 ? 0 : 12, 0);
+            choices.Controls.Add(box, column, 1);
+        }
+
+        _rescanButton.Text = "再検出";
+        _levelTestButton.Text = "レベル確認";
 
         // Identical fixed sizes: the level button's caption toggles between
         // "レベル確認" and "確認を停止", and an auto-sized button would shift the
         // row every time it changed.
-        _rescanButton.Text = "再検出";
-        _rescanButton.AutoSize = false;
-        _rescanButton.Size = buttonSize;
-        _rescanButton.Anchor = AnchorStyles.Left;
-        _rescanButton.Margin = new Padding(0, 2, 6, 2);
+        foreach (var button in new[] { _rescanButton, _levelTestButton })
+        {
+            button.Ghost = true;
+            button.OnCard = true;
+            button.Radius = 5;
+            button.AutoSize = false;
+            button.Size = new Size(84, 26);
+            button.Anchor = AnchorStyles.Left;
+            button.Margin = new Padding(8, 0, 0, 0);
+        }
         _rescanButton.Click += (_, _) => LoadDevices(_settings.InputDeviceName);
-
-        _levelTestButton.Text = "レベル確認";
-        _levelTestButton.AutoSize = false;
-        _levelTestButton.Size = buttonSize;
-        _levelTestButton.Anchor = AnchorStyles.Left;
-        _levelTestButton.Margin = new Padding(0, 2, 0, 2);
         _levelTestButton.Click += (_, _) => ToggleLevelTest();
 
-        var grid = Grid(4);
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        grid.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-
-        grid.Controls.Add(FieldLabel("入力"), 0, 0);
-        grid.Controls.Add(_deviceBox, 1, 0);
-        grid.Controls.Add(_rescanButton, 2, 0);
-        grid.Controls.Add(_levelTestButton, 3, 0);
-
-        return grid;
-    }
-
-    private FlowLayoutPanel BuildStateLabels()
-    {
-        _grammarLabel.AutoSize = true;
-        _grammarLabel.ForeColor = Theme.Muted;
-        _grammarLabel.Margin = new Padding(0, 0, 0, 2);
-
-        _noticeLabel.AutoSize = true;
-        _noticeLabel.ForeColor = Theme.Good;
-        _noticeLabel.Margin = new Padding(0, 0, 0, 4);
-        _noticeLabel.Visible = false;
-        _noticeLabel.Cursor = Cursors.Hand;
-        _noticeLabel.Click += (_, _) => OnNoticeClicked();
-
-        var stack = new FlowLayoutPanel
+        var device = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            FlowDirection = FlowDirection.TopDown,
-            WrapContents = false,
-            Margin = new Padding(0, 0, 0, 4),
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 4,
+            RowCount = 1,
+            Margin = new Padding(0),
         };
-        stack.Controls.Add(_grammarLabel);
-        stack.Controls.Add(_noticeLabel);
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-        return stack;
+        var inputLabel = Micro("入力");
+        inputLabel.Anchor = AnchorStyles.Left;
+        inputLabel.Margin = new Padding(1, 0, 10, 0);
+        device.Controls.Add(inputLabel, 0, 0);
+
+        _deviceBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _deviceBox.Margin = new Padding(0);
+        device.Controls.Add(_deviceBox, 1, 0);
+        device.Controls.Add(_rescanButton, 2, 0);
+        device.Controls.Add(_levelTestButton, 3, 0);
+
+        var stack = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 1,
+            RowCount = 3,
+            Padding = new Padding(16, 12, 16, 14),
+        };
+        stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        stack.Controls.Add(choices);
+        stack.Controls.Add(Divider());
+        stack.Controls.Add(device);
+        foreach (var _ in Enumerable.Range(0, 3)) stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+        var card = new Card { Dock = DockStyle.Fill, AutoSize = true, Margin = new Padding(0, 0, 0, 14) };
+        card.Controls.Add(stack);
+        return card;
     }
 
-    private void ConfigureMic()
+    /// <summary>The dial and the search box: hold the one, or type in the other.</summary>
+    private TableLayoutPanel BuildInputRow()
     {
-        _micButton.Text = MicIdleText;
-        _micButton.Height = 92;
-        _micButton.Dock = DockStyle.Fill;
-        _micButton.Font = new Font("Yu Gothic UI", 13f, FontStyle.Bold);
-        _micButton.Enabled = false;
-        _micButton.MouseDown += (_, e) => { if (e.Button == MouseButtons.Left) BeginHold(); };
-        _micButton.MouseUp += (_, e) => { if (e.Button == MouseButtons.Left) EndHold(); };
-        _micButton.KeyDown += (_, e) => { if (e.KeyCode == Keys.Space) BeginHold(); };
-        _micButton.KeyUp += (_, e) => { if (e.KeyCode == Keys.Space) EndHold(); };
+        _dial.Size = new Size(64, 64);
+        _dial.Enabled = false;
+        _dial.Anchor = AnchorStyles.Left;
+        _dial.Margin = new Padding(0, 0, 14, 0);
+        _dial.HoldStarted += (_, _) => BeginHold();
+        _dial.HoldEnded += (_, _) => EndHold();
 
-        _levelBar.Dock = DockStyle.Fill;
-        _levelBar.Maximum = 100;
-        _levelBar.Style = ProgressBarStyle.Continuous;
-        _levelBar.Margin = new Padding(0, 6, 0, 6);
-
-        _heardLabel.Dock = DockStyle.Fill;
-        _heardLabel.TextAlign = ContentAlignment.MiddleLeft;
-        _heardLabel.ForeColor = Theme.Muted;
-        _heardLabel.Text = "聞き取り結果はここに出ます";
-    }
-
-    private void ConfigureResults()
-    {
-        _typedBox.Dock = DockStyle.Fill;
+        _typedBox.BorderStyle = BorderStyle.None;
+        _typedBox.BackColor = Theme.Panel;
+        _typedBox.ForeColor = Theme.Text;
+        _typedBox.Font = new Font("Yu Gothic UI", 10.5f);
+        _typedBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _typedBox.Margin = new Padding(0);
         _typedBox.PlaceholderText = "キーボードで探す（英語表記: wet job part 4）";
-        _typedBox.Margin = new Padding(0, 4, 0, 8);
         _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
         _typedBox.KeyDown += (_, e) =>
         {
@@ -309,8 +313,76 @@ public sealed class MainForm : Form
             OpenSelected();
         };
 
+        _micHint.Text = "準備中…";
+        _micHint.AutoSize = true;
+        _micHint.BackColor = Color.Transparent;
+        _micHint.ForeColor = Theme.Faint;
+        _micHint.Font = new Font("Yu Gothic UI", 8.25f);
+        _micHint.Anchor = AnchorStyles.Right;
+        _micHint.Margin = new Padding(10, 0, 0, 0);
+
+        var inner = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Padding = new Padding(34, 0, 12, 0),
+            Margin = new Padding(0),
+        };
+        inner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        inner.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        inner.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        inner.Controls.Add(_typedBox, 0, 0);
+        inner.Controls.Add(_micHint, 1, 0);
+
+        var box = new SearchCard
+        {
+            Radius = 8,
+            Height = 38,
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+            Margin = new Padding(0),
+        };
+        box.Controls.Add(inner);
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+        };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        row.Controls.Add(_dial, 0, 0);
+        row.Controls.Add(box, 1, 0);
+        return row;
+    }
+
+    /// <summary>What the recognizer heard, large enough to read at a glance.</summary>
+    private Label BuildHeard()
+    {
+        _heardLabel.Dock = DockStyle.Fill;
+        _heardLabel.Height = 34;
+        _heardLabel.TextAlign = ContentAlignment.MiddleLeft;
+        _heardLabel.Font = new Font("Yu Gothic UI", 12.5f);
+        _heardLabel.ForeColor = Theme.Faint;
+        _heardLabel.BackColor = Color.Transparent;
+        _heardLabel.Margin = new Padding(2, 10, 0, 6);
+        _heardLabel.Text = "聞き取り結果はここに出ます";
+        return _heardLabel;
+    }
+
+    private Card BuildResultsCard()
+    {
         _candidates.Dock = DockStyle.Fill;
-        _candidates.IntegralHeight = false;
+        _candidates.BackColor = Theme.Panel;
+        _candidates.ForeColor = Theme.Text;
+        _candidates.Margin = new Padding(0);
         _candidates.DoubleClick += (_, _) => OpenSelected();
         _candidates.KeyDown += (_, e) =>
         {
@@ -319,22 +391,84 @@ public sealed class MainForm : Form
             OpenSelected();
         };
 
-        _openButton.Text = "選択したページをブラウザで開く";
-        _openButton.Dock = DockStyle.Fill;
-        _openButton.Height = 36;
-        _openButton.Click += (_, _) => OpenSelected();
+        _countLabel.Text = "";
+        _countLabel.AutoSize = true;
+        _countLabel.BackColor = Color.Transparent;
+        _countLabel.ForeColor = Theme.Faint;
+        _countLabel.Font = new Font("Yu Gothic UI", 8.25f);
+        _countLabel.Margin = new Padding(2, 0, 0, 6);
 
-        _statusLabel.Dock = DockStyle.Fill;
-        _statusLabel.ForeColor = Theme.Muted;
-        _statusLabel.Text = "起動中…";
+        var hint = Micro("Enter で開く");
+        hint.Anchor = AnchorStyles.Right;
+        hint.Margin = new Padding(0, 0, 2, 6);
+
+        var header = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+        };
+        header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        header.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        header.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        header.Controls.Add(_countLabel, 0, 0);
+        header.Controls.Add(hint, 1, 0);
+
+        var stack = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.Transparent,
+            ColumnCount = 1,
+            RowCount = 2,
+            Padding = new Padding(14, 12, 14, 12),
+            Margin = new Padding(0),
+        };
+        stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        stack.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        stack.Controls.Add(header, 0, 0);
+        stack.Controls.Add(_candidates, 0, 1);
+
+        var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 12) };
+        card.Controls.Add(stack);
+        return card;
     }
 
-    private FlowLayoutPanel BuildBottomRow()
+    private Label BuildNotice()
+    {
+        _noticeLabel.AutoSize = true;
+        _noticeLabel.Visible = false;
+        _noticeLabel.BackColor = Color.Transparent;
+        _noticeLabel.Cursor = Cursors.Hand;
+        _noticeLabel.Margin = new Padding(2, 0, 0, 8);
+        _noticeLabel.Click += (_, _) => OnNoticeClicked();
+        return _noticeLabel;
+    }
+
+    private PillButton BuildOpenButton()
+    {
+        _openButton.Text = "選択したページをブラウザで開く";
+        _openButton.Dock = DockStyle.Fill;
+        _openButton.Height = 38;
+        _openButton.Font = new Font("Yu Gothic UI", 10.5f, FontStyle.Bold);
+        _openButton.Margin = new Padding(0, 0, 0, 12);
+        _openButton.Click += (_, _) => OpenSelected();
+        return _openButton;
+    }
+
+    private TableLayoutPanel BuildBottomRow()
     {
         _autoOpen.Text = "確信度が高いときは自動で開く";
         _autoOpen.Checked = true;
         _autoOpen.AutoSize = true;
-        _autoOpen.Margin = new Padding(0, 8, 16, 0);
+        _autoOpen.BackColor = Color.Transparent;
+        _autoOpen.ForeColor = Theme.Muted;
+        _autoOpen.Anchor = AnchorStyles.Left;
+        _autoOpen.Margin = new Padding(0, 0, 0, 0);
         _autoOpen.CheckedChanged += (_, _) =>
         {
             if (_loading) return;
@@ -342,31 +476,132 @@ public sealed class MainForm : Form
             _settings.Save();
         };
 
-        _themeBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _themeBox.Width = 120;
-        _themeBox.Margin = new Padding(0, 5, 0, 4);
+        _themeBox.Width = 152;
+        _themeBox.Anchor = AnchorStyles.Right;
+        _themeBox.Margin = new Padding(8, 0, 0, 0);
         _themeBox.Items.AddRange(new object[] { "システムに従う", "ライト", "ダーク" });
         _themeBox.SelectedIndex = 0;
         _themeBox.SelectedIndexChanged += (_, _) => OnThemeChanged();
 
-        var row = new FlowLayoutPanel
+        var themeLabel = Micro("表示");
+        themeLabel.Anchor = AnchorStyles.Right;
+        themeLabel.Margin = new Padding(0, 0, 0, 0);
+
+        var row = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            FlowDirection = FlowDirection.LeftToRight,
-            WrapContents = false,
-            Margin = new Padding(0, 6, 0, 0),
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 3,
+            RowCount = 1,
+            Margin = new Padding(0, 0, 0, 10),
         };
-        row.Controls.Add(_autoOpen);
-        row.Controls.Add(new Label
-        {
-            Text = "表示",
-            AutoSize = true,
-            Margin = new Padding(0, 9, 6, 0),
-        });
-        row.Controls.Add(_themeBox);
-
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        row.Controls.Add(_autoOpen, 0, 0);
+        row.Controls.Add(themeLabel, 1, 0);
+        row.Controls.Add(_themeBox, 2, 0);
         return row;
+    }
+
+    /// <summary>
+    /// What the app is doing, and what it can hear. One line rather than two:
+    /// a second row of grey text is the sort of noise this redesign is trying
+    /// to remove, and it was the row that got clipped first on a small window.
+    /// </summary>
+    private TableLayoutPanel BuildFooter()
+    {
+        _statusLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _statusLabel.AutoSize = false;
+        _statusLabel.Height = 18;
+        _statusLabel.AutoEllipsis = true;
+        _statusLabel.TextAlign = ContentAlignment.MiddleLeft;
+        _statusLabel.BackColor = Color.Transparent;
+        _statusLabel.ForeColor = Theme.Muted;
+        _statusLabel.Font = new Font("Yu Gothic UI", 8.75f);
+        _statusLabel.Margin = new Padding(2, 0, 12, 0);
+        _statusLabel.Text = "起動中…";
+
+        _grammarLabel.Anchor = AnchorStyles.Right;
+        _grammarLabel.AutoSize = true;
+        _grammarLabel.BackColor = Color.Transparent;
+        _grammarLabel.ForeColor = Theme.Faint;
+        _grammarLabel.Font = new Font("Yu Gothic UI", 8.25f);
+        _grammarLabel.Margin = new Padding(0, 0, 2, 0);
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+        };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        row.Controls.Add(_statusLabel, 0, 0);
+        row.Controls.Add(_grammarLabel, 1, 0);
+        return row;
+    }
+
+    /// <summary>
+    /// Whether the dial can be held, and why not when it cannot. The reason used
+    /// to be the button's own caption; the dial has no room for a sentence.
+    /// </summary>
+    private void SetMicState(bool ready, string hint, bool warn = false)
+    {
+        _dial.Enabled = ready;
+        if (!ready) _dial.Reset();
+        _micHint.Text = hint;
+        _micHint.ForeColor = warn ? Theme.Warning : Theme.Faint;
+    }
+
+    // --------------------------------------------------------- window frame
+
+    private const int DwmCaptionColour = 35;
+    private const int DwmTextColour = 36;
+    private const int DwmBorderColour = 34;
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
+
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+        ApplyCaptionColour();
+    }
+
+    /// <summary>
+    /// Paints the title bar in the app's own colour instead of the system grey.
+    /// Windows 11 only; older builds return an error code we ignore, and the
+    /// window simply keeps the default caption.
+    /// </summary>
+    private void ApplyCaptionColour()
+    {
+        if (!IsHandleCreated) return;
+
+        static int Bgr(Color c) => c.R | (c.G << 8) | (c.B << 16);
+
+        try
+        {
+            var caption = Bgr(Theme.Page);
+            var text = Bgr(Theme.Muted);
+            var border = Bgr(Theme.Edge);
+
+            DwmSetWindowAttribute(Handle, DwmCaptionColour, ref caption, sizeof(int));
+            DwmSetWindowAttribute(Handle, DwmTextColour, ref text, sizeof(int));
+            DwmSetWindowAttribute(Handle, DwmBorderColour, ref border, sizeof(int));
+        }
+        catch (Exception)
+        {
+            // Cosmetic; never let it stop the window from opening.
+        }
     }
 
     // ------------------------------------------------------------- lifecycle
@@ -602,7 +837,9 @@ public sealed class MainForm : Form
             }, token);
 
             _levelTestButton.Text = "確認を停止";
-            _micButton.Enabled = false;
+            _dial.Metering = true;
+            _micHint.Text = "レベル確認中";
+            _micHint.ForeColor = Theme.Faint;
             SetStatus($"「{device}」を聞いています。話してみてください。");
         }
         catch (Exception ex)
@@ -614,17 +851,22 @@ public sealed class MainForm : Form
     }
 
     /// <summary>
-    /// dBFS, not a linear percentage: normal speech peaks around a tenth of full
-    /// scale, which reads as "10%" and looks broken when it is in fact fine.
-    /// 0 dBFS is the clipping point, so healthy speech sits near -20.
+    /// The disc is the meter: the fill is the level now, the held line is the
+    /// loudest so far, and its colour is the verdict. A peak line that never
+    /// leaves the bottom of the disc says "too quiet" without a sentence.
+    ///
+    /// The decibels still go to the status line, because dBFS is what tells a
+    /// broken gain stage from a quiet voice, and this app exists partly to
+    /// answer that. It is diagnostic, so it lives where diagnostics live.
     /// </summary>
     private void ShowLevel(AudioLevel level)
     {
-        _levelBar.Value = AudioLevel.ToMeter(level.PeakDb);
+        _dial.Value = AudioLevel.ToMeter(level.PeakDb);
 
         if (level.PeakDb > _levelTestPeakDb) _levelTestPeakDb = level.PeakDb;
 
-        _heardLabel.ForeColor = _levelTestPeakDb switch
+        _dial.Peak = AudioLevel.ToMeter(_levelTestPeakDb);
+        _dial.PeakTone = _levelTestPeakDb switch
         {
             < AudioLevel.SilenceDb => Theme.Danger,
             < -35 => Theme.Warning,
@@ -635,7 +877,7 @@ public sealed class MainForm : Form
         var now = level.PeakDb <= AudioLevel.FloorDb ? "-∞" : $"{level.PeakDb:0} dBFS";
         var held = _levelTestPeakDb <= AudioLevel.FloorDb ? "-∞" : $"{_levelTestPeakDb:0} dBFS";
 
-        _heardLabel.Text = $"入力 {now}　ピーク {held}　— {AudioLevel.Verdict(_levelTestPeakDb)}";
+        SetStatus($"入力 {now}　ピーク {held}　— {AudioLevel.Verdict(_levelTestPeakDb)}");
     }
 
     private void StopLevelTest()
@@ -649,9 +891,12 @@ public sealed class MainForm : Form
         _levelTest.Dispose();
         _levelTest = null;
 
-        _levelBar.Value = 0;
+        _dial.Metering = false;
+        _dial.Reset();
+        _dial.PeakTone = Color.Empty;
         _levelTestButton.Text = "レベル確認";
-        _micButton.Enabled = _speech is not null;
+        SetMicState(_speech is not null, _speech is not null ? MicReady : "使用できません",
+            warn: _speech is null);
     }
 
     // ------------------------------------------------------------ recognizer
@@ -677,8 +922,7 @@ public sealed class MainForm : Form
     {
         var generation = ++_buildGeneration;
 
-        _micButton.Enabled = false;
-        _micButton.Text = "音声認識を準備中…";
+        SetMicState(false, "準備中…");
         SetStatus("音声認識を準備中…");
 
         _speech?.Dispose();
@@ -763,18 +1007,18 @@ public sealed class MainForm : Form
 
         if (setup.Error == "recognizer-missing")
         {
-            _micButton.Enabled = false;
-            _micButton.Text = language == RecognitionLanguage.Japanese
-                ? "日本語の音声認識が未インストールです"
-                : "英語の音声認識が未インストールです";
-            SetStatus($"利用可能な認識エンジン: {SpeechService.InstalledRecognizerSummary()}");
+            SetMicState(false, "音声認識が未インストール", warn: true);
+            SetStatus(language == RecognitionLanguage.Japanese
+                ? "日本語の音声認識が未インストールです。"
+                  + $"利用可能な認識エンジン: {SpeechService.InstalledRecognizerSummary()}"
+                : "英語の音声認識が未インストールです。"
+                  + $"利用可能な認識エンジン: {SpeechService.InstalledRecognizerSummary()}");
             return;
         }
 
         if (setup.Speech is null)
         {
-            _micButton.Enabled = false;
-            _micButton.Text = "音声認識を初期化できませんでした";
+            SetMicState(false, "初期化に失敗", warn: true);
             if (setup.Error is not null) SetStatus($"音声認識の初期化に失敗しました: {setup.Error}");
             return;
         }
@@ -782,7 +1026,7 @@ public sealed class MainForm : Form
         _speech = setup.Speech;
         _speech.DeviceIndex = SelectedDevice?.Index ?? -1;
         _speech.AudioLevel += (_, level) =>
-            BeginInvoke(() => _levelBar.Value = AudioLevel.ToMeter(level.PeakDb));
+            BeginInvoke(() => _dial.Value = AudioLevel.ToMeter(level.PeakDb));
         _speech.Finished += (_, outcome) =>
             BeginInvoke(() => OnRecognitionFinished(outcome));
         _speech.Hypothesis += (_, text) =>
@@ -790,8 +1034,7 @@ public sealed class MainForm : Form
         _speech.SpeechDetected += (_, _) =>
             BeginInvoke(() => { if (_holding) _heardLabel.Text = "…（音声を検出）"; });
 
-        _micButton.Enabled = true;
-        _micButton.Text = MicIdleText;
+        SetMicState(true, MicReady);
     }
 
     /// <summary>
@@ -876,7 +1119,7 @@ public sealed class MainForm : Form
         {
             _speech.Start();
             _holding = true;
-            _micButton.Text = MicActiveText;
+            _micHint.Text = MicListening;
             _heardLabel.ForeColor = Theme.Muted;
             _heardLabel.Text = "…";
             SetStatus("マイク使用中");
@@ -892,7 +1135,7 @@ public sealed class MainForm : Form
         if (!_holding || _speech is null) return;
 
         _holding = false;
-        _micButton.Text = MicIdleText;
+        _micHint.Text = MicReady;
         SetStatus("認識中…");
         _speech.Stop();
     }
@@ -907,7 +1150,7 @@ public sealed class MainForm : Form
 
     private void OnRecognitionFinished(RecognitionOutcome outcome)
     {
-        _levelBar.Value = 0;
+        _dial.Reset();
 
         if (outcome.IsEmpty)
         {
@@ -1006,6 +1249,7 @@ public sealed class MainForm : Form
         if (text.Trim().Length == 0)
         {
             _candidates.Items.Clear();
+            _countLabel.Text = "";
             return;
         }
 
@@ -1028,6 +1272,7 @@ public sealed class MainForm : Form
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
+        _countLabel.Text = _candidates.Items.Count > 0 ? $"候補 {_candidates.Items.Count} 件" : "";
     }
 
     /// <summary>The katakana reading, so the list also teaches how to say it.</summary>
@@ -1070,6 +1315,19 @@ public sealed class MainForm : Form
     private void SetStatus(string text) => _statusLabel.Text = text;
 
     private const int WmSettingChange = 0x001A;
+    private const int WmDpiChanged = 0x02E0;
+    private const int WmSetRedraw = 0x000B;
+
+    private const uint RdwInvalidate = 0x0001;
+    private const uint RdwErase = 0x0004;
+    private const uint RdwAllChildren = 0x0080;
+    private const uint RdwFrame = 0x0400;
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SendMessage(IntPtr window, int message, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    private static extern bool RedrawWindow(IntPtr window, IntPtr rect, IntPtr region, uint flags);
 
     /// <summary>
     /// Windows broadcasts this when the light/dark setting flips. WinForms
@@ -1078,6 +1336,8 @@ public sealed class MainForm : Form
     /// </summary>
     protected override void WndProc(ref Message m)
     {
+        if (m.Msg == WmDpiChanged) { RescaleQuietly(ref m); return; }
+
         base.WndProc(ref m);
 
         if (m.Msg != WmSettingChange) return;
@@ -1091,12 +1351,84 @@ public sealed class MainForm : Form
         BeginInvoke(ReapplyThemeColors);
     }
 
+    /// <summary>
+    /// Every colour the app paints itself, re-read. WinForms restyles the system
+    /// controls on its own, but the cards, the dial and the candidate rows are
+    /// ours, and so are the ones handed to the combo boxes and the title bar.
+    /// </summary>
+    /// <summary>
+    /// Crossing onto a monitor that scales differently.
+    ///
+    /// WinForms rescales the controls one at a time, laying out and repainting
+    /// between each, so the window is seen changing shape in pieces - and the
+    /// message is synchronous, so the drag stops for as long as it takes. Held
+    /// still and redrawn once at the end, the same work costs a fraction of the
+    /// time and the window simply arrives at its new size.
+    /// </summary>
+    private void RescaleQuietly(ref Message m)
+    {
+        var frozen = Frozen();
+
+        foreach (var control in frozen)
+            SendMessage(control.Handle, WmSetRedraw, IntPtr.Zero, IntPtr.Zero);
+
+        SuspendLayout();
+        try
+        {
+            base.WndProc(ref m);
+        }
+        finally
+        {
+            ResumeLayout(true);
+
+            foreach (var control in frozen)
+                SendMessage(control.Handle, WmSetRedraw, (IntPtr)1, IntPtr.Zero);
+
+            RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero,
+                RdwInvalidate | RdwErase | RdwAllChildren | RdwFrame);
+        }
+    }
+
+    /// <summary>
+    /// Every window that would otherwise paint mid-rescale. Only those with a
+    /// handle: creating one here would defeat the point.
+    /// </summary>
+    private List<Control> Frozen()
+    {
+        var found = new List<Control>();
+
+        void Walk(Control parent)
+        {
+            if (!parent.IsHandleCreated) return;
+            found.Add(parent);
+            foreach (Control child in parent.Controls) Walk(child);
+        }
+
+        Walk(this);
+        return found;
+    }
+
     private void ReapplyThemeColors()
     {
-        _grammarLabel.ForeColor = Theme.Muted;
+        BackColor = Theme.Page;
+
+        _grammarLabel.ForeColor = Theme.Faint;
         _statusLabel.ForeColor = Theme.Muted;
         _heardLabel.ForeColor = Theme.Muted;
+        _micHint.ForeColor = Theme.Faint;
+        _countLabel.ForeColor = Theme.Faint;
+        _autoOpen.ForeColor = Theme.Muted;
         _noticeLabel.ForeColor = _pendingRelease is null ? Theme.Good : Theme.Info;
+
+        foreach (var box in Combos) box.ApplyColours();
+
+        _typedBox.BackColor = Theme.Panel;
+        _typedBox.ForeColor = Theme.Text;
+        _candidates.BackColor = Theme.Panel;
+        _candidates.ForeColor = Theme.Text;
+
+        ApplyCaptionColour();
+        Refresh();
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
@@ -1104,27 +1436,5 @@ public sealed class MainForm : Form
         StopLevelTest();
         _speech?.Dispose();
         base.OnFormClosed(e);
-    }
-
-    private sealed class CandidateRow(TaskMatch match, string? reading)
-    {
-        public TaskMatch Match { get; } = match;
-
-        public override string ToString()
-        {
-            // Kind first, because "Ground Zero" as a map and as the map an
-            // extract belongs to are different answers to the same words.
-            var kind = Match.Task.Kind switch
-            {
-                EntryKind.Map => "[マップ] ",
-                EntryKind.Extract => "[出口] ",
-                _ => "",
-            };
-
-            var group = Match.Task.Group.Length > 0 ? $"  /  {Match.Task.Group}" : "";
-            var row = $"{kind}{Match.Task.Display}{group}   [{Match.Score:P0}]";
-
-            return reading is null ? row : $"{row}   {reading}";
-        }
     }
 }
