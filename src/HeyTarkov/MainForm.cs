@@ -48,6 +48,16 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Text = AppInfo.TitleBar;
+
+        // Every size below is written for 96 DPI. Saying so explicitly is what
+        // makes the window survive a move to a monitor that scales differently:
+        // WinForms then multiplies the whole layout - control bounds,
+        // MinimumSize, and TableLayoutPanel's absolute rows - by the DPI ratio,
+        // at startup and again on every DPI change. Left unset it resizes the
+        // window but not its contents, and the layout comes apart.
+        AutoScaleDimensions = new SizeF(96f, 96f);
+        AutoScaleMode = AutoScaleMode.Dpi;
+
         MinimumSize = new Size(600, 660);
         Size = new Size(680, 740);
         StartPosition = FormStartPosition.CenterScreen;
