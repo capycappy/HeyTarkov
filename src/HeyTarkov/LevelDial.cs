@@ -25,7 +25,9 @@ public sealed class LevelDial : Control
     private const int Fall = 7;
 
     private int _value;
+    private int _peak;
     private bool _holding;
+    private bool _metering;
     private bool _hot;
 
     public LevelDial()
@@ -71,13 +73,59 @@ public sealed class LevelDial : Control
 
     private Color Backdrop => OnCard ? Theme.Panel : Theme.Page;
 
+    /// <summary>
+    /// The highest level seen, held on screen as a marker. It is what the level
+    /// check is for: a peak that never reaches the middle of the disc is a
+    /// microphone that is too quiet, and that reads faster as a line than as a
+    /// number of decibels.
+    /// </summary>
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public int Peak
+    {
+        get => _peak;
+        set
+        {
+            var next = Math.Clamp(value, 0, 100);
+            if (next == _peak) return;
+            _peak = next;
+            Invalidate();
+        }
+    }
+
+    /// <summary>The verdict on that peak, as a colour: too quiet, fine, too hot.</summary>
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Color PeakTone { get; set; } = Color.Empty;
+
+    /// <summary>
+    /// Showing the input without being a button. The level check listens to the
+    /// microphone without the recognizer, so the disc has to display a level it
+    /// must not let anyone start recording with.
+    /// </summary>
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool Metering
+    {
+        get => _metering;
+        set
+        {
+            if (_metering == value) return;
+            _metering = value;
+            if (value) End();
+            Cursor = value ? Cursors.Default : Cursors.Hand;
+            Invalidate();
+        }
+    }
+
     public bool Holding => _holding;
 
     /// <summary>Drop to empty at once, without the fall - the microphone closed.</summary>
     public void Reset()
     {
-        if (_value == 0) return;
+        if (_value == 0 && _peak == 0) return;
         _value = 0;
+        _peak = 0;
         Invalidate();
     }
 
@@ -121,7 +169,7 @@ public sealed class LevelDial : Control
 
     private void Begin()
     {
-        if (_holding || !Enabled) return;
+        if (_holding || !Enabled || _metering) return;
         _holding = true;
         Invalidate();
         HoldStarted?.Invoke(this, EventArgs.Empty);
@@ -150,15 +198,16 @@ public sealed class LevelDial : Control
         var box = new RectangleF((Width - side) / 2f, (Height - side) / 2f, side, side);
         var cx = box.X + side / 2f;
         var cy = box.Y + side / 2f;
-        var level = Enabled ? _value / 100f : 0f;
+        var live = Enabled || _metering;
+        var level = live ? _value / 100f : 0f;
 
-        var ringColour = !Enabled ? Theme.Edge
-            : _holding ? Theme.Accent
+        var ringColour = !live ? Theme.Edge
+            : _holding || _metering ? Theme.Accent
             : _hot ? Theme.Accent
             : Theme.Edge;
 
-        var glyphColour = !Enabled ? Theme.Faint
-            : _holding ? Theme.Accent
+        var glyphColour = !live ? Theme.Faint
+            : _holding || _metering ? Theme.Accent
             : Theme.Muted;
 
         using (var brush = new SolidBrush(Theme.PanelHi)) g.FillEllipse(brush, box);
@@ -174,13 +223,36 @@ public sealed class LevelDial : Control
 
         if (level > 0) InvertMicUnderFill(g, box, cx, cy, side / 2f, level, span, stroke);
 
+        if (live && _peak > 0) DrawPeak(g, box, cx, cy, side / 2f, _peak / 100f);
+
         // Inside the ring, not outside it: the control is exactly the disc, so
         // an outer ring would be clipped away by its own bounds.
-        if (Focused && Enabled)
+        if (Focused && Enabled && !_metering)
         {
             var inset = ring * 2.5f;
             using var pen = new Pen(Theme.Accent, LogicalToDeviceUnits(1)) { DashStyle = DashStyle.Dot };
             g.DrawEllipse(pen, box.X + inset, box.Y + inset, side - inset * 2, side - inset * 2);
+        }
+    }
+
+    /// <summary>The peak, held: a line across the disc in the verdict's colour.</summary>
+    private void DrawPeak(Graphics g, RectangleF box, float cx, float cy, float r, float peak)
+    {
+        var state = g.Save();
+        try
+        {
+            using var clip = new GraphicsPath();
+            clip.AddEllipse(box);
+            g.SetClip(clip, CombineMode.Intersect);
+
+            var y = cy + r - r * 2 * peak;
+            var colour = PeakTone.IsEmpty ? Theme.Text : PeakTone;
+            using var pen = new Pen(colour, Math.Max(1.6f, r * 0.055f));
+            g.DrawLine(pen, cx - r, y, cx + r, y);
+        }
+        finally
+        {
+            g.Restore(state);
         }
     }
 
