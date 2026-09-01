@@ -190,6 +190,9 @@ public sealed class MainForm : Form
 
         _deviceBox.SelectedIndexChanged += (_, _) => OnDeviceChanged();
 
+        foreach (var box in new[] { _languageBox, _wikiBox, _browserBox, _deviceBox })
+            box.OnCard = true;
+
         var choices = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
