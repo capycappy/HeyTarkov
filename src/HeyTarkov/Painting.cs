@@ -209,6 +209,9 @@ public sealed class SearchCard : Card
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
+        Painting.DrawRounded(e.Graphics, new RectangleF(0, 0, Width, Height), Theme.Field,
+            LogicalToDeviceUnits(Radius), LogicalToDeviceUnits(1));
+
         var cx = LogicalToDeviceUnits(19);
         var cy = Height / 2f;
         var r = LogicalToDeviceUnits(5);

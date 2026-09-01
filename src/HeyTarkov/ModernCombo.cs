@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
@@ -19,6 +20,15 @@ public sealed class ModernCombo : ComboBox
     private const int ArrowWidth = 26;
 
     private bool _hot;
+
+    /// <summary>
+    /// What this sits on. The square border has to be painted out in the
+    /// surrounding colour, and a card is not the page.
+    /// </summary>
+    [DefaultValue(false)]
+    public bool OnCard { get; set; }
+
+    private Color Backdrop => OnCard ? Theme.Panel : Theme.Page;
 
     public ModernCombo()
     {
@@ -134,13 +144,34 @@ public sealed class ModernCombo : ComboBox
         var area = g.VisibleClipBounds;
         var arrow = LogicalToDeviceUnits(ArrowWidth);
         var line = LogicalToDeviceUnits(1);
+        var radius = LogicalToDeviceUnits(6);
+
+        // Underneath all of this the OS has drawn its own square border around
+        // the whole control, and filled the corners to match. Rounding the
+        // frame on top of that leaves the square showing at every corner, so
+        // the outermost ring is painted out in the surrounding colour first and
+        // the rounded frame drawn one pixel inside where it used to be.
+        var frame = RectangleF.FromLTRB(
+            area.Left + line, area.Top + line, area.Right - line, area.Bottom - line);
+
+        using (var outside = new GraphicsPath { FillMode = FillMode.Alternate })
+        using (var rounded = Painting.Rounded(frame, radius))
+        {
+            // Inflated past the edge: an anti-aliased path boundary sitting
+            // exactly on the outermost pixel covers only half of it, which
+            // leaves the OS border showing through at 50%.
+            outside.AddRectangle(RectangleF.Inflate(area, line * 2, line * 2));
+            outside.AddPath(rounded, false);
+            using var brush = new SolidBrush(Backdrop);
+            g.FillPath(brush, outside);
+        }
 
         // Cover the button the OS drew, then put a chevron where it was.
         using (var brush = new SolidBrush(Theme.PanelHi))
-            g.FillRectangle(brush, area.Right - arrow, line, arrow - line, area.Height - line * 2);
+            g.FillRectangle(brush, frame.Right - arrow, frame.Top, arrow, frame.Height);
 
-        var cx = area.Right - arrow / 2f;
-        var cy = area.Height / 2f;
+        var cx = frame.Right - arrow / 2f;
+        var cy = frame.Top + frame.Height / 2f;
         var size = LogicalToDeviceUnits(4);
 
         using (var pen = new Pen(Enabled ? Theme.Muted : Theme.Faint, Math.Max(1.3f, line * 1.4f))
@@ -161,8 +192,8 @@ public sealed class ModernCombo : ComboBox
         var border = !Enabled ? Theme.Edge
             : Focused || DroppedDown ? Theme.Accent
             : _hot ? Theme.Muted
-            : Theme.Edge;
+            : Theme.Field;
 
-        Painting.DrawRounded(g, area, border, LogicalToDeviceUnits(6), line);
+        Painting.DrawRounded(g, frame, border, radius, line);
     }
 }

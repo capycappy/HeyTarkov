@@ -29,6 +29,13 @@ public static class Theme
     /// <summary>Hairline borders and dividers.</summary>
     public static Color Edge => Pick(0x2C313A, 0xD5DAE1);
 
+    /// <summary>
+    /// The outline of something you type or choose in. A card can be found by
+    /// its fill alone; a field has to look like a field, and once the combo box
+    /// stopped borrowing the system's own bright border it needed its own.
+    /// </summary>
+    public static Color Field => Pick(0x3E4653, 0xB9C0CB);
+
     // ----------------------------------------------------------------- ink
 
     /// <summary>Normal body text.</summary>
