@@ -1315,6 +1315,19 @@ public sealed class MainForm : Form
     private void SetStatus(string text) => _statusLabel.Text = text;
 
     private const int WmSettingChange = 0x001A;
+    private const int WmDpiChanged = 0x02E0;
+    private const int WmSetRedraw = 0x000B;
+
+    private const uint RdwInvalidate = 0x0001;
+    private const uint RdwErase = 0x0004;
+    private const uint RdwAllChildren = 0x0080;
+    private const uint RdwFrame = 0x0400;
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SendMessage(IntPtr window, int message, IntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    private static extern bool RedrawWindow(IntPtr window, IntPtr rect, IntPtr region, uint flags);
 
     /// <summary>
     /// Windows broadcasts this when the light/dark setting flips. WinForms
@@ -1323,6 +1336,8 @@ public sealed class MainForm : Form
     /// </summary>
     protected override void WndProc(ref Message m)
     {
+        if (m.Msg == WmDpiChanged) { RescaleQuietly(ref m); return; }
+
         base.WndProc(ref m);
 
         if (m.Msg != WmSettingChange) return;
@@ -1341,6 +1356,58 @@ public sealed class MainForm : Form
     /// controls on its own, but the cards, the dial and the candidate rows are
     /// ours, and so are the ones handed to the combo boxes and the title bar.
     /// </summary>
+    /// <summary>
+    /// Crossing onto a monitor that scales differently.
+    ///
+    /// WinForms rescales the controls one at a time, laying out and repainting
+    /// between each, so the window is seen changing shape in pieces - and the
+    /// message is synchronous, so the drag stops for as long as it takes. Held
+    /// still and redrawn once at the end, the same work costs a fraction of the
+    /// time and the window simply arrives at its new size.
+    /// </summary>
+    private void RescaleQuietly(ref Message m)
+    {
+        var frozen = Frozen();
+
+        foreach (var control in frozen)
+            SendMessage(control.Handle, WmSetRedraw, IntPtr.Zero, IntPtr.Zero);
+
+        SuspendLayout();
+        try
+        {
+            base.WndProc(ref m);
+        }
+        finally
+        {
+            ResumeLayout(true);
+
+            foreach (var control in frozen)
+                SendMessage(control.Handle, WmSetRedraw, (IntPtr)1, IntPtr.Zero);
+
+            RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero,
+                RdwInvalidate | RdwErase | RdwAllChildren | RdwFrame);
+        }
+    }
+
+    /// <summary>
+    /// Every window that would otherwise paint mid-rescale. Only those with a
+    /// handle: creating one here would defeat the point.
+    /// </summary>
+    private List<Control> Frozen()
+    {
+        var found = new List<Control>();
+
+        void Walk(Control parent)
+        {
+            if (!parent.IsHandleCreated) return;
+            found.Add(parent);
+            foreach (Control child in parent.Controls) Walk(child);
+        }
+
+        Walk(this);
+        return found;
+    }
+
     private void ReapplyThemeColors()
     {
         BackColor = Theme.Page;
