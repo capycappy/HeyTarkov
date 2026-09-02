@@ -1,4 +1,4 @@
-# Hey Tarkov v1.2.1
+# Hey Tarkov v1.2.2
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -6,12 +6,16 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 ## アプリは Wiki に一切アクセスしません
 
-一覧（1056件）は**ビルド時にアプリへ埋め込まれた固定データ**です。
+一覧（1057件）は**ビルド時にアプリへ埋め込まれた固定データ**です。
 アプリが実行中に Wiki へリクエストを送ることはありません。やっているのは
 **ブックマークと同じく、ブラウザで該当ページを開くこと**だけです。
 
 一覧の更新は開発者が `tools/CatalogBuilder` を手動で実行し、新しいバージョンとして
 リリースする形をとります。利用者側での自動更新はありません。
+
+シーズンやイベントで追加されたタスクは、そのぶんアプリを更新するまで出てきません。
+イベントタスクは日本語 Wiki 側で一覧からリンクされないことがあるため、
+`tools/CatalogBuilder/Tasks.cs` の `JapaneseExtras` にページ名を直接書けるようにしてあります。
 
 アプリが通信するのは1点のみ、**GitHub Releases に新しいバージョンがあるかの確認**です。
 
@@ -22,8 +26,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.2.1-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.2.1-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.2.2-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.2.2-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -48,7 +52,7 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | 種別 | 件数 | 例 |
 |---|---|---|
-| タスク | 898 | 「ウェット ジョブ パート フォー」 |
+| タスク | 899 | 「ウェット ジョブ パート フォー」 |
 | マップ | 15 | 「グラウンドゼロ」 |
 | 脱出地点 | 143 | 「グラウンドゼロ エマーコムチェックポイント」 |
 
@@ -74,8 +78,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | |
 |---|---|
-| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 586件 |
-| 英語 Wiki | [escapefromtarkov.fandom.com](https://escapefromtarkov.fandom.com/wiki/Quests) — 870件 |
+| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 587件 |
+| 英語 Wiki | [escapefromtarkov.fandom.com](https://escapefromtarkov.fandom.com/wiki/Quests) — 871件 |
 
 **選択中の Wiki にページがある項目だけが認識・検索の対象**になる。
 片方にしか無いタスクを候補に混ぜると、実際に開けるタスクが下に押し下げられて邪魔になるため。

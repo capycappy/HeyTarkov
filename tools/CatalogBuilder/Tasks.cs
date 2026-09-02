@@ -35,6 +35,42 @@ public static partial class Tasks
     private const string StoryCategoryJapanese = "ストーリータスク";
     private const string StoryTrader = "Story";
 
+    /// <summary>
+    /// Pages that exist on wikiwiki but are not linked from any index we read.
+    /// Seasonal event tasks land here: the page is written before anybody wires
+    /// it into the task list, and until they do it is unreachable by crawling.
+    /// Each is checked to exist before it is used, so a stale line drops out
+    /// rather than producing a dead entry.
+    /// </summary>
+    private static readonly string[] JapaneseExtras =
+    {
+        // KORD BREACH battle pass. Part 2 has no Japanese page yet.
+        "Prapor/KORD BREACH Uninvited Guests - Part 1",
+    };
+
+    /// <summary>
+    /// Prefixes wikiwiki puts on event task pages to group them together. They
+    /// are page naming rather than part of the task's name - the game calls it
+    /// "Uninvited Guests - Part 1" - and stripping them is what lets the entry
+    /// merge with the same task on the English wiki instead of becoming a
+    /// second one nobody can open.
+    /// </summary>
+    private static readonly string[] EventPrefixes =
+    {
+        "KORD BREACH ",
+    };
+
+    private static string WithoutEventPrefix(string name)
+    {
+        foreach (var prefix in EventPrefixes)
+        {
+            if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return name[prefix.Length..].Trim();
+        }
+
+        return name;
+    }
+
     [GeneratedRegex("""href="(/eft/[^"]+)" title="([^"]+)" class="rel-wiki-page""")]
     private static partial Regex JapaneseLink();
 
@@ -104,8 +140,31 @@ public static partial class Tasks
                 if (!seen.Add(title)) continue;
 
                 var trader = category == StoryCategoryJapanese ? StoryTrader : category;
-                found.Add((trader, name, Wikis.JapaneseOrigin + href));
+                found.Add((trader, WithoutEventPrefix(name), Wikis.JapaneseOrigin + href));
             }
+        }
+
+        foreach (var title in JapaneseExtras)
+        {
+            if (!seen.Add(title)) continue;
+
+            var slash = title.IndexOf('/');
+            if (slash <= 0 || slash == title.Length - 1) continue;
+
+            var category = title[..slash];
+            var name = title[(slash + 1)..];
+            if (!JapaneseCategories.Contains(category)) continue;
+
+            var url = wikis.JapaneseUrl(title);
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is null)
+            {
+                Console.Error.WriteLine($"  extra page is gone, skipping: {title}");
+                continue;
+            }
+
+            Console.WriteLine($"  extra: {title}");
+            var trader = category == StoryCategoryJapanese ? StoryTrader : category;
+            found.Add((trader, WithoutEventPrefix(name), url));
         }
 
         return found;
