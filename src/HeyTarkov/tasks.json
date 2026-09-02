@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-08-31T23:02:40.4429355+08:00",
+  "UpdatedAt": "2026-09-03T04:22:43.8807015+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -2043,6 +2043,16 @@
     },
     {
       "Kind": 0,
+      "Name": "Preliminary Survey",
+      "Group": "",
+      "Faction": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Preliminary_Survey",
+      "Display": "Preliminary Survey",
+      "SpokenName": "Preliminary Survey"
+    },
+    {
+      "Kind": 0,
       "Name": "Pressured by Circumstances",
       "Group": "",
       "Faction": null,
@@ -2970,16 +2980,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unanswered_Calls",
       "Display": "Unanswered Calls",
       "SpokenName": "Unanswered Calls"
-    },
-    {
-      "Kind": 0,
-      "Name": "Uninvited Guests - Part 1",
-      "Group": "",
-      "Faction": null,
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_1",
-      "Display": "Uninvited Guests - Part 1",
-      "SpokenName": "Uninvited Guests - Part 1"
     },
     {
       "Kind": 0,
@@ -6350,6 +6350,16 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Tarkov_Import",
       "Display": "The Tarkov Import",
       "SpokenName": "The Tarkov Import"
+    },
+    {
+      "Kind": 0,
+      "Name": "Uninvited Guests - Part 1",
+      "Group": "Prapor",
+      "Faction": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/KORD%20BREACH%20Uninvited%20Guests%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_1",
+      "Display": "Uninvited Guests - Part 1",
+      "SpokenName": "Uninvited Guests - Part 1"
     },
     {
       "Kind": 0,

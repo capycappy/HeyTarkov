@@ -75,7 +75,14 @@ public sealed partial class Wikis : IDisposable
         _lastRequest = DateTimeOffset.Now;
     }
 
-    public string JapaneseUrl(string page) => $"{JapaneseOrigin}/eft/{Uri.EscapeDataString(page)}";
+    /// <summary>
+    /// Escaped a segment at a time. A wikiwiki page under a trader has a slash
+    /// in its title - "Prapor/KORD BREACH Uninvited Guests - Part 1" - and
+    /// escaping the whole title turns that into %2F, which the site tolerates
+    /// but which matches nothing else in the catalog.
+    /// </summary>
+    public string JapaneseUrl(string page) =>
+        $"{JapaneseOrigin}/eft/{string.Join('/', page.Split('/').Select(Uri.EscapeDataString))}";
 
     /// <summary>
     /// MediaWiki titles keep characters EscapeDataString would encode; leaving
