@@ -51,6 +51,9 @@ public sealed class MainForm : Form
     private bool _loading;
     private int _buildGeneration;
 
+    /// <summary>Where the window was last time, if it is still somewhere real.</summary>
+    private WindowPlacement? _placement;
+
     public MainForm()
     {
         Text = AppInfo.TitleBar;
@@ -66,7 +69,13 @@ public sealed class MainForm : Form
 
         MinimumSize = new Size(600, 620);
         Size = new Size(680, 740);
+
+        // Centred on the monitor the mouse is on, which is what WinForms means
+        // by CenterScreen once there is more than one - until the window has
+        // been closed once and has somewhere of its own to go back to.
         StartPosition = FormStartPosition.CenterScreen;
+        _placement = Settings.Load().Window;
+        Restore();
         Font = new Font("Yu Gothic UI", 9.75f);
         BackColor = Theme.Page;
 
@@ -74,6 +83,106 @@ public sealed class MainForm : Form
         BuildLayout();
         ActiveControl = _typedBox;
         Load += async (_, _) => await InitializeAsync();
+    }
+
+    /// <summary>How much of the strip you drag has to be on a monitor.</summary>
+    private const int GripWidth = 160;
+    private const int GripHeight = 32;
+
+    /// <summary>
+    /// Put the window back where it was left.
+    ///
+    /// The saved rectangle is only used if enough of the title bar is still on
+    /// a monitor that exists: unplugging the screen it was on, or turning the
+    /// television off, must not leave the window somewhere it cannot be
+    /// dragged back from.
+    /// </summary>
+    private void Restore()
+    {
+        var saved = _placement;
+
+        if (saved is null || saved.Width <= 0 || saved.Height <= 0)
+        {
+            _placement = null;
+            return;
+        }
+
+        var grip = new Rectangle(saved.X, saved.Y, GripWidth, GripHeight);
+
+        var reachable = Screen.AllScreens.Any(screen =>
+        {
+            var seen = Rectangle.Intersect(screen.WorkingArea, grip);
+            return seen.Width >= GripWidth / 2 && seen.Height >= GripHeight / 2;
+        });
+
+        if (!reachable)
+        {
+            _placement = null;
+            return;
+        }
+
+        // Only the corner, so the window is born on the right monitor and picks
+        // up its DPI. The exact rectangle is applied in OnLoad, after the DPI
+        // scaling pass has had its say - going through that pass loses a few
+        // percent of the size, and the loss compounds on every launch.
+        StartPosition = FormStartPosition.Manual;
+        Location = new Point(saved.X, saved.Y);
+    }
+
+    /// <summary>
+    /// The saved rectangle, exactly, once the window knows what monitor it is
+    /// on. Rescaled only if that monitor's scale has changed since.
+    /// </summary>
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+
+        if (_placement is null) return;
+
+        var factor = DeviceDpi / (double)(_placement.Dpi <= 0 ? 96 : _placement.Dpi);
+
+        Bounds = new Rectangle(
+            _placement.X,
+            _placement.Y,
+            (int)Math.Round(_placement.Width * factor),
+            (int)Math.Round(_placement.Height * factor));
+
+        if (_placement.Maximized) WindowState = FormWindowState.Maximized;
+    }
+
+    /// <summary>
+    /// RestoreBounds rather than Bounds when the window is maximized or
+    /// minimized: what should come back is the shape it had before, not a
+    /// full-screen rectangle reopened as a normal window.
+    ///
+    /// The file is re-read rather than the in-memory copy written, because the
+    /// window can be closed before startup has finished loading it, and saving
+    /// an empty Settings over a real one would lose every other preference.
+    /// </summary>
+    private void SavePlacement()
+    {
+        try
+        {
+            var bounds = WindowState == FormWindowState.Normal ? Bounds : RestoreBounds;
+            if (bounds.Width <= 0 || bounds.Height <= 0) return;
+
+            var settings = Settings.Load();
+            settings.Window = new WindowPlacement
+            {
+                X = bounds.X,
+                Y = bounds.Y,
+                Width = bounds.Width,
+                Height = bounds.Height,
+                Dpi = DeviceDpi <= 0 ? 96 : DeviceDpi,
+                Maximized = WindowState == FormWindowState.Maximized,
+            };
+
+            settings.Save();
+        }
+        catch (Exception)
+        {
+            // Losing a window position is not worth interrupting a close.
+        }
     }
 
     /// <summary>
@@ -1429,6 +1538,12 @@ public sealed class MainForm : Form
 
         ApplyCaptionColour();
         Refresh();
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        SavePlacement();
+        base.OnFormClosing(e);
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e)
