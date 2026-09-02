@@ -48,6 +48,13 @@ public sealed class MainForm : Form
     private ReleaseInfo? _pendingRelease;
     private double _levelTestPeakDb = AudioLevel.FloorDb;
     private bool _holding;
+
+    /// <summary>The grammar is being rebuilt; the microphone cannot start yet.</summary>
+    private bool _preparing;
+
+    /// <summary>The button went down during that, and is still down.</summary>
+    private bool _waitingToStart;
+
     private bool _loading;
     private int _buildGeneration;
 
@@ -1031,7 +1038,8 @@ public sealed class MainForm : Form
     {
         var generation = ++_buildGeneration;
 
-        SetMicState(false, "準備中…");
+        _preparing = true;
+        SetMicState(true, "準備中…");
         SetStatus("音声認識を準備中…");
 
         _speech?.Dispose();
@@ -1116,6 +1124,8 @@ public sealed class MainForm : Form
 
         if (setup.Error == "recognizer-missing")
         {
+            _preparing = false;
+            _waitingToStart = false;
             SetMicState(false, "音声認識が未インストール", warn: true);
             SetStatus(language == RecognitionLanguage.Japanese
                 ? "日本語の音声認識が未インストールです。"
@@ -1127,6 +1137,8 @@ public sealed class MainForm : Form
 
         if (setup.Speech is null)
         {
+            _preparing = false;
+            _waitingToStart = false;
             SetMicState(false, "初期化に失敗", warn: true);
             if (setup.Error is not null) SetStatus($"音声認識の初期化に失敗しました: {setup.Error}");
             return;
@@ -1143,7 +1155,16 @@ public sealed class MainForm : Form
         _speech.SpeechDetected += (_, _) =>
             BeginInvoke(() => { if (_holding) _heardLabel.Text = "…（音声を検出）"; });
 
+        _preparing = false;
         SetMicState(true, MicReady);
+
+        // Held down through the whole rebuild: honour it now rather than making
+        // the press a second time.
+        if (_waitingToStart)
+        {
+            _waitingToStart = false;
+            if (_dial.Holding) BeginHold();
+        }
     }
 
     /// <summary>
@@ -1219,8 +1240,29 @@ public sealed class MainForm : Form
               + $"（もう一方の Wiki にしかない {other} 件は対象外）");
     }
 
+    /// <summary>
+    /// Pressed while the grammar is still compiling - about a second after the
+    /// wiki or the language changes. The press used to land on a disabled
+    /// button and disappear; it is held instead, and starts on its own the
+    /// moment the recognizer is ready, as long as the button is still down.
+    ///
+    /// Nothing said during that second is captured, which is why it says so
+    /// rather than pretending to listen.
+    /// </summary>
+    private bool DeferHold()
+    {
+        if (!_preparing) return false;
+
+        _waitingToStart = true;
+        _micHint.Text = "準備中…";
+        _heardLabel.ForeColor = Theme.Muted;
+        _heardLabel.Text = "準備中… 押したままお待ちください";
+        return true;
+    }
+
     private void BeginHold()
     {
+        if (DeferHold()) return;
         if (_holding || _speech is null || _speechIndex is null) return;
         if (_levelTest is not null) StopLevelTest();
 
@@ -1241,6 +1283,14 @@ public sealed class MainForm : Form
 
     private void EndHold()
     {
+        if (_waitingToStart)
+        {
+            _waitingToStart = false;
+            _micHint.Text = _preparing ? "準備中…" : MicReady;
+            _heardLabel.Text = "聞き取り結果はここに出ます";
+            return;
+        }
+
         if (!_holding || _speech is null) return;
 
         _holding = false;
