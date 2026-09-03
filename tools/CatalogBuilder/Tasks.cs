@@ -44,8 +44,9 @@ public static partial class Tasks
     /// </summary>
     private static readonly string[] JapaneseExtras =
     {
-        // KORD BREACH battle pass. Part 2 has no Japanese page yet.
-        "Prapor/KORD BREACH Uninvited Guests - Part 1",
+        // Empty on purpose. Event tasks used to be listed here by hand; they
+        // are found by FindJapaneseEventPagesAsync now. This stays for the
+        // orphan that is not part of an event, which will turn up eventually.
     };
 
     /// <summary>
@@ -113,10 +114,52 @@ public static partial class Tasks
         }
 
         foreach (var (key, entry) in byKey)
-            if (events.TryGetValue(key, out var name))
-                entry.Event = name;
+        {
+            if (!events.TryGetValue(key, out var season)) continue;
+
+            entry.Event = season.Event;
+
+            // The trader only ever came from the Japanese wiki, and most of
+            // these have no Japanese page. Fandom's infobox knows.
+            if (entry.Group.Length == 0) entry.Group = season.Giver;
+        }
+
+        await FindJapaneseEventPagesAsync(wikis, byKey.Values, ct).ConfigureAwait(false);
 
         return byKey.Values.ToList();
+    }
+
+    /// <summary>
+    /// wikiwiki files an event task under its trader with the event in the
+    /// title - "Mechanic/KORD BREACH Break the Chain" - and links it from
+    /// nowhere at all, so no amount of crawling finds it. Once the event and
+    /// the trader are known the page name is, too, so it is simply asked for.
+    ///
+    /// Only for event tasks that have no Japanese page yet: fifteen of the
+    /// nineteen in KORD BREACH, at one request each. The other four are not
+    /// written yet and answer 404.
+    /// </summary>
+    private static async Task FindJapaneseEventPagesAsync(
+        Wikis wikis, IEnumerable<WikiEntry> entries, CancellationToken ct)
+    {
+        var found = 0;
+
+        foreach (var entry in entries)
+        {
+            if (entry.Event.Length == 0 || entry.JapaneseUrl is not null) continue;
+            if (!JapaneseCategories.Contains(entry.Group)) continue;
+
+            var page = $"{entry.Group}/{entry.Event} {entry.Name}";
+            var url = wikis.JapaneseUrl(page);
+
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is null) continue;
+
+            entry.JapaneseUrl = url;
+            found++;
+            Console.WriteLine($"  event page: {page}");
+        }
+
+        Console.WriteLine($"  {found} event tasks also have a Japanese page");
     }
 
     private static async Task<List<(string Trader, string Name, string Url)>> JapaneseAsync(

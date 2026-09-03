@@ -28,11 +28,18 @@ public static partial class Seasons
     [GeneratedRegex(@"\[\[Seasons#Season\s*\d+\s*:\s*([^|\]]+)")]
     private static partial Regex SeasonLink();
 
-    /// <summary>Task name, normalized, to the event it belongs to.</summary>
-    public static async Task<Dictionary<string, string>> FetchAsync(
+    /// <summary>The trader the task comes from, out of the infobox.</summary>
+    [GeneratedRegex(@"\|\s*given by\s*=\s*\[\[([^\]|]+)")]
+    private static partial Regex Giver();
+
+    /// <summary>What a seasonal task belongs to, and who hands it out.</summary>
+    public readonly record struct Seasonal(string Event, string Giver);
+
+    /// <summary>Task name, normalized, to its season.</summary>
+    public static async Task<Dictionary<string, Seasonal>> FetchAsync(
         Wikis wikis, CancellationToken ct = default)
     {
-        var found = new Dictionary<string, string>(StringComparer.Ordinal);
+        var found = new Dictionary<string, Seasonal>(StringComparer.Ordinal);
 
         var linking = await BacklinksAsync(wikis, ct).ConfigureAwait(false);
         if (linking.Count == 0) return found;
@@ -75,11 +82,13 @@ public static partial class Seasons
                 var name = marker.Groups[1].Value.Trim();
                 if (name.Length == 0) continue;
 
-                found[Naming.Normalize(title)] = name;
+                var giver = Giver().Match(text);
+                found[Naming.Normalize(title)] =
+                    new Seasonal(name, giver.Success ? giver.Groups[1].Value.Trim() : "");
             }
         }
 
-        foreach (var group in found.GroupBy(p => p.Value).OrderBy(g => g.Key, StringComparer.Ordinal))
+        foreach (var group in found.GroupBy(p => p.Value.Event).OrderBy(g => g.Key, StringComparer.Ordinal))
             Console.WriteLine($"    {group.Key}: {group.Count()} tasks");
 
         return found;

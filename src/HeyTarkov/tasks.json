@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-09-03T15:12:59.2462423+08:00",
+  "UpdatedAt": "2026-09-03T16:02:29.3943661+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -256,17 +256,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Break the Chain",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_the_Chain",
-      "Display": "Break the Chain",
-      "SpokenName": "Break the Chain"
-    },
-    {
-      "Kind": 0,
       "Name": "Break Through",
       "Group": "",
       "Faction": null,
@@ -319,17 +308,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Burn_It_Down",
       "Display": "Burn It Down",
       "SpokenName": "Burn It Down"
-    },
-    {
-      "Kind": 0,
-      "Name": "Cast the Net",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cast_the_Net",
-      "Display": "Cast the Net",
-      "SpokenName": "Cast the Net"
     },
     {
       "Kind": 0,
@@ -663,17 +641,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Consequences of Our Decisions",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Consequences_of_Our_Decisions",
-      "Display": "Consequences of Our Decisions",
-      "SpokenName": "Consequences of Our Decisions"
-    },
-    {
-      "Kind": 0,
       "Name": "Conservation Area",
       "Group": "",
       "Faction": null,
@@ -803,28 +770,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Decryption_Hurdles_-_Part_3",
       "Display": "Decryption Hurdles - Part 3",
       "SpokenName": "Decryption Hurdles - Part 3"
-    },
-    {
-      "Kind": 0,
-      "Name": "Desperate Assault",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Desperate_Assault",
-      "Display": "Desperate Assault",
-      "SpokenName": "Desperate Assault"
-    },
-    {
-      "Kind": 0,
-      "Name": "Digital Puzzle",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Digital_Puzzle",
-      "Display": "Digital Puzzle",
-      "SpokenName": "Digital Puzzle"
     },
     {
       "Kind": 0,
@@ -1169,17 +1114,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Final Stretch",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Final_Stretch",
-      "Display": "Final Stretch",
-      "SpokenName": "Final Stretch"
-    },
-    {
-      "Kind": 0,
       "Name": "Find the Source",
       "Group": "",
       "Faction": null,
@@ -1221,17 +1155,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Fishing_With_Shishiga",
       "Display": "Fishing With Shishiga",
       "SpokenName": "Fishing With Shishiga"
-    },
-    {
-      "Kind": 0,
-      "Name": "Forbidden Knowledge",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forbidden_Knowledge",
-      "Display": "Forbidden Knowledge",
-      "SpokenName": "Forbidden Knowledge"
     },
     {
       "Kind": 0,
@@ -1752,17 +1675,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Key to Understanding",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_Understanding",
-      "Display": "Key to Understanding",
-      "SpokenName": "Key to Understanding"
-    },
-    {
-      "Kind": 0,
       "Name": "Khorovod",
       "Group": "",
       "Faction": null,
@@ -1804,17 +1716,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/KnivesOut_-_Part_3",
       "Display": "KnivesOut - Part 3",
       "SpokenName": "KnivesOut - Part 3"
-    },
-    {
-      "Kind": 0,
-      "Name": "Know Your Enemy",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Know_Your_Enemy",
-      "Display": "Know Your Enemy",
-      "SpokenName": "Know Your Enemy"
     },
     {
       "Kind": 0,
@@ -2423,28 +2324,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Reverse Gear",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reverse_Gear",
-      "Display": "Reverse Gear",
-      "SpokenName": "Reverse Gear"
-    },
-    {
-      "Kind": 0,
-      "Name": "Riding the Wave",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Riding_the_Wave",
-      "Display": "Riding the Wave",
-      "SpokenName": "Riding the Wave"
-    },
-    {
-      "Kind": 0,
       "Name": "Rigged",
       "Group": "",
       "Faction": null,
@@ -2566,17 +2445,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Sheep in Wolf's Clothing",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sheep_in_Wolf's_Clothing",
-      "Display": "Sheep in Wolf's Clothing",
-      "SpokenName": "Sheep in Wolf's Clothing"
-    },
-    {
-      "Kind": 0,
       "Name": "Shell Game",
       "Group": "",
       "Faction": null,
@@ -2695,17 +2563,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Staff_Shortage",
       "Display": "Staff Shortage",
       "SpokenName": "Staff Shortage"
-    },
-    {
-      "Kind": 0,
-      "Name": "Stay Clear of Blast Zone",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_Clear_of_Blast_Zone",
-      "Display": "Stay Clear of Blast Zone",
-      "SpokenName": "Stay Clear of Blast Zone"
     },
     {
       "Kind": 0,
@@ -3193,17 +3050,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Timeout",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Timeout",
-      "Display": "Timeout",
-      "SpokenName": "Timeout"
-    },
-    {
-      "Kind": 0,
       "Name": "To the Tree!",
       "Group": "",
       "Faction": null,
@@ -3267,28 +3113,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/U_Turn",
       "Display": "U Turn",
       "SpokenName": "U Turn"
-    },
-    {
-      "Kind": 0,
-      "Name": "Unanswered Calls",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unanswered_Calls",
-      "Display": "Unanswered Calls",
-      "SpokenName": "Unanswered Calls"
-    },
-    {
-      "Kind": 0,
-      "Name": "Uninvited Guests - Part 2",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_2",
-      "Display": "Uninvited Guests - Part 2",
-      "SpokenName": "Uninvited Guests - Part 2"
     },
     {
       "Kind": 0,
@@ -3366,17 +3190,6 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Western_Quality_Standards",
       "Display": "Western Quality Standards",
       "SpokenName": "Western Quality Standards"
-    },
-    {
-      "Kind": 0,
-      "Name": "What's in the Bag?",
-      "Group": "",
-      "Faction": null,
-      "Event": "KORD BREACH",
-      "JapaneseUrl": null,
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/What's_in_the_Bag%3F",
-      "Display": "What's in the Bag?",
-      "SpokenName": "What's in the Bag?"
     },
     {
       "Kind": 0,
@@ -3611,6 +3424,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Uninvited Guests - Part 2",
+      "Group": "BTR Driver",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/KORD%20BREACH%20Uninvited%20Guests%20-%20Part%202",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Uninvited_Guests_-_Part_2",
+      "Display": "Uninvited Guests - Part 2",
+      "SpokenName": "Uninvited Guests - Part 2"
+    },
+    {
+      "Kind": 0,
       "Name": "Between Two Fires",
       "Group": "Fence",
       "Faction": null,
@@ -3644,6 +3468,28 @@
     },
     {
       "Kind": 0,
+      "Name": "Final Stretch",
+      "Group": "Fence",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/KORD%20BREACH%20Final%20Stretch",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Final_Stretch",
+      "Display": "Final Stretch",
+      "SpokenName": "Final Stretch"
+    },
+    {
+      "Kind": 0,
+      "Name": "Forbidden Knowledge",
+      "Group": "Fence",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/KORD%20BREACH%20Forbidden%20Knowledge",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Forbidden_Knowledge",
+      "Display": "Forbidden Knowledge",
+      "SpokenName": "Forbidden Knowledge"
+    },
+    {
+      "Kind": 0,
       "Name": "Friend Among Strangers",
       "Group": "Fence",
       "Faction": null,
@@ -3674,6 +3520,28 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Is_This_a_Reference%3F",
       "Display": "Is This a Reference?",
       "SpokenName": "Is This a Reference?"
+    },
+    {
+      "Kind": 0,
+      "Name": "Key to Understanding",
+      "Group": "Fence",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/KORD%20BREACH%20Key%20to%20Understanding",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Key_to_Understanding",
+      "Display": "Key to Understanding",
+      "SpokenName": "Key to Understanding"
+    },
+    {
+      "Kind": 0,
+      "Name": "Sheep in Wolf's Clothing",
+      "Group": "Fence",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sheep_in_Wolf's_Clothing",
+      "Display": "Sheep in Wolf's Clothing",
+      "SpokenName": "Sheep in Wolf's Clothing"
     },
     {
       "Kind": 0,
@@ -3718,6 +3586,17 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Choice",
       "Display": "The Choice",
       "SpokenName": "The Choice"
+    },
+    {
+      "Kind": 0,
+      "Name": "What's in the Bag?",
+      "Group": "Fence",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/KORD%20BREACH%20What%27s%20in%20the%20Bag%3F",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/What's_in_the_Bag%3F",
+      "Display": "What's in the Bag?",
+      "SpokenName": "What's in the Bag?"
     },
     {
       "Kind": 0,
@@ -3982,6 +3861,17 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Slaughterhouse",
       "Display": "Slaughterhouse",
       "SpokenName": "Slaughterhouse"
+    },
+    {
+      "Kind": 0,
+      "Name": "Stay Clear of Blast Zone",
+      "Group": "Jaeger",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_Clear_of_Blast_Zone",
+      "Display": "Stay Clear of Blast Zone",
+      "SpokenName": "Stay Clear of Blast Zone"
     },
     {
       "Kind": 0,
@@ -4678,6 +4568,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Break the Chain",
+      "Group": "Mechanic",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/KORD%20BREACH%20Break%20the%20Chain",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_the_Chain",
+      "Display": "Break the Chain",
+      "SpokenName": "Break the Chain"
+    },
+    {
+      "Kind": 0,
       "Name": "Broadcast - Part 1",
       "Group": "Mechanic",
       "Faction": null,
@@ -4744,6 +4645,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Consequences of Our Decisions",
+      "Group": "Mechanic",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/KORD%20BREACH%20Consequences%20of%20Our%20Decisions",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Consequences_of_Our_Decisions",
+      "Display": "Consequences of Our Decisions",
+      "SpokenName": "Consequences of Our Decisions"
+    },
+    {
+      "Kind": 0,
       "Name": "Corporate Perks",
       "Group": "Mechanic",
       "Faction": null,
@@ -4763,6 +4675,28 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Corporate_Secrets",
       "Display": "Corporate Secrets",
       "SpokenName": "Corporate Secrets"
+    },
+    {
+      "Kind": 0,
+      "Name": "Desperate Assault",
+      "Group": "Mechanic",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/KORD%20BREACH%20Desperate%20Assault",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Desperate_Assault",
+      "Display": "Desperate Assault",
+      "SpokenName": "Desperate Assault"
+    },
+    {
+      "Kind": 0,
+      "Name": "Digital Puzzle",
+      "Group": "Mechanic",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/KORD%20BREACH%20Digital%20Puzzle",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Digital_Puzzle",
+      "Display": "Digital Puzzle",
+      "SpokenName": "Digital Puzzle"
     },
     {
       "Kind": 0,
@@ -5558,6 +5492,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Timeout",
+      "Group": "Mechanic",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Timeout",
+      "Display": "Timeout",
+      "SpokenName": "Timeout"
+    },
+    {
+      "Kind": 0,
       "Name": "Watching You",
       "Group": "Mechanic",
       "Faction": null,
@@ -6284,6 +6229,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Cast the Net",
+      "Group": "Prapor",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/KORD%20BREACH%20Cast%20the%20Net",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cast_the_Net",
+      "Display": "Cast the Net",
+      "SpokenName": "Cast the Net"
+    },
+    {
+      "Kind": 0,
       "Name": "Debut",
       "Group": "Prapor",
       "Faction": null,
@@ -6548,6 +6504,17 @@
     },
     {
       "Kind": 0,
+      "Name": "Know Your Enemy",
+      "Group": "Prapor",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/KORD%20BREACH%20Know%20Your%20Enemy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Know_Your_Enemy",
+      "Display": "Know Your Enemy",
+      "SpokenName": "Know Your Enemy"
+    },
+    {
+      "Kind": 0,
       "Name": "Luxurious Life",
       "Group": "Prapor",
       "Faction": null,
@@ -6699,6 +6666,17 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Regulated_Materials",
       "Display": "Regulated Materials",
       "SpokenName": "Regulated Materials"
+    },
+    {
+      "Kind": 0,
+      "Name": "Reverse Gear",
+      "Group": "Prapor",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/KORD%20BREACH%20Reverse%20Gear",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reverse_Gear",
+      "Display": "Reverse Gear",
+      "SpokenName": "Reverse Gear"
     },
     {
       "Kind": 0,
@@ -7480,6 +7458,17 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Reserve_Expert",
       "Display": "Reserve Expert",
       "SpokenName": "Reserve Expert"
+    },
+    {
+      "Kind": 0,
+      "Name": "Riding the Wave",
+      "Group": "Ragman",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/KORD%20BREACH%20Riding%20the%20Wave",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Riding_the_Wave",
+      "Display": "Riding the Wave",
+      "SpokenName": "Riding the Wave"
     },
     {
       "Kind": 0,
@@ -9867,6 +9856,17 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/This_Tape_Sucks",
       "Display": "This Tape Sucks",
       "SpokenName": "This Tape Sucks"
+    },
+    {
+      "Kind": 0,
+      "Name": "Unanswered Calls",
+      "Group": "Therapist",
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/KORD%20BREACH%20Unanswered%20Calls",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Unanswered_Calls",
+      "Display": "Unanswered Calls",
+      "SpokenName": "Unanswered Calls"
     },
     {
       "Kind": 0,

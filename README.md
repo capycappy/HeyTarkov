@@ -1,4 +1,4 @@
-# Hey Tarkov v1.2.4
+# Hey Tarkov v1.2.5
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -26,8 +26,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.2.4-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.2.4-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.2.5-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.2.5-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -91,15 +91,18 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 所属は英語 Wiki のタスク本文が持っている `[[Seasons#Season 1: KORD BREACH|…]]` から
 読み取っている。書き下したリストではないので、次のシーズンは再生成するだけで付く。
 
-日本語 Wiki にページがあるイベントタスクは今のところ 1 件だけなので、
-日本語 Wiki を選んでいると 1 件しか出ない。**そのまま英語 Wiki に切り替えれば
+日本語 Wiki のイベントページはどこからもリンクされていないので、クロールでは見つからない。
+イベント名と依頼主が分かればページ名も決まる（`Mechanic/KORD BREACH Break the Chain`）ので、
+**ビルダーが直接問い合わせて拾っている。** KORD BREACH は 19 件中 15 件に日本語ページがある。
+
+残り 4 件は日本語 Wiki にまだ記事が無いだけなので、**英語 Wiki に切り替えれば
 同じ言葉のまま探し直される。**
 
 ### Wiki の選択
 
 | | |
 |---|---|
-| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 587件 |
+| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 601件 |
 | 英語 Wiki | [escapefromtarkov.fandom.com](https://escapefromtarkov.fandom.com/wiki/Quests) — 871件 |
 
 **選択中の Wiki にページがある項目だけが認識・検索の対象**になる。
