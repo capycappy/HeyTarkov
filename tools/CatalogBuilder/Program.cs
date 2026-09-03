@@ -24,7 +24,7 @@ internal static class Program
         {
             using var wikis = new Wikis();
 
-            Console.WriteLine("tasks...");
+            Console.WriteLine("tasks and seasonal events...");
             var tasks = await Tasks.FetchAsync(wikis);
             Console.WriteLine($"  {tasks.Count} tasks");
 

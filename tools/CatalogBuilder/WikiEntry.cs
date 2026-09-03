@@ -44,6 +44,9 @@ public sealed class WikiEntry
     /// <summary>"PMC" or "SCAV" when an extract is faction-specific.</summary>
     public string? Faction { get; set; }
 
+    /// <summary>The seasonal event this task belongs to, or empty.</summary>
+    public string Event { get; set; } = "";
+
     public string? JapaneseUrl { get; set; }
     public string? EnglishUrl { get; set; }
 

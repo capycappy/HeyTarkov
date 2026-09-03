@@ -96,6 +96,8 @@ public static partial class Tasks
             entry.JapaneseUrl ??= url;
         }
 
+        var events = await Seasons.FetchAsync(wikis, ct).ConfigureAwait(false);
+
         foreach (var (name, url) in await EnglishAsync(wikis, ct).ConfigureAwait(false))
         {
             var key = Naming.Normalize(name);
@@ -109,6 +111,10 @@ public static partial class Tasks
 
             entry.EnglishUrl ??= url;
         }
+
+        foreach (var (key, entry) in byKey)
+            if (events.TryGetValue(key, out var name))
+                entry.Event = name;
 
         return byKey.Values.ToList();
     }
