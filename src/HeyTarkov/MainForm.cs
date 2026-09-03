@@ -46,6 +46,10 @@ public sealed class MainForm : Form
     private MicrophoneCapture? _levelTest;
     private CancellationTokenSource? _levelTestDrain;
     private ReleaseInfo? _pendingRelease;
+
+    /// <summary>The last thing the microphone heard, kept so that changing the
+    /// wiki can look it up again on the other one.</summary>
+    private RecognitionOutcome? _lastHeard;
     private double _levelTestPeakDb = AudioLevel.FloorDb;
     private bool _holding;
 
@@ -883,7 +887,7 @@ public sealed class MainForm : Form
         _candidates.Items.Clear();
 
         await RebuildForLanguageAsync();
-        ShowCandidatesFor(_typedBox.Text);
+        SearchAgain();
     }
 
     /// <summary>Re-enumerate capture devices, keeping the current pick if it is
@@ -1340,6 +1344,8 @@ public sealed class MainForm : Form
             ? $"一致しきりませんでした。近い候補を出しています。{via}"
             : $"マイク停止{via}");
 
+        _lastHeard = outcome;
+
         var matches = BuildCandidates(outcome);
         Populate(matches);
 
@@ -1396,6 +1402,34 @@ public sealed class MainForm : Form
         foreach (var match in _speechIndex.Rank(outcome.Text, 6)) Add(match);
 
         return result;
+    }
+
+    /// <summary>
+    /// Run the last search again on the wiki that is now selected. Typing wins
+    /// if there is anything in the box; otherwise the last thing said is looked
+    /// up again, which is what makes changing the wiki a way of asking "is it
+    /// on the other one?" rather than a way of clearing the screen.
+    ///
+    /// It never opens anything: this is not a new utterance, and jumping to a
+    /// page because a dropdown moved would be its own kind of wrong.
+    /// </summary>
+    private void SearchAgain()
+    {
+        if (_typedBox.Text.Trim().Length > 0)
+        {
+            ShowCandidatesFor(_typedBox.Text);
+            return;
+        }
+
+        if (_lastHeard is null || _speechIndex is null) return;
+
+        var matches = BuildCandidates(_lastHeard);
+        Populate(matches);
+
+        var label = SelectedWiki == WikiSource.Japanese ? "日本語 Wiki" : "英語 Wiki";
+        SetStatus(matches.Count > 0
+            ? $"「{_lastHeard.Text}」を {label} で探し直しました"
+            : $"「{_lastHeard.Text}」は {label} にありません");
     }
 
     private void ShowCandidatesFor(string text)

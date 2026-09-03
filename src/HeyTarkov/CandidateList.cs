@@ -20,7 +20,7 @@ public sealed class CandidateRow(TaskMatch match, string? reading)
         {
             EntryKind.Map => "マップ ",
             EntryKind.Extract => "出口 ",
-            _ => "",
+            _ => Match.Task.Event.Length > 0 ? $"イベント {Match.Task.Event} " : "",
         };
 
         var group = Match.Task.Group.Length > 0 ? $" / {Match.Task.Group}" : "";
@@ -108,10 +108,10 @@ public sealed class CandidateList : ListBox
                 Theme.Accent, LogicalToDeviceUnits(2));
         }
 
-        var kind = Theme.Of(row.Match.Task.Kind);
+        var kind = Theme.Of(row.Match.Task);
         var x = full.X + pad + LogicalToDeviceUnits(12);
 
-        x += Badge(g, Theme.BadgeOf(row.Match.Task.Kind), kind, x, full) + gap;
+        x += Badge(g, Theme.BadgeOf(row.Match.Task), kind, x, full) + gap;
 
         // Right-hand columns are placed first; the name takes whatever is left.
         var right = full.Right - pad - LogicalToDeviceUnits(4);

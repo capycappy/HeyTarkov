@@ -68,6 +68,20 @@ public static class Theme
     /// an extract on it are different answers to the same words, and the colour
     /// separates them faster than reading the badge does.
     /// </summary>
+    /// <summary>
+    /// A seasonal event task. It is still a task, but it is the one thing in
+    /// the list that stops existing when the season ends, and saying the event
+    /// name lists nothing else - so it is worth telling apart at a glance.
+    /// </summary>
+    public static Color Event => Pick(0xC792EA, 0x6B3FA6);
+
+    /// <summary>The event wins: a KORD BREACH task is an event task first.</summary>
+    public static Color Of(WikiEntry entry) =>
+        entry.Event.Length > 0 ? Event : Of(entry.Kind);
+
+    public static string BadgeOf(WikiEntry entry) =>
+        entry.Event.Length > 0 ? "EVENT" : BadgeOf(entry.Kind);
+
     public static Color Of(EntryKind kind) => kind switch
     {
         EntryKind.Map => Pick(0x6FA8DC, 0x2C6BA8),

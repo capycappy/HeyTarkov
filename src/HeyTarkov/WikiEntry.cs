@@ -42,6 +42,13 @@ public sealed class WikiEntry
     /// <summary>"PMC" or "SCAV" when an extract is faction-specific.</summary>
     public string? Faction { get; set; }
 
+    /// <summary>
+    /// The seasonal event this task belongs to, or empty. Saying the event name
+    /// is how the whole line is listed at once, so it is part of what the task
+    /// can be called rather than a label hung off it.
+    /// </summary>
+    public string Event { get; set; } = "";
+
     public string? JapaneseUrl { get; set; }
     public string? EnglishUrl { get; set; }
 
@@ -61,6 +68,11 @@ public sealed class WikiEntry
     public IEnumerable<string> SpokenVariants()
     {
         if (Kind == EntryKind.Extract && Group.Length > 0) yield return $"{Group} {Name}";
+
+        // "KORD BREACH Uninvited Guests - Part 1". Every prefix of this is
+        // searchable, so saying just the event name lists the whole line.
+        if (Event.Length > 0) yield return $"{Event} {Name}";
+
         yield return Name;
     }
 
