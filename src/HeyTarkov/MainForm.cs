@@ -921,6 +921,7 @@ public sealed class MainForm : Form
         if (chosen == _settings.UiLanguage) return;
 
         _settings.UiLanguage = chosen;
+        _settings.FollowUiLanguage();
         _settings.Save();
         RestartForDisplayChange();
     }

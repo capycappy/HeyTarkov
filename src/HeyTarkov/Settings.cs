@@ -98,6 +98,20 @@ public sealed class Settings
         };
     }
 
+    /// <summary>
+    /// Point the speaking and the wiki at the same language as the window.
+    /// Nobody sets the display to English and then goes on speaking Japanese
+    /// into it, and the wiki that matches is the one whose page will open.
+    /// Both dropdowns stay free afterwards for whoever wants the mixture.
+    /// </summary>
+    public void FollowUiLanguage()
+    {
+        var japanese = Strings.Resolve(UiLanguage);
+
+        JapaneseMode = japanese;
+        Wiki = japanese ? WikiSource.Japanese : WikiSource.English;
+    }
+
     public void Save()
     {
         try
