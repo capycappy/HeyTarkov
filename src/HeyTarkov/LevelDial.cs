@@ -37,7 +37,7 @@ public sealed class LevelDial : Control
         TabStop = true;
         Cursor = Cursors.Hand;
         AccessibleRole = AccessibleRole.PushButton;
-        AccessibleName = "押している間だけ聞き取ります";
+        AccessibleName = Strings.MicHoldToListen;
     }
 
     /// <summary>Raised when the button goes down, by mouse or by space.</summary>

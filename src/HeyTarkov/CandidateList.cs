@@ -18,9 +18,9 @@ public sealed class CandidateRow(TaskMatch match, string? reading)
     {
         var kind = Match.Task.Kind switch
         {
-            EntryKind.Map => "マップ ",
-            EntryKind.Extract => "出口 ",
-            _ => Match.Task.Event.Length > 0 ? $"イベント {Match.Task.Event} " : "",
+            EntryKind.Map => Strings.KindMap,
+            EntryKind.Extract => Strings.KindExit,
+            _ => Match.Task.Event.Length > 0 ? Strings.KindEvent(Match.Task.Event) : "",
         };
 
         var group = Match.Task.Group.Length > 0 ? $" / {Match.Task.Group}" : "";

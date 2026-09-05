@@ -112,9 +112,14 @@ public sealed class ModernCombo : ComboBox
         var pad = LogicalToDeviceUnits(closed ? 10 : 14);
         var text = Items[e.Index]?.ToString() ?? "";
 
+        // The bounds handed in for the closed value already stop short of the
+        // OS button; subtracting the whole chevron width again took another
+        // fourteen pixels off every field and truncated short words.
+        var tail = LogicalToDeviceUnits(closed ? 12 : 8);
+
         TextRenderer.DrawText(g, text, Font,
             new Rectangle(e.Bounds.X + pad, e.Bounds.Y,
-                e.Bounds.Width - pad - LogicalToDeviceUnits(closed ? ArrowWidth : 8), e.Bounds.Height),
+                e.Bounds.Width - pad - tail, e.Bounds.Height),
             selected ? Theme.Accent : Theme.Text,
             TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis
             | TextFormatFlags.NoPrefix);

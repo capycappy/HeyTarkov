@@ -7,7 +7,7 @@ public sealed record AudioDevice(int Index, string Name)
 {
     public bool IsDefault => Index < 0;
 
-    public override string ToString() => IsDefault ? $"既定のデバイス（{Name}）" : Name;
+    public override string ToString() => IsDefault ? Strings.DefaultDevice(Name) : Name;
 }
 
 public static class AudioInput
@@ -42,11 +42,11 @@ public static class AudioInput
         {
             return WaveInEvent.DeviceCount > 0
                 ? WaveInEvent.GetCapabilities(0).ProductName
-                : "入力デバイスなし";
+                : Strings.NoInputDevice;
         }
         catch (Exception)
         {
-            return "不明";
+            return Strings.UnknownDevice;
         }
     }
 }

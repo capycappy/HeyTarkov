@@ -316,7 +316,7 @@ public sealed class SpeechService : IDisposable
     public static string InstalledRecognizerSummary()
     {
         var installed = SpeechRecognitionEngine.InstalledRecognizers();
-        if (installed.Count == 0) return "(なし)";
+        if (installed.Count == 0) return Strings.NoneInstalled;
         return string.Join(", ", installed.Select(r =>
             $"{r.Culture.Name} ({r.Name})".ToString(CultureInfo.InvariantCulture)));
     }

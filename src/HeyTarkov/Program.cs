@@ -35,12 +35,18 @@ internal static class Program
             return MicTest.Run(seconds, device, language);
         }
 
+        var settings = Settings.Load();
+
+        // Before the window exists: every caption is read once, as its
+        // control is created.
+        Strings.Use(settings.UiLanguage);
+
         ApplicationConfiguration.Initialize();
 
         // Must happen before any control exists: WinForms picks the rendering
         // for the whole process here. Theme covers the few colours the app
         // chooses itself.
-        Application.SetColorMode(Settings.Load().Theme switch
+        Application.SetColorMode(settings.Theme switch
         {
             ThemeMode.Light => SystemColorMode.Classic,
             ThemeMode.Dark => SystemColorMode.Dark,
