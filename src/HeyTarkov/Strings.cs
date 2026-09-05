@@ -53,6 +53,13 @@ public static class Strings
 
     private static string T(string ja, string en) => Ja ? ja : en;
 
+    /// <summary>
+    /// Four digits and up get a thousands separator in the English text, which
+    /// is what an English reader expects. Invariant rather than current: the
+    /// sentence is English wherever Windows happens to be set.
+    /// </summary>
+    private static string N(int value) => value.ToString("N0", CultureInfo.InvariantCulture);
+
     // ------------------------------------------------------------ the panel
 
     public static string SpeakLabel => T("話す言語", "Speak");
@@ -76,6 +83,13 @@ public static class Strings
     public static string WikiName(WikiSource wiki) => wiki == WikiSource.Japanese
         ? T("日本語 Wiki", "Japanese wiki")
         : T("英語 Wiki", "English wiki");
+
+    /// <summary>
+    /// The one not selected, by name. "The other wiki" means nothing to someone
+    /// who has never been told there are two.
+    /// </summary>
+    public static string OtherWikiName(WikiSource wiki) =>
+        WikiName(wiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese);
 
     // -------------------------------------------------------------- the row
 
@@ -109,7 +123,7 @@ public static class Strings
         T("選択したページをブラウザで開く", "Open the selected page in the browser");
 
     public static string AutoOpen =>
-        T("確信度が高いときは自動で開く", "Open automatically when confident");
+        T("確信度が高いときは自動で開く", "Open automatically on a confident match");
 
     // ---------------------------------------------------------- the footer
 
@@ -134,7 +148,7 @@ public static class Strings
 
     public static string Starting => T("起動中…", "Starting…");
     public static string PreparingSpeech => T("音声認識を準備中…", "Preparing speech recognition…");
-    public static string MicInUse => T("マイク使用中", "Microphone open");
+    public static string MicInUse => T("マイク使用中", "Microphone in use");
     public static string Recognizing => T("認識中…", "Recognizing…");
     public static string SpeechDetected => T("…（音声を検出）", "… (speech detected)");
 
@@ -190,19 +204,20 @@ public static class Strings
 
     public static string Coverage(WikiSource wiki, int onWiki, int other) => other == 0
         ? T($"{WikiName(wiki)} のタスク {onWiki} 件を対象にしています",
-            $"Covering {onWiki} entries on the {WikiName(wiki)}")
+            $"Searching {N(onWiki)} entries on the {WikiName(wiki)}")
         : T($"{WikiName(wiki)} のタスク {onWiki} 件を対象にしています（もう一方の Wiki にしかない {other} 件は対象外）",
-            $"Covering {onWiki} entries on the {WikiName(wiki)} ({other} exist only on the other wiki)");
+            $"Searching {N(onWiki)} entries on the {WikiName(wiki)}"
+            + $" — {N(other)} more exist only on the {OtherWikiName(wiki)}");
 
     public static string Vocabulary(int count, string note) =>
-        T($"認識語彙 {count} 件{note}", $"{count} phrases{note}");
+        T($"認識語彙 {count} 件{note}", $"{N(count)} phrases{note}");
 
     public static string SpellOnlyNote(int count) => T(
         $"　※{count} 件は読み未登録（スペル読みでのみ認識）",
-        $"   ({count} without readings — spelled out only)");
+        $"   ({N(count)} without readings — spelled out only)");
 
     public static string SpelledLoaded(int count) =>
-        T($"　/　スペル読み {count} 件", $"   /   spelled {count}");
+        T($"　/　スペル読み {count} 件", $"   /   spelled {N(count)}");
 
     public static string SpelledFailed(string message) => T(
         $"　/　スペル読みの読み込みに失敗: {message}",
