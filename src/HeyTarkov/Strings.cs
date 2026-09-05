@@ -33,7 +33,14 @@ public static class Strings
     /// language, which is what someone who has never opened the settings
     /// expects to see.
     /// </summary>
-    public static void Use(UiLanguage choice) => Ja = choice switch
+    public static void Use(UiLanguage choice) => Ja = Resolve(choice);
+
+    /// <summary>
+    /// Which of the two a choice actually means. Separate from Use because the
+    /// answer decides more than the captions: picking English also switches
+    /// what the app listens for and which wiki it opens.
+    /// </summary>
+    public static bool Resolve(UiLanguage choice) => choice switch
     {
         UiLanguage.Japanese => true,
         UiLanguage.English => false,
