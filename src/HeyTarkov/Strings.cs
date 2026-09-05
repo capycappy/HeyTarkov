@@ -99,7 +99,7 @@ public static class Strings
     public static string HeardPlaceholder =>
         T("聞き取り結果はここに出ます", "What you say appears here");
 
-    public static string MicReady => T("押して話す ／ 打つ", "Hold to speak / type");
+    public static string MicReady => T("押して話す ／ 打つ", "Hold to talk, or type");
     public static string MicListening => T("聞き取り中… 離すと検索します", "Listening… release to search");
     public static string MicPreparing => T("準備中…", "Preparing…");
     public static string MicKeepHolding => T("準備中… 押したままお待ちください", "Preparing… keep holding");
@@ -113,14 +113,14 @@ public static class Strings
 
     public static string EnterToOpen => T("Enter で開く", "Enter to open");
     public static string Candidates(int count) =>
-        T($"候補 {count} 件", count == 1 ? "1 candidate" : $"{count} candidates");
+        T($"候補 {count} 件", count == 1 ? "1 match" : $"{count} matches");
 
     public static string KindMap => T("マップ ", "Map ");
     public static string KindExit => T("出口 ", "Exit ");
     public static string KindEvent(string name) => T($"イベント {name} ", $"Event {name} ");
 
     public static string OpenSelected =>
-        T("選択したページをブラウザで開く", "Open the selected page in the browser");
+        T("選択したページをブラウザで開く", "Open selected page in browser");
 
     public static string AutoOpen =>
         T("確信度が高いときは自動で開く", "Open automatically on a confident match");
