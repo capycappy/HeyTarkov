@@ -6,9 +6,6 @@ public sealed class MainForm : Form
 {
     private const double AutoOpenConfidence = 0.55;
 
-    private const string MicReady = "押して話す ／ 打つ";
-    private const string MicListening = "聞き取り中… 離すと検索します";
-
     private readonly ModernCombo _languageBox = new();
     private readonly ModernCombo _wikiBox = new();
     private readonly ModernCombo _browserBox = new();
@@ -29,6 +26,7 @@ public sealed class MainForm : Form
     private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
     private readonly ModernCombo _themeBox = new();
+    private readonly ModernCombo _uiLanguageBox = new();
     private readonly Label _statusLabel = new();
 
     private Settings _settings = new();
@@ -293,16 +291,16 @@ public sealed class MainForm : Form
 
     /// <summary>Every combo box in the window, so the palette reaches all five.</summary>
     private ModernCombo[] Combos =>
-        new[] { _languageBox, _wikiBox, _browserBox, _deviceBox, _themeBox };
+        new[] { _languageBox, _wikiBox, _browserBox, _deviceBox, _themeBox, _uiLanguageBox };
 
     /// <summary>Set once and then ignored, so it is boxed off and quiet.</summary>
     private Card BuildSettingsCard()
     {
-        _languageBox.Items.AddRange(new object[] { "日本語で言う", "英語で言う" });
+        _languageBox.Items.AddRange(new object[] { Strings.SpeakJapanese, Strings.SpeakEnglish });
         _languageBox.SelectedIndex = 0;
         _languageBox.SelectedIndexChanged += async (_, _) => await OnLanguageChangedAsync();
 
-        _wikiBox.Items.AddRange(new object[] { "日本語 Wiki", "英語 Wiki" });
+        _wikiBox.Items.AddRange(new object[] { Strings.WikiJapaneseItem, Strings.WikiEnglishItem });
         _wikiBox.SelectedIndex = 0;
         _wikiBox.SelectedIndexChanged += async (_, _) => await OnWikiChangedAsync();
 
@@ -310,7 +308,7 @@ public sealed class MainForm : Form
 
         _deviceBox.SelectedIndexChanged += (_, _) => OnDeviceChanged();
 
-        foreach (var box in new[] { _languageBox, _wikiBox, _browserBox, _deviceBox })
+        foreach (var box in new[] { _languageBox, _wikiBox, _browserBox, _deviceBox, _uiLanguageBox })
             box.OnCard = true;
 
         var choices = new TableLayoutPanel
@@ -319,31 +317,43 @@ public sealed class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 3,
+            ColumnCount = 4,
             RowCount = 2,
             Margin = new Padding(0),
         };
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+        // The browser name comes from Windows and can be long; the other three
+        // only ever hold a language or "follow system".
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
         choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-        choices.Controls.Add(Micro("言語"), 0, 0);
-        choices.Controls.Add(Micro("Wiki"), 1, 0);
-        choices.Controls.Add(Micro("ブラウザ"), 2, 0);
+        choices.Controls.Add(Micro(Strings.SpeakLabel), 0, 0);
+        choices.Controls.Add(Micro(Strings.WikiLabel), 1, 0);
+        choices.Controls.Add(Micro(Strings.BrowserLabel), 2, 0);
+        choices.Controls.Add(Micro(Strings.UiLanguageLabel), 3, 0);
 
         // Anchored, not docked: Dock.Fill stretches a ComboBox to the row height
         // and clips its bottom edge. Left+Right stretches the width only.
-        foreach (var (box, column) in new[] { (_languageBox, 0), (_wikiBox, 1), (_browserBox, 2) })
+        // Each language written in its own name: someone who cannot read the
+        // one currently showing still has to be able to find the way out.
+        _uiLanguageBox.Items.AddRange(new object[]
+            { Strings.UiSystem, Strings.UiJapanese, Strings.UiEnglish });
+        _uiLanguageBox.SelectedIndex = 0;
+        _uiLanguageBox.SelectedIndexChanged += (_, _) => OnUiLanguageChanged();
+
+        foreach (var (box, column) in new[]
+                 { (_languageBox, 0), (_wikiBox, 1), (_browserBox, 2), (_uiLanguageBox, 3) })
         {
             box.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            box.Margin = new Padding(0, 0, column == 2 ? 0 : 12, 0);
+            box.Margin = new Padding(0, 0, column == 3 ? 0 : 12, 0);
             choices.Controls.Add(box, column, 1);
         }
 
-        _rescanButton.Text = "再検出";
-        _levelTestButton.Text = "レベル確認";
+        _rescanButton.Text = Strings.Rescan;
+        _levelTestButton.Text = Strings.CheckLevel;
 
         // Identical fixed sizes: the level button's caption toggles between
         // "レベル確認" and "確認を停止", and an auto-sized button would shift the
@@ -376,7 +386,7 @@ public sealed class MainForm : Form
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-        var inputLabel = Micro("入力");
+        var inputLabel = Micro(Strings.InputLabel);
         inputLabel.Anchor = AnchorStyles.Left;
         inputLabel.Margin = new Padding(1, 0, 10, 0);
         device.Controls.Add(inputLabel, 0, 0);
@@ -424,7 +434,7 @@ public sealed class MainForm : Form
         _typedBox.Font = new Font("Yu Gothic UI", 10.5f);
         _typedBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _typedBox.Margin = new Padding(0);
-        _typedBox.PlaceholderText = "キーボードで探す（英語表記: wet job part 4）";
+        _typedBox.PlaceholderText = Strings.SearchPlaceholder;
         _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
         _typedBox.KeyDown += (_, e) =>
         {
@@ -433,7 +443,7 @@ public sealed class MainForm : Form
             OpenSelected();
         };
 
-        _micHint.Text = "準備中…";
+        _micHint.Text = Strings.MicPreparing;
         _micHint.AutoSize = true;
         _micHint.BackColor = Color.Transparent;
         _micHint.ForeColor = Theme.Faint;
@@ -493,7 +503,7 @@ public sealed class MainForm : Form
         _heardLabel.ForeColor = Theme.Faint;
         _heardLabel.BackColor = Color.Transparent;
         _heardLabel.Margin = new Padding(2, 10, 0, 6);
-        _heardLabel.Text = "聞き取り結果はここに出ます";
+        _heardLabel.Text = Strings.HeardPlaceholder;
         return _heardLabel;
     }
 
@@ -518,7 +528,7 @@ public sealed class MainForm : Form
         _countLabel.Font = new Font("Yu Gothic UI", 8.25f);
         _countLabel.Margin = new Padding(2, 0, 0, 6);
 
-        var hint = Micro("Enter で開く");
+        var hint = Micro(Strings.EnterToOpen);
         hint.Anchor = AnchorStyles.Right;
         hint.Margin = new Padding(0, 0, 2, 6);
 
@@ -571,7 +581,7 @@ public sealed class MainForm : Form
 
     private PillButton BuildOpenButton()
     {
-        _openButton.Text = "選択したページをブラウザで開く";
+        _openButton.Text = Strings.OpenSelected;
         _openButton.Dock = DockStyle.Fill;
         _openButton.Height = 38;
         _openButton.Font = new Font("Yu Gothic UI", 10.5f, FontStyle.Bold);
@@ -582,7 +592,7 @@ public sealed class MainForm : Form
 
     private TableLayoutPanel BuildBottomRow()
     {
-        _autoOpen.Text = "確信度が高いときは自動で開く";
+        _autoOpen.Text = Strings.AutoOpen;
         _autoOpen.Checked = true;
         _autoOpen.AutoSize = true;
         _autoOpen.BackColor = Color.Transparent;
@@ -599,11 +609,12 @@ public sealed class MainForm : Form
         _themeBox.Width = 152;
         _themeBox.Anchor = AnchorStyles.Right;
         _themeBox.Margin = new Padding(8, 0, 0, 0);
-        _themeBox.Items.AddRange(new object[] { "システムに従う", "ライト", "ダーク" });
+        _themeBox.Items.AddRange(new object[]
+            { Strings.ThemeSystem, Strings.ThemeLight, Strings.ThemeDark });
         _themeBox.SelectedIndex = 0;
         _themeBox.SelectedIndexChanged += (_, _) => OnThemeChanged();
 
-        var themeLabel = Micro("表示");
+        var themeLabel = Micro(Strings.ThemeLabel);
         themeLabel.Anchor = AnchorStyles.Right;
         themeLabel.Margin = new Padding(0, 0, 0, 0);
 
@@ -643,7 +654,7 @@ public sealed class MainForm : Form
         _statusLabel.ForeColor = Theme.Muted;
         _statusLabel.Font = new Font("Yu Gothic UI", 8.75f);
         _statusLabel.Margin = new Padding(2, 0, 12, 0);
-        _statusLabel.Text = "起動中…";
+        _statusLabel.Text = Strings.Starting;
 
         _grammarLabel.Anchor = AnchorStyles.Right;
         _grammarLabel.AutoSize = true;
@@ -734,6 +745,12 @@ public sealed class MainForm : Form
         _languageBox.SelectedIndex = _settings.JapaneseMode ? 0 : 1;
         _wikiBox.SelectedIndex = _settings.Wiki == WikiSource.English ? 1 : 0;
         _autoOpen.Checked = _settings.AutoOpen;
+        _uiLanguageBox.SelectedIndex = _settings.UiLanguage switch
+        {
+            UiLanguage.Japanese => 1,
+            UiLanguage.English => 2,
+            _ => 0,
+        };
         _themeBox.SelectedIndex = _settings.Theme switch
         {
             ThemeMode.Light => 1,
@@ -769,7 +786,7 @@ public sealed class MainForm : Form
         }
         catch (Exception ex)
         {
-            SetStatus($"タスク一覧を読み込めませんでした: {ex.Message}");
+            SetStatus(Strings.CatalogFailed(ex.Message));
         }
     }
 
@@ -791,7 +808,7 @@ public sealed class MainForm : Form
         {
             _pendingRelease = release;
             ShowNotice(
-                $"新しいバージョン v{release.Version} があります（クリックで開く）",
+                Strings.UpdateAvailable(release.Version),
                 Theme.Info);
         });
     }
@@ -858,8 +875,19 @@ public sealed class MainForm : Form
 
         _settings.Theme = chosen;
         _settings.Save();
+        RestartForDisplayChange();
+    }
 
-        SetStatus("表示テーマを切り替えるため再起動します…");
+    /// <summary>
+    /// WinForms fixes the control rendering for the whole process at start,
+    /// and the captions are read once as the controls are built. Doing the
+    /// restart for the user is less annoying than telling them to. The
+    /// window comes back where it was.
+    /// </summary>
+    private void RestartForDisplayChange()
+    {
+        SetStatus(Strings.Restarting);
+        SavePlacement();
         _speech?.Dispose();
         _speech = null;
 
@@ -870,8 +898,31 @@ public sealed class MainForm : Form
         catch (Exception)
         {
             // The setting is saved either way; it applies on the next launch.
-            SetStatus("表示テーマを保存しました。次回起動時に反映されます。");
+            SetStatus(Strings.SavedForNextLaunch);
         }
+    }
+
+    /// <summary>
+    /// Every caption was read as its control was created, so the window has
+    /// to be built again to speak a different language. Restarting is what
+    /// the theme already does, and it costs the same couple of seconds.
+    /// </summary>
+    private void OnUiLanguageChanged()
+    {
+        if (_loading) return;
+
+        var chosen = _uiLanguageBox.SelectedIndex switch
+        {
+            1 => UiLanguage.Japanese,
+            2 => UiLanguage.English,
+            _ => UiLanguage.System,
+        };
+
+        if (chosen == _settings.UiLanguage) return;
+
+        _settings.UiLanguage = chosen;
+        _settings.Save();
+        RestartForDisplayChange();
     }
 
     private async Task OnWikiChangedAsync()
@@ -956,17 +1007,17 @@ public sealed class MainForm : Form
                 }
             }, token);
 
-            _levelTestButton.Text = "確認を停止";
+            _levelTestButton.Text = Strings.StopLevelCheck;
             _dial.Metering = true;
-            _micHint.Text = "レベル確認中";
+            _micHint.Text = Strings.MicCheckingLevel;
             _micHint.ForeColor = Theme.Faint;
-            SetStatus($"「{device}」を聞いています。話してみてください。");
+            SetStatus(Strings.Listening(device.ToString()));
         }
         catch (Exception ex)
         {
             StopLevelTest();
             _heardLabel.ForeColor = Theme.Danger;
-            _heardLabel.Text = $"このデバイスを開けませんでした: {ex.Message}";
+            _heardLabel.Text = Strings.CannotOpenDevice(ex.Message);
         }
     }
 
@@ -997,7 +1048,7 @@ public sealed class MainForm : Form
         var now = level.PeakDb <= AudioLevel.FloorDb ? "-∞" : $"{level.PeakDb:0} dBFS";
         var held = _levelTestPeakDb <= AudioLevel.FloorDb ? "-∞" : $"{_levelTestPeakDb:0} dBFS";
 
-        SetStatus($"入力 {now}　ピーク {held}　— {AudioLevel.Verdict(_levelTestPeakDb)}");
+        SetStatus(Strings.LevelReadout(now, held, AudioLevel.Verdict(_levelTestPeakDb)));
     }
 
     private void StopLevelTest()
@@ -1014,8 +1065,8 @@ public sealed class MainForm : Form
         _dial.Metering = false;
         _dial.Reset();
         _dial.PeakTone = Color.Empty;
-        _levelTestButton.Text = "レベル確認";
-        SetMicState(_speech is not null, _speech is not null ? MicReady : "使用できません",
+        _levelTestButton.Text = Strings.CheckLevel;
+        SetMicState(_speech is not null, _speech is not null ? Strings.MicReady : Strings.MicUnavailable,
             warn: _speech is null);
     }
 
@@ -1043,8 +1094,8 @@ public sealed class MainForm : Form
         var generation = ++_buildGeneration;
 
         _preparing = true;
-        SetMicState(true, "準備中…");
-        SetStatus("音声認識を準備中…");
+        SetMicState(true, Strings.MicPreparing);
+        SetStatus(Strings.PreparingSpeech);
 
         _speech?.Dispose();
         _speech = null;
@@ -1087,8 +1138,7 @@ public sealed class MainForm : Form
             // they can be picked up and added to the lexicon.
             if (index.SpellOnlyTasks.Count > 0)
             {
-                note = $"　※{index.SpellOnlyTasks.Count} 件は読み未登録"
-                       + "（スペル読みでのみ認識）";
+                note = Strings.SpellOnlyNote(index.SpellOnlyTasks.Count);
                 ReportMissingReadings(scheme, index);
             }
         }
@@ -1122,7 +1172,7 @@ public sealed class MainForm : Form
                 _typedIndex ??= new TaskIndex(_catalog.On(SelectedWiki), new EnglishScheme());
 
             _grammarLabel.ForeColor = Theme.Muted;
-            _grammarLabel.Text = $"認識語彙 {setup.Index.TaskCount} 件{setup.Note}";
+            _grammarLabel.Text = Strings.Vocabulary(setup.Index.TaskCount, setup.Note);
             ReportCoverage();
         }
 
@@ -1130,12 +1180,8 @@ public sealed class MainForm : Form
         {
             _preparing = false;
             _waitingToStart = false;
-            SetMicState(false, "音声認識が未インストール", warn: true);
-            SetStatus(language == RecognitionLanguage.Japanese
-                ? "日本語の音声認識が未インストールです。"
-                  + $"利用可能な認識エンジン: {SpeechService.InstalledRecognizerSummary()}"
-                : "英語の音声認識が未インストールです。"
-                  + $"利用可能な認識エンジン: {SpeechService.InstalledRecognizerSummary()}");
+            SetMicState(false, Strings.MicNoEngine, warn: true);
+            SetStatus(Strings.NoRecognizer(language, SpeechService.InstalledRecognizerSummary()));
             return;
         }
 
@@ -1143,8 +1189,8 @@ public sealed class MainForm : Form
         {
             _preparing = false;
             _waitingToStart = false;
-            SetMicState(false, "初期化に失敗", warn: true);
-            if (setup.Error is not null) SetStatus($"音声認識の初期化に失敗しました: {setup.Error}");
+            SetMicState(false, Strings.MicInitFailed, warn: true);
+            if (setup.Error is not null) SetStatus(Strings.RecognizerFailed(setup.Error));
             return;
         }
 
@@ -1157,10 +1203,10 @@ public sealed class MainForm : Form
         _speech.Hypothesis += (_, text) =>
             BeginInvoke(() => ShowLive(text));
         _speech.SpeechDetected += (_, _) =>
-            BeginInvoke(() => { if (_holding) _heardLabel.Text = "…（音声を検出）"; });
+            BeginInvoke(() => { if (_holding) _heardLabel.Text = Strings.SpeechDetected; });
 
         _preparing = false;
-        SetMicState(true, MicReady);
+        SetMicState(true, Strings.MicReady);
 
         // Held down through the whole rebuild: honour it now rather than making
         // the press a second time.
@@ -1185,13 +1231,13 @@ public sealed class MainForm : Form
             await Task.Run(() => speech.AddVocabulary("spelled", phrases));
             if (generation != _buildGeneration) return;
 
-            _grammarLabel.Text += $"　/　スペル読み {phrases.Count} 件";
+            _grammarLabel.Text += Strings.SpelledLoaded(phrases.Count);
         }
         catch (Exception ex)
         {
             if (generation != _buildGeneration) return;
             _grammarLabel.ForeColor = Theme.Danger;
-            _grammarLabel.Text += $"　/　スペル読みの読み込みに失敗: {ex.Message}";
+            _grammarLabel.Text += Strings.SpelledFailed(ex.Message);
         }
     }
 
@@ -1205,11 +1251,8 @@ public sealed class MainForm : Form
         try
         {
             var path = Path.Combine(TaskCatalog.DataDirectory, "missing-readings.txt");
-            var lines = new List<string>
+            var lines = new List<string>(Strings.MissingReadingsHeader)
             {
-                "japanese-lexicon.json に読みが無い単語。",
-                "追加すればこれらのタスクを単語読みで言えるようになる。",
-                "（未追加でもスペル読みでは認識できる）",
                 "",
                 "--- words ---",
             };
@@ -1236,12 +1279,7 @@ public sealed class MainForm : Form
         var wiki = SelectedWiki;
         var onWiki = _catalog.CountOn(wiki);
         var other = _catalog.Entries.Count - onWiki;
-        var label = wiki == WikiSource.Japanese ? "日本語 Wiki" : "英語 Wiki";
-
-        SetStatus(other == 0
-            ? $"{label} のタスク {onWiki} 件を対象にしています"
-            : $"{label} のタスク {onWiki} 件を対象にしています"
-              + $"（もう一方の Wiki にしかない {other} 件は対象外）");
+        SetStatus(Strings.Coverage(wiki, onWiki, other));
     }
 
     /// <summary>
@@ -1258,9 +1296,9 @@ public sealed class MainForm : Form
         if (!_preparing) return false;
 
         _waitingToStart = true;
-        _micHint.Text = "準備中…";
+        _micHint.Text = Strings.MicPreparing;
         _heardLabel.ForeColor = Theme.Muted;
-        _heardLabel.Text = "準備中… 押したままお待ちください";
+        _heardLabel.Text = Strings.MicKeepHolding;
         return true;
     }
 
@@ -1274,14 +1312,14 @@ public sealed class MainForm : Form
         {
             _speech.Start();
             _holding = true;
-            _micHint.Text = MicListening;
+            _micHint.Text = Strings.MicListening;
             _heardLabel.ForeColor = Theme.Muted;
             _heardLabel.Text = "…";
-            SetStatus("マイク使用中");
+            SetStatus(Strings.MicInUse);
         }
         catch (Exception ex)
         {
-            SetStatus($"マイクを開けませんでした: {ex.Message}");
+            SetStatus(Strings.CannotOpenMic(ex.Message));
         }
     }
 
@@ -1290,16 +1328,16 @@ public sealed class MainForm : Form
         if (_waitingToStart)
         {
             _waitingToStart = false;
-            _micHint.Text = _preparing ? "準備中…" : MicReady;
-            _heardLabel.Text = "聞き取り結果はここに出ます";
+            _micHint.Text = _preparing ? Strings.MicPreparing : Strings.MicReady;
+            _heardLabel.Text = Strings.HeardPlaceholder;
             return;
         }
 
         if (!_holding || _speech is null) return;
 
         _holding = false;
-        _micHint.Text = MicReady;
-        SetStatus("認識中…");
+        _micHint.Text = Strings.MicReady;
+        SetStatus(Strings.Recognizing);
         _speech.Stop();
     }
 
@@ -1325,24 +1363,22 @@ public sealed class MainForm : Form
 
             _heardLabel.ForeColor = Theme.Danger;
             _heardLabel.Text = outcome.Seconds < 0.3
-                ? $"録音が短すぎます（{outcome.Seconds:0.0}秒）— もう少し長く押してください"
+                ? Strings.TooShort(outcome.Seconds)
                 : outcome.PeakDb < AudioLevel.SilenceDb
-                    ? $"無音でした（{outcome.Seconds:0.0}秒 / ピーク {level}）— 入力デバイスを確認"
-                    : $"音は入っていますが一致しませんでした（{outcome.Seconds:0.0}秒 / ピーク {level}）";
+                    ? Strings.Silent(outcome.Seconds, level)
+                    : Strings.NoMatch(outcome.Seconds, level);
 
-            SetStatus("マイク停止。もう一度どうぞ。");
+            SetStatus(Strings.MicStoppedTryAgain);
             return;
         }
 
         _heardLabel.ForeColor = outcome.Rejected ? Theme.Warning : Theme.Text;
         _heardLabel.Text = outcome.Rejected
-            ? $"確信度不足: 「{outcome.Text}」  ({outcome.Confidence:P0}) — 候補から選んでください"
-            : $"聞き取り: 「{outcome.Text}」  ({outcome.Confidence:P0})";
+            ? Strings.Rejected(outcome.Text, outcome.Confidence)
+            : Strings.Heard(outcome.Text, outcome.Confidence);
 
-        var via = outcome.Path == "buffered" ? "（録音から再認識）" : "";
-        SetStatus(outcome.Rejected
-            ? $"一致しきりませんでした。近い候補を出しています。{via}"
-            : $"マイク停止{via}");
+        var via = outcome.Path == "buffered" ? Strings.FromRecording : "";
+        SetStatus(outcome.Rejected ? Strings.NotQuiteMatched(via) : Strings.MicStopped(via));
 
         _lastHeard = outcome;
 
@@ -1426,10 +1462,9 @@ public sealed class MainForm : Form
         var matches = BuildCandidates(_lastHeard);
         Populate(matches);
 
-        var label = SelectedWiki == WikiSource.Japanese ? "日本語 Wiki" : "英語 Wiki";
         SetStatus(matches.Count > 0
-            ? $"「{_lastHeard.Text}」を {label} で探し直しました"
-            : $"「{_lastHeard.Text}」は {label} にありません");
+            ? Strings.SearchedAgain(_lastHeard.Text, SelectedWiki)
+            : Strings.NotOnWiki(_lastHeard.Text, SelectedWiki));
     }
 
     private void ShowCandidatesFor(string text)
@@ -1465,7 +1500,7 @@ public sealed class MainForm : Form
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
-        _countLabel.Text = _candidates.Items.Count > 0 ? $"候補 {_candidates.Items.Count} 件" : "";
+        _countLabel.Text = _candidates.Items.Count > 0 ? Strings.Candidates(_candidates.Items.Count) : "";
     }
 
     /// <summary>The katakana reading, so the list also teaches how to say it.</summary>
@@ -1489,19 +1524,18 @@ public sealed class MainForm : Form
 
         if (url is null)
         {
-            var label = wiki == WikiSource.Japanese ? "日本語 Wiki" : "英語 Wiki";
-            SetStatus($"「{task.Name}」のページは {label} にありません");
+            SetStatus(Strings.NoPageOnWiki(task.Name, wiki));
             return;
         }
 
         try
         {
             BrowserLauncher.Open(url, SelectedBrowser);
-            SetStatus($"開きました: {task.Name}");
+            SetStatus(Strings.Opened(task.Name));
         }
         catch (Exception ex)
         {
-            SetStatus($"ブラウザを開けませんでした: {ex.Message}");
+            SetStatus(Strings.CannotOpenBrowser(ex.Message));
         }
     }
 

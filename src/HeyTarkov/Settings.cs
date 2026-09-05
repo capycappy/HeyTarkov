@@ -49,6 +49,9 @@ public sealed class Settings
     public bool AutoOpen { get; set; } = true;
     public ThemeMode Theme { get; set; } = ThemeMode.System;
 
+    /// <summary>The language of the window itself, not of the speaking.</summary>
+    public UiLanguage UiLanguage { get; set; } = UiLanguage.System;
+
     /// <summary>Null until the window has been closed once.</summary>
     public WindowPlacement? Window { get; set; }
 
@@ -76,7 +79,23 @@ public sealed class Settings
             // A corrupt settings file should never stop the app from starting.
         }
 
-        return new Settings();
+        return FirstRun();
+    }
+
+    /// <summary>
+    /// No settings file yet. Follow the machine: an English Windows should
+    /// not open onto a Japanese window offering to hear Japanese, and the
+    /// English wiki carries more entries anyway.
+    /// </summary>
+    private static Settings FirstRun()
+    {
+        var japanese = Strings.IsJapaneseWindows;
+
+        return new Settings
+        {
+            JapaneseMode = japanese,
+            Wiki = japanese ? WikiSource.Japanese : WikiSource.English,
+        };
     }
 
     public void Save()

@@ -8,7 +8,7 @@ public sealed record BrowserChoice(string Name, string? ExecutablePath)
 {
     public bool IsDefault => ExecutablePath is null;
 
-    public override string ToString() => IsDefault ? "既定のブラウザ" : Name;
+    public override string ToString() => IsDefault ? Strings.DefaultBrowser : Name;
 }
 
 /// <summary>
@@ -19,7 +19,12 @@ public static class BrowserLauncher
 {
     private const string StartMenuInternet = @"SOFTWARE\Clients\StartMenuInternet";
 
-    public static readonly BrowserChoice Default = new("既定のブラウザ", null);
+    /// <summary>
+    /// The name is fixed rather than translated: it is what gets written to
+    /// settings.json for a non-default browser, and a display language must not
+    /// change what a setting means. IsDefault is what the UI shows instead.
+    /// </summary>
+    public static readonly BrowserChoice Default = new("default", null);
 
     /// <summary>
     /// Every browser registered with Windows, plus the system default. Reads the

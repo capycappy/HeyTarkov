@@ -39,15 +39,15 @@ public static class TaskCatalog
         var name = assembly.GetManifestResourceNames()
             .FirstOrDefault(n => n.EndsWith("tasks.json", StringComparison.Ordinal))
             ?? throw new InvalidOperationException(
-                "tasks.json がビルドに含まれていません。");
+                Strings.CatalogMissing);
 
         using var stream = assembly.GetManifestResourceStream(name)!;
 
         var catalog = JsonSerializer.Deserialize<WikiCatalog>(stream, JsonOptions)
-                      ?? throw new InvalidOperationException("tasks.json を読み取れませんでした。");
+                      ?? throw new InvalidOperationException(Strings.CatalogUnreadable);
 
         if (catalog.Entries.Count == 0)
-            throw new InvalidOperationException("tasks.json に項目が入っていません。");
+            throw new InvalidOperationException(Strings.CatalogEmpty);
 
         return catalog;
     }

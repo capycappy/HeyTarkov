@@ -28,9 +28,9 @@ public readonly record struct AudioLevel(float Peak, float Rms)
     /// <summary>Plain-language verdict on a peak-hold reading.</summary>
     public static string Verdict(double peakDb) => peakDb switch
     {
-        < SilenceDb => "無音 — このデバイスには何も入っていません",
-        < -35 => "小さすぎます — 入力ゲインを上げるか、デバイスを変えてください",
-        < -3 => "十分な音量です",
-        _ => "大きすぎます — 歪む可能性があります",
+        < SilenceDb => Strings.VerdictSilent,
+        < -35 => Strings.VerdictTooQuiet,
+        < -3 => Strings.VerdictGood,
+        _ => Strings.VerdictTooLoud,
     };
 }
