@@ -45,6 +45,10 @@ public sealed class MainForm : Form
     private CancellationTokenSource? _levelTestDrain;
     private ReleaseInfo? _pendingRelease;
 
+    /// <summary>The underlined font of the notice, when it is a link. Owned
+    /// here - the plain font belongs to the form.</summary>
+    private Font? _noticeLink;
+
     /// <summary>The last thing the microphone heard, kept so that changing the
     /// wiki can look it up again on the other one.</summary>
     private RecognitionOutcome? _lastHeard;
@@ -573,7 +577,6 @@ public sealed class MainForm : Form
         _noticeLabel.AutoSize = true;
         _noticeLabel.Visible = false;
         _noticeLabel.BackColor = Color.Transparent;
-        _noticeLabel.Cursor = Cursors.Hand;
         _noticeLabel.Margin = new Padding(2, 0, 0, 8);
         _noticeLabel.Click += (_, _) => OnNoticeClicked();
         return _noticeLabel;
@@ -822,6 +825,33 @@ public sealed class MainForm : Form
         _noticeLabel.Text = text;
         _noticeLabel.ForeColor = color;
         _noticeLabel.Visible = true;
+        MarkNoticeClickable(_pendingRelease is not null);
+    }
+
+    /// <summary>
+    /// Blue text alone does not read as a link on a line that sits among other
+    /// grey status text, so the one notice that goes somewhere is underlined and
+    /// takes the hand cursor. A notice that goes nowhere gets neither, rather
+    /// than inviting a click that does nothing.
+    /// </summary>
+    private void MarkNoticeClickable(bool clickable)
+    {
+        // Control.Font hands back the parent's font until the control is given
+        // one of its own, so clearing it first both puts the label back to the
+        // plain look and gives a correctly scaled font to build the underlined
+        // one from. Only the font made here is ever disposed.
+        _noticeLabel.Font = null;
+
+        if (clickable)
+        {
+            var underlined = new Font(_noticeLabel.Font, FontStyle.Underline);
+            _noticeLabel.Font = underlined;
+
+            _noticeLink?.Dispose();
+            _noticeLink = underlined;
+        }
+
+        _noticeLabel.Cursor = clickable ? Cursors.Hand : Cursors.Default;
     }
 
     private void OnNoticeClicked()
@@ -1426,14 +1456,14 @@ public sealed class MainForm : Form
             if (hit is not null) Add(new TaskMatch(hit, 1.0, text));
         }
 
-        // Saying only the start of a name is normal - "broadcast" for
-        // "Broadcast - Part 4". A fragment cannot pick one entry, so everything
-        // under it is offered.
-        foreach (var entry in _speechIndex.StartingWith(outcome.Text))
+        // Saying only part of a name is normal - "broadcast" for
+        // "Broadcast - Part 4", "punisher" for "The Punisher - Part 4". A
+        // fragment cannot pick one entry, so everything under it is offered.
+        foreach (var entry in _speechIndex.Containing(outcome.Text))
             Add(new TaskMatch(entry, 1.0, outcome.Text));
 
         foreach (var (text, _) in outcome.Alternates)
-        foreach (var entry in _speechIndex.StartingWith(text))
+        foreach (var entry in _speechIndex.Containing(text))
             Add(new TaskMatch(entry, 1.0, text));
 
         foreach (var match in _speechIndex.Rank(outcome.Text, 6)) Add(match);
@@ -1482,14 +1512,14 @@ public sealed class MainForm : Form
             return;
         }
 
-        var starting = _typedIndex.StartingWith(text)
+        var containing = _typedIndex.Containing(text)
             .Select(e => new TaskMatch(e, 1.0, text))
             .ToList();
 
         var ranked = _typedIndex.Rank(text, 12)
-            .Where(m => starting.All(s => s.Task != m.Task));
+            .Where(m => containing.All(s => s.Task != m.Task));
 
-        Populate(starting.Concat(ranked).Take(14).ToList());
+        Populate(containing.Concat(ranked).Take(14).ToList());
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches)

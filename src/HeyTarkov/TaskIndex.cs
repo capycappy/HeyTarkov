@@ -16,8 +16,8 @@ public sealed class TaskIndex
     private readonly HashSet<WikiEntry> _covered = new();
     private readonly HashSet<WikiEntry> _spellOnly = new();
 
-    /// <summary>Leading fragments of a name to everything that starts with it.</summary>
-    private readonly Dictionary<string, List<WikiEntry>> _byPrefix = new(StringComparer.Ordinal);
+    /// <summary>A run of words from a name to everything containing that run.</summary>
+    private readonly Dictionary<string, List<WikiEntry>> _byFragment = new(StringComparer.Ordinal);
 
     public TaskIndex(IEnumerable<WikiEntry> tasks, IPhraseScheme scheme)
     {
@@ -71,23 +71,23 @@ public sealed class TaskIndex
             }
         }
 
-        // Prefixes go in last so a fragment never displaces a whole name that
-        // happens to read the same way.
+        // Fragments go in last so one never displaces a whole name that happens
+        // to read the same way.
         foreach (var task in _covered)
         {
             foreach (var variant in task.SpokenVariants())
             {
-                foreach (var prefix in Prefixes.Of(variant))
+                foreach (var fragment in Fragments.Of(variant))
                 {
-                    foreach (var phrase in scheme.Phrases(prefix))
+                    foreach (var phrase in scheme.Phrases(fragment))
                     {
                         var key = scheme.Key(phrase);
                         if (_byPhrase.ContainsKey(key)) continue;   // a real name wins
 
-                        if (!_byPrefix.TryGetValue(key, out var list))
+                        if (!_byFragment.TryGetValue(key, out var list))
                         {
                             list = new List<WikiEntry>();
-                            _byPrefix[key] = list;
+                            _byFragment[key] = list;
                         }
 
                         if (!list.Contains(task)) list.Add(task);
@@ -99,7 +99,7 @@ public sealed class TaskIndex
 
         // Read in name order, so "Broadcast - Part 1" through "Part 5" come out
         // in that order rather than in whatever order the catalog held them.
-        foreach (var list in _byPrefix.Values)
+        foreach (var list in _byFragment.Values)
         {
             list.Sort((a, b) =>
             {
@@ -116,13 +116,14 @@ public sealed class TaskIndex
     }
 
     /// <summary>
-    /// Everything whose name starts with what was said. Empty when the phrase is
-    /// a whole name rather than a fragment.
+    /// Everything whose name contains what was said, as a run of whole words -
+    /// "punisher" finds "The Punisher - Part 4". Empty when the phrase is a
+    /// whole name rather than a fragment of one.
     /// </summary>
-    public IReadOnlyList<WikiEntry> StartingWith(string recognizedText)
+    public IReadOnlyList<WikiEntry> Containing(string recognizedText)
     {
         var key = _scheme.Key(recognizedText);
-        return _byPrefix.TryGetValue(key, out var list)
+        return _byFragment.TryGetValue(key, out var list)
             ? list
             : Array.Empty<WikiEntry>();
     }
