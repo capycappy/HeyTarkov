@@ -58,7 +58,7 @@ public static class SelfTest
             failed |= !CheckMapsAndExtracts(report, catalog);
             report.AppendLine();
 
-            failed |= !CheckPrefixes(report, catalog);
+            failed |= !CheckFragments(report, catalog);
             report.AppendLine();
 
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
@@ -174,19 +174,20 @@ public static class SelfTest
     }
 
     /// <summary>
-    /// Saying the start of a name finds it. A fragment resolves to everything
-    /// under it, never to one entry.
+    /// Saying any run of words from a name finds it - the start, the middle,
+    /// or the end. A fragment resolves to everything under it, never to one
+    /// entry.
     /// </summary>
-    private static bool CheckPrefixes(StringBuilder report, WikiCatalog catalog)
+    private static bool CheckFragments(StringBuilder report, WikiCatalog catalog)
     {
-        report.AppendLine("=== speaking only the start of a name ===");
+        report.AppendLine("=== speaking part of a name ===");
 
         var index = new TaskIndex(catalog.Entries, new EnglishScheme());
         var ok = true;
 
         void Check(string said, string mustInclude, int atLeast)
         {
-            var hits = index.StartingWith(said);
+            var hits = index.Containing(said);
             var names = hits.Select(h => h.Name).ToList();
             var found = names.Any(n => n.StartsWith(mustInclude, StringComparison.OrdinalIgnoreCase));
             var enough = hits.Count >= atLeast;
@@ -205,9 +206,14 @@ public static class SelfTest
         Check("wet job", "Wet Job", 4);
         Check("ground zero emercom", "Emercom", 1);
 
+        // The point of word-level fragments: the distinctive word is rarely the
+        // first one, and nobody remembers the article in front of it.
+        Check("punisher", "The Punisher", 4);
+        Check("history", "Disease History", 1);
+
         void CheckOrder(string said)
         {
-            var names = index.StartingWith(said).Select(h => h.Name).ToList();
+            var names = index.Containing(said).Select(h => h.Name).ToList();
             var sorted = names.OrderBy(n => n, NaturalOrder.Instance).ToList();
             var inOrder = names.SequenceEqual(sorted);
             ok &= inOrder;
@@ -218,11 +224,23 @@ public static class SelfTest
 
         // A whole name is not a fragment: it must keep resolving to itself.
         var whole = index.Exact("debut");
-        var notPrefix = index.StartingWith("debut").Count == 0;
+        var notPrefix = index.Containing("debut").Count == 0;
         ok &= whole is not null && notPrefix;
 
         report.AppendLine($"  {(whole is not null && notPrefix ? "PASS" : "FAIL")}  "
                           + "a whole name still resolves to itself, not a fragment list");
+
+        // Japanese hears the same names as katakana, so the fragments have to
+        // survive that reading too - not just the English spelling of them.
+        var japanese = new TaskIndex(
+            catalog.Entries, new JapaneseScheme(new JapaneseForms(JapaneseLexicon.Load())));
+
+        var spoken = japanese.Containing("パニッシャー");
+        var heard = spoken.Any(h => h.Name.StartsWith("The Punisher", StringComparison.OrdinalIgnoreCase));
+        ok &= heard;
+
+        report.AppendLine($"  {(heard ? "PASS" : "FAIL")}  \"パニッシャー\" -> "
+                          + $"{spoken.Count} entries: {string.Join(", ", spoken.Take(3).Select(h => h.Name))}");
 
         report.AppendLine($"  grammar with fragments: {index.GrammarPhrases.Count} phrases");
         return ok;
@@ -401,12 +419,15 @@ public static class SelfTest
         // Must mirror the app: a synchronous Recognize() never returns on a
         // stream whose length is open-ended, because it waits for more audio.
         RecognitionResult? result = null;
+        RecognitionResult? rejected = null;
         using var completed = new ManualResetEventSlim(false);
 
         void OnRecognized(object? s, SpeechRecognizedEventArgs e) => result = e.Result;
+        void OnRejected(object? s, SpeechRecognitionRejectedEventArgs e) => rejected ??= e.Result;
         void OnCompleted(object? s, RecognizeCompletedEventArgs e) => completed.Set();
 
         engine.SpeechRecognized += OnRecognized;
+        engine.SpeechRecognitionRejected += OnRejected;
         engine.RecognizeCompleted += OnCompleted;
 
         try
@@ -424,9 +445,17 @@ public static class SelfTest
         finally
         {
             engine.SpeechRecognized -= OnRecognized;
+            engine.SpeechRecognitionRejected -= OnRejected;
             engine.RecognizeCompleted -= OnCompleted;
             engine.SetInputToNull();
         }
+
+        // The app keeps a rejected hypothesis and offers it as a candidate
+        // rather than throwing it away, so the check has to look where the app
+        // looks. A name that only comes back this way is genuinely weaker - it
+        // will not open the wiki on its own - but it is still findable.
+        var weak = result is null;
+        result ??= rejected;
 
         if (result is null)
         {
@@ -438,8 +467,9 @@ public static class SelfTest
         var matched = resolved is not null && resolved.Name == taskName;
 
         report.AppendLine(
-            $"  {(matched ? "PASS" : "FAIL")}  said \"{spoken}\" -> heard \"{result.Text}\" "
-            + $"({result.Confidence:0.00}) -> {resolved?.Name ?? "(unresolved)"}");
+            $"  {(matched ? weak ? "WEAK" : "PASS" : "FAIL")}  said \"{spoken}\" -> heard \"{result.Text}\" "
+            + $"({result.Confidence:0.00}{(weak ? ", rejected - candidate only" : "")}) "
+            + $"-> {resolved?.Name ?? "(unresolved)"}");
 
         return matched;
     }
@@ -525,10 +555,30 @@ public static class SelfTest
         else synth.Speak(spoken);
         synth.SetOutputToNull();
 
-        engine.SetInputToWaveFile(wavPath);
-        var result = engine.Recognize(TimeSpan.FromSeconds(20));
-        engine.SetInputToNull();
+        // Recognize() discards a hypothesis the engine rejects. The app does
+        // not - it offers one as a candidate the user can click - so the probe
+        // has to catch it the same way, or it reports a name as unreachable
+        // when the app would in fact have shown it.
+        RecognitionResult? turnedDown = null;
+        void OnRejected(object? s, SpeechRecognitionRejectedEventArgs e) => turnedDown ??= e.Result;
+        engine.SpeechRecognitionRejected += OnRejected;
+
+        RecognitionResult? result;
+        try
+        {
+            engine.SetInputToWaveFile(wavPath);
+            result = engine.Recognize(TimeSpan.FromSeconds(20));
+            engine.SetInputToNull();
+        }
+        finally
+        {
+            engine.SpeechRecognitionRejected -= OnRejected;
+        }
+
         TryDelete(wavPath);
+
+        var weak = result is null;
+        result ??= turnedDown;
 
         if (result is null)
         {
@@ -542,8 +592,9 @@ public static class SelfTest
         if (ok) passed++;
 
         report.AppendLine(
-            $"  {(ok ? "PASS" : "FAIL")}  said \"{spoken}\" -> heard \"{result.Text}\" "
-            + $"({result.Confidence:0.00}) -> {resolved?.Name ?? "(unresolved)"}");
+            $"  {(ok ? weak ? "WEAK" : "PASS" : "FAIL")}  said \"{spoken}\" -> heard \"{result.Text}\" "
+            + $"({result.Confidence:0.00}{(weak ? ", rejected - candidate only" : "")}) "
+            + $"-> {resolved?.Name ?? "(unresolved)"}");
     }
 
     /// <summary>Speaks the words with a real gap between them, the way someone
