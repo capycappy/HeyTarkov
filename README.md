@@ -316,6 +316,17 @@ dotnet publish src\HeyTarkov -c Release -o dist
 
 `NuGet.Config` はこのリポジトリ内だけで nuget.org を有効にしている。
 
+配布用の自己完結版を作ったあとは `bin\` を消してからビルドし直すこと。
+
+```
+dotnet publish src\HeyTarkov -c Release -o <出力先> -p:SelfContained=true -p:PublishSingleFile=true
+```
+
+これを走らせると `bin\` にランタイム一式（`hostfxr.dll` など）が残る。
+`HeyTarkov.exe` は隣に `hostfxr.dll` があればそちらを使うため、
+次にフレームワーク依存でビルドすると **「.NET をインストールしてください」と言い出す**。
+配布物は単一ファイルなのでこの影響を受けない。壊れるのは手元の `bin\` だけ。
+
 ### タスク一覧の更新（開発者向け）
 
 ```

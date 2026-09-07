@@ -8,3 +8,9 @@ tools/*.log
 # Landing page for the website, kept out of this repository
 site/
 design/
+
+# Noise from the Mac side and from iCloud Drive, now that this folder is shared
+.DS_Store
+._*
+.iCloud
+Icon?
