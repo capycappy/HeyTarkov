@@ -198,6 +198,39 @@ wikiwiki.jp は **1.2秒間隔でも 429 Too Many Requests を返す**（実測:
 429 を見て待ち直す処理を入れる（20秒から倍々、上限120秒で実測は通った）。
 **これは既存のタスク取得にも効く修正**なので、Collector とは別に先に入れてよい。
 
+### 6.5 表示するのは短縮名 — ゲーム画面と同じ文字
+
+スタッシュのアイテムは、アイコンの上に**短い名前**が出ている。
+
+```
+Glorious   Plague mask   Viibiin   Axel   BeardOil   Badge   Mazoni   DRD   WZ   Tigzresq
+```
+
+照合するとき人が実際に読んでいるのはこれなので、一覧にはこれを出す。
+`Glorious E lightweight armored mask` というフルネームは、目で突き合わせる役には立たない。
+
+これはゲーム内の `shortName`。**両Wikiとも載せていない**（Fandomの infobox にも無い。
+あるのはBSGのアイテムID `node` のほう）。取得元は `tarkov.dev` の公開GraphQL API。
+
+- 取ってくるのは**短い機能的な文字列**であって、絵ではない。すでに載せているタスク名1,057件と同じ立場
+- `tarkov-api` は GPL-3.0 だが、それは**サーバーsoftware のライセンス**であって、
+  APIが返すデータに伝播するものではない。こちらのMITに影響しない
+- これもビルド時に1回引くだけ。実行時には触らない
+
+当初案の「カテゴリ色分け」は**取り下げ**。あれは私が勝手に決めた分類で、
+ゲーム内に存在しない情報を足すだけだった。短縮名のほうが本物。
+
+### 6.6 一覧の行はこうなる
+
+```
+☑ BeardOil     Deadlyslob's beard oil / DeadlySlob's ビアードオイル
+☐ Plague mask  Pestily plague mask / Pestily ペストマスク
+☐ DRD          DRD body armor
+```
+
+左に短縮名（目で探す用）、右にフルネーム（読み上げ・リンク用）。
+日本語Wiki選択時のみ日本語名を併記（§6.2）。
+
 ---
 
 ## 7. 44品目の対応表
