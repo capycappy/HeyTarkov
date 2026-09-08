@@ -32,7 +32,11 @@ internal static class Program
             Console.WriteLine("maps and extracts...");
             var maps = await Maps.FetchAsync(wikis);
 
-            var entries = tasks.Concat(maps)
+            Console.WriteLine();
+            Console.WriteLine("collector items...");
+            var items = await Collector.FetchAsync(wikis);
+
+            var entries = tasks.Concat(maps).Concat(items)
                 .OrderBy(e => e.Kind)
                 .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
                 .ThenBy(e => e.Name, StringComparer.OrdinalIgnoreCase)

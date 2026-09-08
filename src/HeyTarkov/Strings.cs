@@ -117,6 +117,7 @@ public static class Strings
 
     public static string KindMap => T("マップ ", "Map ");
     public static string KindExit => T("出口 ", "Exit ");
+    public static string KindItem => T("アイテム ", "Item ");
     public static string KindEvent(string name) => T($"イベント {name} ", $"Event {name} ");
 
     public static string OpenSelected =>

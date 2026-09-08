@@ -20,6 +20,7 @@ public sealed class CandidateRow(TaskMatch match, string? reading)
         {
             EntryKind.Map => Strings.KindMap,
             EntryKind.Extract => Strings.KindExit,
+            EntryKind.Item => Strings.KindItem,
             _ => Match.Task.Event.Length > 0 ? Strings.KindEvent(Match.Task.Event) : "",
         };
 
