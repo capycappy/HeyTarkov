@@ -17,11 +17,35 @@ public sealed partial class Wikis : IDisposable
     /// <summary>Spacing between requests, so a rebuild never looks like a crawl.</summary>
     private static readonly TimeSpan PoliteDelay = TimeSpan.FromSeconds(1.2);
 
+    /// <summary>
+    /// The slowest this will let itself get. wikiwiki.jp starts refusing well
+    /// inside the polite delay, and every refusal doubles the pace for the rest
+    /// of the run - but a build that crawls forever is its own kind of broken.
+    /// </summary>
+    private static readonly TimeSpan SlowestPace = TimeSpan.FromSeconds(10);
+
     /// <summary>wikiwiki.jp runs a bot check that a burst can trip.</summary>
     private const string BotCheckMarker = "アクセス確認中";
 
+    /// <summary>
+    /// How many requests must go through untouched before the pace is allowed
+    /// to creep back up. Backing off is cheap; staying backed off for the
+    /// remaining thousand pages is not.
+    /// </summary>
+    private const int CalmBeforeSpeedingUp = 20;
+
     private readonly HttpClient _http;
     private DateTimeOffset _lastRequest = DateTimeOffset.MinValue;
+    private TimeSpan _pace = PoliteDelay;
+    private int _calm;
+
+    /// <summary>
+    /// Every URL this could not get an answer about. Not the ones that came
+    /// back missing - the ones where the wiki refused to say. A catalog built
+    /// with any of these in it is missing links it should have had, so the
+    /// build refuses to write one.
+    /// </summary>
+    public List<string> Unresolved { get; } = new();
 
     public Wikis()
     {
@@ -41,37 +65,129 @@ public sealed partial class Wikis : IDisposable
 
     // ------------------------------------------------------------- transport
 
-    public async Task<string?> GetAsync(string url, CancellationToken ct = default)
+    /// <summary>
+    /// Fetches a page, and says which of three things happened - because "the
+    /// page is not there" and "the wiki would not tell me" have to be told
+    /// apart. Reading a refusal as an absence is how a rebuild quietly drops
+    /// links that were fine the day before.
+    /// </summary>
+    public async Task<Page> GetAsync(string url, CancellationToken ct = default)
     {
+        var wait = TimeSpan.FromSeconds(20);
+
         for (var attempt = 0; attempt < 5; attempt++)
         {
             await PaceAsync(ct).ConfigureAwait(false);
 
-            string body;
+            HttpResponseMessage response;
             try
             {
-                body = await _http.GetStringAsync(url, ct).ConfigureAwait(false);
+                response = await _http.GetAsync(url, ct).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
+                // A timeout or a dropped connection says nothing about whether
+                // the page exists, so it is worth another try.
                 Console.Error.WriteLine($"    {url}: {ex.Message}");
-                return null;
+                await Task.Delay(wait, ct).ConfigureAwait(false);
+                wait = Longer(wait);
+                continue;
             }
 
-            if (!body.Contains(BotCheckMarker, StringComparison.Ordinal)) return body;
+            using (response)
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    Calm();
+                    return Page.Missing;
+                }
 
-            Console.WriteLine("    bot check hit, backing off...");
-            await Task.Delay(TimeSpan.FromSeconds(12), ct).ConfigureAwait(false);
+                if (Overloaded(response.StatusCode))
+                {
+                    // One refusal means the whole run is going too fast, not
+                    // just this request - so slow everything down, or the next
+                    // few hundred requests each pay this same penalty.
+                    Slower();
+
+                    var told = response.Headers.RetryAfter?.Delta;
+                    var delay = told > wait ? told.Value : wait;
+
+                    Console.WriteLine(
+                        $"    {(int)response.StatusCode} from the wiki, waiting {delay.TotalSeconds:0}s "
+                        + $"(pace now {_pace.TotalSeconds:0.0}s)");
+
+                    await Task.Delay(delay, ct).ConfigureAwait(false);
+                    wait = Longer(wait);
+                    continue;
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.Error.WriteLine($"    {url}: HTTP {(int)response.StatusCode}");
+                    return Unresolvable(url);
+                }
+
+                var body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+                if (!body.Contains(BotCheckMarker, StringComparison.Ordinal))
+                {
+                    Calm();
+                    return Page.Found(body);
+                }
+
+                Slower();
+                Console.WriteLine($"    bot check hit, waiting {wait.TotalSeconds:0}s");
+                await Task.Delay(wait, ct).ConfigureAwait(false);
+                wait = Longer(wait);
+            }
         }
 
-        Console.Error.WriteLine($"    {url}: bot check kept firing");
-        return null;
+        Console.Error.WriteLine($"    {url}: the wiki never answered");
+        return Unresolvable(url);
+    }
+
+    /// <summary>The codes that mean "ask again later" rather than "no".</summary>
+    private static bool Overloaded(HttpStatusCode code) =>
+        code is HttpStatusCode.TooManyRequests
+             or HttpStatusCode.ServiceUnavailable
+             or HttpStatusCode.BadGateway
+             or HttpStatusCode.GatewayTimeout;
+
+    private static TimeSpan Longer(TimeSpan wait) =>
+        TimeSpan.FromSeconds(Math.Min(wait.TotalSeconds * 2, 120));
+
+    private void Slower()
+    {
+        _pace = TimeSpan.FromSeconds(Math.Min(_pace.TotalSeconds * 2, SlowestPace.TotalSeconds));
+        _calm = 0;
+    }
+
+    /// <summary>
+    /// Eases back towards the polite delay after a quiet stretch. Without this
+    /// one busy minute early on would slow every remaining request for the rest
+    /// of the run - at the ten second ceiling that is hours added to a rebuild
+    /// of a thousand pages.
+    /// </summary>
+    private void Calm()
+    {
+        if (_pace <= PoliteDelay) return;
+        if (++_calm < CalmBeforeSpeedingUp) return;
+
+        _pace = TimeSpan.FromSeconds(Math.Max(_pace.TotalSeconds / 2, PoliteDelay.TotalSeconds));
+        _calm = 0;
+        Console.WriteLine($"    quiet again, pace back to {_pace.TotalSeconds:0.0}s");
+    }
+
+    private Page Unresolvable(string url)
+    {
+        Unresolved.Add(url);
+        return Page.Unknown;
     }
 
     private async Task PaceAsync(CancellationToken ct)
     {
         var since = DateTimeOffset.Now - _lastRequest;
-        if (since < PoliteDelay) await Task.Delay(PoliteDelay - since, ct).ConfigureAwait(false);
+        if (since < _pace) await Task.Delay(_pace - since, ct).ConfigureAwait(false);
         _lastRequest = DateTimeOffset.Now;
     }
 
@@ -114,8 +230,10 @@ public sealed partial class Wikis : IDisposable
                           ? ""
                           : $"&cmcontinue={Uri.EscapeDataString(continuation)}");
 
-            var json = await GetAsync(url, ct).ConfigureAwait(false);
-            if (json is null) break;
+            // A failure here is already recorded in Unresolved, and the build
+            // will refuse to write a catalog once anything is in there. Stopping
+            // quietly is only safe because of that.
+            if (await GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) break;
 
             using var document = JsonDocument.Parse(json);
             var root = document.RootElement;
@@ -149,8 +267,8 @@ public sealed partial class Wikis : IDisposable
         var url = $"{FandomApi}?action=parse&page={Uri.EscapeDataString(title)}"
                   + "&prop=sections&format=json";
 
-        var json = await GetAsync(url, ct).ConfigureAwait(false);
-        if (json is null) return sections;
+        if (await GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json })
+            return sections;
 
         using var document = JsonDocument.Parse(json);
 
