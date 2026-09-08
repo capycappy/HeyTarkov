@@ -14,8 +14,8 @@ Fence の [Collector](https://wikiwiki.jp/eft/Fence/Collector) は、見つけ�
 |---|---|
 | 品目数 | **44**（英語Wiki `Collector` の `==Objectives==` を実際に取得して数えた） |
 | 英語Wikiの形 | `* Hand over the found in raid item: [[Antique axe]]` の箇条書き。**機械的に取れる** |
-| 日本語Wikiの形 | 同じ内容を日本語名つきで掲載。ただし**45品目と書かれている**ように読めた（要確認、§6） |
-| 日本語のアイテムページ | `https://wikiwiki.jp/eft/<英語名>` の形と思われるが、**未確認**。素の `curl` は 403（例のBOT判定）で確かめられなかった。CatalogBuilder には既にバックオフ付きの取得処理があるので、実装時にそれで確認する |
+| 日本語Wikiの形 | 同じ44品目。Collectorページの表は**英語名のみ**。日本語名は各アイテムの個別ページにある（§6.2） |
+| 日本語のアイテムページ | `https://wikiwiki.jp/eft/<英語名>` で確定。44件すべて実在を確認済み。見出しが `Golden egg / ゴールデンエッグ` の形で**日本語名を持っている** |
 
 44品目の一覧は英語Wikiから取得済み（`42 Signature Blend English Tea` 〜 `WZ Wallet`）。
 
@@ -140,20 +140,120 @@ WikiEntry { Kind = Item, Group = "Collector", Name = "Golden egg", ... }
 
 ---
 
-## 6. 明日決めたいこと
+## 6. 決まったこと（2026-09-08）
 
-1. **アイテム名を日本語で表示するか。** いまアプリは両Wikiとも英語名で喋る仕様。
-   でも一覧を*見る*なら日本語名のほうが照合しやすいはず（「カラス像」）。
-   やるなら `WikiEntry` に `JapaneseName` を足して日本語Wikiから取る。**取得の手間が増える**
-2. **44 か 45 か。** 英語Wikiは44。日本語Wikiは45と読めた。英語Wikiを正とする（英語先行の方針どおり）が、
-   差分が何なのかは実装時に出す
-3. **画面は案A（別ウィンドウ）でよいか**
-4. **第1段階で読み上げ対象に入れるか**（文法を測ってから決めてもよい）
+### 6.1 品目差分 — **無し**
+
+両Wikiとも44品目、中身は同一。違うのは同じアイテムの綴り2件だけで、
+**それぞれのWikiは自分の綴りのページしか持たない**（相互リダイレクトも無い）。
+
+| | 英語Wiki | 日本語Wiki | 正 |
+|---|---|---|---|
+| CD | `DesmondPilak CD` | `Desmond Pilak CD` | — |
+| 水 | `Bottle of YMXC water` | `Bottle of YXMC water` | **YMXC**（日本語Wikiが誤記） |
+
+表示・読み上げは**英語Wikiの綴り**を使う。日本語Wikiのリンク先だけ向こうの綴りにする。
+`WikiEntry` は名前とURLを別々に持つので構造の変更は不要。
+
+**ペアリングは正規化では足りない。** `DesmondPilak` ↔ `Desmond Pilak` は空白を潰せば一致するが、
+`YMXC` ↔ `YXMC` は文字が入れ替わっているので一致しない。完全一致 → 既存の Levenshtein の順に試し、
+**あいまい一致した組はビルドログに出して人間が確認する**。決め打ちにすると、
+どちらかのWikiが誤記を直した瞬間に壊れる。
+
+### 6.2 表示 — 日本語Wiki選択時は英語と日本語を併記
+
+```
+Golden egg / ゴールデンエッグ
+Baddie's red beard              ← 日本語名が無いものは英語だけ
+```
+
+44件中 **30件に日本語名があり、14件は無い**。無いものはWikiに
+「日本語名称無し（英名称と同じ）」と**文字列で書かれている**ので、
+これを日本語名として取り込まないよう弾くこと。`FireKlean` は先頭に `#` が付くなど、
+Wiki記法の残りかすも落とす。
+
+`WikiEntry` に `JapaneseName`（null許容）を足す。読み上げ対象は英語名のまま。
+
+### 6.3 画像 — **使わない**
+
+両Wikiとも `CC BY-NC-SA`（表示 - 非営利 - 継承）。**NC は MIT と両立しない**ので、
+Wikiの素材をこの配布物に混ぜることはできない。
+
+それ以前に、両Wikiのフッターが
+`Game content and materials are trademarks and copyrights of Battlestate Games and its licensors.`
+と明記しているとおり、**アイテムアイコンはWikiのものではない**。Wikiは持っていない権利を
+CC で配れないので、CC BY-NC-SA が掛かっているのは編集者の書いた文章のほうだけ。
+
+実行時のホットリンクも駄目（自分ルールにもFandomの規約にも反する）。
+
+見分けが付かない問題は、**自分で描いた記号か色分け**で対処する。画像が見たければ行をクリックしてWikiを開く。
+
+### 6.4 `Wikis.cs` に穴がある — 先に直す
+
+wikiwiki.jp は **1.2秒間隔でも 429 Too Many Requests を返す**（実測: 5件目で発生）。
+いまの `GetAsync` は「アクセス確認中」のBOT判定しか見ておらず、
+429 は `catch (Exception)` に落ちて **即 `null` を返す**。
+このままアイテムページを44件叩くと、ほとんどが「日本語ページ無し」と誤判定される。
+
+429 を見て待ち直す処理を入れる（20秒から倍々、上限120秒で実測は通った）。
+**これは既存のタスク取得にも効く修正**なので、Collector とは別に先に入れてよい。
 
 ---
 
-## 7. やらないこと
+## 7. 44品目の対応表
+
+| # | 英語Wiki（＝表示名） | 日本語Wikiのページ名 | 日本語名 |
+|---|---|---|---|
+| 1 | 42 Signature Blend English Tea | 同じ | 42 シグニチャーブレンド 英国紅茶 |
+| 2 | Antique axe | 同じ | アンティークの斧 |
+| 3 | Axel parrot figurine | 同じ | オウムの Axel の置物 |
+| 4 | Baddie's red beard | 同じ | — |
+| 5 | BakeEzy cook book | 同じ | BakeEzy レシピ本 |
+| 6 | Battered antique book | 同じ | アンティークの本 |
+| 7 | BEAR Buddy plush toy | 同じ | BEAR バディのぬいぐるみ |
+| 8 | Bottle of YMXC water | **Bottle of YXMC water** | — |
+| 9 | Can of Dr. Lupo's coffee beans | 同じ | Dr. Lupo's コーヒー豆 |
+| 10 | Can of GigaBeef meat | 同じ | GigaBeefの肉の缶詰 |
+| 11 | Can of RatCola soda | 同じ | ラットコーラ |
+| 12 | Deadlyslob's beard oil | 同じ | DeadlySlob's ビアードオイル |
+| 13 | DesmondPilak CD | **Desmond Pilak CD** | — |
+| 14 | Domontovich ushanka hat | 同じ | — |
+| 15 | DRD body armor | 同じ | — |
+| 16 | Dunduk floppy disk | 同じ | — |
+| 17 | Fake mustache | 同じ | 付け髭 |
+| 18 | FireKlean gun lube | 同じ | FireKlean ガンオイル |
+| 19 | French bakery baguette | 同じ | フランスパンのバゲット |
+| 20 | Gingy keychain | 同じ | Gingy のキーホルダー |
+| 21 | Glorious E lightweight armored mask | 同じ | — |
+| 22 | Golden 1GPhone smartphone | 同じ | 1GPhone オレンジゴールド |
+| 23 | Golden egg | 同じ | ゴールデンエッグ |
+| 24 | Inseq gas pipe wrench | 同じ | Inseq ガスパイプレンチ |
+| 25 | JohnB Liquid DNB glasses | 同じ | — |
+| 26 | LM KC-130 model aircraft | 同じ | — |
+| 27 | Loot Lord plushie | 同じ | ルートロードのぬいぐるみ |
+| 28 | LVNDMARK's rat poison | 同じ | LVNDMARK's 殺鼠剤 |
+| 29 | Mazoni golden dumbbell | 同じ | — |
+| 30 | Missam forklift key | 同じ | Missamのフォークリフトの鍵 |
+| 31 | Nut Sack balaclava | 同じ | — |
+| 32 | Pestily plague mask | 同じ | Pestily ペストマスク |
+| 33 | Press pass (issued for NoiceGuy) | 同じ | NoiceGuy のプレスカード |
+| 34 | Raven figurine | 同じ | カラスの置物 |
+| 35 | SheefGG piggy bank | 同じ | — |
+| 36 | Shroud half-mask | 同じ | Shroud ハーフマスク |
+| 37 | Silver Badge | 同じ | シルバーバッジ |
+| 38 | Smoke balaclava | 同じ | Smoke バラクラバ |
+| 39 | Tamatthi kunai knife replica | 同じ | Tamatthi のレプリカのクナイ |
+| 40 | Tigzresq splint | 同じ | — |
+| 41 | Veritas guitar pick | 同じ | Veritas ギターピック |
+| 42 | Video cassette with the Cyborg Killer movie | 同じ | 映画 "サイボーグ・キラー" のビデオ |
+| 43 | Viibiin sneaker | 同じ | — |
+| 44 | WZ Wallet | 同じ | WZ ウォレット |
+
+---
+
+## 8. やらないこと
 
 - ゲームプロセスには一切触らない。所持品の自動読み取りはしない（アンチチート）
 - 実行時のWikiアクセスはしない
 - クラウド同期はしない。記録はこのPCのローカルファイルのみ
+- Wikiの画像は同梱もホットリンクもしない（§6.3）
