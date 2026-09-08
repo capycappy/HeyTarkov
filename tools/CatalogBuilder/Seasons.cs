@@ -52,8 +52,8 @@ public static partial class Seasons
             var url = $"{Wikis.FandomApi}?action=query&prop=revisions&rvprop=content&rvslots=main"
                       + $"&titles={Uri.EscapeDataString(string.Join('|', batch))}&format=json";
 
-            var json = await wikis.GetAsync(url, ct).ConfigureAwait(false);
-            if (json is null) continue;
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json })
+                continue;
 
             using var document = JsonDocument.Parse(json);
             if (!document.RootElement.TryGetProperty("query", out var query)
@@ -107,8 +107,8 @@ public static partial class Seasons
                       + "&blnamespace=0&bllimit=500&format=json"
                       + (continuation is null ? "" : $"&blcontinue={Uri.EscapeDataString(continuation)}");
 
-            var json = await wikis.GetAsync(url, ct).ConfigureAwait(false);
-            if (json is null) break;
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json })
+                break;
 
             using var document = JsonDocument.Parse(json);
             var root = document.RootElement;
@@ -145,8 +145,8 @@ public static partial class Seasons
                       + $"&titles={Uri.EscapeDataString(string.Join('|', batch))}"
                       + "&cllimit=500&format=json";
 
-            var json = await wikis.GetAsync(url, ct).ConfigureAwait(false);
-            if (json is null) continue;
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json })
+                continue;
 
             using var document = JsonDocument.Parse(json);
             if (!document.RootElement.TryGetProperty("query", out var query)

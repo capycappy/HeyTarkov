@@ -152,7 +152,7 @@ public static partial class Tasks
             var page = $"{entry.Group}/{entry.Event} {entry.Name}";
             var url = wikis.JapaneseUrl(page);
 
-            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is null) continue;
+            if (!(await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists) continue;
 
             entry.JapaneseUrl = url;
             found++;
@@ -170,8 +170,8 @@ public static partial class Tasks
 
         foreach (var page in JapaneseIndexPages)
         {
-            var html = await wikis.GetAsync(wikis.JapaneseUrl(page), ct).ConfigureAwait(false);
-            if (html is null) continue;
+            if (await wikis.GetAsync(wikis.JapaneseUrl(page), ct).ConfigureAwait(false)
+                is not { Text: { } html }) continue;
 
             foreach (Match match in JapaneseLink().Matches(html))
             {
@@ -205,7 +205,7 @@ public static partial class Tasks
             if (!JapaneseCategories.Contains(category)) continue;
 
             var url = wikis.JapaneseUrl(title);
-            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is null)
+            if (!(await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists)
             {
                 Console.Error.WriteLine($"  extra page is gone, skipping: {title}");
                 continue;
