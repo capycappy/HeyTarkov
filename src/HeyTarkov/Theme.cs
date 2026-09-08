@@ -86,6 +86,7 @@ public static class Theme
     {
         EntryKind.Map => Pick(0x6FA8DC, 0x2C6BA8),
         EntryKind.Extract => Pick(0x77C08A, 0x2F7D4A),
+        EntryKind.Item => Pick(0xD98C6A, 0xA85426),
         _ => Accent,
     };
 
@@ -93,6 +94,7 @@ public static class Theme
     {
         EntryKind.Map => "MAP",
         EntryKind.Extract => "EXIT",
+        EntryKind.Item => "ITEM",
         _ => "TASK",
     };
 
