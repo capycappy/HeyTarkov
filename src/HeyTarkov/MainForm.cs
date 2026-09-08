@@ -45,6 +45,15 @@ public sealed class MainForm : Form
     private CancellationTokenSource? _levelTestDrain;
     private ReleaseInfo? _pendingRelease;
 
+    /// <summary>
+    /// The Collector checklist. Everything it needs is in one field, one
+    /// button and one method, so that dropping the feature is a matter of
+    /// deleting them rather than untangling it from the window.
+    /// </summary>
+    private readonly PillButton _collector = new();
+
+    private CollectorForm? _collectorWindow;
+
     /// <summary>The underlined font of the notice, when it is a link. Owned
     /// here - the plain font belongs to the form.</summary>
     private Font? _noticeLink;
@@ -621,24 +630,65 @@ public sealed class MainForm : Form
         themeLabel.Anchor = AnchorStyles.Right;
         themeLabel.Margin = new Padding(0, 0, 0, 0);
 
+        _collector.Text = Strings.CollectorOpen;
+        _collector.Ghost = true;
+        _collector.AutoSize = false;
+        _collector.Size = new Size(104, 26);
+        _collector.Anchor = AnchorStyles.Right;
+        _collector.Margin = new Padding(0, 0, 12, 0);
+        _collector.Click += (_, _) => OpenCollector();
+
         var row = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 3,
+            ColumnCount = 4,
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 10),
         };
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_autoOpen, 0, 0);
-        row.Controls.Add(themeLabel, 1, 0);
-        row.Controls.Add(_themeBox, 2, 0);
+        row.Controls.Add(_collector, 1, 0);
+        row.Controls.Add(themeLabel, 2, 0);
+        row.Controls.Add(_themeBox, 3, 0);
         return row;
+    }
+
+    /// <summary>
+    /// Opens the checklist, or brings back the one already open. A second copy
+    /// would be two views of one file, each overwriting the other's ticks.
+    /// </summary>
+    private void OpenCollector()
+    {
+        if (_collectorWindow is { IsDisposed: false } open)
+        {
+            if (open.WindowState == FormWindowState.Minimized)
+                open.WindowState = FormWindowState.Normal;
+
+            open.Activate();
+            return;
+        }
+
+        // The catalog is loaded before the window is usable, but the button
+        // exists from the first paint, so this is not a promise the type makes.
+        if (_catalog is null) return;
+
+        var items = _catalog.Entries
+            .Where(e => e.Kind == EntryKind.Item)
+            .OrderBy(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        _collectorWindow = new CollectorForm(
+            items, CollectorRecord.Load(), SelectedWiki, SelectedBrowser);
+
+        _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
+        _collectorWindow.Show(this);
     }
 
     /// <summary>

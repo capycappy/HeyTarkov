@@ -118,6 +118,33 @@ public static class Strings
     public static string KindMap => T("マップ ", "Map ");
     public static string KindExit => T("出口 ", "Exit ");
     public static string KindItem => T("アイテム ", "Item ");
+
+    // ------------------------------------------------------------ collector
+
+    public static string CollectorTitle => T("コレクター", "Collector");
+
+    /// <summary>The button on the main window. Short: it shares a row.</summary>
+    public static string CollectorOpen => T("コレクター", "Collector");
+
+    public static string CollectorProgress(int held, int all) =>
+        T($"{held} / {all} 所持", $"{held} of {all} held");
+
+    public static string CollectorDone => T("すべて集まりました", "All collected");
+
+    public static string CollectorFilter => T("絞り込み", "Filter");
+
+    public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
+
+    public static string CollectorHint =>
+        T("クリックでチェック　ダブルクリックで Wiki を開く",
+          "Click the box to tick, double-click a row to open the wiki");
+
+    public static string CollectorEmpty =>
+        T("該当なし", "Nothing matches");
+
+    public static string CollectorNoItems =>
+        T("このビルドにはコレクターの一覧が入っていません",
+          "This build carries no Collector list");
     public static string KindEvent(string name) => T($"イベント {name} ", $"Event {name} ");
 
     public static string OpenSelected =>
