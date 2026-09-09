@@ -133,6 +133,10 @@ public static class Strings
 
     public static string CollectorFilter => T("絞り込み", "Filter");
 
+    public static string CollectorColumnLabel => T("ゲーム内表記", "In game");
+
+    public static string CollectorColumnName => T("アイテム名", "Item");
+
     public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
 
     public static string CollectorHint =>
