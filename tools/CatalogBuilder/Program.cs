@@ -32,7 +32,11 @@ internal static class Program
             Console.WriteLine("maps and extracts...");
             var maps = await Maps.FetchAsync(wikis);
 
-            var entries = tasks.Concat(maps)
+            Console.WriteLine();
+            Console.WriteLine("collector items...");
+            var items = await Collector.FetchAsync(wikis);
+
+            var entries = tasks.Concat(maps).Concat(items)
                 .OrderBy(e => e.Kind)
                 .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
                 .ThenBy(e => e.Name, StringComparer.OrdinalIgnoreCase)
@@ -41,6 +45,31 @@ internal static class Program
             if (entries.Count == 0)
             {
                 Console.Error.WriteLine("Nothing was fetched; leaving the file alone.");
+                return 1;
+            }
+
+            // A page the wiki refused to answer about is not a page that is
+            // missing, and the difference matters: an entry only gets its
+            // Japanese link if its page was found. Writing the file now would
+            // ship a catalog with links silently absent from it, and the next
+            // person to notice would be a user who could not find a task.
+            //
+            // The failures are almost always rate limiting, and the answer is
+            // to run it again later rather than to accept the result.
+            if (wikis.Unresolved.Count > 0)
+            {
+                Console.Error.WriteLine();
+                Console.Error.WriteLine(
+                    $"{wikis.Unresolved.Count} page(s) the wiki would not answer about:");
+
+                foreach (var url in wikis.Unresolved.Take(20))
+                    Console.Error.WriteLine($"  {url}");
+
+                if (wikis.Unresolved.Count > 20)
+                    Console.Error.WriteLine($"  ...and {wikis.Unresolved.Count - 20} more");
+
+                Console.Error.WriteLine();
+                Console.Error.WriteLine("Leaving the file alone. Run it again in a few minutes.");
                 return 1;
             }
 

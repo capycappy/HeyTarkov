@@ -10,6 +10,14 @@ public readonly record struct TaskMatch(WikiEntry Task, double Score, string Mat
 public sealed class TaskIndex
 {
     private readonly IPhraseScheme _scheme;
+
+    /// <summary>
+    /// How this index turns names into phrases. Exposed so a second index over
+    /// a different set of entries can be built to match: two indexes searched
+    /// with the same string have to agree on what that string means, or the
+    /// katakana one silently finds nothing in the English one.
+    /// </summary>
+    public IPhraseScheme Scheme => _scheme;
     private readonly Dictionary<string, WikiEntry> _byPhrase = new(StringComparer.Ordinal);
     private readonly Dictionary<string, WikiEntry> _byFuzzyKey = new(StringComparer.Ordinal);
     private readonly List<(string Key, WikiEntry Task)> _all = new();
