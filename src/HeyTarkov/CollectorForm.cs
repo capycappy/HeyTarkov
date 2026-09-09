@@ -21,6 +21,7 @@ public sealed class CollectorForm : Form
     private readonly CollectorHeader _header = new();
     private readonly CollectorList _list = new();
     private readonly Label _hint = new();
+    private readonly PillButton _clear = new();
 
     public CollectorForm(
         IReadOnlyList<WikiEntry> items, CollectorRecord record,
@@ -36,8 +37,8 @@ public sealed class CollectorForm : Form
         AutoScaleMode = AutoScaleMode.Dpi;
         AutoScaleDimensions = new SizeF(96f, 96f);
         StartPosition = FormStartPosition.CenterParent;
-        MinimumSize = new Size(460, 420);
-        Size = new Size(560, 680);
+        MinimumSize = new Size(520, 420);
+        Size = new Size(660, 680);
         BackColor = Theme.Page;
         ShowIcon = false;
         ShowInTaskbar = false;
@@ -95,8 +96,52 @@ public sealed class CollectorForm : Form
         _progress.BackColor = Color.Transparent;
         _progress.ForeColor = Theme.Text;
         _progress.Font = new Font("Yu Gothic UI", 15f, FontStyle.Bold);
-        _progress.Margin = new Padding(2, 0, 0, 10);
-        return _progress;
+        _progress.Anchor = AnchorStyles.Left;
+        _progress.Margin = new Padding(2, 0, 0, 0);
+
+        _clear.Text = Strings.CollectorClear;
+        _clear.Ghost = true;
+        _clear.AutoSize = false;
+        _clear.Size = new Size(96, 26);
+        _clear.Anchor = AnchorStyles.Right;
+        _clear.Margin = new Padding(8, 4, 2, 0);
+        _clear.Click += (_, _) => ClearAll();
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            ColumnCount = 2,
+            RowCount = 1,
+            BackColor = Color.Transparent,
+            Margin = new Padding(0, 0, 0, 10),
+        };
+
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.Controls.Add(_progress, 0, 0);
+        row.Controls.Add(_clear, 1, 0);
+        return row;
+    }
+
+    /// <summary>
+    /// Asked about first. It throws away the only thing in this window that
+    /// cannot be worked out again from the wikis.
+    /// </summary>
+    private void ClearAll()
+    {
+        var held = _items.Count(item => _record.Has(item.Name));
+        if (held == 0) return;
+
+        var answer = MessageBox.Show(this, Strings.CollectorClearAsk(held),
+            Strings.CollectorClearTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning,
+            MessageBoxDefaultButton.Button2);
+
+        if (answer != DialogResult.OK) return;
+
+        _record.Clear();
+        Populate();
     }
 
     private Control BuildFilterRow()
@@ -167,6 +212,7 @@ public sealed class CollectorForm : Form
 
         _header.Dock = DockStyle.Top;
         _header.BackColor = Theme.Panel;
+        _header.ShowJapanese = _wiki == WikiSource.Japanese;
         _header.Picked += OnSortPicked;
 
         var holder = new Panel
@@ -216,11 +262,19 @@ public sealed class CollectorForm : Form
                 : items.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase);
         }
 
-        var byLabel = items.OrderBy(e => e.ShortName is null);
+        // Whichever column is sorted, the rows with nothing in it go last. An
+        // empty cell at the top is a poor opening for a list sorted by that
+        // column, and there are fourteen without a Japanese name.
+        var (missing, key) = _sort == CollectorSort.Japanese
+            ? ((Func<WikiEntry, bool>)(e => e.JapaneseName is null),
+                (Func<WikiEntry, string>)(e => e.JapaneseName ?? e.Name))
+            : (e => e.ShortName is null, e => e.ShortName ?? e.Name);
+
+        var ordered = items.OrderBy(missing);
 
         return _descending
-            ? byLabel.ThenByDescending(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase)
-            : byLabel.ThenBy(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase);
+            ? ordered.ThenByDescending(key, StringComparer.OrdinalIgnoreCase)
+            : ordered.ThenBy(key, StringComparer.OrdinalIgnoreCase);
     }
 
     private Control BuildHint()

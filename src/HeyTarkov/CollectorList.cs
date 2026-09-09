@@ -28,6 +28,40 @@ public enum CollectorSort
 
     /// <summary>By the full name, which is how both wikis list them.</summary>
     Name,
+
+    /// <summary>By the Japanese name, where the wiki gives one.</summary>
+    Japanese,
+}
+
+/// <summary>
+/// Where each column starts and how wide it is, worked out once from the width
+/// on offer. The header and the rows are separate controls drawing what has to
+/// read as one table, so they ask the same function rather than each doing
+/// their own arithmetic.
+/// </summary>
+public readonly record struct CollectorLayout(int LabelX, int LabelW, int NameX, int NameW,
+                                              int JapaneseX, int JapaneseW)
+{
+    public static CollectorLayout For(Control control, int width, bool japanese)
+    {
+        var pad = control.LogicalToDeviceUnits(CollectorColumns.Pad);
+        var gap = control.LogicalToDeviceUnits(CollectorColumns.Gap);
+
+        var labelX = control.LogicalToDeviceUnits(CollectorColumns.Box);
+        var labelW = control.LogicalToDeviceUnits(CollectorColumns.Label);
+
+        var nameX = labelX + labelW + gap;
+        var rest = width - pad - control.LogicalToDeviceUnits(6) - nameX;
+
+        if (!japanese) return new CollectorLayout(labelX, labelW, nameX, rest, 0, 0);
+
+        // The English name is the one that has to survive being read, so it
+        // keeps the larger share when the window is narrow.
+        var nameW = Math.Max(control.LogicalToDeviceUnits(90), (int)(rest * 0.55f) - gap);
+
+        return new CollectorLayout(labelX, labelW, nameX, nameW,
+            nameX + nameW + gap, rest - nameW - gap);
+    }
 }
 
 /// <summary>One item in the checklist, and whether it is already in the stash.</summary>
@@ -57,6 +91,7 @@ public sealed class CollectorRow(WikiEntry item, bool held)
 public sealed class CollectorList : ListBox
 {
     private Font? _label;
+    private Font? _labelHeld;
     private Font? _name;
     private Font? _held;
 
@@ -93,37 +128,42 @@ public sealed class CollectorList : ListBox
     private void RebuildFonts()
     {
         _label?.Dispose();
+        _labelHeld?.Dispose();
         _name?.Dispose();
         _held?.Dispose();
 
         var size = Font.SizeInPoints;
         _label = new Font("Segoe UI Semibold", size);
+        _labelHeld = new Font("Segoe UI Semibold", size, FontStyle.Strikeout);
         _name = new Font("Yu Gothic UI", size * 0.9f);
         _held = new Font("Yu Gothic UI", size * 0.9f, FontStyle.Strikeout);
 
         ItemHeight = Font.Height + LogicalToDeviceUnits(11);
     }
 
-    /// <summary>How far in the box reaches. A click inside it ticks the row;
-    /// a click past it just selects, so the name can be read without the list
-    /// changing under the cursor.</summary>
-    private int BoxColumn => LogicalToDeviceUnits(CollectorColumns.Box);
-
+    /// <summary>
+    /// Anywhere on the row ticks it. Aiming for a fifteen-pixel box forty-four
+    /// times is work, and there is nothing else a click on one of these rows
+    /// could reasonably mean.
+    /// </summary>
     protected override void OnMouseDown(MouseEventArgs e)
     {
         base.OnMouseDown(e);
 
-        if (e.Button != MouseButtons.Left || e.X > BoxColumn) return;
+        if (e.Button != MouseButtons.Left) return;
 
         var index = IndexFromPoint(e.Location);
         if (index >= 0 && index < Items.Count) Toggle(index);
     }
 
+    /// <summary>
+    /// The two clicks have already ticked and unticked the row by the time this
+    /// arrives, so the state is where it started and there is nothing to undo -
+    /// the box just blinks on the way past.
+    /// </summary>
     protected override void OnMouseDoubleClick(MouseEventArgs e)
     {
         base.OnMouseDoubleClick(e);
-
-        if (e.X <= BoxColumn) return;   // the second click of ticking a box
 
         var index = IndexFromPoint(e.Location);
         if (index >= 0 && Items[index] is CollectorRow row) Opened?.Invoke(row);
@@ -183,35 +223,32 @@ public sealed class CollectorList : ListBox
         Box(g, full, row.Held, pad + LogicalToDeviceUnits(6));
 
         // A held item is not removed from the list - seeing the whole set is
-        // the point - but it should stop competing for attention.
+        // the point - but it should stop competing for attention, and the line
+        // through it belongs on every column or the row reads as half done.
         var strong = row.Held ? Theme.Faint : Theme.Text;
         var quiet = row.Held ? Theme.Faint : Theme.Muted;
-        var font = row.Held ? _held! : _name!;
+        var label = row.Held ? _labelHeld! : _label!;
+        var name = row.Held ? _held! : _name!;
 
-        var x = full.X + BoxColumn;
-        var labelW = LogicalToDeviceUnits(CollectorColumns.Label);
+        var at = CollectorLayout.For(this, full.Width, ShowJapanese);
 
-        if (row.Item.ShortName is { } label)
+        if (row.Item.ShortName is { } stash)
         {
-            Draw(g, label, _label!, strong, x, labelW, full);
+            Draw(g, stash, label, strong, full.X + at.LabelX, at.LabelW, full);
         }
         else
         {
             // Nothing to line up with, so say so rather than leaving a hole
             // that reads as "this item has no label in the game".
-            Draw(g, "—", _name!, Theme.Faint, x, labelW, full);
+            Draw(g, "—", _name!, Theme.Faint, full.X + at.LabelX, at.LabelW, full);
         }
 
-        var nameX = x + labelW + LogicalToDeviceUnits(CollectorColumns.Gap);
-        var nameW = full.Right - pad - LogicalToDeviceUnits(6) - nameX;
+        if (at.NameW > 0)
+            Draw(g, row.Item.Name, name, quiet, full.X + at.NameX, at.NameW, full);
 
-        if (nameW > 0) Draw(g, Describe(row.Item), font, quiet, nameX, nameW, full);
+        if (ShowJapanese && at.JapaneseW > 0 && row.Item.JapaneseName is { } japanese)
+            Draw(g, japanese, name, quiet, full.X + at.JapaneseX, at.JapaneseW, full);
     }
-
-    private string Describe(WikiEntry item) =>
-        ShowJapanese && item.JapaneseName is { } japanese
-            ? $"{item.Name} / {japanese}"
-            : item.Name;
 
     private void Box(Graphics g, Rectangle row, bool held, int x)
     {
@@ -256,6 +293,7 @@ public sealed class CollectorList : ListBox
         if (disposing)
         {
             _label?.Dispose();
+            _labelHeld?.Dispose();
             _name?.Dispose();
             _held?.Dispose();
         }

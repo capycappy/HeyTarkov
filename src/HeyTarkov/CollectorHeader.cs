@@ -60,10 +60,11 @@ public sealed class CollectorHeader : Control
         Height = _font.Height + LogicalToDeviceUnits(12);
     }
 
-    private int LabelX => LogicalToDeviceUnits(CollectorColumns.Box);
+    /// <summary>Whether the Japanese column is there to be clicked.</summary>
+    [System.ComponentModel.DefaultValue(false)]
+    public bool ShowJapanese { get; set; }
 
-    private int NameX => LabelX + LogicalToDeviceUnits(CollectorColumns.Label)
-                         + LogicalToDeviceUnits(CollectorColumns.Gap);
+    private CollectorLayout At => CollectorLayout.For(this, Width, ShowJapanese);
 
     protected override void OnMouseUp(MouseEventArgs e)
     {
@@ -71,7 +72,13 @@ public sealed class CollectorHeader : Control
 
         if (e.Button != MouseButtons.Left) return;
 
-        Picked?.Invoke(e.X < NameX ? CollectorSort.Label : CollectorSort.Name);
+        var at = At;
+
+        var picked = e.X < at.NameX ? CollectorSort.Label
+            : ShowJapanese && e.X >= at.JapaneseX ? CollectorSort.Japanese
+            : CollectorSort.Name;
+
+        Picked?.Invoke(picked);
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -82,11 +89,16 @@ public sealed class CollectorHeader : Control
         g.SmoothingMode = SmoothingMode.AntiAlias;
         g.Clear(Theme.Panel);
 
-        Column(g, Strings.CollectorColumnLabel, LabelX,
-            NameX - LabelX - LogicalToDeviceUnits(6), CollectorSort.Label);
+        var at = At;
 
-        Column(g, Strings.CollectorColumnName, NameX,
-            Width - NameX - LogicalToDeviceUnits(CollectorColumns.Pad), CollectorSort.Name);
+        Column(g, Strings.CollectorColumnLabel, at.LabelX, at.LabelW, CollectorSort.Label);
+        Column(g, Strings.CollectorColumnName, at.NameX, at.NameW, CollectorSort.Name);
+
+        if (ShowJapanese)
+        {
+            Column(g, Strings.CollectorColumnJapanese, at.JapaneseX, at.JapaneseW,
+                CollectorSort.Japanese);
+        }
 
         // A hairline under the row, so the titles read as a header rather than
         // as a first item that cannot be ticked.

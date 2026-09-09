@@ -121,10 +121,17 @@ public static class Strings
 
     // ------------------------------------------------------------ collector
 
-    public static string CollectorTitle => T("コレクター", "Collector");
+    /// <summary>
+    /// What players call these, rather than what the quest is called. The
+    /// reward is the Kappa container and both communities named the set after
+    /// it - "KAPPAタスク品" in Japanese, "Kappa items" in English - so that is
+    /// the phrase that says at a glance what the list is for. Neither wiki uses
+    /// it; it is the players' word, not the wiki's.
+    /// </summary>
+    public static string CollectorTitle => T("KAPPA品", "KAPPA items");
 
     /// <summary>The button on the main window. Short: it shares a row.</summary>
-    public static string CollectorOpen => T("コレクター", "Collector");
+    public static string CollectorOpen => T("KAPPA品", "KAPPA items");
 
     public static string CollectorProgress(int held, int all) =>
         T($"{held} / {all} 所持", $"{held} of {all} held");
@@ -136,6 +143,16 @@ public static class Strings
     public static string CollectorColumnLabel => T("ゲーム内表記", "In game");
 
     public static string CollectorColumnName => T("アイテム名", "Item");
+
+    public static string CollectorColumnJapanese => T("日本語名", "Japanese");
+
+    public static string CollectorClear => T("すべて解除", "Clear all");
+
+    public static string CollectorClearAsk(int held) => T(
+        $"チェック済みの {held} 件をすべて解除します。よろしいですか？",
+        $"Clear all {held} ticked items?");
+
+    public static string CollectorClearTitle => T("すべて解除", "Clear all");
 
     public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
 
