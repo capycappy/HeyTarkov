@@ -61,6 +61,9 @@ public static class SelfTest
             failed |= !CheckFragments(report, catalog);
             report.AppendLine();
 
+            failed |= !CheckCollector(report, catalog);
+            report.AppendLine();
+
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
             report.AppendLine();
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.Japanese);
@@ -244,6 +247,102 @@ public static class SelfTest
 
         report.AppendLine($"  grammar with fragments: {index.GrammarPhrases.Count} phrases");
         return ok;
+    }
+
+    /// <summary>
+    /// The Collector items are in the catalog, and the record that tracks them
+    /// survives a round trip. The record is the user's own data - forty raids
+    /// of it - so a bug that loses it is the worst thing this feature can do.
+    /// </summary>
+    private static bool CheckCollector(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== collector ===");
+
+        var items = catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
+        var ok = items.Count > 0;
+
+        report.AppendLine($"  {(ok ? "PASS" : "FAIL")}  {items.Count} items in the catalog");
+        if (!ok) return false;
+
+        var linked = items.Count(e => e.EnglishUrl is not null);
+        var labelled = items.Count(e => e.ShortName is not null);
+        var japanese = items.Count(e => e.JapaneseName is not null);
+
+        report.AppendLine($"        {linked} with an English link, "
+                          + $"{items.Count(e => e.JapaneseUrl is not null)} Japanese");
+        report.AppendLine($"        {labelled} with the game's short label, "
+                          + $"{japanese} with a Japanese name");
+
+        // Every item must be openable somewhere, or its row is a dead end.
+        var openable = items.All(e => e.EnglishUrl is not null || e.JapaneseUrl is not null);
+        ok &= openable;
+        report.AppendLine($"  {(openable ? "PASS" : "FAIL")}  every item opens on at least one wiki");
+
+        // The label is what the checklist is scanned by, so a build that lost
+        // most of them is worth noticing even though it still runs.
+        var enough = labelled * 2 >= items.Count;
+        report.AppendLine($"  {(enough ? "PASS" : "WARN")}  {labelled}/{items.Count} carry a short label"
+                          + (enough ? "" : "  (tarkov.dev may have been down)"));
+
+        // An item is reachable by name like anything else in the catalog.
+        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+        var probe = items[0].Name;
+        var found = index.Exact(probe);
+        var reachable = found is not null && found.Kind == EntryKind.Item;
+
+        ok &= reachable;
+        report.AppendLine($"  {(reachable ? "PASS" : "FAIL")}  \"{probe}\" resolves to an item");
+
+        ok &= CheckRecord(report, items);
+        return ok;
+    }
+
+    /// <summary>
+    /// Ticking and unticking must survive being written and read back, and
+    /// nothing must be lost when the catalog no longer lists something that
+    /// was ticked - the user knows what is in their stash better than a wiki
+    /// scrape does.
+    /// </summary>
+    private static bool CheckRecord(StringBuilder report, List<WikiEntry> items)
+    {
+        // Its own file in the temp directory. Reading the user's record,
+        // writing over it and putting it back is how a self-test loses an
+        // evening of ticking for somebody who happened to be clicking at the
+        // time - which is exactly what it did.
+        var path = Path.Combine(Path.GetTempPath(), $"heytarkov-record-{Guid.NewGuid():N}.json");
+        CollectorRecord.Elsewhere = path;
+
+        try
+        {
+            var record = new CollectorRecord();
+            record.Set(items[0].Name, true);
+            record.Set("A Thing No Wiki Has Ever Listed", true);
+            record.Set(items[0].Name, false);
+            record.Set(items[0].Name, true);
+
+            var read = CollectorRecord.Load();
+
+            var kept = read.Has(items[0].Name);
+            var stranger = read.Has("A Thing No Wiki Has Ever Listed");
+            var counted = read.Count == 2;
+
+            var ok = kept && stranger && counted;
+
+            report.AppendLine($"  {(ok ? "PASS" : "FAIL")}  the record round-trips "
+                              + $"(ticked={kept}, unknown name kept={stranger}, count={read.Count})");
+
+            return ok;
+        }
+        catch (Exception ex)
+        {
+            report.AppendLine($"  FAIL  the record threw: {ex.Message}");
+            return false;
+        }
+        finally
+        {
+            CollectorRecord.Elsewhere = null;
+            TryDelete(path);
+        }
     }
 
     private static bool RunLanguage(

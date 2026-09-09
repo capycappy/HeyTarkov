@@ -3,12 +3,20 @@ using System.Drawing.Drawing2D;
 namespace HeyTarkov;
 
 /// <summary>One row of the candidate list.</summary>
-public sealed class CandidateRow(TaskMatch match, string? reading)
+public sealed class CandidateRow(TaskMatch match, string? reading, WikiSource? elsewhere = null)
 {
     public TaskMatch Match { get; } = match;
 
     /// <summary>The katakana reading, when the microphone is in Japanese.</summary>
     public string? Reading { get; } = reading;
+
+    /// <summary>
+    /// Set when the chosen wiki has no page for this and the other one does.
+    /// The row is still worth showing - what the user wanted exists, just not
+    /// where they are looking - but it has to say so, and opening it has to go
+    /// to the wiki that actually has it.
+    /// </summary>
+    public WikiSource? Elsewhere { get; } = elsewhere;
 
     /// <summary>
     /// What a screen reader announces. The list is painted, so this is the only
@@ -20,11 +28,13 @@ public sealed class CandidateRow(TaskMatch match, string? reading)
         {
             EntryKind.Map => Strings.KindMap,
             EntryKind.Extract => Strings.KindExit,
+            EntryKind.Item => Strings.KindItem,
             _ => Match.Task.Event.Length > 0 ? Strings.KindEvent(Match.Task.Event) : "",
         };
 
         var group = Match.Task.Group.Length > 0 ? $" / {Match.Task.Group}" : "";
-        return $"{kind}{Match.Task.Display}{group} {Match.Score:P0}";
+        var where = Elsewhere is { } other ? $" - {Strings.OnlyOnWiki(other)}" : "";
+        return $"{kind}{Match.Task.Display}{group}{where} {Match.Score:P0}";
     }
 }
 
@@ -118,12 +128,23 @@ public sealed class CandidateList : ListBox
         var scoreW = LogicalToDeviceUnits(40);
         var groupW = LogicalToDeviceUnits(96);
 
-        var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
-        Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
-
         var groupX = right - scoreW - LogicalToDeviceUnits(8) - groupW;
-        if (row.Match.Task.Group.Length > 0)
-            Column(g, row.Match.Task.Group, _small!, Theme.Muted, groupX, groupW, full);
+
+        if (row.Elsewhere is { } other)
+        {
+            // Where it can be found, in place of a score and a trader - neither
+            // of which answers the question this row raises.
+            Column(g, Strings.OnlyOnWiki(other), _small!, Theme.Clip,
+                groupX, groupW + scoreW + LogicalToDeviceUnits(8), full);
+        }
+        else
+        {
+            var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
+            Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
+
+            if (row.Match.Task.Group.Length > 0)
+                Column(g, row.Match.Task.Group, _small!, Theme.Muted, groupX, groupW, full);
+        }
 
         var readingX = full.X + (int)(full.Width * 0.46f);
         var readingW = groupX - LogicalToDeviceUnits(10) - readingX;

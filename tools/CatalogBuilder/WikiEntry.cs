@@ -21,6 +21,13 @@ public enum EntryKind
 
     /// <summary>An extraction point on a map.</summary>
     Extract,
+
+    /// <summary>
+    /// An item the Collector task wants handed over. Added last on purpose -
+    /// the value is written into tasks.json as a number, so an existing file
+    /// keeps meaning what it meant.
+    /// </summary>
+    Item,
 }
 
 /// <summary>
@@ -46,6 +53,26 @@ public sealed class WikiEntry
 
     /// <summary>The seasonal event this task belongs to, or empty.</summary>
     public string Event { get; set; } = "";
+
+    /// <summary>
+    /// The label the game prints over the icon in the stash - "BeardOil",
+    /// "Plague mask". Null for anything that is not an item.
+    ///
+    /// This is what a person reads when checking what they already have, so it
+    /// is what the checklist shows first. Neither wiki carries it; it comes
+    /// from the game's own item data.
+    /// </summary>
+    public string? ShortName { get; set; }
+
+    /// <summary>
+    /// The Japanese name, where the Japanese wiki gives one. Shown beside the
+    /// English name when that wiki is selected, and null when the wiki says in
+    /// so many words that there is no Japanese name for the thing.
+    ///
+    /// Never spoken. The grammar stays on the English name, which is what both
+    /// wikis title their pages with.
+    /// </summary>
+    public string? JapaneseName { get; set; }
 
     public string? JapaneseUrl { get; set; }
     public string? EnglishUrl { get; set; }

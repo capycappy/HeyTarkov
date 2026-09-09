@@ -117,13 +117,111 @@ public static class Strings
 
     public static string KindMap => T("マップ ", "Map ");
     public static string KindExit => T("出口 ", "Exit ");
+    public static string KindItem => T("アイテム ", "Item ");
+
+    /// <summary>
+    /// Said of a result that the selected wiki does not have. Names the wiki
+    /// that does, because "not found" and "found, elsewhere" are different
+    /// answers and only one of them is worth acting on.
+    /// </summary>
+    public static string OnlyOnWiki(WikiSource source) => source == WikiSource.Japanese
+        ? T("日本語Wikiにあり", "On the Japanese wiki")
+        : T("英語Wikiにあり", "On the English wiki");
+
+    // ------------------------------------------------------------ collector
+
+    /// <summary>
+    /// What players call these, rather than what the quest is called. The
+    /// reward is the Kappa container and both communities named the set after
+    /// it - "KAPPAタスク品" in Japanese, "Kappa items" in English - so that is
+    /// the phrase that says at a glance what the list is for. Neither wiki uses
+    /// it; it is the players' word, not the wiki's.
+    /// </summary>
+    public static string CollectorTitle => T("KAPPA品", "KAPPA items");
+
+    /// <summary>The button on the main window. Short: it shares a row.</summary>
+    public static string CollectorOpen => T("KAPPA品", "KAPPA items");
+
+    /// <summary>
+    /// The same button once the catalog is loaded, carrying how far along the
+    /// collection is. Worth the width: it answers the question the window would
+    /// otherwise have to be opened to ask.
+    /// </summary>
+    public static string CollectorOpenWith(int held, int all) =>
+        $"{CollectorOpen}  {held}/{all}";
+
+    public static string CollectorProgress(int held, int all) =>
+        T($"{held} / {all} 所持", $"{held} of {all} held");
+
+    public static string CollectorDone => T("すべて集まりました", "All collected");
+
+    /// <summary>
+    /// The placeholder in the filter box. It names the columns rather than
+    /// saying "filter", because the one thing worth knowing here is that the
+    /// stash label works - nobody expects to be able to type "BeardOil" - and
+    /// the words used are the ones written at the top of the columns a few
+    /// pixels below, so the connection needs no explaining.
+    ///
+    /// Japanese is only offered when that column is on screen. The filter reads
+    /// it either way, but promising a column the window is not showing is a
+    /// strange thing to do.
+    ///
+    /// Written out rather than built from the column titles. Japanese nouns sit
+    /// next to each other and read as a list; the English titles are headings,
+    /// and "Filter by In game, Item or Japanese" is not a sentence.
+    /// </summary>
+    public static string CollectorFilter(bool japanese) => japanese
+        ? T("アイコンの文字・アイテム名・日本語名で絞り込み",
+            "Filter by the icon label, the name, or the Japanese")
+        : T("アイコンの文字・アイテム名で絞り込み",
+            "Filter by the icon label or the name");
+
+    /// <summary>
+    /// The label printed over the item's icon in the stash.
+    ///
+    /// It was "ゲーム内表記" and that named nothing: everything on screen while
+    /// playing is in-game text. What makes this column findable is that it is
+    /// the writing on the picture, so that is what it says.
+    /// </summary>
+    public static string CollectorColumnLabel => T("アイコンの文字", "Icon label");
+
+    public static string CollectorColumnName => T("アイテム名", "Item");
+
+    public static string CollectorColumnJapanese => T("日本語名", "Japanese");
+
+    public static string CollectorClear => T("すべて解除", "Clear all");
+
+    public static string CollectorClearAsk(int held) => T(
+        $"チェック済みの {held} 件をすべて解除します。よろしいですか？",
+        $"Clear all {held} ticked items?");
+
+    public static string CollectorClearTitle => T("すべて解除", "Clear all");
+
+    public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
+
+    public static string CollectorHint =>
+        T("左のチェックボックスで記録　行をダブルクリックで Wiki を開く",
+          "Tick the box on the left to record it, double-click a row for the wiki");
+
+    public static string CollectorEmpty =>
+        T("該当なし", "Nothing matches");
+
+    public static string CollectorNoItems =>
+        T("このビルドにはコレクターの一覧が入っていません",
+          "This build carries no Collector list");
     public static string KindEvent(string name) => T($"イベント {name} ", $"Event {name} ");
 
     public static string OpenSelected =>
         T("選択したページをブラウザで開く", "Open selected page in browser");
 
+    /// <summary>
+    /// Shorter in English than it reads naturally, because the row it sits in
+    /// now splits its spare width evenly so the middle button lands on the
+    /// window's centre line - and the long form was the first thing to be cut
+    /// off by that.
+    /// </summary>
     public static string AutoOpen =>
-        T("確信度が高いときは自動で開く", "Open automatically on a confident match");
+        T("確信度が高いときは自動で開く", "Auto-open when confident");
 
     // ---------------------------------------------------------- the footer
 

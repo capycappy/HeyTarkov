@@ -39,11 +39,34 @@ public sealed class MainForm : Form
     /// <summary>Always English: the text box is typed, not spoken.</summary>
     private TaskIndex? _typedIndex;
 
+    /// <summary>
+    /// The same catalog, filtered to the wiki that is not selected, keyed by
+    /// the scheme it was built with. Built only when a search comes back empty,
+    /// which is the one moment it is any use - and there are two, because typing
+    /// is always read as English while speaking may be read as katakana.
+    /// </summary>
+    private readonly Dictionary<IPhraseScheme, TaskIndex> _otherIndex = new();
+
     private JapaneseLexicon? _lexicon;
     private JapaneseForms? _hintForms;
     private MicrophoneCapture? _levelTest;
     private CancellationTokenSource? _levelTestDrain;
     private ReleaseInfo? _pendingRelease;
+
+    /// <summary>
+    /// The Collector checklist. Everything it needs is in one field, one
+    /// button and one method, so that dropping the feature is a matter of
+    /// deleting them rather than untangling it from the window.
+    /// </summary>
+    private readonly PillButton _collector = new();
+
+    private CollectorForm? _collectorWindow;
+
+    /// <summary>
+    /// Read once and kept, so the button's count and the checklist are the same
+    /// record rather than two copies that can disagree.
+    /// </summary>
+    private CollectorRecord? _collectorRecord;
 
     /// <summary>The underlined font of the notice, when it is a link. Owned
     /// here - the plain font belongs to the form.</summary>
@@ -440,6 +463,10 @@ public sealed class MainForm : Form
         _typedBox.Margin = new Padding(0);
         _typedBox.PlaceholderText = Strings.SearchPlaceholder;
         _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
+
+        // Enter opens a page and leaves the words that found it sitting there.
+        // The next search is a different task, not an edit of that one.
+        SearchCard.SelectAllWhenClickedInto(_typedBox);
         _typedBox.KeyDown += (_, e) =>
         {
             if (e.KeyCode != Keys.Enter) return;
@@ -611,7 +638,7 @@ public sealed class MainForm : Form
 
         _themeBox.Width = 152;
         _themeBox.Anchor = AnchorStyles.Right;
-        _themeBox.Margin = new Padding(8, 0, 0, 0);
+        _themeBox.Margin = new Padding(8, 0, 2, 0);
         _themeBox.Items.AddRange(new object[]
             { Strings.ThemeSystem, Strings.ThemeLight, Strings.ThemeDark });
         _themeBox.SelectedIndex = 0;
@@ -621,6 +648,38 @@ public sealed class MainForm : Form
         themeLabel.Anchor = AnchorStyles.Right;
         themeLabel.Margin = new Padding(0, 0, 0, 0);
 
+        _collector.Text = Strings.CollectorOpen;
+        _collector.AutoSize = false;
+        _collector.Width = 172;
+        _collector.Ticked = true;
+        _collector.SameHeightAs = _themeBox;
+        _collector.Anchor = AnchorStyles.None;
+        _collector.Margin = new Padding(12, 0, 12, 0);
+        _collector.Click += (_, _) => OpenCollector();
+
+        // The dropdown settles its own height, sometimes not the one it asked
+        // for, and it changes again on a monitor with different scaling.
+        _themeBox.SizeChanged += (_, _) => _collector.Height = _themeBox.Height;
+
+        // The theme label and its dropdown travel together, so they share one
+        // cell and anchor right inside it.
+        var theme = new TableLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Anchor = AnchorStyles.Right,
+            Margin = new Padding(0),
+        };
+        theme.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        theme.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        theme.Controls.Add(themeLabel, 0, 0);
+        theme.Controls.Add(_themeBox, 1, 0);
+
+        // Half the leftover space on each side, so the button sits on the
+        // window's centre line rather than wherever the two ends leave it.
         var row = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -631,14 +690,71 @@ public sealed class MainForm : Form
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 10),
         };
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_autoOpen, 0, 0);
-        row.Controls.Add(themeLabel, 1, 0);
-        row.Controls.Add(_themeBox, 2, 0);
+        row.Controls.Add(_collector, 1, 0);
+        row.Controls.Add(theme, 2, 0);
         return row;
+    }
+
+    /// <summary>
+    /// Opens the checklist, or brings back the one already open. A second copy
+    /// would be two views of one file, each overwriting the other's ticks.
+    /// </summary>
+    private void OpenCollector()
+    {
+        if (_collectorWindow is { IsDisposed: false } open)
+        {
+            if (open.WindowState == FormWindowState.Minimized)
+                open.WindowState = FormWindowState.Normal;
+
+            open.Activate();
+            return;
+        }
+
+        // The catalog is loaded before the window is usable, but the button
+        // exists from the first paint, so this is not a promise the type makes.
+        if (_catalog is null) return;
+
+        // Order is the checklist's own business now - its header decides it.
+        var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
+
+        _collectorRecord ??= CollectorRecord.Load();
+
+        _collectorWindow = new CollectorForm(
+            items, _collectorRecord, SelectedWiki, SelectedBrowser);
+
+        _collectorWindow.Changed += RefreshCollectorCount;
+        _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
+        _collectorWindow.Show(this);
+    }
+
+    /// <summary>
+    /// How much of the collection is done, on the button that opens it. The
+    /// answer is the reason most people would open the window at all, so it may
+    /// as well be on the outside of it.
+    /// </summary>
+    private void RefreshCollectorCount()
+    {
+        if (_catalog is null) return;
+
+        var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
+
+        if (items.Count == 0)
+        {
+            _collector.Text = Strings.CollectorOpen;
+            _collector.Visible = false;
+            return;
+        }
+
+        _collectorRecord ??= CollectorRecord.Load();
+
+        _collector.Visible = true;
+        _collector.Text = Strings.CollectorOpenWith(
+            items.Count(item => _collectorRecord.Has(item.Name)), items.Count);
     }
 
     /// <summary>
@@ -786,6 +902,8 @@ public sealed class MainForm : Form
         {
             _catalog = TaskCatalog.Load();
             _typedIndex = null;
+            _otherIndex.Clear();
+            RefreshCollectorCount();
         }
         catch (Exception ex)
         {
@@ -963,9 +1081,11 @@ public sealed class MainForm : Form
         _settings.Wiki = SelectedWiki;
         _settings.Save();
 
-        // The wiki decides which tasks exist, so both the grammar and the typed
-        // search have to be rebuilt against the new set.
+        // The wiki decides which tasks exist, so the grammar, the typed search
+        // and the index of the wiki now on the other side all have to be built
+        // again against the new sets.
         _typedIndex = null;
+        _otherIndex.Clear();
         _candidates.Items.Clear();
 
         await RebuildForLanguageAsync();
@@ -1491,9 +1611,23 @@ public sealed class MainForm : Form
         if (_lastHeard is null || _speechIndex is null) return;
 
         var matches = BuildCandidates(_lastHeard);
-        Populate(matches);
 
-        SetStatus(matches.Count > 0
+        // This is the one moment speaking can reach the other wiki: the phrase
+        // came from the wiki that was selected until a second ago, and this one
+        // has no page for it. Ordinary speaking cannot - the grammar only holds
+        // phrases for the wiki in use, so it can only return one of those.
+        var solid = _speechIndex.Exact(_lastHeard.Text) is not null
+                    || _speechIndex.Containing(_lastHeard.Text).Count > 0;
+
+        var elsewhere = solid
+            ? new List<CandidateRow>()
+            : Elsewhere(_lastHeard.Text, _speechIndex.Scheme);
+
+        PopulateRows(elsewhere
+            .Concat(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))))
+            .Take(14).ToList());
+
+        SetStatus(matches.Count > 0 || elsewhere.Count > 0
             ? Strings.SearchedAgain(_lastHeard.Text, SelectedWiki)
             : Strings.NotOnWiki(_lastHeard.Text, SelectedWiki));
     }
@@ -1519,15 +1653,63 @@ public sealed class MainForm : Form
         var ranked = _typedIndex.Rank(text, 12)
             .Where(m => containing.All(s => s.Task != m.Task));
 
-        Populate(containing.Concat(ranked).Take(14).ToList());
+        // Whether to look at the other wiki turns on `containing`, not on the
+        // list being empty. Ranking returns near misses for almost any input,
+        // so "no results at all" hardly ever happens and waiting for it would
+        // mean this never fired.
+        var elsewhere = containing.Count == 0
+            ? Elsewhere(text, _typedIndex.Scheme)
+            : new List<CandidateRow>();
+
+        var here = containing.Concat(ranked)
+            .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
+            .ToList();
+
+        // The other wiki's exact answer leads, this wiki's guesses follow.
+        PopulateRows(elsewhere.Concat(here).Take(14).ToList());
     }
 
-    private void Populate(IReadOnlyList<TaskMatch> matches)
+    /// <summary>
+    /// The other wiki's answer to the same question, for when this one had
+    /// none. Only ever a fallback: a page on the wiki the user chose always
+    /// wins, and this never runs when there was one.
+    /// </summary>
+    private List<CandidateRow> Elsewhere(string text, IPhraseScheme scheme)
+    {
+        var nothing = new List<CandidateRow>();
+        if (_catalog is null || text.Trim().Length == 0) return nothing;
+
+        var other = SelectedWiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese;
+
+        if (!_otherIndex.TryGetValue(scheme, out var index))
+        {
+            index = new TaskIndex(_catalog.On(other), scheme);
+            _otherIndex[scheme] = index;
+        }
+
+        var found = new List<WikiEntry>();
+
+        if (index.Exact(text) is { } exact) found.Add(exact);
+        found.AddRange(index.Containing(text).Where(e => !found.Contains(e)));
+
+        // Exact and whole-word only. "There is nothing here, but something
+        // vaguely like it is over there" is not worth a red line across the
+        // list; "the thing you asked for is over there" is.
+
+        return found
+            .Take(8)
+            .Select(e => new CandidateRow(new TaskMatch(e, 1.0, text), null, other))
+            .ToList();
+    }
+
+    private void Populate(IReadOnlyList<TaskMatch> matches) =>
+        PopulateRows(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))).ToList());
+
+    private void PopulateRows(IReadOnlyList<CandidateRow> rows)
     {
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var match in matches)
-            _candidates.Items.Add(new CandidateRow(match, ReadingHint(match.Task)));
+        foreach (var row in rows) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
@@ -1545,12 +1727,17 @@ public sealed class MainForm : Form
 
     private void OpenSelected()
     {
-        if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task);
+        if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task, row.Elsewhere);
     }
 
-    private void OpenTask(WikiEntry task)
+    /// <summary>
+    /// <paramref name="elsewhere"/> is set for a row the chosen wiki does not
+    /// have. Opening it on the chosen wiki would fail, and the row said plainly
+    /// where the page is, so it goes there.
+    /// </summary>
+    private void OpenTask(WikiEntry task, WikiSource? elsewhere = null)
     {
-        var wiki = SelectedWiki;
+        var wiki = elsewhere ?? SelectedWiki;
         var url = task.Url(wiki);
 
         if (url is null)

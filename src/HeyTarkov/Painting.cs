@@ -49,6 +49,30 @@ public static class Painting
     /// renders at a different weight in every theme, and an icon font is a
     /// dependency this app will not take.
     /// </summary>
+    /// <summary>
+    /// A check mark inside the given square. Lives here because the checklist
+    /// rows and the button that opens them draw the same mark, and two hand-
+    /// placed polylines drift apart.
+    /// </summary>
+    public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke)
+        {
+            StartCap = LineCap.Round,
+            EndCap = LineCap.Round,
+            LineJoin = LineJoin.Round,
+        };
+
+        var side = box.Width;
+
+        g.DrawLines(pen, new[]
+        {
+            new PointF(box.Left + side * 0.20f, box.Top + side * 0.52f),
+            new PointF(box.Left + side * 0.42f, box.Top + side * 0.74f),
+            new PointF(box.Left + side * 0.80f, box.Top + side * 0.26f),
+        });
+    }
+
     public static void Mic(Graphics g, float cx, float cy, float span, Color colour, float stroke)
     {
         using var brush = new SolidBrush(colour);
@@ -107,8 +131,9 @@ public class Card : Panel
 }
 
 /// <summary>
-/// A flat button the app paints itself, in two weights: filled for the one
-/// action the window exists to perform, outlined for everything else.
+/// A flat button the app paints itself, in two weights: filled to read as a
+/// button worth pressing, outlined for the ones that sit quietly beside
+/// something else.
 /// </summary>
 public sealed class PillButton : Button
 {
@@ -141,6 +166,30 @@ public sealed class PillButton : Button
 
     [DefaultValue(8)]
     public int Radius { get; set; } = 8;
+
+    /// <summary>
+    /// A control this must be exactly as tall as.
+    ///
+    /// The height is copied rather than calculated. Working out the same
+    /// expression a ComboBox uses lands two pixels out, because a ComboBox asks
+    /// Windows for its height and does not always get what it asked for - and
+    /// two pixels is enough to push a button past the bottom of the row it is
+    /// laid out in and have it clipped.
+    /// </summary>
+    [DefaultValue(null)]
+    public Control? SameHeightAs { get; set; }
+
+    protected override void SetBoundsCore(
+        int x, int y, int width, int height, BoundsSpecified specified)
+    {
+        var wanted = SameHeightAs is { Height: > 0 } other ? other.Height : height;
+        base.SetBoundsCore(x, y, width, wanted, specified);
+    }
+
+    /// <summary>A tick drawn before the text, for a button that opens a list of
+    /// things to tick off.</summary>
+    [DefaultValue(false)]
+    public bool Ticked { get; set; }
 
     protected override void OnMouseEnter(EventArgs e) { _hot = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hot = false; _down = false; Invalidate(); base.OnMouseLeave(e); }
@@ -180,7 +229,39 @@ public sealed class PillButton : Button
             Painting.DrawRounded(g, Rectangle.Inflate(new Rectangle(0, 0, Width, Height), -2, -2),
                 Ghost ? Theme.Accent : Theme.AccentText, radius, LogicalToDeviceUnits(1));
 
-        TextRenderer.DrawText(g, Text, Font, new Rectangle(0, 0, Width, Height), ink,
+        var box = new Rectangle(0, 0, Width, Height);
+
+        if (Ticked)
+        {
+            // The tick sits at the left edge and the word sits in the middle of
+            // the button. Centring the two together would make the button read
+            // as "tick KAPPA品"; what it is called is KAPPA品, and the tick is
+            // a mark on the button rather than part of its name.
+            var side = LogicalToDeviceUnits(13);
+            var inset = LogicalToDeviceUnits(13);
+
+            Painting.Tick(g, new RectangleF(inset, (Height - side) / 2f, side, side), ink,
+                Math.Max(1.6f, side * 0.16f));
+
+            var textWidth = TextRenderer.MeasureText(g, Text, Font,
+                new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;
+
+            // Unless the word is long enough to reach the tick, in which case it
+            // gives way - overlapping is worse than off-centre.
+            var clear = inset + side + LogicalToDeviceUnits(8);
+            var centred = (Width - textWidth) / 2;
+
+            box = centred >= clear
+                ? new Rectangle(0, 0, Width, Height)
+                : new Rectangle(clear, 0, Width - clear - LogicalToDeviceUnits(6), Height);
+
+            TextRenderer.DrawText(g, Text, Font, box, ink,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+                | TextFormatFlags.NoPrefix);
+            return;
+        }
+
+        TextRenderer.DrawText(g, Text, Font, box, ink,
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
     }
 
@@ -200,6 +281,37 @@ public sealed class SearchCard : Card
     public SearchCard()
     {
         Radius = 8;
+    }
+
+    /// <summary>
+    /// Selects whatever is in the box when it is clicked into, so the next
+    /// keystroke replaces it. Coming back to a search box means looking for
+    /// something else; the last search is there to be read, not edited.
+    ///
+    /// Both events are needed. A click gives focus and then puts the caret
+    /// where it landed, which undoes a SelectAll made on focus alone. The flag
+    /// keeps it to the click that arrives with the focus - clicking again
+    /// inside the box is someone placing the caret, and that has to still work.
+    /// </summary>
+    public static void SelectAllWhenClickedInto(TextBox box)
+    {
+        var arriving = false;
+
+        box.GotFocus += (_, _) =>
+        {
+            arriving = true;
+            box.SelectAll();
+        };
+
+        box.MouseUp += (_, _) =>
+        {
+            if (!arriving) return;
+
+            arriving = false;
+            box.SelectAll();
+        };
+
+        box.Leave += (_, _) => arriving = false;
     }
 
     protected override void OnPaint(PaintEventArgs e)

@@ -69,10 +69,10 @@ public static partial class Maps
             var japaneseUrl = wikis.JapaneseUrl(japanese);
             var englishUrl = Wikis.FandomWiki + Wikis.EncodeWikiTitle(english);
 
-            var html = await wikis.GetAsync(japaneseUrl, ct).ConfigureAwait(false);
+            var japanesePage = await wikis.GetAsync(japaneseUrl, ct).ConfigureAwait(false);
             var sections = await wikis.SectionsAsync(english, ct).ConfigureAwait(false);
 
-            var onJapanese = html is not null;
+            var onJapanese = japanesePage.Exists;
             var onEnglish = sections.Count > 0;
 
             if (!onJapanese && !onEnglish)
@@ -89,7 +89,7 @@ public static partial class Maps
                 EnglishUrl = onEnglish ? englishUrl : null,
             });
 
-            if (html is null)
+            if (japanesePage.Text is not { } html)
             {
                 Console.WriteLine("    (japanese page unavailable, no extracts)");
                 continue;
