@@ -177,7 +177,7 @@ public sealed class CollectorForm : Form
         _filter.BackColor = Theme.Panel;
         _filter.ForeColor = Theme.Text;
         _filter.Font = new Font("Yu Gothic UI", 10.5f);
-        _filter.PlaceholderText = Strings.CollectorFilter;
+        _filter.PlaceholderText = Strings.CollectorFilter(_wiki == WikiSource.Japanese);
         _filter.Dock = DockStyle.Fill;
         _filter.Margin = new Padding(30, 8, 12, 8);
         _filter.TextChanged += (_, _) => Populate();
