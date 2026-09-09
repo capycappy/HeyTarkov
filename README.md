@@ -1,4 +1,4 @@
-# Hey Tarkov v1.4.0
+# Hey Tarkov v1.5.0
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -26,8 +26,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.4.0-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.4.0-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.5.0-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.5.0-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -52,9 +52,10 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | 種別 | 件数 | 例 |
 |---|---|---|
-| タスク | 899 | 「ウェット ジョブ パート フォー」 |
+| タスク | 902 | 「ウェット ジョブ パート フォー」 |
 | マップ | 15 | 「グラウンドゼロ」 |
 | 脱出地点 | 143 | 「グラウンドゼロ エマーコムチェックポイント」 |
+| KAPPA品 | 44 | 「ゴールデンエッグ」 |
 
 脱出地点はマップ名を省略できます。ただし `Emercom Checkpoint` のように複数マップに
 同名がある場合、マップ名を付けると一意に決まります。
@@ -98,16 +99,43 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 残り 4 件は日本語 Wiki にまだ記事が無いだけなので、**英語 Wiki に切り替えれば
 同じ言葉のまま探し直される。**
 
+### KAPPA品のチェックリスト
+
+Fence の `Collector` は **44品目**を全部集めて納品するタスクで、何を持っていて何が
+足りないかを覚えていられない。下部の **KAPPA品** ボタンにいまの進捗が出て、
+押すとチェックリストが開く。
+
+```
+アイコンの文字 ▲    アイテム名                  日本語名
+☑ BeardOil          Deadlyslob's beard oil      DeadlySlob's ビアードオイル
+☐ Plague mask       Pestily plague mask         Pestily ペストマスク
+```
+
+左の列は**ゲームがアイコンの上に出している文字**。スタッシュと突き合わせるときに
+人が実際に読んでいるのはこれで、`Glorious E mask` というフルネームは照合の役に立たない。
+どの列でも並べ替えでき、絞り込みは3列すべてを対象にする。
+
+- チェックは押した瞬間に保存され、`%LOCALAPPDATA%\HeyTarkov\collector.json` に残る
+- 記録は `settings.json` とは**別ファイル**。設定は消えても数秒で戻せるが、こちらは
+  40回のレイド。一時ファイルに書いてから差し替えるので、途中で落ちても前の記録が残る
+- カタログから消えた品目がチェック済みでも、ファイルからは消さない
+- シーズンが変わったときのために **すべて解除** がある（確認あり）
+- 行をダブルクリックでその品目の Wiki ページが開く
+
+品目名は読み上げでも引ける（「ゴールデンエッグ」でページが開く）。
+
 ### Wiki の選択
 
 | | |
 |---|---|
-| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 601件 |
-| 英語 Wiki | [escapefromtarkov.fandom.com](https://escapefromtarkov.fandom.com/wiki/Quests) — 871件 |
+| 日本語 Wiki | [wikiwiki.jp/eft](https://wikiwiki.jp/eft/) — 798件 |
+| 英語 Wiki | [escapefromtarkov.fandom.com](https://escapefromtarkov.fandom.com/wiki/Quests) — 1079件 |
 
 **選択中の Wiki にページがある項目だけが認識・検索の対象**になる。
 Wiki を切り替えると、**直前に言った言葉でそのまま探し直す**（言い直さなくてよい）。
-片方に無いものが他方にあるかを確かめるのは、ドロップダウンを動かすだけで済む。
+選択中の Wiki に無くて**他方にあるものは、赤字で「英語Wikiにあり」と候補に出る**。
+その行を開くと、実際にページがある側の Wiki へ飛ぶ。英語 Wiki だけにあるものが306件、
+日本語 Wiki だけにあるものが25件あるため、どちらの向きでも起こる。
 片方にしか無いタスクを候補に混ぜると、実際に開けるタスクが下に押し下げられて邪魔になるため。
 Wiki を切り替えると文法と検索インデックスの両方が組み直される。
 ストーリータスクも両方から取得している。
