@@ -182,29 +182,9 @@ public sealed class CollectorForm : Form
         _filter.Margin = new Padding(30, 8, 12, 8);
         _filter.TextChanged += (_, _) => Populate();
 
-        // Coming back to the box after ticking something means looking for the
-        // next item, not editing the last search. Selecting what is there makes
-        // the first keystroke replace it.
-        //
-        // Twice, because a click gives focus and then puts the caret where it
-        // landed, undoing a SelectAll made on focus alone. The flag keeps it to
-        // the click that arrives with the focus - a second click inside the box
-        // is someone placing the caret, and that has to still work.
-        _filter.GotFocus += (_, _) =>
-        {
-            _arriving = true;
-            _filter.SelectAll();
-        };
-
-        _filter.MouseUp += (_, _) =>
-        {
-            if (!_arriving) return;
-
-            _arriving = false;
-            _filter.SelectAll();
-        };
-
-        _filter.Leave += (_, _) => _arriving = false;
+        // Ticking something and coming back here means looking for the next
+        // item, not editing the last search.
+        SearchCard.SelectAllWhenClickedInto(_filter);
 
         var holder = new Panel { Dock = DockStyle.Fill, BackColor = Color.Transparent };
         holder.Padding = new Padding(30, 8, 12, 6);
@@ -277,9 +257,6 @@ public sealed class CollectorForm : Form
     private CollectorSort _sort = CollectorSort.Label;
     private bool _descending;
 
-    /// <summary>The filter box has just been given focus and the click that
-    /// gave it has not landed yet.</summary>
-    private bool _arriving;
 
     /// <summary>
     /// Items with no label sort last rather than first, whichever way the
