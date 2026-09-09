@@ -3,6 +3,33 @@ using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
 
+/// <summary>
+/// Where the columns start, in 96 DPI units. Shared so the header and the rows
+/// cannot drift apart - they are two controls drawing what reads as one table.
+/// </summary>
+internal static class CollectorColumns
+{
+    /// <summary>How far in the tick box reaches, and where the label starts.</summary>
+    public const int Box = 34;
+
+    /// <summary>Width of the short-label column. "BEAR Buddy" is the longest.</summary>
+    public const int Label = 96;
+
+    public const int Pad = 8;
+
+    public const int Gap = 10;
+}
+
+/// <summary>Which column the list is ordered by.</summary>
+public enum CollectorSort
+{
+    /// <summary>By the stash label - the order the eye scans in.</summary>
+    Label,
+
+    /// <summary>By the full name, which is how both wikis list them.</summary>
+    Name,
+}
+
 /// <summary>One item in the checklist, and whether it is already in the stash.</summary>
 public sealed class CollectorRow(WikiEntry item, bool held)
 {
@@ -80,7 +107,7 @@ public sealed class CollectorList : ListBox
     /// <summary>How far in the box reaches. A click inside it ticks the row;
     /// a click past it just selects, so the name can be read without the list
     /// changing under the cursor.</summary>
-    private int BoxColumn => LogicalToDeviceUnits(34);
+    private int BoxColumn => LogicalToDeviceUnits(CollectorColumns.Box);
 
     protected override void OnMouseDown(MouseEventArgs e)
     {
@@ -145,7 +172,7 @@ public sealed class CollectorList : ListBox
 
         using (var brush = new SolidBrush(Theme.Panel)) g.FillRectangle(brush, full);
 
-        var pad = LogicalToDeviceUnits(8);
+        var pad = LogicalToDeviceUnits(CollectorColumns.Pad);
 
         if (selected)
         {
@@ -162,7 +189,7 @@ public sealed class CollectorList : ListBox
         var font = row.Held ? _held! : _name!;
 
         var x = full.X + BoxColumn;
-        var labelW = LogicalToDeviceUnits(96);
+        var labelW = LogicalToDeviceUnits(CollectorColumns.Label);
 
         if (row.Item.ShortName is { } label)
         {
@@ -175,7 +202,7 @@ public sealed class CollectorList : ListBox
             Draw(g, "—", _name!, Theme.Faint, x, labelW, full);
         }
 
-        var nameX = x + labelW + LogicalToDeviceUnits(10);
+        var nameX = x + labelW + LogicalToDeviceUnits(CollectorColumns.Gap);
         var nameW = full.Right - pad - LogicalToDeviceUnits(6) - nameX;
 
         if (nameW > 0) Draw(g, Describe(row.Item), font, quiet, nameX, nameW, full);

@@ -679,10 +679,8 @@ public sealed class MainForm : Form
         // exists from the first paint, so this is not a promise the type makes.
         if (_catalog is null) return;
 
-        var items = _catalog.Entries
-            .Where(e => e.Kind == EntryKind.Item)
-            .OrderBy(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        // Order is the checklist's own business now - its header decides it.
+        var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
 
         _collectorWindow = new CollectorForm(
             items, CollectorRecord.Load(), SelectedWiki, SelectedBrowser);

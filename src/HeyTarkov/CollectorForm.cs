@@ -18,6 +18,7 @@ public sealed class CollectorForm : Form
     private readonly Label _progress = new();
     private readonly TextBox _filter = new();
     private readonly CheckBox _remaining = new();
+    private readonly CollectorHeader _header = new();
     private readonly CollectorList _list = new();
     private readonly Label _hint = new();
 
@@ -42,8 +43,26 @@ public sealed class CollectorForm : Form
         ShowInTaskbar = false;
         KeyPreview = true;
 
+        // Painted in one pass. Several of the panels here have a transparent
+        // background, which WinForms emulates by asking the parent to paint
+        // underneath them - cheap enough while still, visibly not while the
+        // window is being taken apart.
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+
         BuildLayout();
         Populate();
+    }
+
+    /// <summary>
+    /// Closing destroys the controls one at a time, and each one leaving
+    /// uncovers the window behind it, so the whole thing comes apart on screen
+    /// in front of the user. Hiding first puts the teardown out of sight.
+    /// </summary>
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+        base.OnFormClosing(e);
+
+        if (!e.Cancel) Visible = false;
     }
 
     private void BuildLayout()
@@ -146,16 +165,62 @@ public sealed class CollectorForm : Form
         _list.Toggled += OnToggled;
         _list.Opened += OnOpened;
 
+        _header.Dock = DockStyle.Top;
+        _header.BackColor = Theme.Panel;
+        _header.Picked += OnSortPicked;
+
         var holder = new Panel
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(2, 8, 2, 8),
+            Padding = new Padding(2, 6, 2, 8),
             BackColor = Color.Transparent,
         };
 
+        // The list goes in first: WinForms docks in reverse, so the header
+        // added after it is the one that takes the top edge.
         holder.Controls.Add(_list);
+        holder.Controls.Add(_header);
+
         card.Controls.Add(holder);
         return card;
+    }
+
+    /// <summary>
+    /// Clicking the column already sorted turns it around; clicking the other
+    /// one starts it the way round that reads naturally - both of these columns
+    /// are text, so that is A to Z.
+    /// </summary>
+    private void OnSortPicked(CollectorSort sort)
+    {
+        if (sort == _sort) _descending = !_descending;
+        else (_sort, _descending) = (sort, false);
+
+        _header.Show(_sort, _descending);
+        Populate();
+    }
+
+    private CollectorSort _sort = CollectorSort.Label;
+    private bool _descending;
+
+    /// <summary>
+    /// Items with no label sort last rather than first, whichever way the
+    /// column runs: an empty cell at the top is a poor first impression of a
+    /// list whose point is the labels.
+    /// </summary>
+    private IEnumerable<WikiEntry> Ordered(IEnumerable<WikiEntry> items)
+    {
+        if (_sort == CollectorSort.Name)
+        {
+            return _descending
+                ? items.OrderByDescending(e => e.Name, StringComparer.OrdinalIgnoreCase)
+                : items.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase);
+        }
+
+        var byLabel = items.OrderBy(e => e.ShortName is null);
+
+        return _descending
+            ? byLabel.ThenByDescending(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase)
+            : byLabel.ThenBy(e => e.ShortName ?? e.Name, StringComparer.OrdinalIgnoreCase);
     }
 
     private Control BuildHint()
@@ -177,9 +242,9 @@ public sealed class CollectorForm : Form
     {
         var needle = _filter.Text.Trim();
 
-        var shown = _items
-            .Where(item => !_remaining.Checked || !_record.Has(item.Name))
-            .Where(item => Matches(item, needle))
+        var shown = Ordered(_items
+                .Where(item => !_remaining.Checked || !_record.Has(item.Name))
+                .Where(item => Matches(item, needle)))
             .Select(item => new CollectorRow(item, _record.Has(item.Name)))
             .ToArray();
 
