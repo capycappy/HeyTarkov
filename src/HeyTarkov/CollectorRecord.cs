@@ -26,8 +26,16 @@ public sealed class CollectorRecord
 
     public DateTimeOffset UpdatedAt { get; set; }
 
+    /// <summary>
+    /// Set only by the self-test, which needs somewhere to write that is not
+    /// the user's own record. It used to save the real file, scribble on it and
+    /// put it back, which quietly threw away anything ticked while the test was
+    /// running. A test has no business touching data it did not create.
+    /// </summary>
+    internal static string? Elsewhere;
+
     private static string Path =>
-        System.IO.Path.Combine(TaskCatalog.DataDirectory, "collector.json");
+        Elsewhere ?? System.IO.Path.Combine(TaskCatalog.DataDirectory, "collector.json");
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 
@@ -38,6 +46,7 @@ public sealed class CollectorRecord
 
     public bool Has(string name) => Lookup.Contains(name);
 
+    [System.Text.Json.Serialization.JsonIgnore]
     public int Count => Lookup.Count;
 
     public void Set(string name, bool held)
@@ -53,6 +62,19 @@ public sealed class CollectorRecord
             Checked.RemoveAll(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase));
         }
 
+        Save();
+    }
+
+    /// <summary>
+    /// Empties the record. A season turning over resets everyone's stash, and
+    /// the alternative is forty-four clicks.
+    /// </summary>
+    public void Clear()
+    {
+        if (Checked.Count == 0) return;
+
+        Checked.Clear();
+        _lookup = null;
         Save();
     }
 

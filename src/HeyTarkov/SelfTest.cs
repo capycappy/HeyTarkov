@@ -305,8 +305,12 @@ public static class SelfTest
     /// </summary>
     private static bool CheckRecord(StringBuilder report, List<WikiEntry> items)
     {
-        var path = Path.Combine(TaskCatalog.DataDirectory, "collector.json");
-        var saved = File.Exists(path) ? File.ReadAllText(path) : null;
+        // Its own file in the temp directory. Reading the user's record,
+        // writing over it and putting it back is how a self-test loses an
+        // evening of ticking for somebody who happened to be clicking at the
+        // time - which is exactly what it did.
+        var path = Path.Combine(Path.GetTempPath(), $"heytarkov-record-{Guid.NewGuid():N}.json");
+        CollectorRecord.Elsewhere = path;
 
         try
         {
@@ -336,9 +340,8 @@ public static class SelfTest
         }
         finally
         {
-            // Leave whatever the user had, not the test's scribbles.
-            if (saved is not null) File.WriteAllText(path, saved);
-            else File.Delete(path);
+            CollectorRecord.Elsewhere = null;
+            TryDelete(path);
         }
     }
 
