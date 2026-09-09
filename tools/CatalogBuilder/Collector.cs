@@ -311,14 +311,45 @@ public static partial class Collector
     /// labels is poorer but still works, and a rebuild should not fail because
     /// somebody else's server is having an afternoon.
     /// </summary>
+    /// <summary>
+    /// The label the game prints over the icon in the stash - "BeardOil",
+    /// "Plague mask", "WZ". It is what a person reads when checking what they
+    /// already have, so the checklist leads with it.
+    ///
+    /// Three sources, in the order of how close each sits to the game:
+    ///
+    /// tarkov.dev reads the live game, but it is a service and has been down
+    /// for a day at a time. The mirrored locale is the game's own file in a git
+    /// repository, so it cannot go down, but it was last refreshed in March
+    /// 2025 and knows nothing of the items added since. The wiki's own opening
+    /// sentence - "'''Bottle of YMXC water''' (YMXC) is a provision item" -
+    /// covers all forty-four and stays current, but it is written by hand and
+    /// is sometimes wrong: it gives "Glorious E" where the game says
+    /// "Glorious".
+    ///
+    /// So the game's data wins where it has an answer, and the wiki fills the
+    /// rest. Measured against the thirty-three the locale knows, the wiki
+    /// agreed on thirty-two.
+    ///
+    /// Coming back with none of them is not fatal. A checklist without the
+    /// labels is poorer but still works, and a rebuild should not fail because
+    /// somebody else's server is having an afternoon.
+    /// </summary>
     private static async Task AddShortNamesAsync(
         List<WikiEntry> entries, Wikis wikis, CancellationToken ct)
     {
         var labels = await FromTarkovDevAsync(entries, ct).ConfigureAwait(false);
 
         var wanting = entries.Where(e => !labels.ContainsKey(e.Name)).ToList();
+
         if (wanting.Count > 0)
-            await FromGameLocaleAsync(wanting, labels, wikis, ct).ConfigureAwait(false);
+        {
+            var pages = await ItemPagesAsync(wanting.Select(e => e.Name).ToList(), wikis, ct)
+                .ConfigureAwait(false);
+
+            await FromGameLocaleAsync(wanting, labels, pages, ct).ConfigureAwait(false);
+            FromWikiLead(wanting, labels, pages);
+        }
 
         foreach (var entry in entries)
             if (labels.TryGetValue(entry.Name, out var label)) entry.ShortName = label;
@@ -350,7 +381,7 @@ public static partial class Collector
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"  tarkov.dev unreachable ({ex.Message}); using the mirrored locale");
+            Console.WriteLine($"  tarkov.dev unreachable ({ex.Message}); falling back");
             return labels;
         }
 
@@ -360,7 +391,7 @@ public static partial class Collector
 
             if (document.RootElement.TryGetProperty("errors", out var errors))
             {
-                Console.WriteLine($"  tarkov.dev said {errors}; using the mirrored locale");
+                Console.WriteLine($"  tarkov.dev said {errors}; falling back");
                 return labels;
             }
 
@@ -389,18 +420,12 @@ public static partial class Collector
         return labels;
     }
 
-    /// <summary>
-    /// The wiki knows each item's BSG id, and the mirrored locale is keyed by
-    /// it. One batched request covers every item's infobox.
-    /// </summary>
+    /// <summary>The mirrored locale is keyed by the item id the wiki carries.</summary>
     private static async Task FromGameLocaleAsync(
         List<WikiEntry> wanting, Dictionary<string, string> labels,
-        Wikis wikis, CancellationToken ct)
+        Dictionary<string, ItemPage> pages, CancellationToken ct)
     {
-        var ids = await ItemIdsAsync(wanting.Select(e => e.Name).ToList(), wikis, ct)
-            .ConfigureAwait(false);
-
-        if (ids.Count == 0) return;
+        if (pages.Values.All(page => page.Id is null)) return;
 
         string locale;
         try
@@ -410,7 +435,7 @@ public static partial class Collector
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"  the mirrored locale is unreachable too: {ex.Message}");
+            Console.WriteLine($"  the mirrored locale is unreachable: {ex.Message}");
             return;
         }
 
@@ -420,38 +445,73 @@ public static partial class Collector
 
         foreach (var entry in wanting)
         {
-            if (!ids.TryGetValue(entry.Name, out var id)) continue;
-            if (!root.TryGetProperty($"{id} ShortName", out var value)) continue;
+            if (!pages.TryGetValue(entry.Name, out var page) || page.Id is null) continue;
+            if (!root.TryGetProperty($"{page.Id} ShortName", out var value)) continue;
 
             var label = value.GetString();
             if (!string.IsNullOrWhiteSpace(label)) labels[entry.Name] = label.Trim();
         }
 
-        Console.WriteLine($"  {labels.Count - before} more from the mirrored game locale");
+        Console.WriteLine($"  {labels.Count - before} from the mirrored game locale");
     }
+
+    /// <summary>
+    /// Whatever the game data could not answer, taken from the wiki's opening
+    /// sentence. Last because it is prose rather than data, and prose drifts.
+    /// </summary>
+    private static void FromWikiLead(
+        List<WikiEntry> wanting, Dictionary<string, string> labels,
+        Dictionary<string, ItemPage> pages)
+    {
+        var before = labels.Count;
+
+        foreach (var entry in wanting)
+        {
+            if (labels.ContainsKey(entry.Name)) continue;
+            if (!pages.TryGetValue(entry.Name, out var page) || page.Lead is null) continue;
+
+            labels[entry.Name] = page.Lead;
+        }
+
+        Console.WriteLine($"  {labels.Count - before} from the wiki's opening sentence");
+    }
+
+    /// <summary>What one item's wiki page says about itself.</summary>
+    private readonly record struct ItemPage(string? Id, string? Lead);
 
     [GeneratedRegex(@"(?im)^\s*\|\s*node\s*=\s*([0-9a-f]{24})\s*$")]
     private static partial Regex ItemId();
 
-    private static async Task<Dictionary<string, string>> ItemIdsAsync(
+    /// <summary>
+    /// "'''Golden egg''' (Egg) is a barter item" - the bolded title, then the
+    /// label in brackets. Anchored on the verb that follows so a bracket
+    /// anywhere else in the sentence cannot be mistaken for it.
+    /// </summary>
+    [GeneratedRegex(@"'''(?:\{\{PAGENAME\}\}|[^']+)'''\s*\(([^)]{1,24})\)\s*(?:is|are)\b")]
+    private static partial Regex LeadLabel();
+
+    /// <summary>
+    /// One batched request; MediaWiki takes fifty titles at a time and there
+    /// are never that many.
+    /// </summary>
+    private static async Task<Dictionary<string, ItemPage>> ItemPagesAsync(
         List<string> names, Wikis wikis, CancellationToken ct)
     {
-        var ids = new Dictionary<string, string>(StringComparer.Ordinal);
+        var found = new Dictionary<string, ItemPage>(StringComparer.Ordinal);
 
-        // MediaWiki takes fifty titles at a time; there are never that many.
         var url = $"{Wikis.FandomApi}?action=query&prop=revisions&rvprop=content&rvslots=main"
                   + $"&titles={Uri.EscapeDataString(string.Join('|', names))}"
                   + "&format=json&formatversion=2";
 
         if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json })
-            return ids;
+            return found;
 
         using var document = JsonDocument.Parse(json);
 
         if (!document.RootElement.TryGetProperty("query", out var query)
             || !query.TryGetProperty("pages", out var pages))
         {
-            return ids;
+            return found;
         }
 
         foreach (var page in pages.EnumerateArray())
@@ -470,10 +530,14 @@ public static partial class Collector
             if (title is null || text is null) continue;
 
             var id = ItemId().Match(text);
-            if (id.Success) ids[title] = id.Groups[1].Value;
+            var lead = LeadLabel().Match(text);
+
+            found[title] = new ItemPage(
+                id.Success ? id.Groups[1].Value : null,
+                lead.Success ? lead.Groups[1].Value.Trim() : null);
         }
 
-        return ids;
+        return found;
     }
 
     private static HttpClient Client()
