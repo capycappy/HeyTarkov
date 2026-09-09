@@ -142,6 +142,14 @@ public static class Strings
     /// <summary>The button on the main window. Short: it shares a row.</summary>
     public static string CollectorOpen => T("KAPPA品", "KAPPA items");
 
+    /// <summary>
+    /// The same button once the catalog is loaded, carrying how far along the
+    /// collection is. Worth the width: it answers the question the window would
+    /// otherwise have to be opened to ask.
+    /// </summary>
+    public static string CollectorOpenWith(int held, int all) =>
+        $"{CollectorOpen}  {held}/{all}";
+
     public static string CollectorProgress(int held, int all) =>
         T($"{held} / {all} 所持", $"{held} of {all} held");
 

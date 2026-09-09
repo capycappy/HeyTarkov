@@ -62,6 +62,12 @@ public sealed class MainForm : Form
 
     private CollectorForm? _collectorWindow;
 
+    /// <summary>
+    /// Read once and kept, so the button's count and the checklist are the same
+    /// record rather than two copies that can disagree.
+    /// </summary>
+    private CollectorRecord? _collectorRecord;
+
     /// <summary>The underlined font of the notice, when it is a link. Owned
     /// here - the plain font belongs to the form.</summary>
     private Font? _noticeLink;
@@ -640,7 +646,7 @@ public sealed class MainForm : Form
 
         _collector.Text = Strings.CollectorOpen;
         _collector.AutoSize = false;
-        _collector.Width = 150;
+        _collector.Width = 172;
         _collector.Ticked = true;
         _collector.SameHeightAs = _themeBox;
         _collector.Anchor = AnchorStyles.None;
@@ -712,11 +718,39 @@ public sealed class MainForm : Form
         // Order is the checklist's own business now - its header decides it.
         var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
 
-        _collectorWindow = new CollectorForm(
-            items, CollectorRecord.Load(), SelectedWiki, SelectedBrowser);
+        _collectorRecord ??= CollectorRecord.Load();
 
+        _collectorWindow = new CollectorForm(
+            items, _collectorRecord, SelectedWiki, SelectedBrowser);
+
+        _collectorWindow.Changed += RefreshCollectorCount;
         _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
         _collectorWindow.Show(this);
+    }
+
+    /// <summary>
+    /// How much of the collection is done, on the button that opens it. The
+    /// answer is the reason most people would open the window at all, so it may
+    /// as well be on the outside of it.
+    /// </summary>
+    private void RefreshCollectorCount()
+    {
+        if (_catalog is null) return;
+
+        var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
+
+        if (items.Count == 0)
+        {
+            _collector.Text = Strings.CollectorOpen;
+            _collector.Visible = false;
+            return;
+        }
+
+        _collectorRecord ??= CollectorRecord.Load();
+
+        _collector.Visible = true;
+        _collector.Text = Strings.CollectorOpenWith(
+            items.Count(item => _collectorRecord.Has(item.Name)), items.Count);
     }
 
     /// <summary>
@@ -865,6 +899,7 @@ public sealed class MainForm : Form
             _catalog = TaskCatalog.Load();
             _typedIndex = null;
             _otherIndex.Clear();
+            RefreshCollectorCount();
         }
         catch (Exception ex)
         {
