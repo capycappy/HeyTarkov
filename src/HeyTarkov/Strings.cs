@@ -119,6 +119,15 @@ public static class Strings
     public static string KindExit => T("出口 ", "Exit ");
     public static string KindItem => T("アイテム ", "Item ");
 
+    /// <summary>
+    /// Said of a result that the selected wiki does not have. Names the wiki
+    /// that does, because "not found" and "found, elsewhere" are different
+    /// answers and only one of them is worth acting on.
+    /// </summary>
+    public static string OnlyOnWiki(WikiSource source) => source == WikiSource.Japanese
+        ? T("日本語Wikiにあり", "On the Japanese wiki")
+        : T("英語Wikiにあり", "On the English wiki");
+
     // ------------------------------------------------------------ collector
 
     /// <summary>

@@ -262,20 +262,7 @@ public sealed class CollectorList : ListBox
         if (held)
         {
             Painting.FillRounded(g, box, Theme.Accent, radius);
-
-            using var tick = new Pen(Theme.AccentText, Math.Max(1.6f, side * 0.14f))
-            {
-                StartCap = LineCap.Round,
-                EndCap = LineCap.Round,
-                LineJoin = LineJoin.Round,
-            };
-
-            g.DrawLines(tick, new[]
-            {
-                new PointF(box.Left + side * 0.24f, box.Top + side * 0.52f),
-                new PointF(box.Left + side * 0.43f, box.Top + side * 0.71f),
-                new PointF(box.Left + side * 0.77f, box.Top + side * 0.29f),
-            });
+            Painting.Tick(g, box, Theme.AccentText, Math.Max(1.6f, side * 0.14f));
         }
         else
         {
