@@ -283,6 +283,37 @@ public sealed class SearchCard : Card
         Radius = 8;
     }
 
+    /// <summary>
+    /// Selects whatever is in the box when it is clicked into, so the next
+    /// keystroke replaces it. Coming back to a search box means looking for
+    /// something else; the last search is there to be read, not edited.
+    ///
+    /// Both events are needed. A click gives focus and then puts the caret
+    /// where it landed, which undoes a SelectAll made on focus alone. The flag
+    /// keeps it to the click that arrives with the focus - clicking again
+    /// inside the box is someone placing the caret, and that has to still work.
+    /// </summary>
+    public static void SelectAllWhenClickedInto(TextBox box)
+    {
+        var arriving = false;
+
+        box.GotFocus += (_, _) =>
+        {
+            arriving = true;
+            box.SelectAll();
+        };
+
+        box.MouseUp += (_, _) =>
+        {
+            if (!arriving) return;
+
+            arriving = false;
+            box.SelectAll();
+        };
+
+        box.Leave += (_, _) => arriving = false;
+    }
+
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);

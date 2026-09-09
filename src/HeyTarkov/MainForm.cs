@@ -463,6 +463,10 @@ public sealed class MainForm : Form
         _typedBox.Margin = new Padding(0);
         _typedBox.PlaceholderText = Strings.SearchPlaceholder;
         _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
+
+        // Enter opens a page and leaves the words that found it sitting there.
+        // The next search is a different task, not an edit of that one.
+        SearchCard.SelectAllWhenClickedInto(_typedBox);
         _typedBox.KeyDown += (_, e) =>
         {
             if (e.KeyCode != Keys.Enter) return;
