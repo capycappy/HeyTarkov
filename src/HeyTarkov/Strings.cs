@@ -171,8 +171,14 @@ public static class Strings
     public static string OpenSelected =>
         T("選択したページをブラウザで開く", "Open selected page in browser");
 
+    /// <summary>
+    /// Shorter in English than it reads naturally, because the row it sits in
+    /// now splits its spare width evenly so the middle button lands on the
+    /// window's centre line - and the long form was the first thing to be cut
+    /// off by that.
+    /// </summary>
     public static string AutoOpen =>
-        T("確信度が高いときは自動で開く", "Open automatically on a confident match");
+        T("確信度が高いときは自動で開く", "Auto-open when confident");
 
     // ---------------------------------------------------------- the footer
 

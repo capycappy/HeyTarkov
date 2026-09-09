@@ -107,8 +107,9 @@ public class Card : Panel
 }
 
 /// <summary>
-/// A flat button the app paints itself, in two weights: filled for the one
-/// action the window exists to perform, outlined for everything else.
+/// A flat button the app paints itself, in two weights: filled to read as a
+/// button worth pressing, outlined for the ones that sit quietly beside
+/// something else.
 /// </summary>
 public sealed class PillButton : Button
 {
@@ -141,6 +142,20 @@ public sealed class PillButton : Button
 
     [DefaultValue(8)]
     public int Radius { get; set; } = 8;
+
+    /// <summary>
+    /// Take the height a dropdown would take, so a button standing in a row of
+    /// them lines up. The number is ModernCombo's, and has to stay its: two
+    /// controls sitting side by side either agree on their height or the row
+    /// looks like an accident.
+    /// </summary>
+    [DefaultValue(false)]
+    public bool AsTallAsAField { get; set; }
+
+    protected override void SetBoundsCore(
+        int x, int y, int width, int height, BoundsSpecified specified) =>
+        base.SetBoundsCore(x, y, width,
+            AsTallAsAField ? Font.Height + LogicalToDeviceUnits(13) : height, specified);
 
     protected override void OnMouseEnter(EventArgs e) { _hot = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hot = false; _down = false; Invalidate(); base.OnMouseLeave(e); }

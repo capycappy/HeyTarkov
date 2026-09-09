@@ -620,7 +620,7 @@ public sealed class MainForm : Form
 
         _themeBox.Width = 152;
         _themeBox.Anchor = AnchorStyles.Right;
-        _themeBox.Margin = new Padding(8, 0, 0, 0);
+        _themeBox.Margin = new Padding(8, 0, 2, 0);
         _themeBox.Items.AddRange(new object[]
             { Strings.ThemeSystem, Strings.ThemeLight, Strings.ThemeDark });
         _themeBox.SelectedIndex = 0;
@@ -631,32 +631,49 @@ public sealed class MainForm : Form
         themeLabel.Margin = new Padding(0, 0, 0, 0);
 
         _collector.Text = Strings.CollectorOpen;
-        _collector.Ghost = true;
         _collector.AutoSize = false;
-        _collector.Size = new Size(104, 26);
-        _collector.Anchor = AnchorStyles.Right;
-        _collector.Margin = new Padding(0, 0, 12, 0);
+        _collector.Width = 124;
+        _collector.AsTallAsAField = true;
+        _collector.Anchor = AnchorStyles.None;
+        _collector.Margin = new Padding(12, 0, 12, 0);
         _collector.Click += (_, _) => OpenCollector();
 
+        // The theme label and its dropdown travel together, so they share one
+        // cell and anchor right inside it.
+        var theme = new TableLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Anchor = AnchorStyles.Right,
+            Margin = new Padding(0),
+        };
+        theme.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        theme.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        theme.Controls.Add(themeLabel, 0, 0);
+        theme.Controls.Add(_themeBox, 1, 0);
+
+        // Half the leftover space on each side, so the button sits on the
+        // window's centre line rather than wherever the two ends leave it.
         var row = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 3,
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 10),
         };
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_autoOpen, 0, 0);
         row.Controls.Add(_collector, 1, 0);
-        row.Controls.Add(themeLabel, 2, 0);
-        row.Controls.Add(_themeBox, 3, 0);
+        row.Controls.Add(theme, 2, 0);
         return row;
     }
 
