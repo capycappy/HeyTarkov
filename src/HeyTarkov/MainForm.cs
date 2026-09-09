@@ -39,6 +39,14 @@ public sealed class MainForm : Form
     /// <summary>Always English: the text box is typed, not spoken.</summary>
     private TaskIndex? _typedIndex;
 
+    /// <summary>
+    /// The same catalog, filtered to the wiki that is not selected, keyed by
+    /// the scheme it was built with. Built only when a search comes back empty,
+    /// which is the one moment it is any use - and there are two, because typing
+    /// is always read as English while speaking may be read as katakana.
+    /// </summary>
+    private readonly Dictionary<IPhraseScheme, TaskIndex> _otherIndex = new();
+
     private JapaneseLexicon? _lexicon;
     private JapaneseForms? _hintForms;
     private MicrophoneCapture? _levelTest;
@@ -632,11 +640,16 @@ public sealed class MainForm : Form
 
         _collector.Text = Strings.CollectorOpen;
         _collector.AutoSize = false;
-        _collector.Width = 124;
-        _collector.AsTallAsAField = true;
+        _collector.Width = 132;
+        _collector.Ticked = true;
+        _collector.SameHeightAs = _themeBox;
         _collector.Anchor = AnchorStyles.None;
         _collector.Margin = new Padding(12, 0, 12, 0);
         _collector.Click += (_, _) => OpenCollector();
+
+        // The dropdown settles its own height, sometimes not the one it asked
+        // for, and it changes again on a monitor with different scaling.
+        _themeBox.SizeChanged += (_, _) => _collector.Height = _themeBox.Height;
 
         // The theme label and its dropdown travel together, so they share one
         // cell and anchor right inside it.
@@ -851,6 +864,7 @@ public sealed class MainForm : Form
         {
             _catalog = TaskCatalog.Load();
             _typedIndex = null;
+            _otherIndex.Clear();
         }
         catch (Exception ex)
         {
@@ -1028,9 +1042,11 @@ public sealed class MainForm : Form
         _settings.Wiki = SelectedWiki;
         _settings.Save();
 
-        // The wiki decides which tasks exist, so both the grammar and the typed
-        // search have to be rebuilt against the new set.
+        // The wiki decides which tasks exist, so the grammar, the typed search
+        // and the index of the wiki now on the other side all have to be built
+        // again against the new sets.
         _typedIndex = null;
+        _otherIndex.Clear();
         _candidates.Items.Clear();
 
         await RebuildForLanguageAsync();
@@ -1556,9 +1572,23 @@ public sealed class MainForm : Form
         if (_lastHeard is null || _speechIndex is null) return;
 
         var matches = BuildCandidates(_lastHeard);
-        Populate(matches);
 
-        SetStatus(matches.Count > 0
+        // This is the one moment speaking can reach the other wiki: the phrase
+        // came from the wiki that was selected until a second ago, and this one
+        // has no page for it. Ordinary speaking cannot - the grammar only holds
+        // phrases for the wiki in use, so it can only return one of those.
+        var solid = _speechIndex.Exact(_lastHeard.Text) is not null
+                    || _speechIndex.Containing(_lastHeard.Text).Count > 0;
+
+        var elsewhere = solid
+            ? new List<CandidateRow>()
+            : Elsewhere(_lastHeard.Text, _speechIndex.Scheme);
+
+        PopulateRows(elsewhere
+            .Concat(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))))
+            .Take(14).ToList());
+
+        SetStatus(matches.Count > 0 || elsewhere.Count > 0
             ? Strings.SearchedAgain(_lastHeard.Text, SelectedWiki)
             : Strings.NotOnWiki(_lastHeard.Text, SelectedWiki));
     }
@@ -1584,15 +1614,63 @@ public sealed class MainForm : Form
         var ranked = _typedIndex.Rank(text, 12)
             .Where(m => containing.All(s => s.Task != m.Task));
 
-        Populate(containing.Concat(ranked).Take(14).ToList());
+        // Whether to look at the other wiki turns on `containing`, not on the
+        // list being empty. Ranking returns near misses for almost any input,
+        // so "no results at all" hardly ever happens and waiting for it would
+        // mean this never fired.
+        var elsewhere = containing.Count == 0
+            ? Elsewhere(text, _typedIndex.Scheme)
+            : new List<CandidateRow>();
+
+        var here = containing.Concat(ranked)
+            .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
+            .ToList();
+
+        // The other wiki's exact answer leads, this wiki's guesses follow.
+        PopulateRows(elsewhere.Concat(here).Take(14).ToList());
     }
 
-    private void Populate(IReadOnlyList<TaskMatch> matches)
+    /// <summary>
+    /// The other wiki's answer to the same question, for when this one had
+    /// none. Only ever a fallback: a page on the wiki the user chose always
+    /// wins, and this never runs when there was one.
+    /// </summary>
+    private List<CandidateRow> Elsewhere(string text, IPhraseScheme scheme)
+    {
+        var nothing = new List<CandidateRow>();
+        if (_catalog is null || text.Trim().Length == 0) return nothing;
+
+        var other = SelectedWiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese;
+
+        if (!_otherIndex.TryGetValue(scheme, out var index))
+        {
+            index = new TaskIndex(_catalog.On(other), scheme);
+            _otherIndex[scheme] = index;
+        }
+
+        var found = new List<WikiEntry>();
+
+        if (index.Exact(text) is { } exact) found.Add(exact);
+        found.AddRange(index.Containing(text).Where(e => !found.Contains(e)));
+
+        // Exact and whole-word only. "There is nothing here, but something
+        // vaguely like it is over there" is not worth a red line across the
+        // list; "the thing you asked for is over there" is.
+
+        return found
+            .Take(8)
+            .Select(e => new CandidateRow(new TaskMatch(e, 1.0, text), null, other))
+            .ToList();
+    }
+
+    private void Populate(IReadOnlyList<TaskMatch> matches) =>
+        PopulateRows(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))).ToList());
+
+    private void PopulateRows(IReadOnlyList<CandidateRow> rows)
     {
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var match in matches)
-            _candidates.Items.Add(new CandidateRow(match, ReadingHint(match.Task)));
+        foreach (var row in rows) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
@@ -1610,12 +1688,17 @@ public sealed class MainForm : Form
 
     private void OpenSelected()
     {
-        if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task);
+        if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task, row.Elsewhere);
     }
 
-    private void OpenTask(WikiEntry task)
+    /// <summary>
+    /// <paramref name="elsewhere"/> is set for a row the chosen wiki does not
+    /// have. Opening it on the chosen wiki would fail, and the row said plainly
+    /// where the page is, so it goes there.
+    /// </summary>
+    private void OpenTask(WikiEntry task, WikiSource? elsewhere = null)
     {
-        var wiki = SelectedWiki;
+        var wiki = elsewhere ?? SelectedWiki;
         var url = task.Url(wiki);
 
         if (url is null)
