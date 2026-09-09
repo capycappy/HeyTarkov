@@ -640,7 +640,7 @@ public sealed class MainForm : Form
 
         _collector.Text = Strings.CollectorOpen;
         _collector.AutoSize = false;
-        _collector.Width = 132;
+        _collector.Width = 150;
         _collector.Ticked = true;
         _collector.SameHeightAs = _themeBox;
         _collector.Anchor = AnchorStyles.None;
