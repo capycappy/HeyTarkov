@@ -23,6 +23,10 @@ public sealed class CollectorForm : Form
     private readonly Label _hint = new();
     private readonly PillButton _clear = new();
 
+    /// <summary>Raised whenever a tick changes, so whoever opened this window
+    /// can keep its own count of them right.</summary>
+    public event Action? Changed;
+
     public CollectorForm(
         IReadOnlyList<WikiEntry> items, CollectorRecord record,
         WikiSource wiki, BrowserChoice browser)
@@ -141,6 +145,7 @@ public sealed class CollectorForm : Form
         if (answer != DialogResult.OK) return;
 
         _record.Clear();
+        Changed?.Invoke();
         Populate();
     }
 
@@ -343,6 +348,7 @@ public sealed class CollectorForm : Form
         // Written the moment it is ticked. A checklist with a save button is a
         // checklist that loses an evening's raids to a closed window.
         _record.Set(row.Item.Name, row.Held);
+        Changed?.Invoke();
 
         // "Still needed only" is on: the row just ticked no longer belongs.
         if (_remaining.Checked) Populate();
