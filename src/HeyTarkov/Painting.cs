@@ -233,23 +233,31 @@ public sealed class PillButton : Button
 
         if (Ticked)
         {
-            // The tick and the word are centred together, so the pair sits in
-            // the middle of the button rather than the word alone.
+            // The tick sits at the left edge and the word sits in the middle of
+            // the button. Centring the two together would make the button read
+            // as "tick KAPPA品"; what it is called is KAPPA品, and the tick is
+            // a mark on the button rather than part of its name.
             var side = LogicalToDeviceUnits(13);
-            var gap = LogicalToDeviceUnits(7);
+            var inset = LogicalToDeviceUnits(13);
+
+            Painting.Tick(g, new RectangleF(inset, (Height - side) / 2f, side, side), ink,
+                Math.Max(1.6f, side * 0.16f));
 
             var textWidth = TextRenderer.MeasureText(g, Text, Font,
                 new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;
 
-            var start = (Width - (side + gap + textWidth)) / 2f;
+            // Unless the word is long enough to reach the tick, in which case it
+            // gives way - overlapping is worse than off-centre.
+            var clear = inset + side + LogicalToDeviceUnits(8);
+            var centred = (Width - textWidth) / 2;
 
-            Painting.Tick(g, new RectangleF(start, (Height - side) / 2f, side, side), ink,
-                Math.Max(1.6f, side * 0.16f));
-
-            box = new Rectangle((int)(start + side + gap), 0, textWidth + LogicalToDeviceUnits(2), Height);
+            box = centred >= clear
+                ? new Rectangle(0, 0, Width, Height)
+                : new Rectangle(clear, 0, Width - clear - LogicalToDeviceUnits(6), Height);
 
             TextRenderer.DrawText(g, Text, Font, box, ink,
-                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+                | TextFormatFlags.NoPrefix);
             return;
         }
 
