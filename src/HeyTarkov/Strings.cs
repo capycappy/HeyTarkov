@@ -155,7 +155,26 @@ public static class Strings
 
     public static string CollectorDone => T("すべて集まりました", "All collected");
 
-    public static string CollectorFilter => T("絞り込み", "Filter");
+    /// <summary>
+    /// The placeholder in the filter box. It names the columns rather than
+    /// saying "filter", because the one thing worth knowing here is that the
+    /// stash label works - nobody expects to be able to type "BeardOil" - and
+    /// the words used are the ones written at the top of the columns a few
+    /// pixels below, so the connection needs no explaining.
+    ///
+    /// Japanese is only offered when that column is on screen. The filter reads
+    /// it either way, but promising a column the window is not showing is a
+    /// strange thing to do.
+    ///
+    /// Written out rather than built from the column titles. Japanese nouns sit
+    /// next to each other and read as a list; the English titles are headings,
+    /// and "Filter by In game, Item or Japanese" is not a sentence.
+    /// </summary>
+    public static string CollectorFilter(bool japanese) => japanese
+        ? T("ゲーム内表記・アイテム名・日本語名で絞り込み",
+            "Filter by the in-game label, the name, or the Japanese")
+        : T("ゲーム内表記・アイテム名で絞り込み",
+            "Filter by the in-game label or the name");
 
     public static string CollectorColumnLabel => T("ゲーム内表記", "In game");
 
