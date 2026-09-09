@@ -171,12 +171,19 @@ public static class Strings
     /// and "Filter by In game, Item or Japanese" is not a sentence.
     /// </summary>
     public static string CollectorFilter(bool japanese) => japanese
-        ? T("ゲーム内表記・アイテム名・日本語名で絞り込み",
-            "Filter by the in-game label, the name, or the Japanese")
-        : T("ゲーム内表記・アイテム名で絞り込み",
-            "Filter by the in-game label or the name");
+        ? T("アイコンの文字・アイテム名・日本語名で絞り込み",
+            "Filter by the icon label, the name, or the Japanese")
+        : T("アイコンの文字・アイテム名で絞り込み",
+            "Filter by the icon label or the name");
 
-    public static string CollectorColumnLabel => T("ゲーム内表記", "In game");
+    /// <summary>
+    /// The label printed over the item's icon in the stash.
+    ///
+    /// It was "ゲーム内表記" and that named nothing: everything on screen while
+    /// playing is in-game text. What makes this column findable is that it is
+    /// the writing on the picture, so that is what it says.
+    /// </summary>
+    public static string CollectorColumnLabel => T("アイコンの文字", "Icon label");
 
     public static string CollectorColumnName => T("アイテム名", "Item");
 
@@ -193,8 +200,8 @@ public static class Strings
     public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
 
     public static string CollectorHint =>
-        T("クリックでチェック　ダブルクリックで Wiki を開く",
-          "Click the box to tick, double-click a row to open the wiki");
+        T("左のチェックボックスで記録　行をダブルクリックで Wiki を開く",
+          "Tick the box on the left to record it, double-click a row for the wiki");
 
     public static string CollectorEmpty =>
         T("該当なし", "Nothing matches");

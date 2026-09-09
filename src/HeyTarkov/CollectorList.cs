@@ -142,32 +142,38 @@ public sealed class CollectorList : ListBox
     }
 
     /// <summary>
-    /// Anywhere on the row ticks it. Aiming for a fifteen-pixel box forty-four
-    /// times is work, and there is nothing else a click on one of these rows
-    /// could reasonably mean.
+    /// Only the box ticks the row, and the column it sits in is twice its width
+    /// so it is not a fifteen-pixel target.
+    ///
+    /// Ticking anywhere was tried and taken back out. Opening the wiki is a
+    /// double click, and two clicks on a row that ticks is two ticks - which
+    /// with "still needed only" on meant: the row is ticked, it leaves the
+    /// list, the next row slides up under the cursor, and the second click
+    /// lands on that one instead. A double click could walk down the list
+    /// ticking things nobody meant to tick.
     /// </summary>
     protected override void OnMouseDown(MouseEventArgs e)
     {
         base.OnMouseDown(e);
 
-        if (e.Button != MouseButtons.Left) return;
+        if (e.Button != MouseButtons.Left || e.X > BoxColumn) return;
 
         var index = IndexFromPoint(e.Location);
         if (index >= 0 && index < Items.Count) Toggle(index);
     }
 
-    /// <summary>
-    /// The two clicks have already ticked and unticked the row by the time this
-    /// arrives, so the state is where it started and there is nothing to undo -
-    /// the box just blinks on the way past.
-    /// </summary>
     protected override void OnMouseDoubleClick(MouseEventArgs e)
     {
         base.OnMouseDoubleClick(e);
 
+        if (e.X <= BoxColumn) return;   // that was two clicks on the box
+
         var index = IndexFromPoint(e.Location);
         if (index >= 0 && Items[index] is CollectorRow row) Opened?.Invoke(row);
     }
+
+    /// <summary>How far in the box column reaches.</summary>
+    private int BoxColumn => LogicalToDeviceUnits(CollectorColumns.Box);
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
