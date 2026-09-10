@@ -19,6 +19,9 @@ internal static class Program
         if (args.Contains("--checkupdate", StringComparer.OrdinalIgnoreCase))
             return UpdateDiagnostic.Run();
 
+        if (args.Contains("--collector", StringComparer.OrdinalIgnoreCase))
+            return CollectorDiagnostic.Run();
+
         // --mictest [seconds] [deviceIndex] [en|ja] - records from a real
         // microphone through the app's own recognition path.
         if (args.Contains("--mictest", StringComparer.OrdinalIgnoreCase))

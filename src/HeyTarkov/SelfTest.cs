@@ -331,7 +331,7 @@ public static class SelfTest
             report.AppendLine($"  {(ok ? "PASS" : "FAIL")}  the record round-trips "
                               + $"(ticked={kept}, unknown name kept={stranger}, count={read.Count})");
 
-            return ok;
+            return ok && CheckLockedRecord(report, path);
         }
         catch (Exception ex)
         {
@@ -343,6 +343,47 @@ public static class SelfTest
             CollectorRecord.Elsewhere = null;
             TryDelete(path);
         }
+    }
+
+    /// <summary>
+    /// A record that cannot be read must not be written over.
+    ///
+    /// This is the path that loses everything: a failed read looks exactly like
+    /// an empty record, the window opens with nothing ticked, and the first
+    /// tick saves one name over the forty that were in the file. A machine that
+    /// has just started is when a read is most likely to fail and when someone
+    /// is most likely to open the app.
+    /// </summary>
+    private static bool CheckLockedRecord(StringBuilder report, string path)
+    {
+        var before = File.ReadAllText(path);
+
+        // Held open with no sharing at all - what a backup or a scanner does
+        // for the moment it has the file.
+        using (new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            var record = CollectorRecord.Load();
+
+            var flagged = record.Unreadable;
+            var empty = record.Checked.Count == 0;
+
+            record.Set("Golden egg", true);
+            record.Clear();
+
+            report.AppendLine($"  {(flagged && empty ? "PASS" : "FAIL")}  "
+                              + $"a locked record reads as unreadable, not as empty "
+                              + $"(unreadable={flagged}, names={record.Checked.Count})");
+
+            if (!flagged) return false;
+        }
+
+        var after = File.ReadAllText(path);
+        var intact = before == after;
+
+        report.AppendLine($"  {(intact ? "PASS" : "FAIL")}  "
+                          + "ticking against an unreadable record left the file alone");
+
+        return intact;
     }
 
     private static bool RunLanguage(
