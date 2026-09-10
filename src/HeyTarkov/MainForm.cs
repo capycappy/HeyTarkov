@@ -722,10 +722,8 @@ public sealed class MainForm : Form
         // Order is the checklist's own business now - its header decides it.
         var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
 
-        _collectorRecord ??= CollectorRecord.Load();
-
         _collectorWindow = new CollectorForm(
-            items, _collectorRecord, SelectedWiki, SelectedBrowser);
+            items, CollectorRecordNow(), SelectedWiki, SelectedBrowser);
 
         _collectorWindow.Changed += RefreshCollectorCount;
         _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
@@ -737,6 +735,17 @@ public sealed class MainForm : Form
     /// answer is the reason most people would open the window at all, so it may
     /// as well be on the outside of it.
     /// </summary>
+    /// <summary>
+    /// Returning to the window is a good moment to have another go at a record
+    /// that would not open, and costs nothing when it opened fine.
+    /// </summary>
+    protected override void OnActivated(EventArgs e)
+    {
+        base.OnActivated(e);
+
+        if (_collectorRecord is { Unreadable: true }) RefreshCollectorCount();
+    }
+
     private void RefreshCollectorCount()
     {
         if (_catalog is null) return;
@@ -750,11 +759,32 @@ public sealed class MainForm : Form
             return;
         }
 
-        _collectorRecord ??= CollectorRecord.Load();
+        var record = CollectorRecordNow();
 
         _collector.Visible = true;
-        _collector.Text = Strings.CollectorOpenWith(
-            items.Count(item => _collectorRecord.Has(item.Name)), items.Count);
+
+        _collector.Text = record.Unreadable
+            ? Strings.CollectorOpenUnknown(items.Count)
+            : Strings.CollectorOpenWith(
+                items.Count(item => record.Has(item.Name)), items.Count);
+    }
+
+    /// <summary>
+    /// The record, read again if the last attempt failed.
+    ///
+    /// A failed read is never kept. The file is unreadable for a moment - a
+    /// backup or a scanner has it while the machine finishes starting - and the
+    /// moment passes, but a record cached in that state keeps the window saying
+    /// nothing is ticked until the app is restarted. Which is precisely what it
+    /// looks like when forty ticks have been lost, so it is worth trying again
+    /// every time anything asks.
+    /// </summary>
+    private CollectorRecord CollectorRecordNow()
+    {
+        if (_collectorRecord is null or { Unreadable: true })
+            _collectorRecord = CollectorRecord.Load();
+
+        return _collectorRecord;
     }
 
     /// <summary>

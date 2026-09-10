@@ -150,6 +150,14 @@ public static class Strings
     public static string CollectorOpenWith(int held, int all) =>
         $"{CollectorOpen}  {held}/{all}";
 
+    /// <summary>
+    /// The record could not be read, so how many are held is not known. A zero
+    /// here would be a lie, and an alarming one - it reads as "everything you
+    /// ticked is gone" to someone who ticked forty things.
+    /// </summary>
+    public static string CollectorOpenUnknown(int all) =>
+        $"{CollectorOpen}  ?/{all}";
+
     public static string CollectorProgress(int held, int all) =>
         T($"{held} / {all} 所持", $"{held} of {all} held");
 

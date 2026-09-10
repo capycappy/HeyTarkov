@@ -14,3 +14,9 @@ design/
 ._*
 .iCloud
 Icon?
+
+# Empty two-character folders that appear in the repository root when git
+# commits from inside iCloud Drive - the same names git uses under
+# .git/objects, created alongside it rather than inside it. Always empty,
+# nothing to do with the app, and they come back.
+/[0-9a-f][0-9a-f]/
