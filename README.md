@@ -1,4 +1,4 @@
-# Hey Tarkov v1.5.0
+# Hey Tarkov v1.5.1
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -26,8 +26,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.5.0-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.5.0-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.5.1-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.5.1-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
