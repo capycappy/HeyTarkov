@@ -206,6 +206,15 @@ public static class Strings
     public static string CollectorEmpty =>
         T("該当なし", "Nothing matches");
 
+    /// <summary>
+    /// Shown when the record file is there but would not open. Says plainly
+    /// that nothing is being saved, because an empty list that quietly refuses
+    /// to remember anything is the worst of both.
+    /// </summary>
+    public static string CollectorUnreadable => T(
+        "記録ファイルを読めませんでした。チェックしても保存されません。アプリを開き直してください",
+        "The record could not be read. Ticks will not be saved - close and open the app again");
+
     public static string CollectorNoItems =>
         T("このビルドにはコレクターの一覧が入っていません",
           "This build carries no Collector list");

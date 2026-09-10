@@ -325,9 +325,15 @@ public sealed class CollectorForm : Form
 
         _progress.ForeColor = held == _items.Count && _items.Count > 0 ? Theme.Accent : Theme.Text;
 
-        _hint.Text = _items.Count == 0 ? Strings.CollectorNoItems
+        _hint.Text = _record.Unreadable ? Strings.CollectorUnreadable
+            : _items.Count == 0 ? Strings.CollectorNoItems
             : shown.Length == 0 ? Strings.CollectorEmpty
             : Strings.CollectorHint;
+
+        _hint.ForeColor = _record.Unreadable ? Theme.Clip : Theme.Faint;
+
+        // Nothing is being written, so offering to wipe it is meaningless.
+        _clear.Enabled = !_record.Unreadable;
     }
 
     /// <summary>
