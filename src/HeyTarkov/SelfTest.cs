@@ -27,6 +27,8 @@ public static class SelfTest
         "Shortage",
         "The Punisher - Part 4",
         "What’s on the Flash Drive?",
+        "Honest Review",
+        "Pestily plague mask",
     };
 
     /// <summary>Spelled out letter by letter - the escape hatch for a name whose
