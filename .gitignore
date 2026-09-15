@@ -1,9 +1,15 @@
+# Build output goes outside the repository (Directory.Build.props). These stay
+# as a safety net for a build run some other way.
 bin/
 obj/
 dist/
 build/
 *.user
 tools/*.log
+
+# Claude Code: the project settings and hooks are shared; personal permission
+# choices are not.
+.claude/settings.local.json
 
 # Landing page for the website, kept out of this repository
 site/

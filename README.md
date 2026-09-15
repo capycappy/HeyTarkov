@@ -249,34 +249,63 @@ WinForms はプロセス起動時に描画方式を決めるため、切り替�
 
 ## ビルド
 
+コマンドは PowerShell のもの。
+
+**リポジトリの中にはビルドの生成物を作らない。** `Directory.Build.props` が全プロジェクトの出力をリポジトリの外へ向けている。
+
+| | 場所 |
+|---|---|
+| ビルド中間物 | `%LOCALAPPDATA%\HeyTarkov\build\bin\<project>\`、`build\obj\<project>\` |
+| 完成品（exe・配布 ZIP） | `%USERPROFILE%\app\HeyTarkov\` |
+
+`%LOCALAPPDATA%\HeyTarkov\` にはアプリの設定と KAPPA品の記録もある。ビルドを掃除するときは `build\` だけを消すこと。
+
 ```
-dotnet publish src\HeyTarkov -c Release -o dist
+dotnet publish src\HeyTarkov -c Release -o "$env:USERPROFILE\app\HeyTarkov"
 ```
 
-`dist\HeyTarkov.exe` が単一ファイルの成果物。付随ファイルは不要。
+`%USERPROFILE%\app\HeyTarkov\HeyTarkov.exe` が単一ファイルの成果物。付随ファイルは不要。
 
 Release ビルドは `ContinuousIntegrationBuild` でソースのパスを `/_/` に置き換えており、ビルドしたマシンのフォルダ構成は埋め込まれない。
+`obj\` がリポジトリの外にあるため、`Directory.Build.props` はそこもソースルートとして登録している（外すと生成ファイルのパスが漏れる）。
 
 **配布前に必ず確認する。**
 
 ```
-dotnet run --project tools\PathCheck -- dist\HeyTarkov.exe
+dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarkov.exe"
 ```
 
 `PASS` 以外なら配布しない。`findstr /c:"Users\"` では確認にならない。PDB は圧縮して埋め込まれているので中のパスは文字列検索に掛からず、逆に同梱の NAudio 自身のビルドパスには必ず一致する。
 
 `NuGet.Config` はこのリポジトリ内だけで nuget.org を有効にしている。
 
-配布用の自己完結版を作ったあとは `bin\` を消してからビルドし直すこと。
+### 配布用 ZIP
+
+ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
+作業用の展開先は `%LOCALAPPDATA%\HeyTarkov\build\publish\`。
 
 ```
-dotnet publish src\HeyTarkov -c Release -o <出力先> -p:SelfContained=true -p:PublishSingleFile=true
+$v = "1.5.4"
+$stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
+$out = "$env:USERPROFILE\app\HeyTarkov"
+
+dotnet publish src\HeyTarkov -c Release -o "$stage\HeyTarkov-v$v-win-x64" -p:SelfContained=true -p:PublishSingleFile=true
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\HeyTarkov\build\bin\HeyTarkov", "$env:LOCALAPPDATA\HeyTarkov\build\obj\HeyTarkov"
+dotnet publish src\HeyTarkov -c Release -o "$stage\HeyTarkov-v$v-win-x64-framework-dependent"
+
+foreach ($name in "HeyTarkov-v$v-win-x64", "HeyTarkov-v$v-win-x64-framework-dependent") {
+  dotnet run --project tools\PathCheck -- "$stage\$name\HeyTarkov.exe"
+  Remove-Item "$stage\$name\*.pdb" -ErrorAction SilentlyContinue
+  Copy-Item LICENSE, README.md "$stage\$name"
+  Compress-Archive -Path "$stage\$name\*" -DestinationPath "$out\$name.zip" -Force
+}
 ```
 
-これを走らせると `bin\` にランタイム一式（`hostfxr.dll` など）が残る。
+**自己完結版の publish の後は `build\bin\HeyTarkov\` と `build\obj\HeyTarkov\` を消す**（上の2行目）。
+残すと `build\bin\HeyTarkov\` にランタイム一式（`hostfxr.dll` など）が残る。
 `HeyTarkov.exe` は隣に `hostfxr.dll` があればそちらを使うため、
 次にフレームワーク依存でビルドすると **「.NET をインストールしてください」と言い出す**。
-配布物は単一ファイルなのでこの影響を受けない。壊れるのは手元の `bin\` だけ。
+配布物は単一ファイルなのでこの影響を受けない。壊れるのは手元のビルドだけ。
 
 ### タスク一覧の更新（開発者向け）
 

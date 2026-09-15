@@ -1,0 +1,34 @@
+<Project>
+
+  <!-- Build output never lands inside the repository. Everything a build
+       writes goes under one folder in LocalAppData:
+
+         %LOCALAPPDATA%\HeyTarkov\build\bin\<project>\
+         %LOCALAPPDATA%\HeyTarkov\build\obj\<project>\
+
+       - build\ and not bin\ obj\ directly: %LOCALAPPDATA%\HeyTarkov\ is also
+         where the running app keeps settings.json and the KAPPA record
+         (collector.json). Clearing a build must never mean deleting that
+         folder, so the build gets a folder of its own inside it.
+       - <project> per project: the app and the three tools each restore into
+         obj\, and one shared obj\ would have them overwrite each other's
+         project.assets.json.
+       - GetFolderPath rather than $(LOCALAPPDATA): the same on Windows, and
+         still somewhere sensible where that variable does not exist. -->
+  <PropertyGroup>
+    <HeyTarkovBuildRoot>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))\HeyTarkov\build\</HeyTarkovBuildRoot>
+    <BaseOutputPath>$(HeyTarkovBuildRoot)bin\$(MSBuildProjectName)\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(HeyTarkovBuildRoot)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <!-- ContinuousIntegrationBuild rewrites source paths to /_/ - but only paths
+       under a known source root, and the repository is the only one it knows.
+       The compiler also builds files the SDK generates into obj\ (assembly
+       attributes, global usings), and with obj\ outside the repository those
+       would go into the embedded PDB as C:\Users\<name>\AppData\Local\... .
+       Declaring obj\ as a source root of its own maps it too. -->
+  <ItemGroup>
+    <SourceRoot Include="$(BaseIntermediateOutputPath)" />
+  </ItemGroup>
+
+</Project>

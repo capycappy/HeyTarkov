@@ -113,18 +113,28 @@ internal static class Program
         Console.WriteLine("to see whether any new names need katakana readings.");
     }
 
-    /// <summary>Walk up until the solution layout appears, so the tool can be
-    /// run from anywhere.</summary>
+    /// <summary>
+    /// Walk up until the solution layout appears.
+    ///
+    /// Starts from the current directory: build output lives outside the
+    /// repository (Directory.Build.props), so walking up from the exe no longer
+    /// reaches it. Finding nothing is an error rather than a guess - writing
+    /// src\HeyTarkov\tasks.json under whatever directory this happened to be
+    /// started from produces a catalog the app never embeds, after twenty
+    /// minutes of wiki requests.
+    /// </summary>
     private static string FindRepositoryRoot()
     {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-
-        while (dir is not null)
+        foreach (var start in new[] { Directory.GetCurrentDirectory(), AppContext.BaseDirectory })
         {
-            if (Directory.Exists(Path.Combine(dir.FullName, "src", "HeyTarkov"))) return dir.FullName;
-            dir = dir.Parent;
+            for (var dir = new DirectoryInfo(start); dir is not null; dir = dir.Parent)
+            {
+                if (Directory.Exists(Path.Combine(dir.FullName, "src", "HeyTarkov"))) return dir.FullName;
+            }
         }
 
-        return Directory.GetCurrentDirectory();
+        throw new InvalidOperationException(
+            "Could not find the repository (a folder containing src\\HeyTarkov). "
+            + "Run this from inside the repository, or pass the output path as the first argument.");
     }
 }

@@ -95,19 +95,28 @@ internal static class Program
         Console.WriteLine($"wrote PNG masters and palettes.png to {docs}");
     }
 
-    /// <summary>Walk up until the solution layout appears, so the tool can be
-    /// run from anywhere.</summary>
+    /// <summary>
+    /// Walk up until the solution layout appears.
+    ///
+    /// Starts from the current directory: build output lives outside the
+    /// repository (Directory.Build.props), so walking up from the exe no longer
+    /// reaches it. Finding nothing is an error rather than a guess - writing
+    /// src\HeyTarkov\app.ico under whatever directory this happened to be
+    /// started from only makes a stray copy nobody builds.
+    /// </summary>
     private static string FindRepositoryRoot()
     {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-
-        while (dir is not null)
+        foreach (var start in new[] { Directory.GetCurrentDirectory(), AppContext.BaseDirectory })
         {
-            if (Directory.Exists(Path.Combine(dir.FullName, "src", "HeyTarkov"))) return dir.FullName;
-            dir = dir.Parent;
+            for (var dir = new DirectoryInfo(start); dir is not null; dir = dir.Parent)
+            {
+                if (Directory.Exists(Path.Combine(dir.FullName, "src", "HeyTarkov"))) return dir.FullName;
+            }
         }
 
-        return Directory.GetCurrentDirectory();
+        throw new InvalidOperationException(
+            "Could not find the repository (a folder containing src\\HeyTarkov). "
+            + "Run this from inside the repository, or pass its path as the first argument.");
     }
 
     private static Bitmap Render(int size, Variant variant)

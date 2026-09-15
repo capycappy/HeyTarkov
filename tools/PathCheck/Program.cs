@@ -4,7 +4,7 @@ using System.Text;
 
 // Checks a build for paths from the machine that built it.
 //
-//   dotnet run --project tools/PathCheck -- dist/HeyTarkov.exe
+//   dotnet run --project tools/PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarkov.exe"
 //
 // A string search (findstr) cannot do this. The PDB is embedded Deflate-
 // compressed, so the paths inside it are invisible to a byte search - and a
