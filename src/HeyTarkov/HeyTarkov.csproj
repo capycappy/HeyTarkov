@@ -8,9 +8,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <AssemblyName>HeyTarkov</AssemblyName>
-    <Version>1.5.3</Version>
-    <AssemblyVersion>1.5.3.0</AssemblyVersion>
-    <FileVersion>1.5.3.0</FileVersion>
+    <Version>1.5.4</Version>
+    <AssemblyVersion>1.5.4.0</AssemblyVersion>
+    <FileVersion>1.5.4.0</FileVersion>
     <Product>Hey Tarkov</Product>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <RootNamespace>HeyTarkov</RootNamespace>
@@ -20,6 +20,20 @@
          heuristics nor an anti-cheat scanner has anything to be suspicious of. -->
     <DebugType>embedded</DebugType>
     <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!-- The embedded PDB carries every source file's path, and without this those
+       are the absolute paths on the machine that built it - user name and
+       folder layout included - in a binary handed to strangers. Line numbers in
+       a crash still work.
+
+       Not a hand-written PathMap: that rewrites the document paths but not the
+       SourceLink map, which kept the local root and stopped matching anything.
+       ContinuousIntegrationBuild turns on DeterministicSourcePaths, which maps
+       both to /_/ from the same source root. Check with tools/PathCheck. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup>

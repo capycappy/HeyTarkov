@@ -1,4 +1,4 @@
-# Hey Tarkov v1.5.3
+# Hey Tarkov v1.5.4
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -26,8 +26,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.5.3-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.5.3-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.5.4-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.5.4-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -254,6 +254,16 @@ dotnet publish src\HeyTarkov -c Release -o dist
 ```
 
 `dist\HeyTarkov.exe` が単一ファイルの成果物。付随ファイルは不要。
+
+Release ビルドは `ContinuousIntegrationBuild` でソースのパスを `/_/` に置き換えており、ビルドしたマシンのフォルダ構成は埋め込まれない。
+
+**配布前に必ず確認する。**
+
+```
+dotnet run --project tools\PathCheck -- dist\HeyTarkov.exe
+```
+
+`PASS` 以外なら配布しない。`findstr /c:"Users\"` では確認にならない。PDB は圧縮して埋め込まれているので中のパスは文字列検索に掛からず、逆に同梱の NAudio 自身のビルドパスには必ず一致する。
 
 `NuGet.Config` はこのリポジトリ内だけで nuget.org を有効にしている。
 
