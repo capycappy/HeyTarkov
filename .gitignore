@@ -7,22 +7,22 @@ build/
 *.user
 tools/*.log
 
-# Claude Code: the project settings and hooks are shared; personal permission
-# choices are not.
-.claude/settings.local.json
-
-# Landing page for the website, kept out of this repository
+# Kept out of this repository
 site/
 design/
+/CLAUDE.md
+/docs/DECISIONS.md
+/docs/CURRENT_STATUS.md
+/docs/*-PLAN.md
+/PROJECT_OVERVIEW.md
+/HANDOFF.txt
+/.claude/
 
-# Noise from the Mac side and from iCloud Drive, now that this folder is shared
+# OS files
 .DS_Store
 ._*
 .iCloud
 Icon?
 
-# Empty two-character folders that appear in the repository root when git
-# commits from inside iCloud Drive - the same names git uses under
-# .git/objects, created alongside it rather than inside it. Always empty,
-# nothing to do with the app, and they come back.
+# Empty two-character folders some sync tools leave in the repository root
 /[0-9a-f][0-9a-f]/

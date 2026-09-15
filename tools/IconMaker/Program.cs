@@ -87,12 +87,20 @@ internal static class Program
 
         WriteIco(iconPath, frames);
 
+        // The palette comparison sheet is a working file, not part of the
+        // product, so it goes to the build folder rather than the repository.
+        var sheets = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "HeyTarkov", "build", "icon");
+        Directory.CreateDirectory(sheets);
+
         var shipped = P.Name;
-        WriteComparison(Path.Combine(docs, "palettes.png"));   // this walks every palette
+        WriteComparison(Path.Combine(sheets, "palettes.png"));   // this walks every palette
         P = Palettes[0];
 
         Console.WriteLine($"wrote {iconPath} ({Sizes.Length} sizes, palette {shipped})");
-        Console.WriteLine($"wrote PNG masters and palettes.png to {docs}");
+        Console.WriteLine($"wrote PNG masters to {docs}");
+        Console.WriteLine($"wrote palettes.png to {sheets}");
     }
 
     /// <summary>
