@@ -18,7 +18,8 @@ namespace HeyTarkov.CatalogBuilder;
 /// </summary>
 public static partial class Keys
 {
-    private const string Category = "Keys";
+    /// <summary>The full page title, as the API wants it.</summary>
+    private const string Category = "Category:Keys";
 
     /// <summary>The Japanese wiki's own index of keys.</summary>
     private const string JapaneseIndex = "鍵";

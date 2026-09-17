@@ -16,13 +16,20 @@ internal static class Program
 {
     private static async Task<int> Main(string[] args)
     {
-        var output = args.Length > 0
-            ? args[0]
-            : Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
+        // "--keys" refreshes only the keys, in place. A whole run walks eleven
+        // hundred pages and the Japanese wiki rate limits long before that is
+        // done, so re-fetching everything to correct one part of the catalog
+        // costs most of an hour and annoys somebody else's server.
+        var keysOnly = args.Contains("--keys", StringComparer.OrdinalIgnoreCase);
+
+        var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
+            ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
 
         try
         {
             using var wikis = new Wikis();
+
+            if (keysOnly) return await RefreshKeysAsync(wikis, output).ConfigureAwait(false);
 
             Console.WriteLine("tasks and seasonal events...");
             var tasks = await Tasks.FetchAsync(wikis);
@@ -95,6 +102,70 @@ internal static class Program
             Console.Error.WriteLine(ex);
             return 1;
         }
+    }
+
+    /// <summary>
+    /// Fetches the keys and puts them into the catalog that is already there,
+    /// leaving everything else untouched.
+    ///
+    /// The maps come from that file rather than from the wiki: keys carry the
+    /// map they belong to, and the name has to be the same string the map
+    /// itself uses, which is exactly what the file holds.
+    /// </summary>
+    private static async Task<int> RefreshKeysAsync(Wikis wikis, string output)
+    {
+        if (!File.Exists(output))
+        {
+            Console.Error.WriteLine($"{output} is not there; run the whole build first.");
+            return 1;
+        }
+
+        var catalog = JsonSerializer.Deserialize<WikiCatalog>(
+            await File.ReadAllTextAsync(output).ConfigureAwait(false));
+
+        if (catalog is null || catalog.Entries.Count == 0)
+        {
+            Console.Error.WriteLine($"{output} holds no catalog; run the whole build first.");
+            return 1;
+        }
+
+        Console.WriteLine($"keys only, into the existing {catalog.Entries.Count} entries...");
+
+        var keys = await Keys.FetchAsync(wikis, catalog.Entries).ConfigureAwait(false);
+
+        if (keys.Count == 0)
+        {
+            Console.Error.WriteLine("No keys came back; leaving the file alone.");
+            return 1;
+        }
+
+        if (wikis.Unresolved.Count > 0)
+        {
+            Console.Error.WriteLine();
+            Console.Error.WriteLine(
+                $"{wikis.Unresolved.Count} page(s) the wiki would not answer about; leaving the file alone.");
+
+            foreach (var url in wikis.Unresolved.Take(20)) Console.Error.WriteLine($"  {url}");
+            return 1;
+        }
+
+        catalog.Entries = catalog.Entries.Where(e => e.Kind != EntryKind.Key).Concat(keys)
+            .OrderBy(e => e.Kind)
+            .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(e => e.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        catalog.UpdatedAt = DateTimeOffset.Now;
+
+        await File.WriteAllTextAsync(output, JsonSerializer.Serialize(catalog,
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            })).ConfigureAwait(false);
+
+        Report(catalog, output);
+        return 0;
     }
 
     private static void Report(WikiCatalog catalog, string output)
