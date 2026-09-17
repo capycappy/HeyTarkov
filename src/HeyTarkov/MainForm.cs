@@ -18,6 +18,9 @@ public sealed class MainForm : Form
     /// <summary>The hold button and the input meter in one control.</summary>
     private readonly LevelDial _dial = new();
 
+    /// <summary>Turns the whole window over to keys and back.</summary>
+    private readonly PillButton _keysButton = new();
+
     private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
@@ -28,6 +31,12 @@ public sealed class MainForm : Form
     private readonly ModernCombo _themeBox = new();
     private readonly ModernCombo _uiLanguageBox = new();
     private readonly Label _statusLabel = new();
+
+    /// <summary>Whether the key button is pressed in.</summary>
+    private bool _keysOnly;
+
+    /// <summary>Keys dropped from the last search because they are hidden.</summary>
+    private int _hiddenKeys;
 
     private Settings _settings = new();
     private SpeechService? _speech;
@@ -474,6 +483,17 @@ public sealed class MainForm : Form
             OpenSelected();
         };
 
+        // Between the microphone and the box, because it belongs to both: it
+        // changes what speaking finds as much as what typing finds.
+        _keysButton.Text = Strings.KeysButton;
+        _keysButton.Keyed = true;
+        _keysButton.Ghost = true;
+        _keysButton.Width = 78;
+        _keysButton.Height = 38;
+        _keysButton.Anchor = AnchorStyles.Left;
+        _keysButton.Margin = new Padding(0, 0, 10, 0);
+        _keysButton.Click += (_, _) => ToggleKeys();
+
         _micHint.Text = Strings.MicPreparing;
         _micHint.AutoSize = true;
         _micHint.BackColor = Color.Transparent;
@@ -512,15 +532,17 @@ public sealed class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 2,
+            ColumnCount = 3,
             RowCount = 1,
             Margin = new Padding(0),
         };
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_dial, 0, 0);
-        row.Controls.Add(box, 1, 0);
+        row.Controls.Add(_keysButton, 1, 0);
+        row.Controls.Add(box, 2, 0);
         return row;
     }
 
@@ -1566,6 +1588,10 @@ public sealed class MainForm : Form
         var matches = BuildCandidates(outcome);
         Populate(matches);
 
+        // Heard a key while keys are hidden: say so rather than showing nothing
+        // and letting it look like the microphone failed.
+        if (_hiddenKeys > 0) SetStatus(Strings.KeysHidden(_hiddenKeys));
+
         // Never jump to a page off a rejected result, and never off a fragment:
         // "broadcast" means six different pages, so the list is the answer.
         var wholeName = _speechIndex?.Exact(outcome.Text) is not null;
@@ -1618,7 +1644,7 @@ public sealed class MainForm : Form
 
         foreach (var match in _speechIndex.Rank(outcome.Text, 6)) Add(match);
 
-        return result;
+        return Keep(result);
     }
 
     /// <summary>
@@ -1676,11 +1702,16 @@ public sealed class MainForm : Form
             return;
         }
 
-        var containing = _typedIndex.Containing(text)
+        var found = _typedIndex.Containing(text).ToList();
+        _hiddenKeys = _keysOnly ? 0 : found.Count(e => e.Kind == EntryKind.Key);
+
+        var containing = found
+            .Where(Wanted)
             .Select(e => new TaskMatch(e, 1.0, text))
             .ToList();
 
         var ranked = _typedIndex.Rank(text, 12)
+            .Where(m => Wanted(m.Task))
             .Where(m => containing.All(s => s.Task != m.Task));
 
         // Whether to look at the other wiki turns on `containing`, not on the
@@ -1697,6 +1728,8 @@ public sealed class MainForm : Form
 
         // The other wiki's exact answer leads, this wiki's guesses follow.
         PopulateRows(elsewhere.Concat(here).Take(14).ToList());
+
+        if (_hiddenKeys > 0) SetStatus(Strings.KeysHidden(_hiddenKeys));
     }
 
     /// <summary>
@@ -1727,9 +1760,45 @@ public sealed class MainForm : Form
         // list; "the thing you asked for is over there" is.
 
         return found
+            .Where(Wanted)
             .Take(8)
             .Select(e => new CandidateRow(new TaskMatch(e, 1.0, text), null, other))
             .ToList();
+    }
+
+    /// <summary>
+    /// Keys and everything else never share a list. There are a couple of
+    /// hundred keys and their names run together - thirty of them end in
+    /// "room key" - so mixed in they bury the task that was asked for, and a
+    /// list of tasks is no help to somebody standing at a locked door.
+    /// </summary>
+    private bool Wanted(WikiEntry entry) =>
+        _keysOnly ? entry.Kind == EntryKind.Key : entry.Kind != EntryKind.Key;
+
+    /// <summary>
+    /// Drops what the other mode owns, remembering how much went, so the status
+    /// line can point at the button instead of leaving an empty list.
+    /// </summary>
+    private List<TaskMatch> Keep(List<TaskMatch> matches)
+    {
+        var kept = matches.Where(m => Wanted(m.Task)).ToList();
+        _hiddenKeys = _keysOnly ? 0 : matches.Count - kept.Count;
+        return kept;
+    }
+
+    /// <summary>
+    /// The button is a filter, not a mode change in the recognizer: the grammar
+    /// holds every phrase either way. Rebuilding it on each press would cost a
+    /// second and a half in Japanese, for a button meant to be flicked.
+    /// </summary>
+    private void ToggleKeys()
+    {
+        _keysOnly = !_keysOnly;
+        _keysButton.Ghost = !_keysOnly;
+        _keysButton.Invalidate();
+
+        SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
+        SearchAgain();
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>

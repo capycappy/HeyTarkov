@@ -119,6 +119,25 @@ public static class Strings
     public static string KindExit => T("出口 ", "Exit ");
     public static string KindItem => T("アイテム ", "Item ");
 
+    public static string KindKey => T("鍵 ", "Key ");
+
+    /// <summary>The button beside the microphone. Short: it sits in a row that
+    /// belongs to the search box.</summary>
+    public static string KeysButton => T("鍵", "Keys");
+
+    public static string KeysOnly => T(
+        "鍵だけを表示しています。もう一度押すと元に戻ります",
+        "Showing keys only. Press again to go back");
+
+    public static string KeysOff => T(
+        "鍵以外を表示しています",
+        "Showing everything except keys");
+
+    /// <summary>Said when the answer exists but is a key, and keys are hidden.</summary>
+    public static string KeysHidden(int count) => T(
+        $"鍵が{count}件あります（左の「鍵」ボタンで表示）",
+        $"{count} key(s) found - press the Keys button to see them");
+
     /// <summary>
     /// Said of a result that the selected wiki does not have. Names the wiki
     /// that does, because "not found" and "found, elsewhere" are different

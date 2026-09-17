@@ -289,14 +289,6 @@ public static partial class Collector
     private const string TarkovDevApi = "https://api.tarkov.dev/graphql";
 
     /// <summary>
-    /// The game's own English locale, as the Single Player Tarkov project
-    /// mirrors it. Keyed by the item's BSG id: "&lt;id&gt; ShortName".
-    /// </summary>
-    private const string GameLocale =
-        "https://raw.githubusercontent.com/sp-tarkov/server/master"
-        + "/project/assets/database/locales/global/en.json";
-
-    /// <summary>
     /// The label the game prints over the icon in the stash - "BeardOil",
     /// "Plague mask", "WZ". It is what a person reads when checking what they
     /// already have, so the checklist leads with it.
@@ -427,29 +419,15 @@ public static partial class Collector
     {
         if (pages.Values.All(page => page.Id is null)) return;
 
-        string locale;
-        try
-        {
-            using var http = Client();
-            locale = await http.GetStringAsync(GameLocale, ct).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"  the mirrored locale is unreachable: {ex.Message}");
-            return;
-        }
+        var locale = await GameLocale.ShortNamesAsync(ct).ConfigureAwait(false);
+        if (locale is null) return;
 
-        using var document = JsonDocument.Parse(locale);
-        var root = document.RootElement;
         var before = labels.Count;
 
         foreach (var entry in wanting)
         {
             if (!pages.TryGetValue(entry.Name, out var page) || page.Id is null) continue;
-            if (!root.TryGetProperty($"{page.Id} ShortName", out var value)) continue;
-
-            var label = value.GetString();
-            if (!string.IsNullOrWhiteSpace(label)) labels[entry.Name] = label.Trim();
+            if (locale.TryGetValue(page.Id, out var label)) labels[entry.Name] = label;
         }
 
         Console.WriteLine($"  {labels.Count - before} from the mirrored game locale");

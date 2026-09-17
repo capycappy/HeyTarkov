@@ -26,6 +26,14 @@ public enum EntryKind
     /// keeps meaning what it meant.
     /// </summary>
     Item,
+
+    /// <summary>
+    /// A key to a door or a container. Kept behind the key button rather than
+    /// mixed into the ordinary results: there are a couple of hundred of them
+    /// and their names share words - thirty end in "room key" - so on an
+    /// ordinary search they would bury the task somebody asked for.
+    /// </summary>
+    Key,
 }
 
 /// <summary>

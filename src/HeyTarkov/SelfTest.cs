@@ -66,6 +66,9 @@ public static class SelfTest
             failed |= !CheckCollector(report, catalog);
             report.AppendLine();
 
+            failed |= !CheckKeys(report, catalog);
+            report.AppendLine();
+
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
             report.AppendLine();
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.Japanese);
@@ -248,6 +251,74 @@ public static class SelfTest
                           + $"{spoken.Count} entries: {string.Join(", ", spoken.Take(3).Select(h => h.Name))}");
 
         report.AppendLine($"  grammar with fragments: {index.GrammarPhrases.Count} phrases");
+        return ok;
+    }
+
+    /// <summary>
+    /// The keys are in the catalog, carry the map they belong to, and are
+    /// reachable the same way everything else is.
+    ///
+    /// Keys are hidden behind the key button in the window, but that is a
+    /// filter on the results rather than a second catalog - so what this
+    /// checks is that the catalog itself is sound.
+    /// </summary>
+    private static bool CheckKeys(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== keys ===");
+
+        var keys = catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList();
+
+        if (keys.Count == 0)
+        {
+            report.AppendLine("  SKIP  this catalog has no keys");
+            return true;
+        }
+
+        var located = keys.Count(e => e.Group.Length > 0);
+        var labelled = keys.Count(e => e.ShortName is not null);
+        var japanese = keys.Count(e => e.JapaneseUrl is not null);
+
+        report.AppendLine($"  {keys.Count} keys, {located} placed on a map, "
+                          + $"{labelled} with the game's short label, {japanese} on the Japanese wiki");
+
+        var ok = true;
+
+        // A key with no page anywhere is a row that cannot be opened.
+        var openable = keys.All(e => e.EnglishUrl is not null || e.JapaneseUrl is not null);
+        ok &= openable;
+        report.AppendLine($"  {(openable ? "PASS" : "FAIL")}  every key opens on at least one wiki");
+
+        // The map is what tells two doors of the same name apart, so a build
+        // that lost most of them is worth seeing even though it still runs.
+        var placed = located * 2 >= keys.Count;
+        report.AppendLine($"  {(placed ? "PASS" : "WARN")}  {located}/{keys.Count} say which map they are on");
+
+        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+
+        var probe = keys[0].Name;
+        var found = index.Exact(probe);
+        var reachable = found is not null && found.Kind == EntryKind.Key;
+        ok &= reachable;
+        report.AppendLine($"  {(reachable ? "PASS" : "FAIL")}  \"{probe}\" resolves to a key");
+
+        // Part of a key name reaches it too - that is why keys are worth their
+        // own button rather than being mixed in: "room key" alone is thirty of
+        // them, and in the ordinary list it would bury the task asked for.
+        var crowded = index.Containing("room key");
+        report.AppendLine($"        \"room key\" covers {crowded.Count} entries, "
+                          + $"{crowded.Count(e => e.Kind == EntryKind.Key)} of them keys");
+
+        // A key must not answer to a task name, or the key button would hide
+        // something that is not a key.
+        var names = new HashSet<string>(
+            catalog.Entries.Where(e => e.Kind != EntryKind.Key).Select(e => e.Name),
+            StringComparer.OrdinalIgnoreCase);
+
+        var clashes = keys.Where(k => names.Contains(k.Name)).ToList();
+        ok &= clashes.Count == 0;
+        report.AppendLine($"  {(clashes.Count == 0 ? "PASS" : "FAIL")}  no key shares a name with a task"
+                          + (clashes.Count == 0 ? "" : $": {string.Join(", ", clashes.Take(5).Select(c => c.Name))}"));
+
         return ok;
     }
 

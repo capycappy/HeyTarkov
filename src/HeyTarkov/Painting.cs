@@ -54,6 +54,31 @@ public static class Painting
     /// rows and the button that opens them draw the same mark, and two hand-
     /// placed polylines drift apart.
     /// </summary>
+    /// <summary>
+    /// A key, drawn rather than typed. A font emoji would be another face on a
+    /// window that draws everything else itself, and at this size it lands as a
+    /// blob; two circles and a couple of teeth read as a key at 13 pixels.
+    /// </summary>
+    public static void KeyGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+
+        // The bow is a ring on the left, the blade runs right with two teeth
+        // hanging off its underside.
+        var ring = box.Height * 0.52f;
+        var top = box.Y + (box.Height - ring) / 2f;
+
+        g.DrawEllipse(pen, box.X, top, ring, ring);
+
+        var middle = top + ring / 2f;
+        var from = box.X + ring;
+        var to = box.Right;
+
+        g.DrawLine(pen, from, middle, to, middle);
+        g.DrawLine(pen, to - stroke / 2f, middle, to - stroke / 2f, middle + box.Height * 0.22f);
+        g.DrawLine(pen, to - box.Width * 0.26f, middle, to - box.Width * 0.26f, middle + box.Height * 0.16f);
+    }
+
     public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
     {
         using var pen = new Pen(colour, stroke)
@@ -191,6 +216,10 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Ticked { get; set; }
 
+    /// <summary>A key drawn before the text, for the button that shows keys.</summary>
+    [DefaultValue(false)]
+    public bool Keyed { get; set; }
+
     protected override void OnMouseEnter(EventArgs e) { _hot = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hot = false; _down = false; Invalidate(); base.OnMouseLeave(e); }
     protected override void OnMouseDown(MouseEventArgs e) { _down = true; Invalidate(); base.OnMouseDown(e); }
@@ -231,7 +260,7 @@ public sealed class PillButton : Button
 
         var box = new Rectangle(0, 0, Width, Height);
 
-        if (Ticked)
+        if (Ticked || Keyed)
         {
             // The tick sits at the left edge and the word sits in the middle of
             // the button. Centring the two together would make the button read
@@ -240,8 +269,11 @@ public sealed class PillButton : Button
             var side = LogicalToDeviceUnits(13);
             var inset = LogicalToDeviceUnits(13);
 
-            Painting.Tick(g, new RectangleF(inset, (Height - side) / 2f, side, side), ink,
-                Math.Max(1.6f, side * 0.16f));
+            var glyph = new RectangleF(inset, (Height - side) / 2f, side, side);
+            var stroke = Math.Max(1.6f, side * 0.16f);
+
+            if (Keyed) Painting.KeyGlyph(g, glyph, ink, stroke);
+            else Painting.Tick(g, glyph, ink, stroke);
 
             var textWidth = TextRenderer.MeasureText(g, Text, Font,
                 new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;
