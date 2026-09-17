@@ -293,7 +293,12 @@ public static class SelfTest
         var placed = located * 2 >= keys.Count;
         report.AppendLine($"  {(placed ? "PASS" : "WARN")}  {located}/{keys.Count} say which map they are on");
 
-        var index = new TaskIndex(catalog.Entries, new EnglishScheme());
+        // The window searches two lists - the keys, and everything else - so
+        // that is what is checked here.
+        var rest = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind != EntryKind.Key).ToList(), new EnglishScheme());
+
+        var index = new TaskIndex(keys, new EnglishScheme());
 
         var probe = keys[0].Name;
         var found = index.Exact(probe);
@@ -301,23 +306,29 @@ public static class SelfTest
         ok &= reachable;
         report.AppendLine($"  {(reachable ? "PASS" : "FAIL")}  \"{probe}\" resolves to a key");
 
-        // Part of a key name reaches it too - that is why keys are worth their
-        // own button rather than being mixed in: "room key" alone is thirty of
-        // them, and in the ordinary list it would bury the task asked for.
+        // Part of a key name reaches it too. This is why keys have a button of
+        // their own: "room key" is thirty of them, and mixed into the ordinary
+        // list it would bury whatever task was actually asked for.
         var crowded = index.Containing("room key");
-        report.AppendLine($"        \"room key\" covers {crowded.Count} entries, "
-                          + $"{crowded.Count(e => e.Kind == EntryKind.Key)} of them keys");
+        report.AppendLine($"        \"room key\" covers {crowded.Count} keys");
 
-        // A key must not answer to a task name, or the key button would hide
-        // something that is not a key.
-        var names = new HashSet<string>(
-            catalog.Entries.Where(e => e.Kind != EntryKind.Key).Select(e => e.Name),
-            StringComparer.OrdinalIgnoreCase);
+        // A few entries are a key and something else at once - "Missam forklift
+        // key" is a KAPPA item as well. Two lists is what makes that work: each
+        // side has to answer with its own.
+        var shared = keys
+            .Where(k => catalog.Entries.Any(e =>
+                e.Kind != EntryKind.Key
+                && string.Equals(e.Name, k.Name, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
-        var clashes = keys.Where(k => names.Contains(k.Name)).ToList();
-        ok &= clashes.Count == 0;
-        report.AppendLine($"  {(clashes.Count == 0 ? "PASS" : "FAIL")}  no key shares a name with a task"
-                          + (clashes.Count == 0 ? "" : $": {string.Join(", ", clashes.Take(5).Select(c => c.Name))}"));
+        var bothWays = shared.All(k =>
+            index.Exact(k.Name)?.Kind == EntryKind.Key
+            && rest.Exact(k.Name) is { } other && other.Kind != EntryKind.Key);
+
+        ok &= bothWays;
+        report.AppendLine($"  {(bothWays ? "PASS" : "FAIL")}  {shared.Count} name(s) in both halves "
+                          + "resolve to the right one on each side"
+                          + (shared.Count == 0 ? "" : $": {string.Join(", ", shared.Take(3).Select(k => k.Name))}"));
 
         return ok;
     }
