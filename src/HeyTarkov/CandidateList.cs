@@ -45,6 +45,28 @@ public sealed class CandidateRow(TaskMatch match, string? reading, WikiSource? e
 /// into one line of text; here each gets its own column and the kind gets a
 /// colour, so the right row is found by shape rather than by reading.
 /// </summary>
+/// <summary>
+/// Where the candidate list's columns sit for a given width. The list and the
+/// header above it both ask this, so each title stays over its column.
+/// </summary>
+public readonly record struct CandidateLayout(
+    int NameX, int ReadingX, int GroupX, int GroupW, int ScoreX, int ScoreW)
+{
+    public static CandidateLayout For(Control control, int left, int width)
+    {
+        var pad = control.LogicalToDeviceUnits(8);
+        var right = left + width - pad - control.LogicalToDeviceUnits(4);
+        var scoreW = control.LogicalToDeviceUnits(40);
+        var groupW = control.LogicalToDeviceUnits(96);
+        var groupX = right - scoreW - control.LogicalToDeviceUnits(8) - groupW;
+
+        return new CandidateLayout(
+            left + pad + control.LogicalToDeviceUnits(12),
+            left + (int)(width * 0.46f),
+            groupX, groupW, right - scoreW, scoreW);
+    }
+}
+
 public sealed class CandidateList : ListBox
 {
     private Font? _name;
@@ -125,11 +147,11 @@ public sealed class CandidateList : ListBox
         x += Badge(g, Theme.BadgeOf(row.Match.Task), kind, x, full) + gap;
 
         // Right-hand columns are placed first; the name takes whatever is left.
-        var right = full.Right - pad - LogicalToDeviceUnits(4);
-        var scoreW = LogicalToDeviceUnits(40);
-        var groupW = LogicalToDeviceUnits(96);
-
-        var groupX = right - scoreW - LogicalToDeviceUnits(8) - groupW;
+        var at = CandidateLayout.For(this, full.X, full.Width);
+        var right = at.ScoreX + at.ScoreW;
+        var scoreW = at.ScoreW;
+        var groupW = at.GroupW;
+        var groupX = at.GroupX;
 
         if (row.Elsewhere is { } other)
         {
@@ -147,7 +169,7 @@ public sealed class CandidateList : ListBox
                 Column(g, row.Match.Task.Group, _small!, Theme.Muted, groupX, groupW, full);
         }
 
-        var readingX = full.X + (int)(full.Width * 0.46f);
+        var readingX = at.ReadingX;
         var readingW = groupX - LogicalToDeviceUnits(10) - readingX;
 
         if (row.Reading is not null && readingW > LogicalToDeviceUnits(40))

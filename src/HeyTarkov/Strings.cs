@@ -121,6 +121,11 @@ public static class Strings
 
     public static string KindKey => T("鍵 ", "Key ");
 
+    public static string CandidateColumnName => T("名前", "Name");
+    public static string CandidateColumnReading => T("読み", "Reading");
+    public static string CandidateColumnGroup => T("トレーダー・マップ", "Trader / map");
+    public static string CandidateColumnScore => T("一致度", "Match");
+
     /// <summary>The button beside the microphone. Short: it sits in a row that
     /// belongs to the search box.</summary>
     public static string KeysButton => T("鍵", "Keys");

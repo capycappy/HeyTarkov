@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace HeyTarkov;
 
-public sealed class MainForm : Form
+public sealed partial class MainForm : Form
 {
     private const double AutoOpenConfidence = 0.55;
 
@@ -28,6 +28,24 @@ public sealed class MainForm : Form
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
     private readonly CandidateList _candidates = new();
+
+    /// <summary>The column titles over the list, which reorder it.</summary>
+    private CandidateHeader? _sortHeader;
+
+    /// <summary>How the list is ordered, and the rows as the search gave them,
+    /// so a click on a title can reorder without searching again.</summary>
+    private CandidateSort _sort = CandidateSort.Relevance;
+
+    private bool _sortDescending;
+
+    private List<CandidateRow> _lastRows = new();
+
+    /// <summary>
+    /// Each entry's Japanese names, folded for matching: the name the game
+    /// shows, where there is one, and the katakana readings of the English
+    /// name. Worked out once per wiki - typing asks on every keystroke.
+    /// </summary>
+    private readonly Dictionary<WikiEntry, string[]> _japaneseNames = new();
     private readonly Label _countLabel = new();
     private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
@@ -632,15 +650,24 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             BackColor = Color.Transparent,
             ColumnCount = 1,
-            RowCount = 2,
+            RowCount = 3,
             Padding = new Padding(14, 12, 14, 12),
             Margin = new Padding(0),
         };
         stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         stack.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         stack.Controls.Add(header, 0, 0);
-        stack.Controls.Add(_candidates, 0, 1);
+        _sortHeader = new CandidateHeader(_candidates)
+        {
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 0, 0, 2),
+        };
+        _sortHeader.Picked += PickSort;
+
+        stack.Controls.Add(_sortHeader, 0, 1);
+        stack.Controls.Add(_candidates, 0, 2);
 
         var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 12) };
         card.Controls.Add(stack);
@@ -981,6 +1008,7 @@ public sealed class MainForm : Form
             _catalog = TaskCatalog.Load();
             _typedRest = null;
             _typedKeys = null;
+            _japaneseNames.Clear();
             _otherIndex.Clear();
             RefreshCollectorCount();
         }
@@ -1165,6 +1193,7 @@ public sealed class MainForm : Form
         // again against the new sets.
         _typedRest = null;
         _typedKeys = null;
+        _japaneseNames.Clear();
         _otherIndex.Clear();
         _candidates.Items.Clear();
 
@@ -1751,6 +1780,21 @@ public sealed class MainForm : Form
             return;
         }
 
+        // Kana or kanji in the box means a Japanese name is being typed -
+        // most likely read off a Japanese game screen - so it is matched
+        // against the names in Japanese rather than the English ones, where it
+        // can only ever score nothing.
+        if (JapaneseScript().IsMatch(text))
+        {
+            PopulateRows(SearchJapanese(text, _keysOnly)
+                .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
+                .ToList());
+
+            var aside = SearchJapanese(text, !_keysOnly).Count;
+            if (aside > 0) SetStatus(_keysOnly ? Strings.OthersHidden(aside) : Strings.KeysHidden(aside));
+            return;
+        }
+
         var containing = index.Containing(text)
             .Select(e => new TaskMatch(e, 1.0, text))
             .ToList();
@@ -1883,11 +1927,125 @@ public sealed class MainForm : Form
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
         PopulateRows(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))).ToList());
 
+    [System.Text.RegularExpressions.GeneratedRegex(@"[\u3040-\u30ff\u4e00-\u9fff]")]
+    private static partial System.Text.RegularExpressions.Regex JapaneseScript();
+
+    /// <summary>Punctuation the game puts in Japanese names that nobody types.</summary>
+    private static readonly HashSet<char> JapaneseNoise = new("・「」『』\"'()（）");
+
+    private static string Fold(string text) =>
+        new(JapaneseForms.Normalize(text).Where(c => !JapaneseNoise.Contains(c)).ToArray());
+
+    private string[] JapaneseNamesOf(WikiEntry entry)
+    {
+        if (_japaneseNames.TryGetValue(entry, out var names)) return names;
+
+        var all = new List<string>();
+        if (entry.JapaneseName is { } shown) all.Add(Fold(shown));
+        if (_hintForms is not null) all.AddRange(_hintForms.For(entry.Name).Select(Fold));
+
+        names = all.Where(n => n.Length > 0).Distinct().ToArray();
+        _japaneseNames[entry] = names;
+        return names;
+    }
+
+    /// <summary>
+    /// Japanese typed into the box, found anywhere inside an entry's Japanese
+    /// name. "コンコルディア" is a word in the middle of "コンコルディア・アパート
+    /// 8号室の鍵" as often as at its start, and a player types the part they
+    /// can see. The more of the name the typing covers, the higher it scores,
+    /// with a little extra for matching from the beginning.
+    /// </summary>
+    private List<TaskMatch> SearchJapanese(string text, bool keys)
+    {
+        var query = Fold(text);
+        if (query.Length == 0 || _catalog is null) return new List<TaskMatch>();
+
+        var found = new List<TaskMatch>();
+
+        foreach (var entry in _catalog.On(SelectedWiki))
+        {
+            if ((entry.Kind == EntryKind.Key) != keys) continue;
+
+            var best = 0.0;
+
+            foreach (var name in JapaneseNamesOf(entry))
+            {
+                var at = name.IndexOf(query, StringComparison.Ordinal);
+                if (at < 0) continue;
+
+                var score = 0.5 + 0.5 * query.Length / name.Length + (at == 0 ? 0.05 : 0);
+                best = Math.Max(best, Math.Min(1.0, score));
+            }
+
+            if (best > 0) found.Add(new TaskMatch(entry, best, text));
+        }
+
+        return found
+            .OrderByDescending(m => m.Score)
+            .ThenBy(m => m.Task.Name, NaturalOrder.Instance)
+            .Take(30)
+            .ToList();
+    }
+
+    /// <summary>
+    /// A column title was clicked. The same title again turns the order round;
+    /// a new one starts in the direction a person would expect - the best match
+    /// first, names from A.
+    /// </summary>
+    private void PickSort(CandidateSort sort)
+    {
+        if (sort == _sort) _sortDescending = !_sortDescending;
+        else
+        {
+            _sort = sort;
+            _sortDescending = sort == CandidateSort.Score;
+        }
+
+        _sortHeader?.Show(_sort, _sortDescending);
+        PopulateRows(_lastRows);
+    }
+
+    private IEnumerable<CandidateRow> Ordered(IEnumerable<CandidateRow> rows)
+    {
+        if (_sort == CandidateSort.Relevance) return rows;
+
+        // Rows without the value being sorted on go last whichever way round.
+        IOrderedEnumerable<CandidateRow> ordered = _sort switch
+        {
+            CandidateSort.Name => By(rows, r => r.Match.Task.Display),
+            CandidateSort.Reading => By(rows, r => r.Reading),
+            CandidateSort.Group => By(rows, r => r.Match.Task.Group),
+            _ => _sortDescending
+                ? rows.OrderByDescending(r => r.Match.Score)
+                : rows.OrderBy(r => r.Match.Score),
+        };
+
+        return ordered.ThenBy(r => r.Match.Task.Name, NaturalOrder.Instance);
+    }
+
+    private IOrderedEnumerable<CandidateRow> By(IEnumerable<CandidateRow> rows, Func<CandidateRow, string?> key)
+    {
+        var present = rows.OrderBy(r => string.IsNullOrEmpty(key(r)));
+
+        return _sortDescending
+            ? present.ThenByDescending(r => key(r) ?? "", NaturalOrder.Instance)
+            : present.ThenBy(r => key(r) ?? "", NaturalOrder.Instance);
+    }
+
     private void PopulateRows(IReadOnlyList<CandidateRow> rows)
     {
+        if (!ReferenceEquals(rows, _lastRows)) _lastRows = rows.ToList();
+
+        if (_sortHeader is not null)
+        {
+            _sortHeader.ShowReading = SelectedLanguage == RecognitionLanguage.Japanese;
+            _sortHeader.Invalidate();
+        }
+
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var row in rows) _candidates.Items.Add(row);
+        foreach (var row in Ordered(rows)) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
