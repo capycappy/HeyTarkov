@@ -260,6 +260,16 @@ public sealed class PillButton : Button
 
         var box = new Rectangle(0, 0, Width, Height);
 
+        if (Keyed && string.IsNullOrEmpty(Text))
+        {
+            // Nothing but the picture, so it takes the middle of the button.
+            var size = LogicalToDeviceUnits(18);
+            var centre = new RectangleF((Width - size) / 2f, (Height - size) / 2f, size, size);
+
+            Painting.KeyGlyph(g, centre, ink, Math.Max(1.8f, size * 0.13f));
+            return;
+        }
+
         if (Ticked || Keyed)
         {
             // The tick sits at the left edge and the word sits in the middle of

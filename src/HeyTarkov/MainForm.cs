@@ -21,6 +21,9 @@ public sealed class MainForm : Form
     /// <summary>Turns the whole window over to keys and back.</summary>
     private readonly PillButton _keysButton = new();
 
+    /// <summary>What the key button does, since it no longer says.</summary>
+    private readonly ToolTip _keysTip = new();
+
     private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
@@ -503,11 +506,16 @@ public sealed class MainForm : Form
 
         // Between the microphone and the box, because it belongs to both: it
         // changes what speaking finds as much as what typing finds.
-        _keysButton.Text = Strings.KeysButton;
+        // The picture is the label. A word beside it made the button read as a
+        // second search box; a key on its own says what it does. The name is
+        // still there for anything that reads the window aloud.
+        _keysButton.Text = "";
+        _keysButton.AccessibleName = Strings.KeysButton;
         _keysButton.Keyed = true;
         _keysButton.Ghost = true;
-        _keysButton.Width = 78;
+        _keysButton.Width = 44;
         _keysButton.Height = 38;
+        _keysTip.SetToolTip(_keysButton, Strings.KeysTip);
         _keysButton.Anchor = AnchorStyles.Left;
         _keysButton.Margin = new Padding(0, 0, 10, 0);
         _keysButton.Click += (_, _) => ToggleKeys();

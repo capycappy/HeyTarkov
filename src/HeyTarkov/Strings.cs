@@ -125,6 +125,10 @@ public static class Strings
     /// belongs to the search box.</summary>
     public static string KeysButton => T("鍵", "Keys");
 
+    public static string KeysTip => T(
+        "鍵だけを表示（もう一度押すと元に戻る）",
+        "Show keys only (press again to go back)");
+
     public static string KeysOnly => T(
         "鍵だけを表示しています。もう一度押すと元に戻ります",
         "Showing keys only. Press again to go back");
