@@ -1511,9 +1511,11 @@ public sealed class MainForm : Form
         if (_catalog is null) return;
 
         var wiki = SelectedWiki;
-        var onWiki = _catalog.CountOn(wiki);
-        var other = _catalog.Entries.Count - onWiki;
-        SetStatus(Strings.Coverage(wiki, onWiki, other));
+        var here = _catalog.On(wiki);
+        var keys = here.Count(e => e.Kind == EntryKind.Key);
+        var other = _catalog.Entries.Count - here.Count;
+
+        SetStatus(Strings.Coverage(wiki, here.Count - keys, keys, other));
     }
 
     /// <summary>
@@ -1621,8 +1623,7 @@ public sealed class MainForm : Form
 
         // Heard something the button is hiding: say so rather than showing
         // nothing, which looks like the microphone failed.
-        var hidden = HiddenMatches(outcome.Text);
-        if (hidden > 0) SetStatus(Strings.KeysHidden(hidden));
+        SayWhatIsHidden(Hidden, outcome.Text, matches.Count > 0 ? matches.Max(m => m.Score) : 0);
 
         // Never jump to a page off a rejected result, and never off a fragment:
         // "broadcast" means six different pages, so the list is the answer.
@@ -1757,8 +1758,8 @@ public sealed class MainForm : Form
         // The other wiki's exact answer leads, this wiki's guesses follow.
         PopulateRows(elsewhere.Concat(here).Take(14).ToList());
 
-        var hidden = HiddenTyped(text);
-        if (hidden > 0) SetStatus(Strings.KeysHidden(hidden));
+        SayWhatIsHidden(_keysOnly ? _typedRest : _typedKeys, text,
+            here.Count > 0 ? here.Max(r => r.Match.Score) : 0);
     }
 
     /// <summary>
@@ -1816,25 +1817,35 @@ public sealed class MainForm : Form
     }
 
     /// <summary>
-    /// How much of the answer sits in the half the button is hiding. This is
-    /// for the case that looks like a failure: the name was heard perfectly and
-    /// the list came back empty, because what was named was a key.
+    /// A near match is worth pointing at when it is at least this good.
     /// </summary>
-    private int HiddenMatches(string text)
+    private const double NearEnough = 0.6;
+
+    /// <summary>
+    /// Points at the button when the answer is in the half it is hiding.
+    ///
+    /// This is for the search that looks like a failure: the name was heard
+    /// perfectly, or typed correctly, and the list came back with nothing
+    /// useful in it because what was named was a key - or, with the button in,
+    /// was not one.
+    ///
+    /// A word-for-word match always counts. A near one counts only if it is a
+    /// decent match and a better one than anything showing: "dorm 314" is not
+    /// a run of words in any key's name, but it is plainly nearer "Dorm room
+    /// 314 marked key" than any task.
+    /// </summary>
+    private void SayWhatIsHidden(TaskIndex? other, string text, double shownBest)
     {
-        if (Hidden is not { } index || text.Trim().Length == 0) return 0;
+        if (other is null || text.Trim().Length == 0) return;
 
-        var found = index.Containing(text).Count;
-        return index.Exact(text) is not null ? found + 1 : found;
-    }
+        var count = other.Containing(text).Count + (other.Exact(text) is not null ? 1 : 0);
 
-    private int HiddenTyped(string text)
-    {
-        if (_catalog is null || text.Trim().Length == 0) return 0;
+        if (count == 0)
+            count = other.Rank(text, 5).Count(m => m.Score >= NearEnough && m.Score > shownBest);
 
-        BuildTypedIndexes();
+        if (count == 0) return;
 
-        return (_keysOnly ? _typedRest : _typedKeys)?.Containing(text).Count ?? 0;
+        SetStatus(_keysOnly ? Strings.OthersHidden(count) : Strings.KeysHidden(count));
     }
 
     /// <summary>

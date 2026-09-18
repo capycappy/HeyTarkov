@@ -133,6 +133,12 @@ public static class Strings
         "鍵以外を表示しています",
         "Showing everything except keys");
 
+    /// <summary>Said with the key button in, when the answer is something other
+    /// than a key.</summary>
+    public static string OthersHidden(int count) => T(
+        $"鍵以外に{count}件あります（「鍵」ボタンを戻すと表示）",
+        $"{count} non-key result(s) - press Keys again to see them");
+
     /// <summary>Said when the answer exists but is a key, and keys are hidden.</summary>
     public static string KeysHidden(int count) => T(
         $"鍵が{count}件あります（左の「鍵」ボタンで表示）",
@@ -336,12 +342,23 @@ public static class Strings
 
     public static string Opened(string name) => T($"開きました: {name}", $"Opened: {name}");
 
-    public static string Coverage(WikiSource wiki, int onWiki, int other) => other == 0
-        ? T($"{WikiName(wiki)} のタスク {onWiki} 件を対象にしています",
-            $"Searching {N(onWiki)} entries on the {WikiName(wiki)}")
-        : T($"{WikiName(wiki)} のタスク {onWiki} 件を対象にしています（もう一方の Wiki にしかない {other} 件は対象外）",
-            $"Searching {N(onWiki)} entries on the {WikiName(wiki)}"
-            + $" — {N(other)} more exist only on the {OtherWikiName(wiki)}");
+    /// <summary>
+    /// What the selected wiki gives the search. Keys are counted apart: they sit
+    /// behind their own button, and calling two hundred keys "tasks" overstates
+    /// what an ordinary search looks through.
+    /// </summary>
+    public static string Coverage(WikiSource wiki, int onWiki, int keys, int other)
+    {
+        var what = keys == 0
+            ? T($"{WikiName(wiki)} のタスク {onWiki} 件", $"{N(onWiki)} entries")
+            : T($"{WikiName(wiki)} のタスク {onWiki} 件と鍵 {keys} 件", $"{N(onWiki)} entries and {N(keys)} keys");
+
+        return other == 0
+            ? T($"{what}を対象にしています", $"Searching {what} on the {WikiName(wiki)}")
+            : T($"{what}を対象にしています（もう一方の Wiki にしかない {other} 件は対象外）",
+                $"Searching {what} on the {WikiName(wiki)}"
+                + $" — {N(other)} more exist only on the {OtherWikiName(wiki)}");
+    }
 
     public static string Vocabulary(int count, string note) =>
         T($"認識語彙 {count} 件{note}", $"{N(count)} phrases{note}");
