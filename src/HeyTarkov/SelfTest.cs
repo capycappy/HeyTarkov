@@ -66,6 +66,9 @@ public static class SelfTest
             failed |= !CheckCollector(report, catalog);
             report.AppendLine();
 
+            failed |= !CheckKeys(report, catalog);
+            report.AppendLine();
+
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.English);
             report.AppendLine();
             failed |= !RunLanguage(report, catalog, RecognitionLanguage.Japanese);
@@ -252,6 +255,85 @@ public static class SelfTest
     }
 
     /// <summary>
+    /// The keys are in the catalog, carry the map they belong to, and are
+    /// reachable the same way everything else is.
+    ///
+    /// Keys are hidden behind the key button in the window, but that is a
+    /// filter on the results rather than a second catalog - so what this
+    /// checks is that the catalog itself is sound.
+    /// </summary>
+    private static bool CheckKeys(StringBuilder report, WikiCatalog catalog)
+    {
+        report.AppendLine("=== keys ===");
+
+        var keys = catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList();
+
+        if (keys.Count == 0)
+        {
+            report.AppendLine("  SKIP  this catalog has no keys");
+            return true;
+        }
+
+        var located = keys.Count(e => e.Group.Length > 0);
+        var labelled = keys.Count(e => e.ShortName is not null);
+        var japanese = keys.Count(e => e.JapaneseUrl is not null);
+
+        report.AppendLine($"  {keys.Count} keys, {located} placed on a map, "
+                          + $"{labelled} with the game's short label, {japanese} on the Japanese wiki");
+
+        var ok = true;
+
+        // A key with no page anywhere is a row that cannot be opened.
+        var openable = keys.All(e => e.EnglishUrl is not null || e.JapaneseUrl is not null);
+        ok &= openable;
+        report.AppendLine($"  {(openable ? "PASS" : "FAIL")}  every key opens on at least one wiki");
+
+        // The map is what tells two doors of the same name apart, so a build
+        // that lost most of them is worth seeing even though it still runs.
+        var placed = located * 2 >= keys.Count;
+        report.AppendLine($"  {(placed ? "PASS" : "WARN")}  {located}/{keys.Count} say which map they are on");
+
+        // The window searches two lists - the keys, and everything else - so
+        // that is what is checked here.
+        var rest = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind != EntryKind.Key).ToList(), new EnglishScheme());
+
+        var index = new TaskIndex(keys, new EnglishScheme());
+
+        var probe = keys[0].Name;
+        var found = index.Exact(probe);
+        var reachable = found is not null && found.Kind == EntryKind.Key;
+        ok &= reachable;
+        report.AppendLine($"  {(reachable ? "PASS" : "FAIL")}  \"{probe}\" resolves to a key");
+
+        // Part of a key name reaches it too. This is why keys have a button of
+        // their own: "room key" is thirty of them, and mixed into the ordinary
+        // list it would bury whatever task was actually asked for.
+        var crowded = index.Containing("room key");
+        report.AppendLine($"        \"room key\" covers {crowded.Count} keys");
+
+        // A few entries are a key and something else at once - "Missam forklift
+        // key" is a KAPPA item as well. Two lists is what makes that work: each
+        // side has to answer with its own.
+        var shared = keys
+            .Where(k => catalog.Entries.Any(e =>
+                e.Kind != EntryKind.Key
+                && string.Equals(e.Name, k.Name, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        var bothWays = shared.All(k =>
+            index.Exact(k.Name)?.Kind == EntryKind.Key
+            && rest.Exact(k.Name) is { } other && other.Kind != EntryKind.Key);
+
+        ok &= bothWays;
+        report.AppendLine($"  {(bothWays ? "PASS" : "FAIL")}  {shared.Count} name(s) in both halves "
+                          + "resolve to the right one on each side"
+                          + (shared.Count == 0 ? "" : $": {string.Join(", ", shared.Take(3).Select(k => k.Name))}"));
+
+        return ok;
+    }
+
+    /// <summary>
     /// The Collector items are in the catalog, and the record that tracks them
     /// survives a round trip. The record is the user's own data - forty raids
     /// of it - so a bug that loses it is the worst thing this feature can do.
@@ -388,6 +470,25 @@ public static class SelfTest
         return intact;
     }
 
+    /// <summary>
+    /// Keys whose Japanese names cover the awkward cases: all kanji, a Latin
+    /// abbreviation, a word with two readings, a room number.
+    /// </summary>
+    private static readonly string[] JapaneseKeyNames =
+    {
+        "Abandoned factory marked key",
+        "RB-AM key",
+        "Health Resort west wing room 306 key",
+        "Kiba Arms outer door key",
+    };
+
+    private static IEnumerable<WikiEntry> JapaneseKeyProbes(WikiCatalog catalog) =>
+        JapaneseKeyNames
+            .Select(name => catalog.Entries.FirstOrDefault(e =>
+                e.Kind == EntryKind.Key && e.JapaneseName is not null
+                && string.Equals(e.Name, name, StringComparison.OrdinalIgnoreCase)))
+            .OfType<WikiEntry>();
+
     private static bool RunLanguage(
         StringBuilder report, WikiCatalog catalog, RecognitionLanguage language)
     {
@@ -401,9 +502,15 @@ public static class SelfTest
             ? new JapaneseScheme(japaneseForms)
             : new EnglishScheme();
 
-        var index = new TaskIndex(catalog.Entries, scheme);
-        report.AppendLine($"covered tasks : {index.TaskCount}/{catalog.Entries.Count}");
-        report.AppendLine($"phrases       : {index.GrammarPhrases.Count}");
+        // The same two halves the window uses: the keys, and everything else,
+        // each its own grammar with only one switched on at a time.
+        var index = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind != EntryKind.Key).ToList(), scheme);
+        var keyIndex = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList(), scheme);
+
+        report.AppendLine($"covered tasks : {index.TaskCount + keyIndex.TaskCount}/{catalog.Entries.Count}");
+        report.AppendLine($"phrases       : {index.GrammarPhrases.Count} (+ {keyIndex.GrammarPhrases.Count} for keys)");
 
         if (scheme is JapaneseScheme japanese && japanese.UnknownWords.Count > 0)
             report.AppendLine($"unknown words : {string.Join(", ", japanese.UnknownWords)}");
@@ -425,6 +532,14 @@ public static class SelfTest
         report.AppendLine($"grammar load  : {watch.ElapsedMilliseconds} ms "
                           + $"({index.GrammarPhrases.Count} phrases)");
 
+        if (keyIndex.GrammarPhrases.Count > 0)
+        {
+            watch.Restart();
+            Load(engine, recognizerInfo.Culture, SpeechService.KeysPrefix, keyIndex.GrammarPhrases);
+            report.AppendLine($"keys load     : {watch.ElapsedMilliseconds} ms "
+                              + $"({keyIndex.GrammarPhrases.Count} phrases)");
+        }
+
         if (index.DeferredGrammarPhrases.Count > 0)
         {
             watch.Restart();
@@ -432,6 +547,8 @@ public static class SelfTest
             report.AppendLine($"spelled load  : {watch.ElapsedMilliseconds} ms "
                               + $"({index.DeferredGrammarPhrases.Count} phrases)");
         }
+
+        UseKeys(engine, false);
 
         using var synth = new SpeechSynthesizer();
         var voice = synth.GetInstalledVoices()
@@ -468,6 +585,24 @@ public static class SelfTest
 
             Probe(report, catalog, index, engine, synth, language, taskName, spoken,
                 ref passed, ref attempted, ref probeNumber);
+        }
+
+        if (japaneseForms is not null)
+        {
+            // Keys read off a Japanese game screen: kanji, and Latin letters
+            // the recognizer cannot read without help.
+            report.AppendLine();
+            report.AppendLine("  -- keys by the name the game shows --");
+
+            UseKeys(engine, true);
+
+            foreach (var key in JapaneseKeyProbes(catalog))
+            {
+                Probe(report, catalog, keyIndex, engine, synth, language, key.Name, key.JapaneseName!,
+                    ref passed, ref attempted, ref probeNumber);
+            }
+
+            UseKeys(engine, false);
         }
 
         if (japaneseForms is not null)
@@ -760,6 +895,16 @@ public static class SelfTest
         var builder = new GrammarBuilder { Culture = culture };
         builder.Append(new Choices(phrases.ToArray()));
         engine.LoadGrammar(new Grammar(builder) { Name = name });
+    }
+
+    /// <summary>What the key button does to the recognizer.</summary>
+    private static void UseKeys(SpeechRecognitionEngine engine, bool keysOnly)
+    {
+        foreach (var grammar in engine.Grammars)
+        {
+            grammar.Enabled = grammar.Name.StartsWith(SpeechService.KeysPrefix, StringComparison.Ordinal)
+                == keysOnly;
+        }
     }
 
     private static void TryDelete(string path)

@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace HeyTarkov;
 
-public sealed class MainForm : Form
+public sealed partial class MainForm : Form
 {
     private const double AutoOpenConfidence = 0.55;
 
@@ -18,10 +18,34 @@ public sealed class MainForm : Form
     /// <summary>The hold button and the input meter in one control.</summary>
     private readonly LevelDial _dial = new();
 
+    /// <summary>Turns the whole window over to keys and back.</summary>
+    private readonly PillButton _keysButton = new();
+
+    /// <summary>What the key button does, since it no longer says.</summary>
+    private readonly ToolTip _keysTip = new();
+
     private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
     private readonly CandidateList _candidates = new();
+
+    /// <summary>The column titles over the list, which reorder it.</summary>
+    private CandidateHeader? _sortHeader;
+
+    /// <summary>How the list is ordered, and the rows as the search gave them,
+    /// so a click on a title can reorder without searching again.</summary>
+    private CandidateSort _sort = CandidateSort.Relevance;
+
+    private bool _sortDescending;
+
+    private List<CandidateRow> _lastRows = new();
+
+    /// <summary>
+    /// Each entry's Japanese names, folded for matching: the name the game
+    /// shows, where there is one, and the katakana readings of the English
+    /// name. Worked out once per wiki - typing asks on every keystroke.
+    /// </summary>
+    private readonly Dictionary<WikiEntry, string[]> _japaneseNames = new();
     private readonly Label _countLabel = new();
     private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
@@ -29,15 +53,39 @@ public sealed class MainForm : Form
     private readonly ModernCombo _uiLanguageBox = new();
     private readonly Label _statusLabel = new();
 
+    /// <summary>Whether the key button is pressed in.</summary>
+    private bool _keysOnly;
+
+    /// <summary>What speaking searches, and what typing searches, right now.</summary>
+    private TaskIndex? Speaking => _keysOnly ? _speechKeys : _speechRest;
+
+    private TaskIndex? Typing => _keysOnly ? _typedKeys : _typedRest;
+
+    /// <summary>The half the button is currently hiding.</summary>
+    private TaskIndex? Hidden => _keysOnly ? _speechRest : _speechKeys;
+
     private Settings _settings = new();
     private SpeechService? _speech;
     private WikiCatalog? _catalog;
 
     /// <summary>Grammar for the language the microphone is currently using.</summary>
-    private TaskIndex? _speechIndex;
+    /// <summary>
+    /// The catalog, split in two: the keys, and everything else. They are
+    /// separate lists rather than one list filtered on the way out, because a
+    /// few entries exist as both - "Missam forklift key" is a KAPPA item and a
+    /// key - and a single index can only answer with one of them.
+    ///
+    /// The recognizer gets both halves as separate grammars and the key button
+    /// switches one on and the other off, so pressing it costs nothing.
+    /// </summary>
+    private TaskIndex? _speechRest;
+
+    private TaskIndex? _speechKeys;
 
     /// <summary>Always English: the text box is typed, not spoken.</summary>
-    private TaskIndex? _typedIndex;
+    private TaskIndex? _typedRest;
+
+    private TaskIndex? _typedKeys;
 
     /// <summary>
     /// The same catalog, filtered to the wiki that is not selected, keyed by
@@ -45,7 +93,7 @@ public sealed class MainForm : Form
     /// which is the one moment it is any use - and there are two, because typing
     /// is always read as English while speaking may be read as katakana.
     /// </summary>
-    private readonly Dictionary<IPhraseScheme, TaskIndex> _otherIndex = new();
+    private readonly Dictionary<(IPhraseScheme Scheme, bool Keys), TaskIndex> _otherIndex = new();
 
     private JapaneseLexicon? _lexicon;
     private JapaneseForms? _hintForms;
@@ -474,6 +522,22 @@ public sealed class MainForm : Form
             OpenSelected();
         };
 
+        // Between the microphone and the box, because it belongs to both: it
+        // changes what speaking finds as much as what typing finds.
+        // The picture is the label. A word beside it made the button read as a
+        // second search box; a key on its own says what it does. The name is
+        // still there for anything that reads the window aloud.
+        _keysButton.Text = "";
+        _keysButton.AccessibleName = Strings.KeysButton;
+        _keysButton.Keyed = true;
+        _keysButton.Ghost = true;
+        _keysButton.Width = 44;
+        _keysButton.Height = 38;
+        _keysTip.SetToolTip(_keysButton, Strings.KeysTip);
+        _keysButton.Anchor = AnchorStyles.Left;
+        _keysButton.Margin = new Padding(0, 0, 10, 0);
+        _keysButton.Click += (_, _) => ToggleKeys();
+
         _micHint.Text = Strings.MicPreparing;
         _micHint.AutoSize = true;
         _micHint.BackColor = Color.Transparent;
@@ -512,15 +576,17 @@ public sealed class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 2,
+            ColumnCount = 3,
             RowCount = 1,
             Margin = new Padding(0),
         };
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_dial, 0, 0);
-        row.Controls.Add(box, 1, 0);
+        row.Controls.Add(_keysButton, 1, 0);
+        row.Controls.Add(box, 2, 0);
         return row;
     }
 
@@ -584,15 +650,24 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             BackColor = Color.Transparent,
             ColumnCount = 1,
-            RowCount = 2,
+            RowCount = 3,
             Padding = new Padding(14, 12, 14, 12),
             Margin = new Padding(0),
         };
         stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         stack.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         stack.Controls.Add(header, 0, 0);
-        stack.Controls.Add(_candidates, 0, 1);
+        _sortHeader = new CandidateHeader(_candidates)
+        {
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 0, 0, 2),
+        };
+        _sortHeader.Picked += PickSort;
+
+        stack.Controls.Add(_sortHeader, 0, 1);
+        stack.Controls.Add(_candidates, 0, 2);
 
         var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 12) };
         card.Controls.Add(stack);
@@ -931,7 +1006,9 @@ public sealed class MainForm : Form
         try
         {
             _catalog = TaskCatalog.Load();
-            _typedIndex = null;
+            _typedRest = null;
+            _typedKeys = null;
+            _japaneseNames.Clear();
             _otherIndex.Clear();
             RefreshCollectorCount();
         }
@@ -1114,7 +1191,9 @@ public sealed class MainForm : Form
         // The wiki decides which tasks exist, so the grammar, the typed search
         // and the index of the wiki now on the other side all have to be built
         // again against the new sets.
-        _typedIndex = null;
+        _typedRest = null;
+        _typedKeys = null;
+        _japaneseNames.Clear();
         _otherIndex.Clear();
         _candidates.Items.Clear();
 
@@ -1264,7 +1343,7 @@ public sealed class MainForm : Form
     }
 
     private sealed record SpeechSetup(
-        TaskIndex? Index, string Note, SpeechService? Speech, string? Error);
+        TaskIndex? Rest, TaskIndex? Keys, string Note, SpeechService? Speech, string? Error);
 
     /// <summary>
     /// Building a grammar takes a second or two, so it happens off the UI
@@ -1297,63 +1376,73 @@ public sealed class MainForm : Form
 
         Apply(setup, language);
 
-        if (_speech is not null && _speechIndex is not null)
-            await LoadSpelledAsync(_speech, _speechIndex, generation);
+        if (_speech is not null && _speechRest is not null && _speechKeys is not null)
+        {
+            await LoadSpelledAsync(_speech, generation,
+                _speechRest.DeferredGrammarPhrases, _speechKeys.DeferredGrammarPhrases);
+        }
     }
 
     private static SpeechSetup BuildSpeech(
         List<WikiEntry>? tasks, JapaneseLexicon? lexicon, RecognitionLanguage language)
     {
-        if (tasks is null) return new SpeechSetup(null, "", null, null);
+        if (tasks is null) return new SpeechSetup(null, null, "", null, null);
 
         var note = "";
-        TaskIndex index;
 
-        if (language == RecognitionLanguage.Japanese)
+        IPhraseScheme scheme = language == RecognitionLanguage.Japanese
+            ? new JapaneseScheme(new JapaneseForms(lexicon ?? JapaneseLexicon.Load()))
+            : new EnglishScheme();
+
+        var rest = new TaskIndex(tasks.Where(t => t.Kind != EntryKind.Key).ToList(), scheme);
+        var keys = new TaskIndex(tasks.Where(t => t.Kind == EntryKind.Key).ToList(), scheme);
+
+        if (scheme is JapaneseScheme japanese)
         {
-            var scheme = new JapaneseScheme(new JapaneseForms(lexicon ?? JapaneseLexicon.Load()));
-            index = new TaskIndex(tasks, scheme);
-
             // Tasks whose words have no katakana reading yet are still usable by
             // spelling them out. Say so, and write the missing words somewhere
             // they can be picked up and added to the lexicon.
-            if (index.SpellOnlyTasks.Count > 0)
+            var spellOnly = rest.SpellOnlyTasks.Count + keys.SpellOnlyTasks.Count;
+
+            if (spellOnly > 0)
             {
-                note = Strings.SpellOnlyNote(index.SpellOnlyTasks.Count);
-                ReportMissingReadings(scheme, index);
+                note = Strings.SpellOnlyNote(spellOnly);
+                ReportMissingReadings(japanese, rest, keys);
             }
-        }
-        else
-        {
-            index = new TaskIndex(tasks, new EnglishScheme());
         }
 
         var recognizerInfo = SpeechService.FindRecognizer(language);
         if (recognizerInfo is null)
-            return new SpeechSetup(index, note, null, "recognizer-missing");
+            return new SpeechSetup(rest, keys, note, null, "recognizer-missing");
 
         try
         {
             var speech = new SpeechService(recognizerInfo);
-            speech.LoadVocabulary(index.GrammarPhrases);
-            return new SpeechSetup(index, note, speech, null);
+
+            // Two grammars: the button switches which one the microphone
+            // listens with, as well as which list an answer is looked up in.
+            speech.LoadVocabulary(rest.GrammarPhrases);
+            speech.AddVocabulary(SpeechService.KeysPrefix, keys.GrammarPhrases);
+
+            return new SpeechSetup(rest, keys, note, speech, null);
         }
         catch (Exception ex)
         {
-            return new SpeechSetup(index, note, null, ex.Message);
+            return new SpeechSetup(rest, keys, note, null, ex.Message);
         }
     }
 
     private void Apply(SpeechSetup setup, RecognitionLanguage language)
     {
-        if (setup.Index is not null)
+        if (setup.Rest is not null && setup.Keys is not null)
         {
-            _speechIndex = setup.Index;
-            if (_catalog is not null)
-                _typedIndex ??= new TaskIndex(_catalog.On(SelectedWiki), new EnglishScheme());
+            _speechRest = setup.Rest;
+            _speechKeys = setup.Keys;
+            BuildTypedIndexes();
 
             _grammarLabel.ForeColor = Theme.Muted;
-            _grammarLabel.Text = Strings.Vocabulary(setup.Index.TaskCount, setup.Note);
+            _grammarLabel.Text = Strings.Vocabulary(
+                setup.Rest.TaskCount + setup.Keys.TaskCount, setup.Note);
             ReportCoverage();
         }
 
@@ -1376,6 +1465,7 @@ public sealed class MainForm : Form
         }
 
         _speech = setup.Speech;
+        _speech.UseKeys(_keysOnly);
         _speech.DeviceIndex = SelectedDevice?.Index ?? -1;
         _speech.AudioLevel += (_, level) =>
             BeginInvoke(() => _dial.Value = AudioLevel.ToMeter(level.PeakDb));
@@ -1402,17 +1492,23 @@ public sealed class MainForm : Form
     /// The spelled-out phrases are loaded after the microphone is already usable
     /// with the normal readings.
     /// </summary>
-    private async Task LoadSpelledAsync(SpeechService speech, TaskIndex index, int generation)
+    private async Task LoadSpelledAsync(
+        SpeechService speech, int generation,
+        IReadOnlyList<string> rest, IReadOnlyList<string> keys)
     {
-        var phrases = index.DeferredGrammarPhrases;
-        if (phrases.Count == 0) return;
+        if (rest.Count + keys.Count == 0) return;
 
         try
         {
-            await Task.Run(() => speech.AddVocabulary("spelled", phrases));
+            await Task.Run(() =>
+            {
+                speech.AddVocabulary("spelled", rest);
+                speech.AddVocabulary(SpeechService.KeysPrefix + "-spelled", keys);
+            });
+
             if (generation != _buildGeneration) return;
 
-            _grammarLabel.Text += Strings.SpelledLoaded(phrases.Count);
+            _grammarLabel.Text += Strings.SpelledLoaded(rest.Count + keys.Count);
         }
         catch (Exception ex)
         {
@@ -1427,7 +1523,8 @@ public sealed class MainForm : Form
     /// block, next to the catalog. Adding them to japanese-lexicon.json is what
     /// turns those tasks from spell-only into speakable.
     /// </summary>
-    private static void ReportMissingReadings(JapaneseScheme scheme, TaskIndex index)
+    private static void ReportMissingReadings(
+        JapaneseScheme scheme, TaskIndex rest, TaskIndex keys)
     {
         try
         {
@@ -1441,7 +1538,7 @@ public sealed class MainForm : Form
             lines.AddRange(scheme.UnknownWords);
             lines.Add("");
             lines.Add("--- tasks reachable only by spelling ---");
-            lines.AddRange(index.SpellOnlyTasks
+            lines.AddRange(rest.SpellOnlyTasks.Concat(keys.SpellOnlyTasks)
                 .Select(t => t.Name)
                 .OrderBy(n => n, StringComparer.OrdinalIgnoreCase));
 
@@ -1458,9 +1555,11 @@ public sealed class MainForm : Form
         if (_catalog is null) return;
 
         var wiki = SelectedWiki;
-        var onWiki = _catalog.CountOn(wiki);
-        var other = _catalog.Entries.Count - onWiki;
-        SetStatus(Strings.Coverage(wiki, onWiki, other));
+        var here = _catalog.On(wiki);
+        var keys = here.Count(e => e.Kind == EntryKind.Key);
+        var other = _catalog.Entries.Count - here.Count;
+
+        SetStatus(Strings.Coverage(wiki, here.Count - keys, keys, other));
     }
 
     /// <summary>
@@ -1486,7 +1585,7 @@ public sealed class MainForm : Form
     private void BeginHold()
     {
         if (DeferHold()) return;
-        if (_holding || _speech is null || _speechIndex is null) return;
+        if (_holding || _speech is null || Speaking is null) return;
         if (_levelTest is not null) StopLevelTest();
 
         try
@@ -1566,9 +1665,13 @@ public sealed class MainForm : Form
         var matches = BuildCandidates(outcome);
         Populate(matches);
 
+        // Heard something the button is hiding: say so rather than showing
+        // nothing, which looks like the microphone failed.
+        SayWhatIsHidden(Hidden, outcome.Text, matches.Count > 0 ? matches.Max(m => m.Score) : 0);
+
         // Never jump to a page off a rejected result, and never off a fragment:
         // "broadcast" means six different pages, so the list is the answer.
-        var wholeName = _speechIndex?.Exact(outcome.Text) is not null;
+        var wholeName = Speaking?.Exact(outcome.Text) is not null;
 
         if (!outcome.Rejected
             && wholeName
@@ -1590,33 +1693,34 @@ public sealed class MainForm : Form
         var result = new List<TaskMatch>();
         var seen = new HashSet<string>(StringComparer.Ordinal);
 
-        if (_speechIndex is null) return result;
+        var index = Speaking;
+        if (index is null) return result;
 
         void Add(TaskMatch match)
         {
             if (seen.Add(match.Task.Name)) result.Add(match);
         }
 
-        var primary = _speechIndex.Exact(outcome.Text);
+        var primary = index.Exact(outcome.Text);
         if (primary is not null) Add(new TaskMatch(primary, 1.0, outcome.Text));
 
         foreach (var (text, _) in outcome.Alternates)
         {
-            var hit = _speechIndex.Exact(text);
+            var hit = index.Exact(text);
             if (hit is not null) Add(new TaskMatch(hit, 1.0, text));
         }
 
         // Saying only part of a name is normal - "broadcast" for
         // "Broadcast - Part 4", "punisher" for "The Punisher - Part 4". A
         // fragment cannot pick one entry, so everything under it is offered.
-        foreach (var entry in _speechIndex.Containing(outcome.Text))
+        foreach (var entry in index.Containing(outcome.Text))
             Add(new TaskMatch(entry, 1.0, outcome.Text));
 
         foreach (var (text, _) in outcome.Alternates)
-        foreach (var entry in _speechIndex.Containing(text))
+        foreach (var entry in index.Containing(text))
             Add(new TaskMatch(entry, 1.0, text));
 
-        foreach (var match in _speechIndex.Rank(outcome.Text, 6)) Add(match);
+        foreach (var match in index.Rank(outcome.Text, 6)) Add(match);
 
         return result;
     }
@@ -1638,7 +1742,7 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (_lastHeard is null || _speechIndex is null) return;
+        if (_lastHeard is null || Speaking is null) return;
 
         var matches = BuildCandidates(_lastHeard);
 
@@ -1646,12 +1750,12 @@ public sealed class MainForm : Form
         // came from the wiki that was selected until a second ago, and this one
         // has no page for it. Ordinary speaking cannot - the grammar only holds
         // phrases for the wiki in use, so it can only return one of those.
-        var solid = _speechIndex.Exact(_lastHeard.Text) is not null
-                    || _speechIndex.Containing(_lastHeard.Text).Count > 0;
+        var solid = Speaking.Exact(_lastHeard.Text) is not null
+                    || Speaking.Containing(_lastHeard.Text).Count > 0;
 
         var elsewhere = solid
             ? new List<CandidateRow>()
-            : Elsewhere(_lastHeard.Text, _speechIndex.Scheme);
+            : Elsewhere(_lastHeard.Text, Speaking.Scheme);
 
         PopulateRows(elsewhere
             .Concat(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))))
@@ -1664,10 +1768,10 @@ public sealed class MainForm : Form
 
     private void ShowCandidatesFor(string text)
     {
-        if (_typedIndex is null && _catalog is not null)
-            _typedIndex = new TaskIndex(_catalog.On(SelectedWiki), new EnglishScheme());
+        BuildTypedIndexes();
 
-        if (_typedIndex is null) return;
+        var index = Typing;
+        if (index is null) return;
 
         if (text.Trim().Length == 0)
         {
@@ -1676,11 +1780,26 @@ public sealed class MainForm : Form
             return;
         }
 
-        var containing = _typedIndex.Containing(text)
+        // Kana or kanji in the box means a Japanese name is being typed -
+        // most likely read off a Japanese game screen - so it is matched
+        // against the names in Japanese rather than the English ones, where it
+        // can only ever score nothing.
+        if (JapaneseScript().IsMatch(text))
+        {
+            PopulateRows(SearchJapanese(text, _keysOnly)
+                .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
+                .ToList());
+
+            var aside = SearchJapanese(text, !_keysOnly).Count;
+            if (aside > 0) SetStatus(_keysOnly ? Strings.OthersHidden(aside) : Strings.KeysHidden(aside));
+            return;
+        }
+
+        var containing = index.Containing(text)
             .Select(e => new TaskMatch(e, 1.0, text))
             .ToList();
 
-        var ranked = _typedIndex.Rank(text, 12)
+        var ranked = index.Rank(text, 12)
             .Where(m => containing.All(s => s.Task != m.Task));
 
         // Whether to look at the other wiki turns on `containing`, not on the
@@ -1688,7 +1807,7 @@ public sealed class MainForm : Form
         // so "no results at all" hardly ever happens and waiting for it would
         // mean this never fired.
         var elsewhere = containing.Count == 0
-            ? Elsewhere(text, _typedIndex.Scheme)
+            ? Elsewhere(text, index.Scheme)
             : new List<CandidateRow>();
 
         var here = containing.Concat(ranked)
@@ -1697,6 +1816,9 @@ public sealed class MainForm : Form
 
         // The other wiki's exact answer leads, this wiki's guesses follow.
         PopulateRows(elsewhere.Concat(here).Take(14).ToList());
+
+        SayWhatIsHidden(_keysOnly ? _typedRest : _typedKeys, text,
+            here.Count > 0 ? here.Max(r => r.Match.Score) : 0);
     }
 
     /// <summary>
@@ -1711,10 +1833,14 @@ public sealed class MainForm : Form
 
         var other = SelectedWiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese;
 
-        if (!_otherIndex.TryGetValue(scheme, out var index))
+        if (!_otherIndex.TryGetValue((scheme, _keysOnly), out var index))
         {
-            index = new TaskIndex(_catalog.On(other), scheme);
-            _otherIndex[scheme] = index;
+            var entries = _catalog.On(other)
+                .Where(e => _keysOnly ? e.Kind == EntryKind.Key : e.Kind != EntryKind.Key)
+                .ToList();
+
+            index = new TaskIndex(entries, scheme);
+            _otherIndex[(scheme, _keysOnly)] = index;
         }
 
         var found = new List<WikiEntry>();
@@ -1732,14 +1858,194 @@ public sealed class MainForm : Form
             .ToList();
     }
 
+    /// <summary>
+    /// The typed search reads the catalog rather than the grammar, so its two
+    /// halves are built here rather than on the background build.
+    /// </summary>
+    private void BuildTypedIndexes()
+    {
+        if (_catalog is null) return;
+
+        var here = _catalog.On(SelectedWiki);
+
+        _typedRest ??= new TaskIndex(
+            here.Where(e => e.Kind != EntryKind.Key).ToList(), new EnglishScheme());
+
+        _typedKeys ??= new TaskIndex(
+            here.Where(e => e.Kind == EntryKind.Key).ToList(), new EnglishScheme());
+    }
+
+    /// <summary>
+    /// A near match is worth pointing at when it is at least this good.
+    /// </summary>
+    private const double NearEnough = 0.6;
+
+    /// <summary>
+    /// Points at the button when the answer is in the half it is hiding.
+    ///
+    /// This is for the search that looks like a failure: the name was heard
+    /// perfectly, or typed correctly, and the list came back with nothing
+    /// useful in it because what was named was a key - or, with the button in,
+    /// was not one.
+    ///
+    /// A word-for-word match always counts. A near one counts only if it is a
+    /// decent match and a better one than anything showing: "dorm 314" is not
+    /// a run of words in any key's name, but it is plainly nearer "Dorm room
+    /// 314 marked key" than any task.
+    /// </summary>
+    private void SayWhatIsHidden(TaskIndex? other, string text, double shownBest)
+    {
+        if (other is null || text.Trim().Length == 0) return;
+
+        var count = other.Containing(text).Count + (other.Exact(text) is not null ? 1 : 0);
+
+        if (count == 0)
+            count = other.Rank(text, 5).Count(m => m.Score >= NearEnough && m.Score > shownBest);
+
+        if (count == 0) return;
+
+        SetStatus(_keysOnly ? Strings.OthersHidden(count) : Strings.KeysHidden(count));
+    }
+
+    /// <summary>
+    /// Switches both what the microphone listens for and which list answers.
+    /// Both grammars are already loaded, so this is a flag rather than a
+    /// rebuild - rebuilding would cost a second and a half in Japanese, for a
+    /// button meant to be flicked.
+    /// </summary>
+    private void ToggleKeys()
+    {
+        _keysOnly = !_keysOnly;
+        _speech?.UseKeys(_keysOnly);
+        _keysButton.Ghost = !_keysOnly;
+        _keysButton.Invalidate();
+
+        SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
+        SearchAgain();
+    }
+
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
         PopulateRows(matches.Select(m => new CandidateRow(m, ReadingHint(m.Task))).ToList());
 
+    [System.Text.RegularExpressions.GeneratedRegex(@"[\u3040-\u30ff\u4e00-\u9fff]")]
+    private static partial System.Text.RegularExpressions.Regex JapaneseScript();
+
+    /// <summary>Punctuation the game puts in Japanese names that nobody types.</summary>
+    private static readonly HashSet<char> JapaneseNoise = new("・「」『』\"'()（）");
+
+    private static string Fold(string text) =>
+        new(JapaneseForms.Normalize(text).Where(c => !JapaneseNoise.Contains(c)).ToArray());
+
+    private string[] JapaneseNamesOf(WikiEntry entry)
+    {
+        if (_japaneseNames.TryGetValue(entry, out var names)) return names;
+
+        var all = new List<string>();
+        if (entry.JapaneseName is { } shown) all.Add(Fold(shown));
+        if (_hintForms is not null) all.AddRange(_hintForms.For(entry.Name).Select(Fold));
+
+        names = all.Where(n => n.Length > 0).Distinct().ToArray();
+        _japaneseNames[entry] = names;
+        return names;
+    }
+
+    /// <summary>
+    /// Japanese typed into the box, found anywhere inside an entry's Japanese
+    /// name. "コンコルディア" is a word in the middle of "コンコルディア・アパート
+    /// 8号室の鍵" as often as at its start, and a player types the part they
+    /// can see. The more of the name the typing covers, the higher it scores,
+    /// with a little extra for matching from the beginning.
+    /// </summary>
+    private List<TaskMatch> SearchJapanese(string text, bool keys)
+    {
+        var query = Fold(text);
+        if (query.Length == 0 || _catalog is null) return new List<TaskMatch>();
+
+        var found = new List<TaskMatch>();
+
+        foreach (var entry in _catalog.On(SelectedWiki))
+        {
+            if ((entry.Kind == EntryKind.Key) != keys) continue;
+
+            var best = 0.0;
+
+            foreach (var name in JapaneseNamesOf(entry))
+            {
+                var at = name.IndexOf(query, StringComparison.Ordinal);
+                if (at < 0) continue;
+
+                var score = 0.5 + 0.5 * query.Length / name.Length + (at == 0 ? 0.05 : 0);
+                best = Math.Max(best, Math.Min(1.0, score));
+            }
+
+            if (best > 0) found.Add(new TaskMatch(entry, best, text));
+        }
+
+        return found
+            .OrderByDescending(m => m.Score)
+            .ThenBy(m => m.Task.Name, NaturalOrder.Instance)
+            .Take(30)
+            .ToList();
+    }
+
+    /// <summary>
+    /// A column title was clicked. The same title again turns the order round;
+    /// a new one starts in the direction a person would expect - the best match
+    /// first, names from A.
+    /// </summary>
+    private void PickSort(CandidateSort sort)
+    {
+        if (sort == _sort) _sortDescending = !_sortDescending;
+        else
+        {
+            _sort = sort;
+            _sortDescending = sort == CandidateSort.Score;
+        }
+
+        _sortHeader?.Show(_sort, _sortDescending);
+        PopulateRows(_lastRows);
+    }
+
+    private IEnumerable<CandidateRow> Ordered(IEnumerable<CandidateRow> rows)
+    {
+        if (_sort == CandidateSort.Relevance) return rows;
+
+        // Rows without the value being sorted on go last whichever way round.
+        IOrderedEnumerable<CandidateRow> ordered = _sort switch
+        {
+            CandidateSort.Name => By(rows, r => r.Match.Task.Display),
+            CandidateSort.Reading => By(rows, r => r.Reading),
+            CandidateSort.Group => By(rows, r => r.Match.Task.Group),
+            _ => _sortDescending
+                ? rows.OrderByDescending(r => r.Match.Score)
+                : rows.OrderBy(r => r.Match.Score),
+        };
+
+        return ordered.ThenBy(r => r.Match.Task.Name, NaturalOrder.Instance);
+    }
+
+    private IOrderedEnumerable<CandidateRow> By(IEnumerable<CandidateRow> rows, Func<CandidateRow, string?> key)
+    {
+        var present = rows.OrderBy(r => string.IsNullOrEmpty(key(r)));
+
+        return _sortDescending
+            ? present.ThenByDescending(r => key(r) ?? "", NaturalOrder.Instance)
+            : present.ThenBy(r => key(r) ?? "", NaturalOrder.Instance);
+    }
+
     private void PopulateRows(IReadOnlyList<CandidateRow> rows)
     {
+        if (!ReferenceEquals(rows, _lastRows)) _lastRows = rows.ToList();
+
+        if (_sortHeader is not null)
+        {
+            _sortHeader.ShowReading = SelectedLanguage == RecognitionLanguage.Japanese;
+            _sortHeader.Invalidate();
+        }
+
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var row in rows) _candidates.Items.Add(row);
+        foreach (var row in Ordered(rows)) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
@@ -1750,6 +2056,10 @@ public sealed class MainForm : Form
     private string? ReadingHint(WikiEntry task)
     {
         if (SelectedLanguage != RecognitionLanguage.Japanese || _hintForms is null) return null;
+
+        // A key is shown by the name on the screen in the game, which is what
+        // will be read out.
+        if (task.Kind == EntryKind.Key && task.JapaneseName is { } japanese) return japanese;
 
         var readings = _hintForms.For(task.Name);
         return readings.Count > 0 ? readings[0] : null;

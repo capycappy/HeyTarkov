@@ -40,6 +40,14 @@ public sealed class SpeechService : IDisposable
     private readonly SpeechRecognitionEngine _engine;
     private readonly System.Threading.Lock _gate = new();
 
+    /// <summary>
+    /// Guards the grammar collection. Grammars are added from a background
+    /// build while the key button can switch them from the UI thread.
+    /// </summary>
+    private readonly System.Threading.Lock _grammarGate = new();
+
+    private bool _keysOnly;
+
     private RecognitionOutcome _pending = RecognitionOutcome.Empty;
     private RecognitionOutcome _rejected = RecognitionOutcome.Empty;
     private MicrophoneCapture? _microphone;
@@ -105,8 +113,41 @@ public sealed class SpeechService : IDisposable
 
     public void LoadVocabulary(IReadOnlyList<string> phrases)
     {
-        _engine.UnloadAllGrammars();
+        lock (_grammarGate) _engine.UnloadAllGrammars();
         AddVocabulary("tasks", phrases);
+    }
+
+    /// <summary>
+    /// Grammars whose name starts with this belong to the keys.
+    ///
+    /// Keys are loaded as grammars of their own and switched on only while the
+    /// key button is in. Loading them alongside everything else, always on,
+    /// was measured to cost the ordinary tasks: six hundred Japanese key names
+    /// in the grammar and "デビュー" started coming back as "レビュー". With
+    /// them switched off, the recognizer is listening to exactly what it was
+    /// before keys existed. Switching is a flag on a loaded grammar, so the
+    /// button costs nothing.
+    /// </summary>
+    public const string KeysPrefix = "keys";
+
+    private static bool IsKeys(string? name) =>
+        name?.StartsWith(KeysPrefix, StringComparison.Ordinal) == true;
+
+    /// <summary>Listen for keys only, or for everything but keys.</summary>
+    public void UseKeys(bool keysOnly)
+    {
+        lock (_grammarGate)
+        {
+            _keysOnly = keysOnly;
+
+            // Never switch everything off: with no keys loaded, the button
+            // has nothing to turn to, and a recognizer with no grammar enabled
+            // hears nothing at all.
+            var haveKeys = _engine.Grammars.Any(g => IsKeys(g.Name));
+
+            foreach (var grammar in _engine.Grammars)
+                grammar.Enabled = !haveKeys || IsKeys(grammar.Name) == keysOnly;
+        }
     }
 
     /// <summary>
@@ -121,7 +162,14 @@ public sealed class SpeechService : IDisposable
         var builder = new GrammarBuilder { Culture = _engine.RecognizerInfo.Culture };
         builder.Append(new Choices(phrases.ToArray()));
 
-        _engine.LoadGrammar(new Grammar(builder) { Name = name });
+        lock (_grammarGate)
+        {
+            _engine.LoadGrammar(new Grammar(builder)
+            {
+                Name = name,
+                Enabled = IsKeys(name) == _keysOnly,
+            });
+        }
     }
 
     /// <summary>Which input device to capture from; -1 is the Windows default.</summary>

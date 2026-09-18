@@ -42,7 +42,9 @@ public sealed class TaskIndex
         {
             // An entry can be said more than one way; every variant resolves to
             // the same entry.
-            var phrases = task.SpokenVariants().SelectMany(scheme.Phrases).Distinct().ToList();
+            var phrases = task.SpokenVariants().SelectMany(scheme.Phrases)
+                .Concat(LocalName(task) is { } local ? scheme.LocalPhrases(local) : Array.Empty<string>())
+                .Distinct().ToList();
             var spelled = task.SpokenVariants().SelectMany(scheme.DeferredPhrases)
                 .Distinct().ToList();
 
@@ -122,6 +124,16 @@ public sealed class TaskIndex
         GrammarPhrases = grammar;
         DeferredGrammarPhrases = deferred;
     }
+
+    /// <summary>
+    /// The name the game shows for this entry in Japanese, when that is the
+    /// name worth listening for. Keys only: a player reading a key off the
+    /// screen reads it in the game's language, and the Japanese names come from
+    /// the game's own files. Other entries' Japanese names come from the wiki
+    /// and are not guaranteed to be what the game says.
+    /// </summary>
+    private static string? LocalName(WikiEntry task) =>
+        task.Kind == EntryKind.Key ? task.JapaneseName : null;
 
     /// <summary>
     /// Everything whose name contains what was said, as a run of whole words -
