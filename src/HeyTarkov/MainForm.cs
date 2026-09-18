@@ -57,8 +57,8 @@ public sealed class MainForm : Form
     /// few entries exist as both - "Missam forklift key" is a KAPPA item and a
     /// key - and a single index can only answer with one of them.
     ///
-    /// The grammar is still one: both halves are loaded into the recognizer, so
-    /// pressing the key button costs nothing.
+    /// The recognizer gets both halves as separate grammars and the key button
+    /// switches one on and the other off, so pressing it costs nothing.
     /// </summary>
     private TaskIndex? _speechRest;
 
@@ -1349,8 +1349,8 @@ public sealed class MainForm : Form
 
         if (_speech is not null && _speechRest is not null && _speechKeys is not null)
         {
-            await LoadSpelledAsync(_speech, generation, _speechRest.DeferredGrammarPhrases
-                .Concat(_speechKeys.DeferredGrammarPhrases).Distinct().ToList());
+            await LoadSpelledAsync(_speech, generation,
+                _speechRest.DeferredGrammarPhrases, _speechKeys.DeferredGrammarPhrases);
         }
     }
 
@@ -1390,10 +1390,10 @@ public sealed class MainForm : Form
         {
             var speech = new SpeechService(recognizerInfo);
 
-            // One grammar for both halves: the button decides which list an
-            // answer is looked up in, not what the microphone can hear.
-            speech.LoadVocabulary(
-                rest.GrammarPhrases.Concat(keys.GrammarPhrases).Distinct().ToList());
+            // Two grammars: the button switches which one the microphone
+            // listens with, as well as which list an answer is looked up in.
+            speech.LoadVocabulary(rest.GrammarPhrases);
+            speech.AddVocabulary(SpeechService.KeysPrefix, keys.GrammarPhrases);
 
             return new SpeechSetup(rest, keys, note, speech, null);
         }
@@ -1436,6 +1436,7 @@ public sealed class MainForm : Form
         }
 
         _speech = setup.Speech;
+        _speech.UseKeys(_keysOnly);
         _speech.DeviceIndex = SelectedDevice?.Index ?? -1;
         _speech.AudioLevel += (_, level) =>
             BeginInvoke(() => _dial.Value = AudioLevel.ToMeter(level.PeakDb));
@@ -1463,16 +1464,22 @@ public sealed class MainForm : Form
     /// with the normal readings.
     /// </summary>
     private async Task LoadSpelledAsync(
-        SpeechService speech, int generation, IReadOnlyList<string> phrases)
+        SpeechService speech, int generation,
+        IReadOnlyList<string> rest, IReadOnlyList<string> keys)
     {
-        if (phrases.Count == 0) return;
+        if (rest.Count + keys.Count == 0) return;
 
         try
         {
-            await Task.Run(() => speech.AddVocabulary("spelled", phrases));
+            await Task.Run(() =>
+            {
+                speech.AddVocabulary("spelled", rest);
+                speech.AddVocabulary(SpeechService.KeysPrefix + "-spelled", keys);
+            });
+
             if (generation != _buildGeneration) return;
 
-            _grammarLabel.Text += Strings.SpelledLoaded(phrases.Count);
+            _grammarLabel.Text += Strings.SpelledLoaded(rest.Count + keys.Count);
         }
         catch (Exception ex)
         {
@@ -1857,13 +1864,15 @@ public sealed class MainForm : Form
     }
 
     /// <summary>
-    /// The button is a filter, not a mode change in the recognizer: the grammar
-    /// holds every phrase either way. Rebuilding it on each press would cost a
-    /// second and a half in Japanese, for a button meant to be flicked.
+    /// Switches both what the microphone listens for and which list answers.
+    /// Both grammars are already loaded, so this is a flag rather than a
+    /// rebuild - rebuilding would cost a second and a half in Japanese, for a
+    /// button meant to be flicked.
     /// </summary>
     private void ToggleKeys()
     {
         _keysOnly = !_keysOnly;
+        _speech?.UseKeys(_keysOnly);
         _keysButton.Ghost = !_keysOnly;
         _keysButton.Invalidate();
 

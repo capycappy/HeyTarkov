@@ -502,9 +502,15 @@ public static class SelfTest
             ? new JapaneseScheme(japaneseForms)
             : new EnglishScheme();
 
-        var index = new TaskIndex(catalog.Entries, scheme);
-        report.AppendLine($"covered tasks : {index.TaskCount}/{catalog.Entries.Count}");
-        report.AppendLine($"phrases       : {index.GrammarPhrases.Count}");
+        // The same two halves the window uses: the keys, and everything else,
+        // each its own grammar with only one switched on at a time.
+        var index = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind != EntryKind.Key).ToList(), scheme);
+        var keyIndex = new TaskIndex(
+            catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList(), scheme);
+
+        report.AppendLine($"covered tasks : {index.TaskCount + keyIndex.TaskCount}/{catalog.Entries.Count}");
+        report.AppendLine($"phrases       : {index.GrammarPhrases.Count} (+ {keyIndex.GrammarPhrases.Count} for keys)");
 
         if (scheme is JapaneseScheme japanese && japanese.UnknownWords.Count > 0)
             report.AppendLine($"unknown words : {string.Join(", ", japanese.UnknownWords)}");
@@ -526,6 +532,14 @@ public static class SelfTest
         report.AppendLine($"grammar load  : {watch.ElapsedMilliseconds} ms "
                           + $"({index.GrammarPhrases.Count} phrases)");
 
+        if (keyIndex.GrammarPhrases.Count > 0)
+        {
+            watch.Restart();
+            Load(engine, recognizerInfo.Culture, SpeechService.KeysPrefix, keyIndex.GrammarPhrases);
+            report.AppendLine($"keys load     : {watch.ElapsedMilliseconds} ms "
+                              + $"({keyIndex.GrammarPhrases.Count} phrases)");
+        }
+
         if (index.DeferredGrammarPhrases.Count > 0)
         {
             watch.Restart();
@@ -533,6 +547,8 @@ public static class SelfTest
             report.AppendLine($"spelled load  : {watch.ElapsedMilliseconds} ms "
                               + $"({index.DeferredGrammarPhrases.Count} phrases)");
         }
+
+        UseKeys(engine, false);
 
         using var synth = new SpeechSynthesizer();
         var voice = synth.GetInstalledVoices()
@@ -578,11 +594,15 @@ public static class SelfTest
             report.AppendLine();
             report.AppendLine("  -- keys by the name the game shows --");
 
+            UseKeys(engine, true);
+
             foreach (var key in JapaneseKeyProbes(catalog))
             {
-                Probe(report, catalog, index, engine, synth, language, key.Name, key.JapaneseName!,
+                Probe(report, catalog, keyIndex, engine, synth, language, key.Name, key.JapaneseName!,
                     ref passed, ref attempted, ref probeNumber);
             }
+
+            UseKeys(engine, false);
         }
 
         if (japaneseForms is not null)
@@ -875,6 +895,16 @@ public static class SelfTest
         var builder = new GrammarBuilder { Culture = culture };
         builder.Append(new Choices(phrases.ToArray()));
         engine.LoadGrammar(new Grammar(builder) { Name = name });
+    }
+
+    /// <summary>What the key button does to the recognizer.</summary>
+    private static void UseKeys(SpeechRecognitionEngine engine, bool keysOnly)
+    {
+        foreach (var grammar in engine.Grammars)
+        {
+            grammar.Enabled = grammar.Name.StartsWith(SpeechService.KeysPrefix, StringComparison.Ordinal)
+                == keysOnly;
+        }
     }
 
     private static void TryDelete(string path)
