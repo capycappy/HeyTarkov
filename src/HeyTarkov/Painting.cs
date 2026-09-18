@@ -34,13 +34,14 @@ public static class Painting
     }
 
     /// <summary>Inset by half the pen so the stroke lands inside the bounds.</summary>
-    public static void DrawRounded(Graphics g, RectangleF r, Color colour, float radius, float width = 1f)
+    public static void DrawRounded(Graphics g, RectangleF r, Color colour, float radius, float width = 1f,
+        DashStyle dash = DashStyle.Solid)
     {
         var inset = RectangleF.FromLTRB(
             r.Left + width / 2, r.Top + width / 2, r.Right - width / 2, r.Bottom - width / 2);
 
         using var path = Rounded(inset, radius);
-        using var pen = new Pen(colour, width);
+        using var pen = new Pen(colour, width) { DashStyle = dash };
         g.DrawPath(pen, path);
     }
 
@@ -220,6 +221,9 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Keyed { get; set; }
 
+    /// <summary>Tab pressed or mouse used: whether to show the ring changes.</summary>
+    protected override void OnChangeUICues(UICuesEventArgs e) { Invalidate(); base.OnChangeUICues(e); }
+
     protected override void OnMouseEnter(EventArgs e) { _hot = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hot = false; _down = false; Invalidate(); base.OnMouseLeave(e); }
     protected override void OnMouseDown(MouseEventArgs e) { _down = true; Invalidate(); base.OnMouseDown(e); }
@@ -254,9 +258,14 @@ public sealed class PillButton : Button
             Painting.FillRounded(g, r, fill, radius);
         }
 
-        if (Focused && on)
+        // Only when the keyboard brought it here. After a click the focus stays
+        // on the button, and a ring left behind reads as the button still
+        // being pressed - on the key button, as the mode still being on.
+        if (Focused && ShowFocusCues && on)
+        {
             Painting.DrawRounded(g, Rectangle.Inflate(new Rectangle(0, 0, Width, Height), -2, -2),
-                Ghost ? Theme.Accent : Theme.AccentText, radius, LogicalToDeviceUnits(1));
+                Ghost ? Theme.Accent : Theme.AccentText, radius, LogicalToDeviceUnits(1), DashStyle.Dot);
+        }
 
         var box = new Rectangle(0, 0, Width, Height);
 

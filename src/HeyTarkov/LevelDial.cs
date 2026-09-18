@@ -164,6 +164,8 @@ public sealed class LevelDial : Control
     protected override void OnMouseEnter(EventArgs e) { _hot = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hot = false; Invalidate(); base.OnMouseLeave(e); }
     protected override void OnGotFocus(EventArgs e) { Invalidate(); base.OnGotFocus(e); }
+
+    protected override void OnChangeUICues(UICuesEventArgs e) { Invalidate(); base.OnChangeUICues(e); }
     protected override void OnLostFocus(EventArgs e) { End(); Invalidate(); base.OnLostFocus(e); }
     protected override void OnEnabledChanged(EventArgs e) { if (!Enabled) End(); Invalidate(); base.OnEnabledChanged(e); }
 
@@ -227,7 +229,10 @@ public sealed class LevelDial : Control
 
         // Inside the ring, not outside it: the control is exactly the disc, so
         // an outer ring would be clipped away by its own bounds.
-        if (Focused && Enabled && !_metering)
+        // Only when the keyboard brought it here: the dial takes focus when it
+        // is clicked, so that Space works, and a ring left behind after every
+        // press would say it is still listening.
+        if (Focused && ShowFocusCues && Enabled && !_metering)
         {
             var inset = ring * 2.5f;
             using var pen = new Pen(Theme.Accent, LogicalToDeviceUnits(1)) { DashStyle = DashStyle.Dot };
