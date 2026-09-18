@@ -1,4 +1,4 @@
-# Hey Tarkov v1.6.0
+# Hey Tarkov v1.6.1
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名・KAPPA品名・鍵の名前**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -21,8 +21,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.6.0-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.6.0-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.6.1-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.6.1-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -250,7 +250,7 @@ dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarko
 ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
 
 ```
-$v = "1.6.0"
+$v = "1.6.1"
 $stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
 $out = "$env:USERPROFILE\app\HeyTarkov"
 
