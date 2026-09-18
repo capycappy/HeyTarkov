@@ -50,6 +50,9 @@ public sealed class SpeechService : IDisposable
 
     private RecognitionOutcome _pending = RecognitionOutcome.Empty;
     private RecognitionOutcome _rejected = RecognitionOutcome.Empty;
+
+    /// <summary>The engine's last running guess for the current press.</summary>
+    private string _hypothesis = "";
     private MicrophoneCapture? _microphone;
     private bool _running;
 
@@ -184,6 +187,7 @@ public sealed class SpeechService : IDisposable
 
             _pending = RecognitionOutcome.Empty;
             _rejected = RecognitionOutcome.Empty;
+            _hypothesis = "";
 
             _microphone = new MicrophoneCapture(DeviceIndex);
 
@@ -242,6 +246,8 @@ public sealed class SpeechService : IDisposable
 
     private void OnSpeechHypothesized(object? sender, SpeechHypothesizedEventArgs e)
     {
+        if (e.Result.Text.Length > 0) _hypothesis = e.Result.Text;
+
         if (e.Result.Text.Length > 0) Hypothesis?.Invoke(this, e.Result.Text);
     }
 
@@ -313,6 +319,7 @@ public sealed class SpeechService : IDisposable
     {
         RecognitionOutcome outcome;
         byte[] captured;
+        string hypothesis;
 
         lock (_gate)
         {
@@ -332,6 +339,8 @@ public sealed class SpeechService : IDisposable
 
             // Fall back to the rejected guess so the user always sees something.
             outcome = _pending.IsEmpty ? _rejected : _pending;
+            hypothesis = _hypothesis;
+            _hypothesis = "";
             _pending = RecognitionOutcome.Empty;
             _rejected = RecognitionOutcome.Empty;
         }
@@ -341,6 +350,21 @@ public sealed class SpeechService : IDisposable
 
         if (outcome.IsEmpty && captured.Length > 0)
             outcome = RetryFromBuffer(captured) ?? outcome;
+
+        // The last resort: what the engine was hearing while the button was
+        // held. A short phrase that many longer ones begin with - "保養所",
+        // which starts forty key names - is heard correctly on the way and then
+        // rejected at the end, because it could still have been the start of
+        // one of the others. The running guess is right, and searching with it
+        // lists every key it begins. It stays a rejected result, so it is only
+        // ever shown as candidates, never opened on its own.
+        if (outcome.IsEmpty && hypothesis.Length > 0)
+        {
+            outcome = new RecognitionOutcome(hypothesis, 0f, Array.Empty<(string, float)>(), Rejected: true)
+            {
+                Path = "hypothesis",
+            };
+        }
 
         Finished?.Invoke(this, outcome with { PeakDb = peakDb, Seconds = seconds });
     }

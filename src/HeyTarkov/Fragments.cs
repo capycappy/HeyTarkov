@@ -67,6 +67,12 @@ public static class Fragments
 
             for (var end = start + 1; end <= words.Length; end++)
             {
+                // A run stops at a dash. "All for the Show - Death from Above"
+                // is a series and a subtitle, and "Show Death" spans the two:
+                // nothing anyone says, but close enough to "Shortage" to be
+                // heard in its place.
+                if (end - 1 > start && Trim(words[end - 1]).Length == 0) break;
+
                 if (start == 0 && end == words.Length) continue;
 
                 var run = words[start..end];

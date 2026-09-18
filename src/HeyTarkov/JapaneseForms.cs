@@ -100,6 +100,14 @@ public sealed class JapaneseForms
     private const int MaxVariantsPerName = 16;
 
     /// <summary>
+    /// Part of a name is said far more often than all of it, and there are many
+    /// parts, so each gets fewer readings than a whole name - but enough for
+    /// two ambiguous words in a row: "保養所 西棟" is three readings times
+    /// three.
+    /// </summary>
+    private const int MaxVariantsPerFragment = 9;
+
+    /// <summary>
     /// Spelling out a name longer than this is not something anyone would
     /// actually do, and every extra phrase costs grammar-load time.
     /// </summary>
@@ -170,7 +178,76 @@ public sealed class JapaneseForms
     /// their digits, which the recognizer reads itself, and gain the readings
     /// people actually use for them (サンマルロク).
     /// </summary>
-    public IReadOnlyList<string> ForJapaneseName(string name)
+    public IReadOnlyList<string> ForJapaneseName(string name) =>
+        ForJapaneseName(name, MaxVariantsPerName);
+
+    /// <summary>
+    /// Runs of words from a Japanese name, for saying part of it - "保養所"
+    /// for every key in the health resort, "保養所 西棟" for its west wing,
+    /// "西棟306号室" for one room. Japanese has no spaces to split on, so a
+    /// name is cut where it plainly has joints: after の, around Latin letters
+    /// and numbers, and around the words that have more than one reading.
+    ///
+    /// Not every such run is worth listening for. "鍵" or "の鍵" alone would
+    /// match all two hundred keys, and a bare number means nothing without the
+    /// word in front of it.
+    /// </summary>
+    public IReadOnlyList<string> FragmentsOfJapaneseName(string name)
+    {
+        var words = JapaneseWords(name).ToList();
+        if (words.Count < 2) return Array.Empty<string>();
+
+        var result = new List<string>();
+
+        for (var start = 0; start < words.Count; start++)
+        {
+            for (var end = start + 1; end <= words.Count; end++)
+            {
+                if (start == 0 && end == words.Count) continue;
+
+                // A run ending on "…の" is said without it: "マーク", not "マークの".
+                var text = string.Join(' ', words.GetRange(start, end - start)).TrimEnd('の', ' ');
+                var plain = text.Replace(" ", "");
+
+                if (plain.Length < 2 || plain is "の鍵" || plain.All(char.IsAsciiDigit)) continue;
+                if (words[start] is "鍵" || words[start].StartsWith('の')) continue;
+
+                foreach (var phrase in ForJapaneseName(text, MaxVariantsPerFragment)) Add(result, phrase);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>The joints of a Japanese name, in order.</summary>
+    private IEnumerable<string> JapaneseWords(string name)
+    {
+        foreach (var (text, kind) in Segments(name))
+        {
+            if (kind != Segment.Japanese)
+            {
+                yield return text;
+                continue;
+            }
+
+            foreach (var part in SplitAmbiguous(text).Select(options => options[0]))
+            {
+                var from = 0;
+
+                for (var i = 0; i < part.Length; i++)
+                {
+                    if (part[i] != 'の') continue;
+
+                    yield return part[from..(i + 1)];
+                    from = i + 1;
+                }
+
+                if (from < part.Length) yield return part[from..];
+            }
+        }
+    }
+
+    private IReadOnlyList<string> ForJapaneseName(string name, int max)
     {
         var parts = new List<string[]>();
 
@@ -196,7 +273,7 @@ public sealed class JapaneseForms
         if (parts.Count == 0) return Array.Empty<string>();
 
         var forms = new List<string>();
-        foreach (var (_, spaced) in Expand(parts, MaxVariantsPerName)) Add(forms, spaced);
+        foreach (var (_, spaced) in Expand(parts, max)) Add(forms, spaced);
         return forms;
     }
 

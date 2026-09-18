@@ -602,6 +602,23 @@ public static class SelfTest
                     ref passed, ref attempted, ref probeNumber);
             }
 
+            // The same parts looked up as text, without the recognizer, so a
+            // miss can be told apart as the index or the ear.
+            foreach (var part in new[] { "保養所", "保養所 西棟", "コンコルディア" })
+                report.AppendLine($"        as text: \"{part}\" covers {keyIndex.Containing(part).Count} keys");
+
+            // Part of a Japanese name should list everything it belongs to.
+            foreach (var part in new[] { "保養所", "保養所 西棟", "コンコルディア" })
+            {
+                attempted++;
+                var covers = ProbeFragment(engine, synth, keyIndex, part, out var heard, out var weak);
+                if (covers > 0) passed++;
+
+                var verdict = covers == 0 ? "FAIL" : weak ? "WEAK" : "PASS";
+                report.AppendLine($"  {verdict}  said \"{part}\" -> heard \"{heard}\""
+                                  + (weak ? " (rejected - candidate only)" : "") + $" -> {covers} keys");
+            }
+
             UseKeys(engine, false);
         }
 
@@ -895,6 +912,52 @@ public static class SelfTest
         var builder = new GrammarBuilder { Culture = culture };
         builder.Append(new Choices(phrases.ToArray()));
         engine.LoadGrammar(new Grammar(builder) { Name = name });
+    }
+
+    /// <summary>
+    /// Says part of a name and counts the entries it lists. Like the window, it
+    /// keeps a rejected hypothesis: a short phrase among many longer ones that
+    /// start the same way is often rejected on confidence while still being
+    /// heard correctly, and the window searches with it all the same.
+    /// </summary>
+    private static int ProbeFragment(
+        SpeechRecognitionEngine engine, SpeechSynthesizer synth, TaskIndex index, string said,
+        out string heard, out bool weak)
+    {
+        var wavPath = Path.Combine(Path.GetTempPath(), $"heytarkov-selftest-fragment-{Environment.ProcessId}.wav");
+
+        synth.SetOutputToWaveFile(wavPath);
+        synth.Speak(said);
+        synth.SetOutputToNull();
+
+        RecognitionResult? rejected = null;
+        var hypothesis = "";
+        void OnRejected(object? s, SpeechRecognitionRejectedEventArgs e) => rejected ??= e.Result;
+        void OnHypothesis(object? s, SpeechHypothesizedEventArgs e)
+        {
+            if (e.Result.Text.Length > 0) hypothesis = e.Result.Text;
+        }
+
+        engine.SpeechRecognitionRejected += OnRejected;
+        engine.SpeechHypothesized += OnHypothesis;
+
+        engine.SetInputToWaveFile(wavPath);
+        var result = engine.Recognize();
+        engine.SetInputToNull();
+        engine.SpeechRecognitionRejected -= OnRejected;
+        engine.SpeechHypothesized -= OnHypothesis;
+        TryDelete(wavPath);
+
+        // The same order the window falls back in: the result, the rejected
+        // guess, and last the running guess while it was still listening.
+        var text = result?.Text;
+        if (string.IsNullOrEmpty(text)) text = rejected?.Text;
+        if (string.IsNullOrEmpty(text)) text = hypothesis;
+
+        weak = result is null && !string.IsNullOrEmpty(text);
+
+        heard = string.IsNullOrEmpty(text) ? "(nothing)" : text;
+        return string.IsNullOrEmpty(text) ? 0 : index.Containing(text).Count;
     }
 
     /// <summary>What the key button does to the recognizer.</summary>

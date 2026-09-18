@@ -83,27 +83,36 @@ public sealed class TaskIndex
 
         // Fragments go in last so one never displaces a whole name that happens
         // to read the same way.
+        void AddFragment(string phrase, WikiEntry task)
+        {
+            var key = scheme.Key(phrase);
+            if (_byPhrase.ContainsKey(key)) return;   // a real name wins
+
+            if (!_byFragment.TryGetValue(key, out var list))
+            {
+                list = new List<WikiEntry>();
+                _byFragment[key] = list;
+            }
+
+            if (!list.Contains(task)) list.Add(task);
+            if (grammarSeen.Add(phrase)) grammar.Add(phrase);
+        }
+
         foreach (var task in _covered)
         {
             foreach (var variant in task.SpokenVariants())
             {
                 foreach (var fragment in Fragments.Of(variant))
                 {
-                    foreach (var phrase in scheme.Phrases(fragment))
-                    {
-                        var key = scheme.Key(phrase);
-                        if (_byPhrase.ContainsKey(key)) continue;   // a real name wins
-
-                        if (!_byFragment.TryGetValue(key, out var list))
-                        {
-                            list = new List<WikiEntry>();
-                            _byFragment[key] = list;
-                        }
-
-                        if (!list.Contains(task)) list.Add(task);
-                        if (grammarSeen.Add(phrase)) grammar.Add(phrase);
-                    }
+                    foreach (var phrase in scheme.Phrases(fragment)) AddFragment(phrase, task);
                 }
+            }
+
+            // Part of the name the game shows, as well: "保養所" for every key
+            // in the health resort.
+            if (LocalName(task) is { } local)
+            {
+                foreach (var phrase in scheme.LocalFragments(local)) AddFragment(phrase, task);
             }
         }
 
