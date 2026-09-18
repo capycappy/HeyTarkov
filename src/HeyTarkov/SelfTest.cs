@@ -470,6 +470,25 @@ public static class SelfTest
         return intact;
     }
 
+    /// <summary>
+    /// Keys whose Japanese names cover the awkward cases: all kanji, a Latin
+    /// abbreviation, a word with two readings, a room number.
+    /// </summary>
+    private static readonly string[] JapaneseKeyNames =
+    {
+        "Abandoned factory marked key",
+        "RB-AM key",
+        "Health Resort west wing room 306 key",
+        "Kiba Arms outer door key",
+    };
+
+    private static IEnumerable<WikiEntry> JapaneseKeyProbes(WikiCatalog catalog) =>
+        JapaneseKeyNames
+            .Select(name => catalog.Entries.FirstOrDefault(e =>
+                e.Kind == EntryKind.Key && e.JapaneseName is not null
+                && string.Equals(e.Name, name, StringComparison.OrdinalIgnoreCase)))
+            .OfType<WikiEntry>();
+
     private static bool RunLanguage(
         StringBuilder report, WikiCatalog catalog, RecognitionLanguage language)
     {
@@ -550,6 +569,20 @@ public static class SelfTest
 
             Probe(report, catalog, index, engine, synth, language, taskName, spoken,
                 ref passed, ref attempted, ref probeNumber);
+        }
+
+        if (japaneseForms is not null)
+        {
+            // Keys read off a Japanese game screen: kanji, and Latin letters
+            // the recognizer cannot read without help.
+            report.AppendLine();
+            report.AppendLine("  -- keys by the name the game shows --");
+
+            foreach (var key in JapaneseKeyProbes(catalog))
+            {
+                Probe(report, catalog, index, engine, synth, language, key.Name, key.JapaneseName!,
+                    ref passed, ref attempted, ref probeNumber);
+            }
         }
 
         if (japaneseForms is not null)

@@ -1890,6 +1890,10 @@ public sealed class MainForm : Form
     {
         if (SelectedLanguage != RecognitionLanguage.Japanese || _hintForms is null) return null;
 
+        // A key is shown by the name on the screen in the game, which is what
+        // will be read out.
+        if (task.Kind == EntryKind.Key && task.JapaneseName is { } japanese) return japanese;
+
         var readings = _hintForms.For(task.Name);
         return readings.Count > 0 ? readings[0] : null;
     }

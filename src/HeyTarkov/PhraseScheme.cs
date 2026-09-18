@@ -24,6 +24,12 @@ public interface IPhraseScheme
     /// </summary>
     IReadOnlyList<string> DeferredPhrases(string taskName);
 
+    /// <summary>
+    /// Phrases for the name the game itself shows in this language, where that
+    /// is not the English name. Empty when there is nothing to add.
+    /// </summary>
+    IReadOnlyList<string> LocalPhrases(string localName);
+
     /// <summary>Exact-match key.</summary>
     string Key(string text);
 
@@ -38,6 +44,8 @@ public sealed class EnglishScheme : IPhraseScheme
     public IReadOnlyList<string> Phrases(string taskName) => SpokenForms.For(taskName);
 
     public IReadOnlyList<string> DeferredPhrases(string taskName) => Array.Empty<string>();
+
+    public IReadOnlyList<string> LocalPhrases(string localName) => Array.Empty<string>();
 
     public string Key(string text) => SpokenForms.Normalize(text);
 
@@ -57,6 +65,8 @@ public sealed class JapaneseScheme : IPhraseScheme
     public IReadOnlyList<string> Phrases(string taskName) => _forms.For(taskName);
 
     public IReadOnlyList<string> DeferredPhrases(string taskName) => _forms.SpelledFor(taskName);
+
+    public IReadOnlyList<string> LocalPhrases(string localName) => _forms.ForJapaneseName(localName);
 
     /// <summary>How to spell this task out loud, for display.</summary>
     public string? SpelledHint(string taskName) => _forms.SpelledHint(taskName);

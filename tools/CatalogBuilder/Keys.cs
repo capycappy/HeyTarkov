@@ -42,6 +42,10 @@ public static partial class Keys
     [GeneratedRegex(@"href=""/eft/([^""#?]+)""")]
     private static partial Regex JapaneseLink();
 
+    /// <summary>Kana or kanji anywhere in the text.</summary>
+    [GeneratedRegex(@"[぀-ヿ一-鿿]")]
+    private static partial Regex JapaneseScript();
+
     public static async Task<List<WikiEntry>> FetchAsync(
         Wikis wikis, IReadOnlyList<WikiEntry> maps, CancellationToken ct = default)
     {
@@ -78,10 +82,12 @@ public static partial class Keys
 
         await AddJapaneseLinksAsync(entries, wikis, ct).ConfigureAwait(false);
         await AddShortNamesAsync(entries, pages, ct).ConfigureAwait(false);
+        await AddJapaneseNamesAsync(entries, pages, ct).ConfigureAwait(false);
 
         Console.WriteLine($"  {entries.Count(e => e.Group.Length > 0)} placed on a map, "
                           + $"{entries.Count(e => e.ShortName is not null)} with the game's short label");
-        Console.WriteLine($"  {entries.Count(e => e.JapaneseUrl is not null)} on the Japanese wiki");
+        Console.WriteLine($"  {entries.Count(e => e.JapaneseUrl is not null)} on the Japanese wiki, "
+                          + $"{entries.Count(e => e.JapaneseName is not null)} with the name the Japanese game shows");
 
         return entries;
     }
@@ -210,6 +216,32 @@ public static partial class Keys
         {
             var url = wikis.JapaneseUrl(entry.Name);
             if ((await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists) entry.JapaneseUrl = url;
+        }
+    }
+
+    // --------------------------------------------------------- japanese names
+
+    /// <summary>
+    /// The name the game shows when it is played in Japanese - "マークの刻まれた
+    /// 廃工場の鍵" - which is what a player reads off the screen and says.
+    ///
+    /// Taken from the game's own Japanese file by the item id rather than from
+    /// the wiki: the wiki's page titles are the English names, and its headings
+    /// are written by hand. A name the game has left in English is not kept,
+    /// because it adds nothing the English name does not already cover.
+    /// </summary>
+    private static async Task AddJapaneseNamesAsync(
+        List<WikiEntry> entries, Dictionary<string, KeyPage> pages, CancellationToken ct)
+    {
+        var names = await GameLocale.JapaneseNamesAsync(ct).ConfigureAwait(false);
+        if (names is null) return;
+
+        foreach (var entry in entries)
+        {
+            if (!pages.TryGetValue(entry.Name, out var page) || page.Id is null) continue;
+            if (!names.TryGetValue(page.Id, out var name)) continue;
+
+            if (JapaneseScript().IsMatch(name)) entry.JapaneseName = name;
         }
     }
 

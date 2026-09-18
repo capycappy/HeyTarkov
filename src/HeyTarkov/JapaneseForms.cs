@@ -13,14 +13,27 @@ public sealed class JapaneseLexicon
 {
     private readonly Dictionary<string, string[]> _words;
     private readonly Dictionary<string, string[]> _numbers;
+    private readonly Dictionary<string, string[]> _japanese;
 
     private JapaneseLexicon(
         Dictionary<string, string[]> words,
-        Dictionary<string, string[]> numbers)
+        Dictionary<string, string[]> numbers,
+        Dictionary<string, string[]> japanese)
     {
         _words = words;
         _numbers = numbers;
+        _japanese = japanese;
     }
+
+    /// <summary>
+    /// Japanese words whose reading the recognizer cannot be relied on to pick:
+    /// 西棟 is にしとう to one person and にしむね to another. Each carries every
+    /// reading it has, so a name containing it is heard whichever is used.
+    /// </summary>
+    public IReadOnlyCollection<string> AmbiguousWords => _japanese.Keys;
+
+    public string[]? AmbiguousReadings(string word) =>
+        _japanese.TryGetValue(word, out var readings) ? readings : null;
 
     public int WordCount => _words.Count;
 
@@ -35,14 +48,17 @@ public sealed class JapaneseLexicon
 
         return new JapaneseLexicon(
             ReadSection(document.RootElement, "words"),
-            ReadSection(document.RootElement, "numbers"));
+            ReadSection(document.RootElement, "numbers"),
+            ReadSection(document.RootElement, "japanese"));
     }
 
     private static Dictionary<string, string[]> ReadSection(JsonElement root, string section)
     {
         var result = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var property in root.GetProperty(section).EnumerateObject())
+        if (!root.TryGetProperty(section, out var entries)) return result;
+
+        foreach (var property in entries.EnumerateObject())
         {
             result[property.Name] = property.Value
                 .EnumerateArray()
@@ -76,6 +92,12 @@ public sealed class JapaneseLexicon
 public sealed class JapaneseForms
 {
     private const int MaxVariantsPerTask = 8;
+
+    /// <summary>
+    /// A name as the game shows it can carry several words with more than one
+    /// reading - "保養所 西棟306号室" has three - so it is allowed more.
+    /// </summary>
+    private const int MaxVariantsPerName = 16;
 
     /// <summary>
     /// Spelling out a name longer than this is not something anyone would
@@ -133,6 +155,136 @@ public sealed class JapaneseForms
         foreach (var (_, spaced) in joined) Add(forms, spaced);
 
         return forms;
+    }
+
+    /// <summary>
+    /// Phrases for a name as the game shows it in Japanese - "マークの刻まれた
+    /// 廃工場の鍵", "RB-AM の鍵", "保養所 西棟306号室の鍵".
+    ///
+    /// The Japanese recognizer reads kanji from its own dictionary, so most of
+    /// such a name goes into the grammar as it stands. Two things it cannot do:
+    /// read Latin letters at all, and know which reading a person will use for
+    /// a word like 西棟. So Latin runs become every reading the lexicon has for
+    /// them - "OLI" is オリ to some players and オーエルアイ to others - and
+    /// the few ambiguous Japanese words are offered each way. Room numbers keep
+    /// their digits, which the recognizer reads itself, and gain the readings
+    /// people actually use for them (サンマルロク).
+    /// </summary>
+    public IReadOnlyList<string> ForJapaneseName(string name)
+    {
+        var parts = new List<string[]>();
+
+        foreach (var (text, kind) in Segments(name))
+        {
+            switch (kind)
+            {
+                case Segment.Latin:
+                    parts.Add(LatinReadings(text));
+                    break;
+
+                case Segment.Digits:
+                    var numbers = _lexicon.Readings(text);
+                    parts.Add(numbers is { Length: > 0 } ? numbers.Prepend(text).ToArray() : new[] { text });
+                    break;
+
+                default:
+                    parts.AddRange(SplitAmbiguous(text));
+                    break;
+            }
+        }
+
+        if (parts.Count == 0) return Array.Empty<string>();
+
+        var forms = new List<string>();
+        foreach (var (_, spaced) in Expand(parts, MaxVariantsPerName)) Add(forms, spaced);
+        return forms;
+    }
+
+    private enum Segment { Japanese, Latin, Digits }
+
+    /// <summary>Punctuation the game puts in names and nobody says.</summary>
+    private static readonly HashSet<char> Separators = new("-_/.,・「」『』\"“”'()（）");
+
+    /// <summary>Runs of Japanese, Latin letters and digits, in order.</summary>
+    private static IEnumerable<(string Text, Segment Kind)> Segments(string name)
+    {
+        var current = new StringBuilder();
+        Segment? kind = null;
+
+        foreach (var c in name)
+        {
+            Segment? next =
+                char.IsAsciiLetter(c) || (c == '\'' && kind == Segment.Latin) ? Segment.Latin
+                : char.IsAsciiDigit(c) ? Segment.Digits
+                : char.IsWhiteSpace(c) || Separators.Contains(c) ? null
+                : Segment.Japanese;
+
+            if (next != kind && current.Length > 0 && kind is { } done)
+            {
+                yield return (current.ToString(), done);
+                current.Clear();
+            }
+
+            kind = next;
+            if (next is not null) current.Append(c);
+        }
+
+        if (current.Length > 0 && kind is { } last) yield return (current.ToString(), last);
+    }
+
+    /// <summary>
+    /// Every reading the lexicon has for a Latin word, or the word spelled out
+    /// when it has none - an unknown abbreviation is still sayable letter by
+    /// letter.
+    /// </summary>
+    private string[] LatinReadings(string word)
+    {
+        if (_lexicon.Readings(word) is { Length: > 0 } readings) return readings;
+
+        if (word.EndsWith("'s", StringComparison.OrdinalIgnoreCase)
+            && _lexicon.Readings(word[..^2]) is { Length: > 0 } stem)
+        {
+            return stem.Select(r => r + "ズ").ToArray();
+        }
+
+        var spelled = string.Concat(word
+            .Where(char.IsLetter)
+            .Select(c => LetterReadings.GetValueOrDefault(char.ToLowerInvariant(c), "")));
+
+        return new[] { spelled };
+    }
+
+    /// <summary>
+    /// Splits a run of Japanese around the words with more than one reading,
+    /// which are offered as written and in each reading.
+    /// </summary>
+    private IEnumerable<string[]> SplitAmbiguous(string text)
+    {
+        var at = 0;
+
+        while (at < text.Length)
+        {
+            var hit = _lexicon.AmbiguousWords
+                .Select(word => (Word: word, Index: text.IndexOf(word, at, StringComparison.Ordinal)))
+                .Where(found => found.Index >= 0)
+                .OrderBy(found => found.Index)
+                .ThenByDescending(found => found.Word.Length)
+                .FirstOrDefault();
+
+            if (hit.Word is null)
+            {
+                yield return new[] { text[at..] };
+                yield break;
+            }
+
+            if (hit.Index > at) yield return new[] { text[at..hit.Index] };
+
+            yield return (_lexicon.AmbiguousReadings(hit.Word) ?? Array.Empty<string>())
+                .Prepend(hit.Word)
+                .ToArray();
+
+            at = hit.Index + hit.Word.Length;
+        }
     }
 
     /// <summary>
@@ -202,7 +354,8 @@ public sealed class JapaneseForms
             forms.Add(value);
     }
 
-    private static List<(string Run, string Spaced)> Expand(List<string[]> perToken)
+    private static List<(string Run, string Spaced)> Expand(
+        List<string[]> perToken, int max = MaxVariantsPerTask)
     {
         var results = new List<(StringBuilder Run, StringBuilder Spaced)>
         {
@@ -217,7 +370,7 @@ public sealed class JapaneseForms
             {
                 // Only branch while there is room left in the budget; beyond that
                 // every token contributes its primary reading only.
-                var take = results.Count * readings.Length <= MaxVariantsPerTask
+                var take = results.Count * readings.Length <= max
                     ? readings.Length
                     : 1;
 
