@@ -75,12 +75,22 @@ public static class Theme
     /// </summary>
     public static Color Event => Pick(0xC792EA, 0x6B3FA6);
 
+    /// <summary>
+    /// A story chapter - the wiki files these under "Story" rather than under
+    /// a trader. They are the main line of the game, not a trader's errand, so
+    /// they get their own badge.
+    /// </summary>
+    public static Color Story => Pick(0x4FC4BA, 0x1C7A72);
+
+    private static bool IsStory(WikiEntry entry) =>
+        entry.Kind == EntryKind.Task && entry.Group == "Story";
+
     /// <summary>The event wins: a KORD BREACH task is an event task first.</summary>
     public static Color Of(WikiEntry entry) =>
-        entry.Event.Length > 0 ? Event : Of(entry.Kind);
+        entry.Event.Length > 0 ? Event : IsStory(entry) ? Story : Of(entry.Kind);
 
     public static string BadgeOf(WikiEntry entry) =>
-        entry.Event.Length > 0 ? "EVENT" : BadgeOf(entry.Kind);
+        entry.Event.Length > 0 ? "EVENT" : IsStory(entry) ? "STORY" : BadgeOf(entry.Kind);
 
     public static Color Of(EntryKind kind) => kind switch
     {
