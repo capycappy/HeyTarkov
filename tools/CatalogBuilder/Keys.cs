@@ -83,6 +83,7 @@ public static partial class Keys
         await AddJapaneseLinksAsync(entries, wikis, ct).ConfigureAwait(false);
         await AddShortNamesAsync(entries, pages, ct).ConfigureAwait(false);
         await AddJapaneseNamesAsync(entries, pages, ct).ConfigureAwait(false);
+        await AddNamesFromJapaneseWikiAsync(entries, wikis, ct).ConfigureAwait(false);
 
         Console.WriteLine($"  {entries.Count(e => e.Group.Length > 0)} placed on a map, "
                           + $"{entries.Count(e => e.ShortName is not null)} with the game's short label");
@@ -244,6 +245,60 @@ public static partial class Keys
             if (JapaneseScript().IsMatch(name)) entry.JapaneseName = name;
         }
     }
+
+    /// <summary>
+    /// The Japanese wiki's own heading, for the keys the game's Japanese file
+    /// does not cover - it is titled "Company director's room key/会社役員室の
+    /// 鍵", the English name and the Japanese one either side of a slash.
+    ///
+    /// Only ever a fallback. A heading is written by hand and need not match
+    /// the game word for word, so it is used where the alternative is no
+    /// Japanese name at all, and never in place of the game's own.
+    /// </summary>
+    private static async Task AddNamesFromJapaneseWikiAsync(
+        List<WikiEntry> entries, Wikis wikis, CancellationToken ct)
+    {
+        var rest = entries
+            .Where(e => e.JapaneseName is null && e.JapaneseUrl is not null)
+            .ToList();
+
+        if (rest.Count == 0) return;
+
+        Console.WriteLine($"  asking the Japanese wiki about {rest.Count} without a Japanese name");
+
+        var taken = 0;
+
+        foreach (var entry in rest)
+        {
+            var page = await wikis.GetAsync(entry.JapaneseUrl!, ct).ConfigureAwait(false);
+            if (page.Text is not { } html) continue;
+
+            var heading = PageHeading().Match(html);
+            if (!heading.Success) continue;
+
+            var title = WebUtility.HtmlDecode(Tags().Replace(heading.Groups[1].Value, "")).Trim();
+
+            // Everything after the English name. A heading without a slash is
+            // just the English name again and says nothing new.
+            var slash = title.IndexOf('/');
+            if (slash < 0) continue;
+
+            var name = title[(slash + 1)..].Trim();
+
+            if (name.Length == 0 || !JapaneseScript().IsMatch(name)) continue;
+
+            entry.JapaneseName = name;
+            taken++;
+        }
+
+        Console.WriteLine($"  {taken} from the Japanese wiki's heading");
+    }
+
+    [GeneratedRegex(@"<h1[^>]*>(.*?)</h1>", RegexOptions.Singleline)]
+    private static partial Regex PageHeading();
+
+    [GeneratedRegex(@"<[^>]+>")]
+    private static partial Regex Tags();
 
     // ----------------------------------------------------------- short labels
 
