@@ -1811,6 +1811,14 @@ public sealed partial class MainForm : Form
 
         if (text.Trim().Length == 0)
         {
+            // Emptying the box in key mode goes back to the whole list rather
+            // than to a blank panel: that list is the starting point there.
+            if (_keysOnly)
+            {
+                ListAllKeys();
+                return;
+            }
+
             _candidates.Items.Clear();
             _countLabel.Text = "";
             return;
@@ -1987,6 +1995,29 @@ public sealed partial class MainForm : Form
         _mapBox.SelectedIndex = 0;
     }
 
+    /// <summary>
+    /// Every key on the wiki in use, as the list rather than as an answer.
+    ///
+    /// Pressing the key button is itself a question - "what keys are there?" -
+    /// and an empty list under a pressed button answered it with nothing. From
+    /// here the map dropdown, the microphone and the box each narrow what is
+    /// already on screen.
+    /// </summary>
+    private void ListAllKeys()
+    {
+        if (_catalog is null) return;
+
+        var rows = _catalog.On(SelectedWiki)
+            .Where(e => e.Kind == EntryKind.Key)
+            .OrderBy(e => e.Group.Length == 0)
+            .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(e => e.Name, NaturalOrder.Instance)
+            .Select(e => new CandidateRow(new TaskMatch(e, 0, ""), ReadingHint(e), listed: true))
+            .ToList();
+
+        PopulateRows(rows);
+    }
+
     /// <summary>Which map the list is narrowed to: null for all of them.</summary>
     private string? SelectedMap =>
         _mapBox.SelectedIndex > 0 && _mapBox.SelectedIndex < _mapChoices.Count
@@ -2030,7 +2061,20 @@ public sealed partial class MainForm : Form
             : Strings.SearchPlaceholder;
 
         SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
-        SearchAgain();
+
+        // With nothing typed, pressing the button shows the keys themselves.
+        // With something in the box, that search is what the user is in the
+        // middle of, and it is run again over the half now in front - the
+        // button is also how "there are 3 keys" is answered.
+        if (!_keysOnly || _typedBox.Text.Trim().Length > 0 || _lastHeard is not null)
+        {
+            SearchAgain();
+
+            // Nothing there to narrow: the question becomes the plain one.
+            if (!_keysOnly || _candidates.Items.Count > 0) return;
+        }
+
+        ListAllKeys();
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -2163,8 +2207,12 @@ public sealed partial class MainForm : Form
         // search: the key exists, it is just somewhere else.
         var elsewhere = rows.Count - _candidates.Items.Count;
 
+        var listing = rows.Count > 0 && rows[0].Listed;
+
         _countLabel.Text = _candidates.Items.Count > 0
-            ? Strings.Candidates(_candidates.Items.Count)
+            ? listing
+                ? Strings.KeysListed(_candidates.Items.Count)
+                : Strings.Candidates(_candidates.Items.Count)
             : elsewhere > 0 && SelectedMap is { } map
                 ? Strings.NoneOnMap(map.Length == 0 ? Strings.MapsUnknown : map, elsewhere)
                 : "";

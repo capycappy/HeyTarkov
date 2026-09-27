@@ -3,9 +3,17 @@ using System.Drawing.Drawing2D;
 namespace HeyTarkov;
 
 /// <summary>One row of the candidate list.</summary>
-public sealed class CandidateRow(TaskMatch match, string? reading, WikiSource? elsewhere = null)
+public sealed class CandidateRow(
+    TaskMatch match, string? reading, WikiSource? elsewhere = null, bool listed = false)
 {
     public TaskMatch Match { get; } = match;
+
+    /// <summary>
+    /// This row is one of a plain listing rather than an answer to something
+    /// said or typed. Nothing was matched, so there is no score to show: a
+    /// column of "0%" beside every key would read as a failure.
+    /// </summary>
+    public bool Listed { get; } = listed;
 
     /// <summary>The katakana reading, when the microphone is in Japanese.</summary>
     public string? Reading { get; } = reading;
@@ -35,7 +43,8 @@ public sealed class CandidateRow(TaskMatch match, string? reading, WikiSource? e
 
         var group = Match.Task.Group.Length > 0 ? $" / {Match.Task.Group}" : "";
         var where = Elsewhere is { } other ? $" - {Strings.OnlyOnWiki(other)}" : "";
-        return $"{kind}{Match.Task.Display}{group}{where} {Match.Score:P0}";
+        var score = Listed ? "" : $" {Match.Score:P0}";
+        return $"{kind}{Match.Task.Display}{group}{where}{score}";
     }
 }
 
@@ -162,8 +171,11 @@ public sealed class CandidateList : ListBox
         }
         else
         {
-            var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
-            Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
+            if (!row.Listed)
+            {
+                var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
+                Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
+            }
 
             if (row.Match.Task.Group.Length > 0)
                 Column(g, row.Match.Task.Group, _small!, Theme.Muted, groupX, groupW, full);

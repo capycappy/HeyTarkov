@@ -159,6 +159,11 @@ public static class Strings
 
     public static string MapFilterName => T("マップで絞り込み", "Filter by map");
 
+    /// <summary>The count over a plain list of keys, which is not a count of
+    /// candidates for anything.</summary>
+    public static string KeysListed(int count) =>
+        T($"鍵 {count} 件", count == 1 ? "1 key" : $"{count} keys");
+
     public static string MapFilterTip => T(
         "選んだマップの鍵だけを候補に出す（聞き取りの範囲は変わりません）",
         "Show only that map's keys (what the microphone listens for does not change)");
