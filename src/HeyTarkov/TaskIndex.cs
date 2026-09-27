@@ -19,6 +19,13 @@ public sealed class TaskIndex
     /// </summary>
     public IPhraseScheme Scheme => _scheme;
     private readonly Dictionary<string, WikiEntry> _byPhrase = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Everything a phrase can mean, not just the first entry to claim it.
+    /// Names do repeat: "The Labyrinth" is a story chapter and a map, and one
+    /// of them would otherwise be unreachable by its own name.
+    /// </summary>
+    private readonly Dictionary<string, List<WikiEntry>> _allByPhrase = new(StringComparer.Ordinal);
     private readonly Dictionary<string, WikiEntry> _byFuzzyKey = new(StringComparer.Ordinal);
     private readonly List<(string Key, WikiEntry Task)> _all = new();
     private readonly HashSet<WikiEntry> _covered = new();
@@ -63,10 +70,12 @@ public sealed class TaskIndex
 
                 _all.Add((scheme.FuzzyKey(phrase), task));
 
-                // First writer wins: two tasks sharing a phrase is possible in
-                // principle, and the ranked fallback will still surface both.
+                // First writer wins for the single answer, which is what
+                // auto-opening needs; every entry the phrase can mean is kept
+                // alongside so the list can offer all of them.
                 _byPhrase.TryAdd(scheme.Key(phrase), task);
                 _byFuzzyKey.TryAdd(scheme.FuzzyKey(phrase), task);
+                Share(scheme.Key(phrase), task);
             }
 
             foreach (var phrase in spelled)
@@ -78,7 +87,19 @@ public sealed class TaskIndex
                 // sequences is noise.
                 _byPhrase.TryAdd(scheme.Key(phrase), task);
                 _byFuzzyKey.TryAdd(scheme.FuzzyKey(phrase), task);
+                Share(scheme.Key(phrase), task);
             }
+        }
+
+        void Share(string key, WikiEntry task)
+        {
+            if (!_allByPhrase.TryGetValue(key, out var list))
+            {
+                list = new List<WikiEntry>();
+                _allByPhrase[key] = list;
+            }
+
+            if (!list.Contains(task)) list.Add(task);
         }
 
         // Fragments go in last so one never displaces a whole name that happens
@@ -176,6 +197,17 @@ public sealed class TaskIndex
     {
         if (_byPhrase.TryGetValue(_scheme.Key(recognizedText), out var hit)) return hit;
         return _byFuzzyKey.TryGetValue(_scheme.FuzzyKey(recognizedText), out hit) ? hit : null;
+    }
+
+    /// <summary>
+    /// Every entry this phrase is the whole name of. Usually one; two when a
+    /// name is shared, which the list shows rather than picking for the user.
+    /// </summary>
+    public IReadOnlyList<WikiEntry> AllExact(string recognizedText)
+    {
+        if (_allByPhrase.TryGetValue(_scheme.Key(recognizedText), out var list)) return list;
+
+        return Exact(recognizedText) is { } hit ? new[] { hit } : Array.Empty<WikiEntry>();
     }
 
     public IReadOnlyList<TaskMatch> Rank(string recognizedText, int max = 5)

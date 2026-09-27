@@ -1671,7 +1671,11 @@ public sealed partial class MainForm : Form
 
         // Never jump to a page off a rejected result, and never off a fragment:
         // "broadcast" means six different pages, so the list is the answer.
-        var wholeName = Speaking?.Exact(outcome.Text) is not null;
+        //
+        // A name two entries share is the same situation: "The Labyrinth" is a
+        // story chapter and a map, and guessing which one was meant is worse
+        // than showing both.
+        var wholeName = Speaking?.AllExact(outcome.Text).Count == 1;
 
         if (!outcome.Rejected
             && wholeName
@@ -1691,24 +1695,27 @@ public sealed partial class MainForm : Form
     private List<TaskMatch> BuildCandidates(RecognitionOutcome outcome)
     {
         var result = new List<TaskMatch>();
-        var seen = new HashSet<string>(StringComparer.Ordinal);
+        // By entry rather than by name: two different entries can share a name.
+        // "The Labyrinth" is both a story chapter and the map it happens on,
+        // and dropping the second one hid whichever came back later.
+        var seen = new HashSet<WikiEntry>();
 
         var index = Speaking;
         if (index is null) return result;
 
         void Add(TaskMatch match)
         {
-            if (seen.Add(match.Task.Name)) result.Add(match);
+            if (seen.Add(match.Task)) result.Add(match);
         }
 
-        var primary = index.Exact(outcome.Text);
-        if (primary is not null) Add(new TaskMatch(primary, 1.0, outcome.Text));
+        // Every entry the phrase is the whole name of, not only the first one:
+        // a name can belong to two entries at once.
+        foreach (var entry in index.AllExact(outcome.Text))
+            Add(new TaskMatch(entry, 1.0, outcome.Text));
 
         foreach (var (text, _) in outcome.Alternates)
-        {
-            var hit = index.Exact(text);
-            if (hit is not null) Add(new TaskMatch(hit, 1.0, text));
-        }
+        foreach (var entry in index.AllExact(text))
+            Add(new TaskMatch(entry, 1.0, text));
 
         // Saying only part of a name is normal - "broadcast" for
         // "Broadcast - Part 4", "punisher" for "The Punisher - Part 4". A
