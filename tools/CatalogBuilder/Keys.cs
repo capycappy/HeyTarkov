@@ -287,6 +287,11 @@ public static partial class Keys
 
             if (name.Length == 0 || !JapaneseScript().IsMatch(name)) continue;
 
+            // Some headings say, in Japanese, that there is no Japanese name.
+            // Taking that literally would put "日本語名称無し" on the key row
+            // and into the grammar.
+            if (NoName().IsMatch(name)) continue;
+
             entry.JapaneseName = name;
             taken++;
         }
@@ -299,6 +304,10 @@ public static partial class Keys
 
     [GeneratedRegex(@"<[^>]+>")]
     private static partial Regex Tags();
+
+    /// <summary>A heading that says the item has no Japanese name.</summary>
+    [GeneratedRegex(@"名称?(無し|なし)|翻訳(無し|なし)")]
+    private static partial Regex NoName();
 
     // ----------------------------------------------------------- short labels
 
