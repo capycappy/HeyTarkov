@@ -96,6 +96,11 @@ public static class Strings
     public static string SearchPlaceholder =>
         T("キーボードで探す（英語表記: wet job part 4）", "Type to search (English: wet job part 4)");
 
+    /// <summary>The same box with the map dropdown beside it: the example no
+    /// longer fits, and half an example reads worse than none.</summary>
+    public static string SearchPlaceholderShort =>
+        T("キーボードで探す", "Type to search");
+
     public static string HeardPlaceholder =>
         T("聞き取り結果はここに出ます", "What you say appears here");
 
@@ -141,6 +146,37 @@ public static class Strings
     public static string KeysOff => T(
         "鍵以外を表示しています",
         "Showing everything except keys");
+
+    // ------------------------------------------------------- the map filter
+
+    /// <summary>The first item of the map dropdown, and what it means: no
+    /// filtering at all.</summary>
+    public static string MapsAll => T("すべてのマップ", "All maps");
+
+    /// <summary>Keys the wiki does not place on any map. They are a seventh of
+    /// the keys, so leaving them out of the list would strand them.</summary>
+    public static string MapsUnknown => T("マップ不明", "No map");
+
+    public static string MapFilterName => T("マップで絞り込み", "Filter by map");
+
+    public static string MapFilterTip => T(
+        "選んだマップの鍵だけを候補に出す（聞き取りの範囲は変わりません）",
+        "Show only that map's keys (what the microphone listens for does not change)");
+
+    public static string KeysOnMap(string map) => T(
+        $"{map} の鍵だけを表示しています",
+        $"Showing keys on {map} only");
+
+    public static string KeysAllMaps => T(
+        "すべてのマップの鍵を表示しています",
+        "Showing keys on every map");
+
+    /// <summary>The search found keys, but all of them are on other maps.</summary>
+    public static string NoneOnMap(string map, int elsewhere) => T(
+        $"{map} には無し（ほかのマップに {elsewhere} 件）",
+        elsewhere == 1
+            ? $"None on {map} (1 on another map)"
+            : $"None on {map} ({elsewhere} on other maps)");
 
     /// <summary>Said with the key button in, when the answer is something other
     /// than a key.</summary>

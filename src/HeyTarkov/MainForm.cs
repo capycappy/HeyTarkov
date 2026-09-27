@@ -24,6 +24,21 @@ public sealed partial class MainForm : Form
     /// <summary>What the key button does, since it no longer says.</summary>
     private readonly ToolTip _keysTip = new();
 
+    /// <summary>
+    /// Which map's keys to show, beside the key button and only while it is
+    /// pressed in. Keys are the one kind of entry that belongs to a place: a
+    /// player standing on Customs has no use for the other hundred and eighty.
+    /// </summary>
+    private readonly ModernCombo _mapBox = new();
+
+    /// <summary>
+    /// What each item of that dropdown means: null for every map, "" for the
+    /// keys the wiki places nowhere, otherwise the map's name. Kept beside the
+    /// items rather than read back off them, so the list can be translated
+    /// without the filter changing meaning.
+    /// </summary>
+    private readonly List<string?> _mapChoices = new();
+
     private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
     private readonly TextBox _typedBox = new();
@@ -538,6 +553,17 @@ public sealed partial class MainForm : Form
         _keysButton.Margin = new Padding(0, 0, 10, 0);
         _keysButton.Click += (_, _) => ToggleKeys();
 
+        // Hidden until the key button is in: it is a tool for the keys, and an
+        // empty dropdown beside the search box the rest of the time would be
+        // one more thing to read past.
+        _mapBox.AccessibleName = Strings.MapFilterName;
+        _mapBox.Visible = false;
+        _mapBox.Width = 150;
+        _mapBox.Anchor = AnchorStyles.Left;
+        _mapBox.Margin = new Padding(0, 0, 10, 0);
+        _mapBox.SelectedIndexChanged += (_, _) => OnMapFilterChanged();
+        _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
+
         _micHint.Text = Strings.MicPreparing;
         _micHint.AutoSize = true;
         _micHint.BackColor = Color.Transparent;
@@ -576,17 +602,19 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 3,
+            ColumnCount = 4,
             RowCount = 1,
             Margin = new Padding(0),
         };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_dial, 0, 0);
         row.Controls.Add(_keysButton, 1, 0);
-        row.Controls.Add(box, 2, 0);
+        row.Controls.Add(_mapBox, 2, 0);
+        row.Controls.Add(box, 3, 0);
         return row;
     }
 
@@ -1010,6 +1038,7 @@ public sealed partial class MainForm : Form
             _typedKeys = null;
             _japaneseNames.Clear();
             _otherIndex.Clear();
+            BuildMapChoices();
             RefreshCollectorCount();
         }
         catch (Exception ex)
@@ -1920,12 +1949,85 @@ public sealed partial class MainForm : Form
     /// rebuild - rebuilding would cost a second and a half in Japanese, for a
     /// button meant to be flicked.
     /// </summary>
+    /// <summary>
+    /// The maps the keys actually sit on, in the order the catalog lists the
+    /// maps themselves - so the dropdown reads like the map list in the game
+    /// rather than like the order the keys happened to be fetched in.
+    ///
+    /// Keys the wiki places nowhere get an entry of their own. There are over
+    /// forty of them, and without it, choosing any map would make them
+    /// unreachable.
+    /// </summary>
+    private void BuildMapChoices()
+    {
+        if (_catalog is null) return;
+
+        var keys = _catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList();
+        var placed = keys.Select(k => k.Group).Where(g => g.Length > 0).ToHashSet(StringComparer.Ordinal);
+
+        _mapChoices.Clear();
+        _mapBox.Items.Clear();
+
+        _mapChoices.Add(null);
+        _mapBox.Items.Add(Strings.MapsAll);
+
+        foreach (var map in _catalog.Entries.Where(e => e.Kind == EntryKind.Map)
+                     .Select(m => m.Name).Where(placed.Contains))
+        {
+            _mapChoices.Add(map);
+            _mapBox.Items.Add(map);
+        }
+
+        if (keys.Any(k => k.Group.Length == 0))
+        {
+            _mapChoices.Add("");
+            _mapBox.Items.Add(Strings.MapsUnknown);
+        }
+
+        _mapBox.SelectedIndex = 0;
+    }
+
+    /// <summary>Which map the list is narrowed to: null for all of them.</summary>
+    private string? SelectedMap =>
+        _mapBox.SelectedIndex > 0 && _mapBox.SelectedIndex < _mapChoices.Count
+            ? _mapChoices[_mapBox.SelectedIndex]
+            : null;
+
+    private void OnMapFilterChanged()
+    {
+        if (_loading) return;
+
+        SetStatus(SelectedMap is { } map
+            ? Strings.KeysOnMap(map.Length == 0 ? Strings.MapsUnknown : map)
+            : Strings.KeysAllMaps);
+
+        // The rows are already in hand; this only changes which of them show.
+        PopulateRows(_lastRows);
+    }
+
+    /// <summary>
+    /// Whether a row survives the map dropdown. Only keys are filtered, and
+    /// only while the key button is in: the filter belongs to that mode, and a
+    /// stale choice must not quietly hide half the tasks.
+    /// </summary>
+    private bool OnSelectedMap(CandidateRow row)
+    {
+        if (!_keysOnly || SelectedMap is not { } map) return true;
+
+        return string.Equals(row.Match.Task.Group, map, StringComparison.Ordinal);
+    }
+
     private void ToggleKeys()
     {
         _keysOnly = !_keysOnly;
         _speech?.UseKeys(_keysOnly);
         _keysButton.Ghost = !_keysOnly;
         _keysButton.Invalidate();
+        _mapBox.Visible = _keysOnly;
+
+        _typedBox.PlaceholderText = _keysOnly
+            ? Strings.SearchPlaceholderShort
+            : Strings.SearchPlaceholder;
 
         SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
         SearchAgain();
@@ -2052,11 +2154,20 @@ public sealed partial class MainForm : Form
 
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var row in Ordered(rows)) _candidates.Items.Add(row);
+        foreach (var row in Ordered(rows).Where(OnSelectedMap)) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
-        _countLabel.Text = _candidates.Items.Count > 0 ? Strings.Candidates(_candidates.Items.Count) : "";
+
+        // An empty list under a map filter is not the same answer as an empty
+        // search: the key exists, it is just somewhere else.
+        var elsewhere = rows.Count - _candidates.Items.Count;
+
+        _countLabel.Text = _candidates.Items.Count > 0
+            ? Strings.Candidates(_candidates.Items.Count)
+            : elsewhere > 0 && SelectedMap is { } map
+                ? Strings.NoneOnMap(map.Length == 0 ? Strings.MapsUnknown : map, elsewhere)
+                : "";
     }
 
     /// <summary>The katakana reading, so the list also teaches how to say it.</summary>
