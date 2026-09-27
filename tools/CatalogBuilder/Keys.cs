@@ -18,8 +18,12 @@ namespace HeyTarkov.CatalogBuilder;
 /// </summary>
 public static partial class Keys
 {
-    /// <summary>The full page title, as the API wants it.</summary>
-    private const string Category = "Category:Keys";
+    /// <summary>
+    /// The full page titles, as the API wants them. Keycards are a category of
+    /// their own on the wiki, but not to a player: a card that opens the
+    /// laboratory's doors is looked up for the same reason a key is.
+    /// </summary>
+    private static readonly string[] Categories = { "Category:Keys", "Category:Keycards" };
 
     /// <summary>The Japanese wiki's own index of keys.</summary>
     private const string JapaneseIndex = "鍵";
@@ -49,7 +53,14 @@ public static partial class Keys
     public static async Task<List<WikiEntry>> FetchAsync(
         Wikis wikis, IReadOnlyList<WikiEntry> maps, CancellationToken ct = default)
     {
-        var titles = await wikis.CategoryMembersAsync(Category, ct).ConfigureAwait(false);
+        var titles = new List<string>();
+        var already = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var category in Categories)
+        {
+            foreach (var title in await wikis.CategoryMembersAsync(category, ct).ConfigureAwait(false))
+                if (already.Add(title)) titles.Add(title);
+        }
 
         if (titles.Count == 0)
         {
@@ -164,20 +175,31 @@ public static partial class Keys
     {
         if (page.Usage is not { } usage) return null;
 
-        var best = int.MaxValue;
+        // Only the links. The prose around them is full of words that contain
+        // a map's name without being one: "the laboratory" holds "The Lab",
+        // and a key to a door on Icebreaker was filed under the wrong place
+        // because of it.
+        //
+        // The last link wins, because the sentence is written outwards - what
+        // the key opens, then where that is: "the door to the [[The Labyrinth]]
+        // transit on [[Shoreline]]" is a door standing on Shoreline. Reading
+        // the first link instead put that key inside the place it leads to.
         string? found = null;
 
-        foreach (var map in maps)
+        foreach (Match link in WikiLink().Matches(usage))
         {
-            var at = usage.IndexOf(map, StringComparison.OrdinalIgnoreCase);
-            if (at < 0 || at >= best) continue;
+            var target = link.Groups[1].Value.Trim();
 
-            best = at;
-            found = map;
+            foreach (var map in maps)
+                if (string.Equals(map, target, StringComparison.OrdinalIgnoreCase)) found = map;
         }
 
         return found;
     }
+
+    /// <summary>A wiki link, without the text it is shown as.</summary>
+    [GeneratedRegex(@"\[\[([^\]\|#]+)")]
+    private static partial Regex WikiLink();
 
     // -------------------------------------------------------- japanese links
 
