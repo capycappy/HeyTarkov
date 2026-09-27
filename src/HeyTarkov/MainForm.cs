@@ -65,6 +65,13 @@ public sealed partial class MainForm : Form
     /// name. Worked out once per wiki - typing asks on every keystroke.
     /// </summary>
     private readonly Dictionary<WikiEntry, string[]> _japaneseNames = new();
+
+    /// <summary>
+    /// The same, for typing in letters: the name and the reading, folded to
+    /// letters and digits. Rebuilt with the Japanese one, because the reading
+    /// column changes with the language and the wiki.
+    /// </summary>
+    private readonly Dictionary<WikiEntry, string[]> _latinNames = new();
     private readonly Label _countLabel = new();
     private readonly PillButton _openButton = new();
     private readonly CheckBox _autoOpen = new();
@@ -1041,6 +1048,7 @@ public sealed partial class MainForm : Form
             _typedRest = null;
             _typedKeys = null;
             _japaneseNames.Clear();
+            _latinNames.Clear();
             _otherIndex.Clear();
             BuildMapChoices();
             RefreshCollectorCount();
@@ -1227,6 +1235,7 @@ public sealed partial class MainForm : Form
         _typedRest = null;
         _typedKeys = null;
         _japaneseNames.Clear();
+        _latinNames.Clear();
         _otherIndex.Clear();
         _candidates.Items.Clear();
 
@@ -1371,6 +1380,9 @@ public sealed partial class MainForm : Form
 
         _settings.JapaneseMode = SelectedLanguage == RecognitionLanguage.Japanese;
         _settings.Save();
+
+        // The reading column only exists in Japanese, and typing searches it.
+        _latinNames.Clear();
 
         await RebuildForLanguageAsync();
     }
@@ -1831,56 +1843,57 @@ public sealed partial class MainForm : Form
             return;
         }
 
-        // Kana or kanji in the box means a Japanese name is being typed -
-        // most likely read off a Japanese game screen - so it is matched
-        // against the names in Japanese rather than the English ones, where it
-        // can only ever score nothing.
-        if (JapaneseScript().IsMatch(text))
-        {
-            DefaultSort(CandidateSort.Relevance);
-
-            PopulateRows(SearchJapanese(text, _keysOnly)
-                .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
-                .ToList());
-
-            var aside = SearchJapanese(text, !_keysOnly).Count;
-            if (aside > 0) SetStatus(_keysOnly ? Strings.OthersHidden(aside) : Strings.KeysHidden(aside));
-            return;
-        }
-
         DefaultSort(CandidateSort.Relevance);
 
-        var containing = index.Containing(text)
-            .Select(e => new TaskMatch(e, 1.0, text))
-            .ToList();
+        // Kana or kanji in the box means a Japanese name is being typed - most
+        // likely read off a Japanese game screen. The recognizer's own index is
+        // keyed by English phrases, so only the Latin side asks it anything.
+        var japanese = JapaneseScript().IsMatch(text);
+
+        var found = new List<TaskMatch>();
+        var seen = new HashSet<WikiEntry>();
+
+        // Whole words first: "USEC" is the name of "USEC cottage room key" as
+        // far as anyone typing is concerned, and that should lead the list.
+        if (!japanese)
+            foreach (var entry in index.Containing(text))
+                if (seen.Add(entry)) found.Add(new TaskMatch(entry, 1.0, text));
+
+        foreach (var match in SearchTyped(text, _keysOnly))
+            if (seen.Add(match.Task)) found.Add(match);
 
         // Ranking answers every input with something, which is what keeps a
-        // typo findable. Once the typing is actually inside some names, those
-        // near misses are noise - "company" found two keys and then listed ten
-        // more at a quarter - so they are only kept when they are good enough
-        // to be a different spelling of what was typed.
-        var floor = containing.Count > 0 ? NearEnough : 0.0;
+        // typo findable. Once the typing is actually inside a name or a reading
+        // those near misses are noise - "company" found two keys and then
+        // listed ten more at a quarter - so they only run when nothing was
+        // found at all.
+        var ranked = found.Count > 0 || japanese
+            ? Array.Empty<TaskMatch>()
+            : index.Rank(text, 12).Where(m => seen.Add(m.Task)).ToArray();
 
-        var ranked = index.Rank(text, 12)
-            .Where(m => m.Score >= floor && containing.All(s => s.Task != m.Task));
-
-        // Whether to look at the other wiki turns on `containing`, not on the
-        // list being empty. Ranking returns near misses for almost any input,
-        // so "no results at all" hardly ever happens and waiting for it would
-        // mean this never fired.
-        var elsewhere = containing.Count == 0
+        // Whether to look at the other wiki turns on what was found here, not
+        // on the list being empty. Ranking returns near misses for almost any
+        // input, so "no results at all" hardly ever happens and waiting for it
+        // would mean this never fired.
+        var elsewhere = found.Count == 0 && !japanese
             ? Elsewhere(text, index.Scheme)
             : new List<CandidateRow>();
 
-        var here = containing.Concat(ranked)
+        var here = found.Concat(ranked)
             .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
             .ToList();
 
         // The other wiki's exact answer leads, this wiki's guesses follow.
         PopulateRows(elsewhere.Concat(here).Take(14).ToList());
 
-        SayWhatIsHidden(_keysOnly ? _typedRest : _typedKeys, text,
-            here.Count > 0 ? here.Max(r => r.Match.Score) : 0);
+        // The half the key button is hiding, counted the same way, so the hint
+        // says "there are 3 keys" for exactly the searches that would find them.
+        var aside = SearchTyped(text, !_keysOnly).Count;
+
+        if (aside > 0) SetStatus(_keysOnly ? Strings.OthersHidden(aside) : Strings.KeysHidden(aside));
+        else if (!japanese)
+            SayWhatIsHidden(_keysOnly ? _typedRest : _typedKeys, text,
+                here.Count > 0 ? here.Max(r => r.Match.Score) : 0);
     }
 
     /// <summary>
@@ -2087,6 +2100,17 @@ public sealed partial class MainForm : Form
         // button is also how "there are 3 keys" is answered.
         if (!_keysOnly || _typedBox.Text.Trim().Length > 0 || _lastHeard is not null)
         {
+            // Coming out of key mode with an empty box: the keys on screen are
+            // not an answer to anything any more, so they go. Running the last
+            // utterance again would only fill the list with whatever the other
+            // half happens to sound like.
+            if (!_keysOnly && _typedBox.Text.Trim().Length == 0)
+            {
+                _candidates.Items.Clear();
+                _countLabel.Text = "";
+                return;
+            }
+
             SearchAgain();
 
             // Nothing there to narrow: the question becomes the plain one.
@@ -2122,16 +2146,33 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Japanese typed into the box, found anywhere inside an entry's Japanese
-    /// name. "コンコルディア" is a word in the middle of "コンコルディア・アパート
-    /// 8号室の鍵" as often as at its start, and a player types the part they
-    /// can see. The more of the name the typing covers, the higher it scores,
-    /// with a little extra for matching from the beginning.
+    /// Letters and digits only, lower case - so "car dealership", "cardealer"
+    /// and "Car Dealership" are the same question, and an apostrophe in
+    /// "Company director's room key" never decides whether a name is found.
     /// </summary>
-    private List<TaskMatch> SearchJapanese(string text, bool keys)
+    private static string FoldLatin(string text) =>
+        new(text.Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray());
+
+    /// <summary>
+    /// What was typed, found anywhere inside anything the row shows: the name
+    /// and the reading beside it. Both columns are in front of the user, and a
+    /// search that only looks at one of them looks broken from the other.
+    ///
+    /// The more of the text the typing covers the higher it scores, with a
+    /// little extra for matching from the beginning.
+    /// </summary>
+    private List<TaskMatch> SearchTyped(string text, bool keys)
     {
-        var query = Fold(text);
-        if (query.Length == 0 || _catalog is null) return new List<TaskMatch>();
+        if (_catalog is null) return new List<TaskMatch>();
+
+        // Japanese is matched as Japanese - hiragana read as katakana, the
+        // game's own names as they are written. Anything else is matched by
+        // letters and digits, which also reaches the Latin inside a Japanese
+        // name ("Rogue USEC の兵舎の鍵").
+        var japanese = JapaneseScript().IsMatch(text);
+        var query = japanese ? Fold(text) : FoldLatin(text);
+
+        if (query.Length == 0) return new List<TaskMatch>();
 
         var found = new List<TaskMatch>();
 
@@ -2141,7 +2182,7 @@ public sealed partial class MainForm : Form
 
             var best = 0.0;
 
-            foreach (var name in JapaneseNamesOf(entry))
+            foreach (var name in japanese ? JapaneseNamesOf(entry) : LatinTextsOf(entry))
             {
                 var at = name.IndexOf(query, StringComparison.Ordinal);
                 if (at < 0) continue;
@@ -2161,10 +2202,22 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// A column title was clicked. The same title again turns the order round;
-    /// a new one starts in the direction a person would expect - the best match
-    /// first, names from A.
+    /// Everything about an entry that typing in letters can match: the name as
+    /// the row shows it, and the reading column, which carries Latin of its own
+    /// for keys named after a place or a company.
     /// </summary>
+    private string[] LatinTextsOf(WikiEntry entry)
+    {
+        if (_latinNames.TryGetValue(entry, out var texts)) return texts;
+
+        var all = new List<string> { FoldLatin(entry.Display) };
+        if (ReadingHint(entry) is { } reading) all.Add(FoldLatin(reading));
+
+        texts = all.Where(t => t.Length > 0).Distinct().ToArray();
+        _latinNames[entry] = texts;
+        return texts;
+    }
+
     /// <summary>
     /// The order to use when the user has not asked for one. A plain list of
     /// keys reads best by name; an answer to something said or typed reads best
@@ -2179,6 +2232,11 @@ public sealed partial class MainForm : Form
         _sortHeader?.Show(_sort, _sortDescending);
     }
 
+    /// <summary>
+    /// A column title was clicked. The same title again turns the order round;
+    /// a new one starts in the direction a person would expect - the best match
+    /// first, names from A. From here on that choice stands.
+    /// </summary>
     private void PickSort(CandidateSort sort)
     {
         _sortPicked = true;
