@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace HeyTarkov;
 
@@ -52,6 +52,10 @@ public sealed partial class MainForm : Form
     private CandidateSort _sort = CandidateSort.Relevance;
 
     private bool _sortDescending;
+
+    /// <summary>A column title was clicked. Until then the list orders itself
+    /// to suit what it is showing.</summary>
+    private bool _sortPicked;
 
     private List<CandidateRow> _lastRows = new();
 
@@ -1692,6 +1696,7 @@ public sealed partial class MainForm : Form
         _lastHeard = outcome;
 
         var matches = BuildCandidates(outcome);
+        DefaultSort(CandidateSort.Relevance);
         Populate(matches);
 
         // Heard something the button is hiding: say so rather than showing
@@ -1789,6 +1794,8 @@ public sealed partial class MainForm : Form
         var solid = Speaking.Exact(_lastHeard.Text) is not null
                     || Speaking.Containing(_lastHeard.Text).Count > 0;
 
+        DefaultSort(CandidateSort.Relevance);
+
         var elsewhere = solid
             ? new List<CandidateRow>()
             : Elsewhere(_lastHeard.Text, Speaking.Scheme);
@@ -1830,6 +1837,8 @@ public sealed partial class MainForm : Form
         // can only ever score nothing.
         if (JapaneseScript().IsMatch(text))
         {
+            DefaultSort(CandidateSort.Relevance);
+
             PopulateRows(SearchJapanese(text, _keysOnly)
                 .Select(m => new CandidateRow(m, ReadingHint(m.Task)))
                 .ToList());
@@ -1839,12 +1848,21 @@ public sealed partial class MainForm : Form
             return;
         }
 
+        DefaultSort(CandidateSort.Relevance);
+
         var containing = index.Containing(text)
             .Select(e => new TaskMatch(e, 1.0, text))
             .ToList();
 
+        // Ranking answers every input with something, which is what keeps a
+        // typo findable. Once the typing is actually inside some names, those
+        // near misses are noise - "company" found two keys and then listed ten
+        // more at a quarter - so they are only kept when they are good enough
+        // to be a different spelling of what was typed.
+        var floor = containing.Count > 0 ? NearEnough : 0.0;
+
         var ranked = index.Rank(text, 12)
-            .Where(m => containing.All(s => s.Task != m.Task));
+            .Where(m => m.Score >= floor && containing.All(s => s.Task != m.Task));
 
         // Whether to look at the other wiki turns on `containing`, not on the
         // list being empty. Ranking returns near misses for almost any input,
@@ -2015,6 +2033,7 @@ public sealed partial class MainForm : Form
             .Select(e => new CandidateRow(new TaskMatch(e, 0, ""), ReadingHint(e), listed: true))
             .ToList();
 
+        DefaultSort(CandidateSort.Name);
         PopulateRows(rows);
     }
 
@@ -2146,8 +2165,24 @@ public sealed partial class MainForm : Form
     /// a new one starts in the direction a person would expect - the best match
     /// first, names from A.
     /// </summary>
+    /// <summary>
+    /// The order to use when the user has not asked for one. A plain list of
+    /// keys reads best by name; an answer to something said or typed reads best
+    /// with the likeliest first. A title the user clicked outranks both.
+    /// </summary>
+    private void DefaultSort(CandidateSort sort)
+    {
+        if (_sortPicked || _sort == sort) return;
+
+        _sort = sort;
+        _sortDescending = false;
+        _sortHeader?.Show(_sort, _sortDescending);
+    }
+
     private void PickSort(CandidateSort sort)
     {
+        _sortPicked = true;
+
         if (sort == _sort) _sortDescending = !_sortDescending;
         else
         {
