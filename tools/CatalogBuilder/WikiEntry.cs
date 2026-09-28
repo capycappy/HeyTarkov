@@ -1,4 +1,4 @@
-// Copied from src/HeyTarkov so the generator and the app agree on the shape of
+﻿// Copied from src/HeyTarkov so the generator and the app agree on the shape of
 // the file. Keep the two in step: the app deserialises exactly what this writes.
 namespace HeyTarkov.CatalogBuilder;
 
@@ -55,6 +55,15 @@ public sealed class WikiEntry
 
     /// <summary>Trader for a task, map name for an extract, empty for a map.</summary>
     public string Group { get; set; } = "";
+
+    /// <summary>
+    /// The maps a task takes place on, where its page names any - a task can
+    /// span several ("Debut" is Woods, Ground Zero, Interchange and Customs),
+    /// and plenty name none at all because they are done at a trader or in the
+    /// hideout. Only tasks carry this; a key or an extract has its one place in
+    /// Group already.
+    /// </summary>
+    public List<string> Maps { get; set; } = new();
 
     /// <summary>"PMC" or "SCAV" when an extract is faction-specific.</summary>
     public string? Faction { get; set; }

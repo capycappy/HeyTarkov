@@ -32,6 +32,16 @@ public sealed partial class MainForm : Form
     private readonly ModernCombo _mapBox = new();
 
     /// <summary>
+    /// Which trader's tasks to show. Beside the map dropdown, and hidden with
+    /// the key button in - a key belongs to a place, never to a trader.
+    /// </summary>
+    private readonly ModernCombo _traderBox = new();
+
+    /// <summary>What each item of the trader dropdown means: null for every
+    /// trader, "" for entries that belong to none.</summary>
+    private readonly List<string?> _traderChoices = new();
+
+    /// <summary>
     /// What each item of that dropdown means: null for every map, "" for the
     /// keys the wiki places nowhere, otherwise the map's name. Kept beside the
     /// items rather than read back off them, so the list can be translated
@@ -535,7 +545,7 @@ public sealed partial class MainForm : Form
         _typedBox.Font = new Font("Yu Gothic UI", 10.5f);
         _typedBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _typedBox.Margin = new Padding(0);
-        _typedBox.PlaceholderText = Strings.SearchPlaceholder;
+        _typedBox.PlaceholderText = Strings.SearchPlaceholderShort;
         _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
 
         // Enter opens a page and leaves the words that found it sitting there.
@@ -567,12 +577,20 @@ public sealed partial class MainForm : Form
         // Hidden until the key button is in: it is a tool for the keys, and an
         // empty dropdown beside the search box the rest of the time would be
         // one more thing to read past.
+        _traderBox.AccessibleName = Strings.TraderFilterName;
+        _traderBox.Visible = false;
+        _traderBox.Width = 118;
+        _traderBox.Anchor = AnchorStyles.Left;
+        _traderBox.Margin = new Padding(0, 0, 8, 0);
+        _traderBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
+        _keysTip.SetToolTip(_traderBox, Strings.TraderFilterTip);
+
         _mapBox.AccessibleName = Strings.MapFilterName;
         _mapBox.Visible = false;
-        _mapBox.Width = 150;
+        _mapBox.Width = 134;
         _mapBox.Anchor = AnchorStyles.Left;
         _mapBox.Margin = new Padding(0, 0, 10, 0);
-        _mapBox.SelectedIndexChanged += (_, _) => OnMapFilterChanged();
+        _mapBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
         _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
 
         _micHint.Text = Strings.MicPreparing;
@@ -613,19 +631,20 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 5,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        for (var column = 0; column < 4; column++)
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_dial, 0, 0);
         row.Controls.Add(_keysButton, 1, 0);
-        row.Controls.Add(_mapBox, 2, 0);
-        row.Controls.Add(box, 3, 0);
+        row.Controls.Add(_traderBox, 2, 0);
+        row.Controls.Add(_mapBox, 3, 0);
+        row.Controls.Add(box, 4, 0);
         return row;
     }
 
@@ -1489,6 +1508,9 @@ public sealed partial class MainForm : Form
             _grammarLabel.Text = Strings.Vocabulary(
                 setup.Rest.TaskCount + setup.Keys.TaskCount, setup.Note);
             ReportCoverage();
+
+            // The window has something to show from the moment it can search.
+            ListAllIfIdle();
         }
 
         if (setup.Error == "recognizer-missing")
@@ -1830,16 +1852,9 @@ public sealed partial class MainForm : Form
 
         if (text.Trim().Length == 0)
         {
-            // Emptying the box in key mode goes back to the whole list rather
-            // than to a blank panel: that list is the starting point there.
-            if (_keysOnly)
-            {
-                ListAllKeys();
-                return;
-            }
-
-            _candidates.Items.Clear();
-            _countLabel.Text = "";
+            // Emptying the box goes back to the whole list rather than to a
+            // blank panel: that list is where the window starts.
+            ListAll();
             return;
         }
 
@@ -2001,53 +2016,95 @@ public sealed partial class MainForm : Form
     {
         if (_catalog is null) return;
 
-        var keys = _catalog.Entries.Where(e => e.Kind == EntryKind.Key).ToList();
-        var placed = keys.Select(k => k.Group).Where(g => g.Length > 0).ToHashSet(StringComparer.Ordinal);
+        var maps = _catalog.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();
 
         _mapChoices.Clear();
         _mapBox.Items.Clear();
-
         _mapChoices.Add(null);
         _mapBox.Items.Add(Strings.MapsAll);
 
-        foreach (var map in _catalog.Entries.Where(e => e.Kind == EntryKind.Map)
-                     .Select(m => m.Name).Where(placed.Contains))
+        foreach (var map in maps)
         {
             _mapChoices.Add(map);
             _mapBox.Items.Add(map);
         }
 
-        if (keys.Any(k => k.Group.Length == 0))
+        _mapChoices.Add("");
+        _mapBox.Items.Add(Strings.MapsNone);
+        _mapBox.SelectedIndex = 0;
+        _mapBox.Visible = true;
+
+        // The order the game itself puts the traders in, along the top of the
+        // trading screen, so the dropdown reads like the game rather than like
+        // the alphabet. Anything the catalog holds that is not on this list
+        // follows it, so a new trader still appears.
+        var order = new[]
         {
-            _mapChoices.Add("");
-            _mapBox.Items.Add(Strings.MapsUnknown);
+            "Prapor", "Therapist", "Fence", "Skier", "Peacekeeper",
+            "Mechanic", "Ragman", "Jaeger", "Ref", "Lightkeeper",
+            "BTR Driver", "Story",
+        };
+
+        // Collector is not a trader and its items have a button of their own,
+        // so it would only get in the way here.
+        var traders = _catalog.Entries
+            .Where(e => e.Kind == EntryKind.Task)
+            .Select(e => e.Group)
+            .Where(g => g.Length > 0)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(g => Array.IndexOf(order, g) is var at && at >= 0 ? at : order.Length)
+            .ThenBy(g => g, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        _traderChoices.Clear();
+        _traderBox.Items.Clear();
+        _traderChoices.Add(null);
+        _traderBox.Items.Add(Strings.TradersAll);
+
+        foreach (var trader in traders)
+        {
+            _traderChoices.Add(trader);
+            _traderBox.Items.Add(Strings.TraderName(trader));
+
+            // The maps and the ways out of them sit between the last of the
+            // traders proper and the story - they belong to no trader, and
+            // "no trader" would describe them by what they are not.
+            if (trader != "BTR Driver") continue;
+
+            _traderChoices.Add(PlacesChoice);
+            _traderBox.Items.Add(Strings.TraderPlaces);
         }
 
-        _mapBox.SelectedIndex = 0;
+        _traderBox.SelectedIndex = 0;
+        _traderBox.Visible = !_keysOnly;
     }
 
     /// <summary>
-    /// Every key on the wiki in use, as the list rather than as an answer.
+    /// Everything on the wiki in use, as the list rather than as an answer.
     ///
-    /// Pressing the key button is itself a question - "what keys are there?" -
-    /// and an empty list under a pressed button answered it with nothing. From
-    /// here the map dropdown, the microphone and the box each narrow what is
-    /// already on screen.
+    /// The window opens on it and the key button switches between the two
+    /// halves of it. An empty panel answered "what is in here?" with nothing;
+    /// from a list, the dropdowns, the microphone and the box each narrow what
+    /// is already in front of the user.
     /// </summary>
-    private void ListAllKeys()
+    private void ListAll()
     {
         if (_catalog is null) return;
 
         var rows = _catalog.On(SelectedWiki)
-            .Where(e => e.Kind == EntryKind.Key)
-            .OrderBy(e => e.Group.Length == 0)
-            .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(e => e.Name, NaturalOrder.Instance)
+            .Where(e => (e.Kind == EntryKind.Key) == _keysOnly)
+            .OrderBy(e => e.Name, NaturalOrder.Instance)
             .Select(e => new CandidateRow(new TaskMatch(e, 0, ""), ReadingHint(e), listed: true))
             .ToList();
 
         DefaultSort(CandidateSort.Name);
         PopulateRows(rows);
+    }
+
+    /// <summary>The list with nothing asked of it, when nothing has been.</summary>
+    private void ListAllIfIdle()
+    {
+        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null) ListAll();
     }
 
     /// <summary>Which map the list is narrowed to: null for all of them.</summary>
@@ -2056,28 +2113,76 @@ public sealed partial class MainForm : Form
             ? _mapChoices[_mapBox.SelectedIndex]
             : null;
 
-    private void OnMapFilterChanged()
+    /// <summary>Which trader, when the keys are not the ones showing.</summary>
+    private string? SelectedTrader =>
+        !_keysOnly && _traderBox.SelectedIndex > 0 && _traderBox.SelectedIndex < _traderChoices.Count
+            ? _traderChoices[_traderBox.SelectedIndex]
+            : null;
+
+    private void OnFilterChanged()
     {
         if (_loading) return;
 
-        SetStatus(SelectedMap is { } map
-            ? Strings.KeysOnMap(map.Length == 0 ? Strings.MapsUnknown : map)
-            : Strings.KeysAllMaps);
+        SetStatus(Strings.Filtering(
+            Shown(SelectedTrader is { } who && who != PlacesChoice ? Strings.TraderName(who) : SelectedTrader,
+                Strings.TraderPlaces),
+            Shown(SelectedMap, Strings.MapsNone)));
 
         // The rows are already in hand; this only changes which of them show.
         PopulateRows(_lastRows);
+
+        static string? Shown(string? choice, string special) =>
+            choice is null ? null : choice.Length == 0 || choice == PlacesChoice ? special : choice;
     }
 
     /// <summary>
-    /// Whether a row survives the map dropdown. Only keys are filtered, and
-    /// only while the key button is in: the filter belongs to that mode, and a
-    /// stale choice must not quietly hide half the tasks.
+    /// The maps an entry belongs to, as the dropdown means it: where a key is,
+    /// where an extract leads out of, the map itself, and for a task every map
+    /// its page names - "Debut" is done on four of them. Empty for a task that
+    /// names none, which is a third of them: they are finished at a trader or
+    /// wherever the player happens to be.
     /// </summary>
-    private bool OnSelectedMap(CandidateRow row)
+    private static IReadOnlyList<string> MapsOf(WikiEntry entry) => entry.Kind switch
     {
-        if (!_keysOnly || SelectedMap is not { } map) return true;
+        EntryKind.Key or EntryKind.Extract =>
+            entry.Group.Length > 0 ? new[] { entry.Group } : Array.Empty<string>(),
+        EntryKind.Map => new[] { entry.Name },
+        EntryKind.Task => entry.Maps,
+        _ => Array.Empty<string>(),
+    };
 
-        return string.Equals(row.Match.Task.Group, map, StringComparison.Ordinal);
+    /// <summary>The dropdown item that stands for the maps and their exits
+    /// rather than for a trader.</summary>
+    private const string PlacesChoice = "places";
+
+    /// <summary>The trader an entry belongs to, or nothing.</summary>
+    private static string TraderOf(WikiEntry entry) => entry.Kind switch
+    {
+        EntryKind.Task or EntryKind.Item => entry.Group,
+        _ => "",
+    };
+
+    /// <summary>Whether a row survives both dropdowns.</summary>
+    private bool PassesFilters(CandidateRow row)
+    {
+        var entry = row.Match.Task;
+
+        if (SelectedMap is { } map)
+        {
+            var maps = MapsOf(entry);
+
+            var here = map.Length == 0
+                ? maps.Count == 0
+                : maps.Contains(map, StringComparer.Ordinal);
+
+            if (!here) return false;
+        }
+
+        if (SelectedTrader is not { } trader) return true;
+
+        if (trader == PlacesChoice) return entry.Kind is EntryKind.Map or EntryKind.Extract;
+
+        return string.Equals(TraderOf(entry), trader, StringComparison.Ordinal);
     }
 
     private void ToggleKeys()
@@ -2086,38 +2191,22 @@ public sealed partial class MainForm : Form
         _speech?.UseKeys(_keysOnly);
         _keysButton.Ghost = !_keysOnly;
         _keysButton.Invalidate();
-        _mapBox.Visible = _keysOnly;
-
-        _typedBox.PlaceholderText = _keysOnly
-            ? Strings.SearchPlaceholderShort
-            : Strings.SearchPlaceholder;
+        _traderBox.Visible = !_keysOnly;
 
         SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
 
-        // With nothing typed, pressing the button shows the keys themselves.
-        // With something in the box, that search is what the user is in the
-        // middle of, and it is run again over the half now in front - the
-        // button is also how "there are 3 keys" is answered.
-        if (!_keysOnly || _typedBox.Text.Trim().Length > 0 || _lastHeard is not null)
+        // With nothing typed and nothing said, the button just swaps one list
+        // for the other. With a search in progress it is run again over the
+        // half now in front - the button is also how "there are 3 keys" is
+        // answered - and falls back to the plain list when that finds nothing.
+        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null)
         {
-            // Coming out of key mode with an empty box: the keys on screen are
-            // not an answer to anything any more, so they go. Running the last
-            // utterance again would only fill the list with whatever the other
-            // half happens to sound like.
-            if (!_keysOnly && _typedBox.Text.Trim().Length == 0)
-            {
-                _candidates.Items.Clear();
-                _countLabel.Text = "";
-                return;
-            }
-
-            SearchAgain();
-
-            // Nothing there to narrow: the question becomes the plain one.
-            if (!_keysOnly || _candidates.Items.Count > 0) return;
+            ListAll();
+            return;
         }
 
-        ListAllKeys();
+        SearchAgain();
+        if (_candidates.Items.Count == 0) ListAll();
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -2289,9 +2378,13 @@ public sealed partial class MainForm : Form
             _sortHeader.Invalidate();
         }
 
+        // With one trader chosen, that column has nothing left to say; the map
+        // the task is done on does.
+        _candidates.MapsForTasks = SelectedTrader is { } chosen && chosen != PlacesChoice;
+
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var row in Ordered(rows).Where(OnSelectedMap)) _candidates.Items.Add(row);
+        foreach (var row in Ordered(rows).Where(PassesFilters)) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
@@ -2304,10 +2397,10 @@ public sealed partial class MainForm : Form
 
         _countLabel.Text = _candidates.Items.Count > 0
             ? listing
-                ? Strings.KeysListed(_candidates.Items.Count)
+                ? Strings.Listed(_candidates.Items.Count)
                 : Strings.Candidates(_candidates.Items.Count)
-            : elsewhere > 0 && SelectedMap is { } map
-                ? Strings.NoneOnMap(map.Length == 0 ? Strings.MapsUnknown : map, elsewhere)
+            : elsewhere > 0 && (SelectedMap ?? SelectedTrader) is { } narrowed
+                ? Strings.NoneHere(narrowed.Length == 0 ? Strings.MapsNone : narrowed, elsewhere)
                 : "";
     }
 

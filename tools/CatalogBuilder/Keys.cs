@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -42,6 +42,16 @@ public static partial class Keys
     /// <summary>The infobox line that says what the key opens, and where.</summary>
     [GeneratedRegex(@"(?im)^\s*\|\s*usage\s*=\s*(.*)$")]
     private static partial Regex UsageLine();
+
+    /// <summary>
+    /// The section that says where the lock is. Written for keys whose infobox
+    /// says only "this key has no usage" - the room is always open, or the lock
+    /// was taken out of the game - but which still sit on a map: every Health
+    /// Resort room key is on Shoreline, every RB- key on Reserve.
+    /// </summary>
+    [GeneratedRegex(@"(?is)==\s*Lock Location\s*==(.*?)(?=?
+==|$)")]
+    private static partial Regex LockLocation();
 
     [GeneratedRegex(@"href=""/eft/([^""#?]+)""")]
     private static partial Regex JapaneseLink();
@@ -107,7 +117,7 @@ public static partial class Keys
     // ------------------------------------------------------------- the pages
 
     /// <summary>What one key's wiki page says about itself.</summary>
-    private readonly record struct KeyPage(string? Id, string? Lead, string? Usage);
+    private readonly record struct KeyPage(string? Id, string? Lead, string? Usage, string? Lock);
 
     private static async Task<Dictionary<string, KeyPage>> PagesAsync(
         List<string> titles, Wikis wikis, CancellationToken ct)
@@ -148,11 +158,13 @@ public static partial class Keys
                 var id = ItemId().Match(text);
                 var lead = LeadLabel().Match(text);
                 var usage = UsageLine().Match(text);
+                var where = LockLocation().Match(text);
 
                 found[title] = new KeyPage(
                     id.Success ? id.Groups[1].Value : null,
                     lead.Success ? lead.Groups[1].Value.Trim() : null,
-                    usage.Success ? usage.Groups[1].Value : null);
+                    usage.Success ? usage.Groups[1].Value : null,
+                    where.Success ? where.Groups[1].Value : null);
             }
         }
 
@@ -171,9 +183,12 @@ public static partial class Keys
     /// The earliest map named wins: the sentence leads with where the door is,
     /// and anything else it mentions comes later and in passing.
     /// </summary>
-    private static string? MapOf(KeyPage page, IReadOnlyList<string> maps)
+    private static string? MapOf(KeyPage page, IReadOnlyList<string> maps) =>
+        MapIn(page.Usage, maps) ?? MapIn(page.Lock, maps);
+
+    private static string? MapIn(string? usage, IReadOnlyList<string> maps)
     {
-        if (page.Usage is not { } usage) return null;
+        if (usage is null) return null;
 
         // Only the links. The prose around them is full of words that contain
         // a map's name without being one: "the laboratory" holds "The Lab",

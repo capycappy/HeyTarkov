@@ -1,4 +1,4 @@
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace HeyTarkov.CatalogBuilder;
@@ -22,6 +22,11 @@ internal static class Program
         // costs most of an hour and annoys somebody else's server.
         var keysOnly = args.Contains("--keys", StringComparer.OrdinalIgnoreCase);
 
+        // "--taskmaps" fills in which maps each task names, in place. Fifty
+        // pages a request, so it is a couple of minutes rather than an hour.
+        var taskMapsOnly = args.Contains("--taskmaps", StringComparer.OrdinalIgnoreCase);
+        var objectivesOnly = args.Contains("--objectives", StringComparer.OrdinalIgnoreCase);
+
         var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
             ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
 
@@ -30,6 +35,22 @@ internal static class Program
             using var wikis = new Wikis();
 
             if (keysOnly) return await RefreshKeysAsync(wikis, output).ConfigureAwait(false);
+            if (taskMapsOnly) return await RefreshTaskMapsAsync(wikis, output).ConfigureAwait(false);
+
+            if (objectivesOnly)
+            {
+                if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } only) return 1;
+
+                var onlyTasks = only.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
+                var onlyMaps = only.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+
+                await Tasks.AddMapsFromObjectivesAsync(onlyTasks, onlyMaps, wikis).ConfigureAwait(false);
+
+                only.UpdatedAt = DateTimeOffset.Now;
+                await WriteAsync(only, output).ConfigureAwait(false);
+                Report(only, output);
+                return 0;
+            }
 
             Console.WriteLine("tasks and seasonal events...");
             var tasks = await Tasks.FetchAsync(wikis);
@@ -42,6 +63,13 @@ internal static class Program
             Console.WriteLine();
             Console.WriteLine("collector items...");
             var items = await Collector.FetchAsync(wikis);
+
+            Console.WriteLine();
+            Console.WriteLine("where the tasks are done...");
+            var mapNames = maps.Where(m => m.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+            await Tasks.AddMapsAsync(tasks, mapNames, wikis);
+            await Tasks.AddMapsFromJapaneseAsync(tasks, mapNames, wikis);
+            await Tasks.AddMapsFromObjectivesAsync(tasks, mapNames, wikis);
 
             Console.WriteLine();
             Console.WriteLine("keys...");
@@ -167,6 +195,64 @@ internal static class Program
         Report(catalog, output);
         return 0;
     }
+
+    /// <summary>
+    /// Fills in the maps of the tasks already in the file, leaving everything
+    /// else untouched.
+    /// </summary>
+    private static async Task<int> RefreshTaskMapsAsync(Wikis wikis, string output)
+    {
+        if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } catalog) return 1;
+
+        var tasks = catalog.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
+        var maps = catalog.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+
+        Console.WriteLine($"task maps only, over {tasks.Count} tasks...");
+
+        await Tasks.AddMapsAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
+
+        if (tasks.All(t => t.Maps.Count == 0))
+        {
+            Console.Error.WriteLine("No maps came back; leaving the file alone.");
+            return 1;
+        }
+
+        catalog.UpdatedAt = DateTimeOffset.Now;
+        await WriteAsync(catalog, output).ConfigureAwait(false);
+
+        Report(catalog, output);
+        return 0;
+    }
+
+    private static async Task<WikiCatalog?> ReadCatalogAsync(string output)
+    {
+        if (!File.Exists(output))
+        {
+            Console.Error.WriteLine($"{output} is not there; run the whole build first.");
+            return null;
+        }
+
+        var catalog = JsonSerializer.Deserialize<WikiCatalog>(
+            await File.ReadAllTextAsync(output).ConfigureAwait(false));
+
+        if (catalog is null || catalog.Entries.Count == 0)
+        {
+            Console.Error.WriteLine($"{output} holds no catalog; run the whole build first.");
+            return null;
+        }
+
+        return catalog;
+    }
+
+    private static Task WriteAsync(WikiCatalog catalog, string output) =>
+        File.WriteAllTextAsync(output, JsonSerializer.Serialize(catalog,
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            }));
 
     private static void Report(WikiCatalog catalog, string output)
     {
