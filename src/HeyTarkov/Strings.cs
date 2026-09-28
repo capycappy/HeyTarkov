@@ -158,8 +158,10 @@ public static class Strings
     /// the wiki places a seventh of the keys nowhere.</summary>
     public static string MapsNone => T("マップ指定なし", "No map");
 
-    /// <summary>Maps and extracts, which belong to no trader.</summary>
-    public static string TraderNone => T("トレーダーなし", "No trader");
+    /// <summary>Maps and their exits, in the dropdown that otherwise holds
+    /// traders. They belong to no trader, and naming them for what they are
+    /// reads better than naming them for what they lack.</summary>
+    public static string TraderPlaces => T("MAP", "MAP");
 
     public static string MapFilterName => T("マップで絞り込み", "Filter by map");
 

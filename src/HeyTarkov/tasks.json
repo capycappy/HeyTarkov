@@ -1,10 +1,10 @@
 {
-  "UpdatedAt": "2026-09-28T21:21:07.0789199+08:00",
+  "UpdatedAt": "2026-09-28T21:32:10.4488068+08:00",
   "Entries": [
     {
       "Kind": 0,
       "Name": "A Key to Salvation",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -18,7 +18,7 @@
     {
       "Kind": 0,
       "Name": "A Kind Snow Maiden",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -32,7 +32,7 @@
     {
       "Kind": 0,
       "Name": "A New Hope",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Shoreline"
       ],
@@ -48,7 +48,7 @@
     {
       "Kind": 0,
       "Name": "A Small Celebration",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Customs",
         "Interchange",
@@ -69,7 +69,7 @@
     {
       "Kind": 0,
       "Name": "Accept Delivery",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -83,7 +83,7 @@
     {
       "Kind": 0,
       "Name": "Action test",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -97,7 +97,7 @@
     {
       "Kind": 0,
       "Name": "Adaptive Diplomacy",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -115,7 +115,7 @@
     {
       "Kind": 0,
       "Name": "Afterparty",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Customs",
         "Reserve",
@@ -138,7 +138,7 @@
     {
       "Kind": 0,
       "Name": "All-Inclusive Support",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Lighthouse"
       ],
@@ -154,7 +154,7 @@
     {
       "Kind": 0,
       "Name": "Alloy",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Shoreline",
         "Lighthouse"
@@ -171,7 +171,7 @@
     {
       "Kind": 0,
       "Name": "Arena Masquerade",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -185,7 +185,7 @@
     {
       "Kind": 0,
       "Name": "Arena Pantheon",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -199,7 +199,7 @@
     {
       "Kind": 0,
       "Name": "Atonement",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs",
         "Shoreline"
@@ -216,7 +216,7 @@
     {
       "Kind": 0,
       "Name": "Backup Plan",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Woods",
         "Customs"
@@ -233,7 +233,7 @@
     {
       "Kind": 0,
       "Name": "Bad Feeling",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "The Lab"
       ],
@@ -249,7 +249,7 @@
     {
       "Kind": 0,
       "Name": "Bad Santa",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -263,7 +263,7 @@
     {
       "Kind": 0,
       "Name": "Barrel warm-up",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -277,7 +277,7 @@
     {
       "Kind": 0,
       "Name": "Battle of the Duelists",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -291,7 +291,7 @@
     {
       "Kind": 0,
       "Name": "Before the Rain",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -305,7 +305,7 @@
     {
       "Kind": 0,
       "Name": "Berserker",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -319,7 +319,7 @@
     {
       "Kind": 0,
       "Name": "Best Served Cold",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -333,7 +333,7 @@
     {
       "Kind": 0,
       "Name": "Blood on the Snow",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -347,7 +347,7 @@
     {
       "Kind": 0,
       "Name": "Bloodhounds",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Woods",
@@ -365,7 +365,7 @@
     {
       "Kind": 0,
       "Name": "Brain Matter Distribution",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -379,7 +379,7 @@
     {
       "Kind": 0,
       "Name": "Break Through",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -393,7 +393,7 @@
     {
       "Kind": 0,
       "Name": "Breathing Room",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -407,7 +407,7 @@
     {
       "Kind": 0,
       "Name": "Bucket of Nothing",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Customs"
       ],
@@ -423,7 +423,7 @@
     {
       "Kind": 0,
       "Name": "Bulldogs Under The Rug",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Shoreline"
       ],
@@ -439,7 +439,7 @@
     {
       "Kind": 0,
       "Name": "Burn It Down",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -453,7 +453,7 @@
     {
       "Kind": 0,
       "Name": "Casus belli",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Customs",
         "Interchange",
@@ -473,7 +473,7 @@
     {
       "Kind": 0,
       "Name": "Caught Red-Handed",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Lighthouse"
       ],
@@ -489,7 +489,7 @@
     {
       "Kind": 0,
       "Name": "Ceasefire - Information",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Shoreline"
       ],
@@ -505,7 +505,7 @@
     {
       "Kind": 0,
       "Name": "Ceasefire - Part 2",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Customs",
         "Shoreline"
@@ -522,7 +522,7 @@
     {
       "Kind": 0,
       "Name": "Cheer Up",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -536,7 +536,7 @@
     {
       "Kind": 0,
       "Name": "Chilly",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -550,7 +550,7 @@
     {
       "Kind": 0,
       "Name": "Chop the Thieving Hand",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Interchange",
         "Shoreline",
@@ -574,7 +574,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Dinner",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -588,7 +588,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Finale",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -602,7 +602,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 1",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -616,7 +616,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 2",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -630,7 +630,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 3",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -644,7 +644,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 4",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -658,7 +658,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 5",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -672,7 +672,7 @@
     {
       "Kind": 0,
       "Name": "Christmas Time - Part 6",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -686,7 +686,7 @@
     {
       "Kind": 0,
       "Name": "Clear Conscience",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Lighthouse",
         "Shoreline",
@@ -707,7 +707,7 @@
     {
       "Kind": 0,
       "Name": "Clearing the Way",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs"
       ],
@@ -723,7 +723,7 @@
     {
       "Kind": 0,
       "Name": "Clip Their Wings",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -737,7 +737,7 @@
     {
       "Kind": 0,
       "Name": "Cocktail Tasting",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -751,7 +751,7 @@
     {
       "Kind": 0,
       "Name": "Cold Start",
-      "Group": "",
+      "Group": "BTR Driver",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -765,7 +765,7 @@
     {
       "Kind": 0,
       "Name": "Come by the Fire",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Woods"
       ],
@@ -781,7 +781,7 @@
     {
       "Kind": 0,
       "Name": "Comfort Zone",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -795,7 +795,7 @@
     {
       "Kind": 0,
       "Name": "Communication Difficulties",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Lighthouse"
       ],
@@ -811,7 +811,7 @@
     {
       "Kind": 0,
       "Name": "Compensation for Damage - Barkeep",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -825,7 +825,7 @@
     {
       "Kind": 0,
       "Name": "Compensation for Damage - Collection",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -839,7 +839,7 @@
     {
       "Kind": 0,
       "Name": "Compensation for Damage - Trust",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -853,7 +853,7 @@
     {
       "Kind": 0,
       "Name": "Compensation for Damage - Wager",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -867,7 +867,7 @@
     {
       "Kind": 0,
       "Name": "Compensation for Damage - Wergild",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -881,7 +881,7 @@
     {
       "Kind": 0,
       "Name": "Competition Protection",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -895,7 +895,7 @@
     {
       "Kind": 0,
       "Name": "Compromise",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -909,7 +909,7 @@
     {
       "Kind": 0,
       "Name": "Conservation Area",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Woods"
       ],
@@ -925,7 +925,7 @@
     {
       "Kind": 0,
       "Name": "Contagious Beast",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -939,7 +939,7 @@
     {
       "Kind": 0,
       "Name": "Cream of the Crop",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Lighthouse"
@@ -956,7 +956,7 @@
     {
       "Kind": 0,
       "Name": "Creator Inspiration - Part 1",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -970,7 +970,7 @@
     {
       "Kind": 0,
       "Name": "Creator Inspiration - Part 2",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -984,7 +984,7 @@
     {
       "Kind": 0,
       "Name": "Customer Communication",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -998,7 +998,7 @@
     {
       "Kind": 0,
       "Name": "Dark Times",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Factory"
       ],
@@ -1014,7 +1014,7 @@
     {
       "Kind": 0,
       "Name": "Darkest Hour Is Just Before Dawn",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Ground Zero",
         "Streets of Tarkov",
@@ -1032,7 +1032,7 @@
     {
       "Kind": 0,
       "Name": "Debts",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1046,7 +1046,7 @@
     {
       "Kind": 0,
       "Name": "Decryption Hurdles - Part 1",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1060,7 +1060,7 @@
     {
       "Kind": 0,
       "Name": "Decryption Hurdles - Part 2",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Reserve"
       ],
@@ -1076,7 +1076,7 @@
     {
       "Kind": 0,
       "Name": "Decryption Hurdles - Part 3",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Customs"
       ],
@@ -1092,7 +1092,7 @@
     {
       "Kind": 0,
       "Name": "Ding-Ding-Ding",
-      "Group": "",
+      "Group": "Lightkeeper",
       "Maps": [
         "Customs",
         "Shoreline"
@@ -1109,7 +1109,7 @@
     {
       "Kind": 0,
       "Name": "Dirty Blood",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "The Lab"
       ],
@@ -1125,7 +1125,7 @@
     {
       "Kind": 0,
       "Name": "Dish Served Cold",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -1143,7 +1143,7 @@
     {
       "Kind": 0,
       "Name": "Disrupting the Party",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1157,7 +1157,7 @@
     {
       "Kind": 0,
       "Name": "Distributed Strike",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -1175,7 +1175,7 @@
     {
       "Kind": 0,
       "Name": "Domain Expansion",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1189,7 +1189,7 @@
     {
       "Kind": 0,
       "Name": "Don’t Believe Your Eyes",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "The Lab"
       ],
@@ -1205,7 +1205,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 1",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Woods"
       ],
@@ -1221,7 +1221,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 2",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Woods"
       ],
@@ -1237,7 +1237,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 3",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Streets of Tarkov",
         "Customs"
@@ -1254,7 +1254,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 4",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1268,7 +1268,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 5",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Customs",
@@ -1288,7 +1288,7 @@
     {
       "Kind": 0,
       "Name": "Down the Rabbit Hole - Part 6",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -1304,7 +1304,7 @@
     {
       "Kind": 0,
       "Name": "Duck Hunt",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -1326,7 +1326,7 @@
     {
       "Kind": 0,
       "Name": "Easy Job - Part 2",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Lighthouse"
       ],
@@ -1342,7 +1342,7 @@
     {
       "Kind": 0,
       "Name": "Enough Drinks for That One",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Interchange"
       ],
@@ -1358,7 +1358,7 @@
     {
       "Kind": 0,
       "Name": "Every Man for Himself",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs"
       ],
@@ -1374,7 +1374,7 @@
     {
       "Kind": 0,
       "Name": "Evil Spirits",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Ground Zero",
         "Customs",
@@ -1397,7 +1397,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 1",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1411,7 +1411,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 2",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1425,7 +1425,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 3",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1439,7 +1439,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 4",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1453,7 +1453,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 5",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1467,7 +1467,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 6",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1481,7 +1481,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 7",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1495,7 +1495,7 @@
     {
       "Kind": 0,
       "Name": "Examinatio - Part 8",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1509,7 +1509,7 @@
     {
       "Kind": 0,
       "Name": "External Interest",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1523,7 +1523,7 @@
     {
       "Kind": 0,
       "Name": "Failed Setup",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Factory",
         "Customs",
@@ -1542,7 +1542,7 @@
     {
       "Kind": 0,
       "Name": "Fairy Tale Showdown",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1556,7 +1556,7 @@
     {
       "Kind": 0,
       "Name": "Fearless Beast",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1570,7 +1570,7 @@
     {
       "Kind": 0,
       "Name": "Field Testing",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1584,7 +1584,7 @@
     {
       "Kind": 0,
       "Name": "Fight Back",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Shoreline",
         "Customs",
@@ -1602,7 +1602,7 @@
     {
       "Kind": 0,
       "Name": "Find the Source",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "The Lab"
       ],
@@ -1618,7 +1618,7 @@
     {
       "Kind": 0,
       "Name": "First Blood",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1632,7 +1632,7 @@
     {
       "Kind": 0,
       "Name": "First Introduction",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1646,7 +1646,7 @@
     {
       "Kind": 0,
       "Name": "Fishing With Shishiga",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Customs",
         "Woods",
@@ -1668,7 +1668,7 @@
     {
       "Kind": 0,
       "Name": "Forced Measure",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "The Lab"
       ],
@@ -1684,7 +1684,7 @@
     {
       "Kind": 0,
       "Name": "Foreign Support",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -1700,7 +1700,7 @@
     {
       "Kind": 0,
       "Name": "Forgotten Acquaintance",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Lighthouse"
       ],
@@ -1716,7 +1716,7 @@
     {
       "Kind": 0,
       "Name": "Forgotten Oaths",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Shoreline"
       ],
@@ -1732,7 +1732,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Alternative Solution",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1746,7 +1746,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Part 1",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Reserve"
       ],
@@ -1762,7 +1762,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Part 2",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Shoreline"
       ],
@@ -1778,7 +1778,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Part 3",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Woods"
       ],
@@ -1794,7 +1794,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Part 4",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1808,7 +1808,7 @@
     {
       "Kind": 0,
       "Name": "Friend from Norvinsk - Part 5",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1822,7 +1822,7 @@
     {
       "Kind": 0,
       "Name": "From Beginning To End",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Ground Zero",
         "Streets of Tarkov",
@@ -1846,7 +1846,7 @@
     {
       "Kind": 0,
       "Name": "Frost and Sun",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1860,7 +1860,7 @@
     {
       "Kind": 0,
       "Name": "Game Review - Part 1",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1874,7 +1874,7 @@
     {
       "Kind": 0,
       "Name": "Game Review - Part 2",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1888,7 +1888,7 @@
     {
       "Kind": 0,
       "Name": "Game Review - Part 3",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1902,7 +1902,7 @@
     {
       "Kind": 0,
       "Name": "Gendarmerie - School Guard",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -1918,7 +1918,7 @@
     {
       "Kind": 0,
       "Name": "General Cleanup",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1932,7 +1932,7 @@
     {
       "Kind": 0,
       "Name": "Getting to the Core",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1946,7 +1946,7 @@
     {
       "Kind": 0,
       "Name": "Global Threat",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Shoreline"
       ],
@@ -1962,7 +1962,7 @@
     {
       "Kind": 0,
       "Name": "Gloves Off",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -1976,7 +1976,7 @@
     {
       "Kind": 0,
       "Name": "Granny's Tales",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Ground Zero",
         "Customs",
@@ -1999,7 +1999,7 @@
     {
       "Kind": 0,
       "Name": "Guardian of Nature",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Woods"
       ],
@@ -2015,7 +2015,7 @@
     {
       "Kind": 0,
       "Name": "Gun Connoisseur",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2029,7 +2029,7 @@
     {
       "Kind": 0,
       "Name": "Gunsmith - Special Order",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2043,7 +2043,7 @@
     {
       "Kind": 0,
       "Name": "Habet, hoc habet!",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Interchange"
       ],
@@ -2059,7 +2059,7 @@
     {
       "Kind": 0,
       "Name": "Harley Forever",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Lighthouse",
         "Streets of Tarkov"
@@ -2076,7 +2076,7 @@
     {
       "Kind": 0,
       "Name": "Healer",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2090,7 +2090,7 @@
     {
       "Kind": 0,
       "Name": "Healing",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2104,7 +2104,7 @@
     {
       "Kind": 0,
       "Name": "Hide in Plain Sight",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Customs",
         "Woods",
@@ -2125,7 +2125,7 @@
     {
       "Kind": 0,
       "Name": "High Voltage",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2139,7 +2139,7 @@
     {
       "Kind": 0,
       "Name": "Hint",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2153,7 +2153,7 @@
     {
       "Kind": 0,
       "Name": "Hippocratic Oath",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2167,7 +2167,7 @@
     {
       "Kind": 0,
       "Name": "Historical Prospects",
-      "Group": "",
+      "Group": "Lightkeeper",
       "Maps": [
         "Customs",
         "Woods",
@@ -2185,7 +2185,7 @@
     {
       "Kind": 0,
       "Name": "Holiday Beyond the Means",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2199,7 +2199,7 @@
     {
       "Kind": 0,
       "Name": "Home Comfort",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2213,7 +2213,7 @@
     {
       "Kind": 0,
       "Name": "Hustle (2023)",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Customs",
         "Woods",
@@ -2233,7 +2233,7 @@
     {
       "Kind": 0,
       "Name": "Hustle (2024)",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Reserve"
       ],
@@ -2249,7 +2249,7 @@
     {
       "Kind": 0,
       "Name": "If I Can't Have It",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "The Lab"
       ],
@@ -2265,7 +2265,7 @@
     {
       "Kind": 0,
       "Name": "Illegal Logging",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Woods",
@@ -2284,7 +2284,7 @@
     {
       "Kind": 0,
       "Name": "Illusion of Mercy",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2298,7 +2298,7 @@
     {
       "Kind": 0,
       "Name": "Import Control",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Factory"
       ],
@@ -2314,7 +2314,7 @@
     {
       "Kind": 0,
       "Name": "Important Patient",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2328,7 +2328,7 @@
     {
       "Kind": 0,
       "Name": "In and Out",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Woods",
@@ -2347,7 +2347,7 @@
     {
       "Kind": 0,
       "Name": "Into the Inferno",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Woods",
@@ -2366,7 +2366,7 @@
     {
       "Kind": 0,
       "Name": "Job That Kills",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2380,7 +2380,7 @@
     {
       "Kind": 0,
       "Name": "Key Component",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Lighthouse",
         "The Lab"
@@ -2397,7 +2397,7 @@
     {
       "Kind": 0,
       "Name": "Key to Every Door",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "The Lab"
       ],
@@ -2413,7 +2413,7 @@
     {
       "Kind": 0,
       "Name": "Khorovod",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Lighthouse",
@@ -2434,7 +2434,7 @@
     {
       "Kind": 0,
       "Name": "KnivesOut - Part 1",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2448,7 +2448,7 @@
     {
       "Kind": 0,
       "Name": "KnivesOut - Part 2",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2462,7 +2462,7 @@
     {
       "Kind": 0,
       "Name": "KnivesOut - Part 3",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2476,7 +2476,7 @@
     {
       "Kind": 0,
       "Name": "Knuckle Sandwich",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Woods"
       ],
@@ -2492,7 +2492,7 @@
     {
       "Kind": 0,
       "Name": "Kolotun",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Streets of Tarkov",
         "Ground Zero",
@@ -2516,7 +2516,7 @@
     {
       "Kind": 0,
       "Name": "Last Spurt - Pioneer",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Reserve"
       ],
@@ -2532,7 +2532,7 @@
     {
       "Kind": 0,
       "Name": "Lay Low",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2546,7 +2546,7 @@
     {
       "Kind": 0,
       "Name": "Letters",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Customs"
       ],
@@ -2562,7 +2562,7 @@
     {
       "Kind": 0,
       "Name": "Liaison",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Customs"
       ],
@@ -2578,7 +2578,7 @@
     {
       "Kind": 0,
       "Name": "Magazines Are for the Weak",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2592,7 +2592,7 @@
     {
       "Kind": 0,
       "Name": "Make Amends - Quarantine",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2606,7 +2606,7 @@
     {
       "Kind": 0,
       "Name": "Make Amends - Software",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2620,7 +2620,7 @@
     {
       "Kind": 0,
       "Name": "Martial arts course",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2634,7 +2634,7 @@
     {
       "Kind": 0,
       "Name": "Matter of Technique",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -2650,7 +2650,7 @@
     {
       "Kind": 0,
       "Name": "Mayday",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2664,7 +2664,7 @@
     {
       "Kind": 0,
       "Name": "Missing in Action",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Woods",
         "Reserve",
@@ -2682,7 +2682,7 @@
     {
       "Kind": 0,
       "Name": "More Red",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2696,7 +2696,7 @@
     {
       "Kind": 0,
       "Name": "Morituri te salutant",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2710,7 +2710,7 @@
     {
       "Kind": 0,
       "Name": "Munchkin",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2724,7 +2724,7 @@
     {
       "Kind": 0,
       "Name": "Musketeers",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2738,7 +2738,7 @@
     {
       "Kind": 0,
       "Name": "My Blood Type Mark is on the Sleeve",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "The Lab"
       ],
@@ -2754,7 +2754,7 @@
     {
       "Kind": 0,
       "Name": "Night of The Cult",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2768,7 +2768,7 @@
     {
       "Kind": 0,
       "Name": "No Gifts for You",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2782,7 +2782,7 @@
     {
       "Kind": 0,
       "Name": "No Man Is an Island",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2796,7 +2796,7 @@
     {
       "Kind": 0,
       "Name": "No Peeking!",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Ground Zero"
       ],
@@ -2812,7 +2812,7 @@
     {
       "Kind": 0,
       "Name": "No Smoke Without Fire",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Shoreline",
         "Lighthouse",
@@ -2830,7 +2830,7 @@
     {
       "Kind": 0,
       "Name": "Not a Step Back!",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Reserve"
       ],
@@ -2846,7 +2846,7 @@
     {
       "Kind": 0,
       "Name": "Not Below Zero",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2860,7 +2860,7 @@
     {
       "Kind": 0,
       "Name": "Number Temporarily Unavailable",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Lighthouse"
       ],
@@ -2876,7 +2876,7 @@
     {
       "Kind": 0,
       "Name": "Obstacle Course",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Shoreline"
       ],
@@ -2892,7 +2892,7 @@
     {
       "Kind": 0,
       "Name": "Obstruction Destruction",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Customs"
       ],
@@ -2908,7 +2908,7 @@
     {
       "Kind": 0,
       "Name": "Only Victories",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2922,7 +2922,7 @@
     {
       "Kind": 0,
       "Name": "Ours by Right",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2936,7 +2936,7 @@
     {
       "Kind": 0,
       "Name": "Out of Time",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Streets of Tarkov",
         "Customs",
@@ -2958,7 +2958,7 @@
     {
       "Kind": 0,
       "Name": "Overseas Trust - Part 1",
-      "Group": "",
+      "Group": "Lightkeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2972,7 +2972,7 @@
     {
       "Kind": 0,
       "Name": "Overseas Trust - Part 2",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -2986,7 +2986,7 @@
     {
       "Kind": 0,
       "Name": "Parasites",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -3002,7 +3002,7 @@
     {
       "Kind": 0,
       "Name": "Party Preparations",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3016,7 +3016,7 @@
     {
       "Kind": 0,
       "Name": "Patch the Vulnerability",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "The Lab"
       ],
@@ -3032,7 +3032,7 @@
     {
       "Kind": 0,
       "Name": "Pecunia Non Olet",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3046,7 +3046,7 @@
     {
       "Kind": 0,
       "Name": "Photo Hunt",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Ground Zero"
       ],
@@ -3062,7 +3062,7 @@
     {
       "Kind": 0,
       "Name": "Poisoning",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Customs"
       ],
@@ -3078,7 +3078,7 @@
     {
       "Kind": 0,
       "Name": "Preemptive Strike",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Shoreline",
         "Customs",
@@ -3096,7 +3096,7 @@
     {
       "Kind": 0,
       "Name": "Preliminary Survey",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "The Lab"
       ],
@@ -3112,7 +3112,7 @@
     {
       "Kind": 0,
       "Name": "Pressured by Circumstances",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Factory"
       ],
@@ -3128,7 +3128,7 @@
     {
       "Kind": 0,
       "Name": "Progression Difficulties - Part 1",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3142,7 +3142,7 @@
     {
       "Kind": 0,
       "Name": "Progression Difficulties - Part 2",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3156,7 +3156,7 @@
     {
       "Kind": 0,
       "Name": "Project of the Century (Consequences)",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -3174,7 +3174,7 @@
     {
       "Kind": 0,
       "Name": "Project of the Century (Finale)",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -3192,7 +3192,7 @@
     {
       "Kind": 0,
       "Name": "Protection of Interests",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -3208,7 +3208,7 @@
     {
       "Kind": 0,
       "Name": "Provide Cover",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Woods",
         "Shoreline"
@@ -3225,7 +3225,7 @@
     {
       "Kind": 0,
       "Name": "Pursuit of Power",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Shoreline"
       ],
@@ -3241,7 +3241,7 @@
     {
       "Kind": 0,
       "Name": "Radical Treatment",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Lighthouse",
         "Shoreline",
@@ -3262,7 +3262,7 @@
     {
       "Kind": 0,
       "Name": "Radio Club",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Woods"
       ],
@@ -3278,7 +3278,7 @@
     {
       "Kind": 0,
       "Name": "Rat Hunter",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3292,7 +3292,7 @@
     {
       "Kind": 0,
       "Name": "Redemption",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Customs",
         "Shoreline"
@@ -3309,7 +3309,7 @@
     {
       "Kind": 0,
       "Name": "Reduce the Distance",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Interchange"
       ],
@@ -3325,7 +3325,7 @@
     {
       "Kind": 0,
       "Name": "Remedy",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Shoreline"
       ],
@@ -3341,7 +3341,7 @@
     {
       "Kind": 0,
       "Name": "Restocking Supplies",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3355,7 +3355,7 @@
     {
       "Kind": 0,
       "Name": "Rigged",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3369,7 +3369,7 @@
     {
       "Kind": 0,
       "Name": "Risks of Small Business",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -3385,7 +3385,7 @@
     {
       "Kind": 0,
       "Name": "Root of All Evil",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3399,7 +3399,7 @@
     {
       "Kind": 0,
       "Name": "Run Aground",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs"
       ],
@@ -3415,7 +3415,7 @@
     {
       "Kind": 0,
       "Name": "Safety First",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3429,7 +3429,7 @@
     {
       "Kind": 0,
       "Name": "Sample IV - A New Hope",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "The Lab",
         "Streets of Tarkov"
@@ -3446,7 +3446,7 @@
     {
       "Kind": 0,
       "Name": "Sanitary Standards - Part 2",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3460,7 +3460,7 @@
     {
       "Kind": 0,
       "Name": "SBEU Mimicry",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3474,7 +3474,7 @@
     {
       "Kind": 0,
       "Name": "Seeking Information",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Lighthouse"
       ],
@@ -3490,7 +3490,7 @@
     {
       "Kind": 0,
       "Name": "Self-Employed",
-      "Group": "",
+      "Group": "BTR Driver",
       "Maps": [
         "Woods"
       ],
@@ -3506,7 +3506,7 @@
     {
       "Kind": 0,
       "Name": "Sensory Analysis - Part 2",
-      "Group": "",
+      "Group": "BTR Driver",
       "Maps": [
         "Woods",
         "Streets of Tarkov"
@@ -3523,7 +3523,7 @@
     {
       "Kind": 0,
       "Name": "Sharpest Shooter",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3537,7 +3537,7 @@
     {
       "Kind": 0,
       "Name": "Shell Game",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3551,7 +3551,7 @@
     {
       "Kind": 0,
       "Name": "Shoot First",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3565,7 +3565,7 @@
     {
       "Kind": 0,
       "Name": "Short on Hands",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Customs",
         "Interchange",
@@ -3585,7 +3585,7 @@
     {
       "Kind": 0,
       "Name": "Sightseeing",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Ground Zero",
         "Streets of Tarkov",
@@ -3609,7 +3609,7 @@
     {
       "Kind": 0,
       "Name": "Signal - Part 3",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Shoreline"
       ],
@@ -3625,7 +3625,7 @@
     {
       "Kind": 0,
       "Name": "Skiing with Skier",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3639,7 +3639,7 @@
     {
       "Kind": 0,
       "Name": "Spinning the drums",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3653,7 +3653,7 @@
     {
       "Kind": 0,
       "Name": "Spread the Damage",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Ground Zero"
       ],
@@ -3669,7 +3669,7 @@
     {
       "Kind": 0,
       "Name": "Spring Never Changes",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Ground Zero",
         "Customs",
@@ -3692,7 +3692,7 @@
     {
       "Kind": 0,
       "Name": "Spring!",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Ground Zero",
         "Customs",
@@ -3715,7 +3715,7 @@
     {
       "Kind": 0,
       "Name": "Staff Shortage",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3729,7 +3729,7 @@
     {
       "Kind": 0,
       "Name": "Stay Frosty",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3743,7 +3743,7 @@
     {
       "Kind": 0,
       "Name": "Stay on Top",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3757,7 +3757,7 @@
     {
       "Kind": 0,
       "Name": "Staying Light",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3771,7 +3771,7 @@
     {
       "Kind": 0,
       "Name": "Stealing the Stolen",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Woods",
         "Customs",
@@ -3789,7 +3789,7 @@
     {
       "Kind": 0,
       "Name": "Stop the Fight!",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3803,7 +3803,7 @@
     {
       "Kind": 0,
       "Name": "Straw",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3817,7 +3817,7 @@
     {
       "Kind": 0,
       "Name": "Supply and Demand",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3831,7 +3831,7 @@
     {
       "Kind": 0,
       "Name": "Surprise Gift",
-      "Group": "",
+      "Group": "Lightkeeper",
       "Maps": [
         "Customs"
       ],
@@ -3847,7 +3847,7 @@
     {
       "Kind": 0,
       "Name": "Take Two",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3861,7 +3861,7 @@
     {
       "Kind": 0,
       "Name": "Taking What's Mine",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [
         "Customs",
         "Interchange",
@@ -3881,7 +3881,7 @@
     {
       "Kind": 0,
       "Name": "Teacher",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3895,7 +3895,7 @@
     {
       "Kind": 0,
       "Name": "That’s a Great Plan, Walter",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3909,7 +3909,7 @@
     {
       "Kind": 0,
       "Name": "The Bad Batch",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3923,7 +3923,7 @@
     {
       "Kind": 0,
       "Name": "The Bosses gathering",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Reserve"
       ],
@@ -3939,7 +3939,7 @@
     {
       "Kind": 0,
       "Name": "The Bunker - Part 2",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Reserve"
       ],
@@ -3955,7 +3955,7 @@
     {
       "Kind": 0,
       "Name": "The Graven Image",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3969,7 +3969,7 @@
     {
       "Kind": 0,
       "Name": "The Old-Fashioned Way",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -3983,7 +3983,7 @@
     {
       "Kind": 0,
       "Name": "The Price of Celebration",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "Shoreline",
         "Lighthouse",
@@ -4004,7 +4004,7 @@
     {
       "Kind": 0,
       "Name": "The Punisher - Harvest",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4018,7 +4018,7 @@
     {
       "Kind": 0,
       "Name": "The Root Cause",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "The Lab"
       ],
@@ -4034,7 +4034,7 @@
     {
       "Kind": 0,
       "Name": "The Stylish One",
-      "Group": "",
+      "Group": "Ragman",
       "Maps": [
         "Interchange"
       ],
@@ -4050,7 +4050,7 @@
     {
       "Kind": 0,
       "Name": "The Survivalist Path - Zatoichi",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4064,7 +4064,7 @@
     {
       "Kind": 0,
       "Name": "The Tarkov Mystery",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4078,7 +4078,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 1",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Shoreline"
       ],
@@ -4094,7 +4094,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 10",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Streets of Tarkov"
       ],
@@ -4110,7 +4110,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 11",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Lighthouse"
       ],
@@ -4126,7 +4126,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 12",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4140,7 +4140,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 13",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Customs",
         "Lighthouse"
@@ -4157,7 +4157,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 14",
-      "Group": "",
+      "Group": "Lightkeeper",
       "Maps": [
         "The Lab"
       ],
@@ -4173,7 +4173,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 15",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Woods",
         "The Lab",
@@ -4191,7 +4191,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 16",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Shoreline",
         "Lighthouse"
@@ -4208,7 +4208,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 17",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Reserve"
       ],
@@ -4224,7 +4224,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 18",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Reserve",
         "The Lab"
@@ -4241,7 +4241,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 19",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Shoreline"
       ],
@@ -4257,7 +4257,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 2",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [
         "Shoreline",
         "Lighthouse"
@@ -4274,7 +4274,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 3",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Lighthouse"
       ],
@@ -4290,7 +4290,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 4",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline"
       ],
@@ -4306,7 +4306,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 5",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4320,7 +4320,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 6",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4334,7 +4334,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 7",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4348,7 +4348,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 8",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Interchange",
         "Shoreline",
@@ -4371,7 +4371,7 @@
     {
       "Kind": 0,
       "Name": "The TerraGroup Trail - Part 9",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [
         "Factory",
         "Customs",
@@ -4391,7 +4391,7 @@
     {
       "Kind": 0,
       "Name": "Thirty Pieces of Silver",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4405,7 +4405,7 @@
     {
       "Kind": 0,
       "Name": "This Is My Party",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Shoreline",
         "Lighthouse",
@@ -4426,7 +4426,7 @@
     {
       "Kind": 0,
       "Name": "Time-Tested",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4440,7 +4440,7 @@
     {
       "Kind": 0,
       "Name": "To the Light - False Call",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Customs"
       ],
@@ -4456,7 +4456,7 @@
     {
       "Kind": 0,
       "Name": "To the Light - Getting Acquainted",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [
         "Lighthouse"
       ],
@@ -4472,7 +4472,7 @@
     {
       "Kind": 0,
       "Name": "To the Tree!",
-      "Group": "",
+      "Group": "Mechanic",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4486,7 +4486,7 @@
     {
       "Kind": 0,
       "Name": "Tourists",
-      "Group": "",
+      "Group": "Prapor",
       "Maps": [
         "Factory"
       ],
@@ -4502,7 +4502,7 @@
     {
       "Kind": 0,
       "Name": "Tournament",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4516,7 +4516,7 @@
     {
       "Kind": 0,
       "Name": "Trade Embargo",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4530,7 +4530,7 @@
     {
       "Kind": 0,
       "Name": "Trade Embargo - Last Chance",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4544,7 +4544,7 @@
     {
       "Kind": 0,
       "Name": "U Turn",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4558,7 +4558,7 @@
     {
       "Kind": 0,
       "Name": "Unsurpassed Skill",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4572,7 +4572,7 @@
     {
       "Kind": 0,
       "Name": "Until Dawn",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4586,7 +4586,7 @@
     {
       "Kind": 0,
       "Name": "Virtue",
-      "Group": "",
+      "Group": "Therapist",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4600,7 +4600,7 @@
     {
       "Kind": 0,
       "Name": "Watch the Watcher",
-      "Group": "",
+      "Group": "Fence",
       "Maps": [
         "Lighthouse"
       ],
@@ -4616,7 +4616,7 @@
     {
       "Kind": 0,
       "Name": "Weak Compromise",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4630,7 +4630,7 @@
     {
       "Kind": 0,
       "Name": "Weather the Blizzard",
-      "Group": "",
+      "Group": "Ref",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4644,7 +4644,7 @@
     {
       "Kind": 0,
       "Name": "Western Quality Standards",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4658,7 +4658,7 @@
     {
       "Kind": 0,
       "Name": "What’s Your Evidence?",
-      "Group": "",
+      "Group": "Peacekeeper",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4672,7 +4672,7 @@
     {
       "Kind": 0,
       "Name": "Wild Wild Woods",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [],
       "Faction": null,
       "Event": "",
@@ -4686,7 +4686,7 @@
     {
       "Kind": 0,
       "Name": "Wolf's Grip (Consequences)",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -4704,7 +4704,7 @@
     {
       "Kind": 0,
       "Name": "Wolf's Grip (Finale)",
-      "Group": "",
+      "Group": "Jaeger",
       "Maps": [
         "Customs",
         "Shoreline",
@@ -4722,7 +4722,7 @@
     {
       "Kind": 0,
       "Name": "Wrench and Waterboarding",
-      "Group": "",
+      "Group": "Skier",
       "Maps": [
         "The Lab"
       ],

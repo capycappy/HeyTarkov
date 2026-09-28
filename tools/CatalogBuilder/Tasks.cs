@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text.RegularExpressions;
 
 namespace HeyTarkov.CatalogBuilder;
@@ -135,6 +135,9 @@ public static partial class Tasks
     [GeneratedRegex(@"(?im)^\s*\|\s*location\s*=\s*(.*)$")]
     private static partial Regex LocationLine();
 
+    [GeneratedRegex(@"(?im)^\s*\|\s*given by\s*=\s*(.*)$")]
+    private static partial Regex GivenByLine();
+
     [GeneratedRegex(@"\[\[([^\]\|#]+)")]
     private static partial Regex WikiLink();
 
@@ -198,6 +201,22 @@ public static partial class Tasks
 
                 if (title is null || text is null || !byTitle.TryGetValue(title, out var entries)) continue;
 
+                // Who hands it out, for the tasks the Japanese index never
+                // listed - those exist only on the English wiki, and until now
+                // they sat in the catalog with no trader at all.
+                if (GivenByLine().Match(text) is { Success: true } giver)
+                {
+                    var trader = WikiLink().Match(giver.Groups[1].Value) is { Success: true } who
+                        ? who.Groups[1].Value.Trim()
+                        : giver.Groups[1].Value.Trim();
+
+                    if (trader.Length > 0)
+                    {
+                        foreach (var entry in entries)
+                            if (entry.Group.Length == 0) entry.Group = trader;
+                    }
+                }
+
                 var line = LocationLine().Match(text);
                 if (!line.Success) continue;
 
@@ -224,7 +243,8 @@ public static partial class Tasks
             }
         }
 
-        Console.WriteLine($"  {placed} tasks placed on a map");
+        Console.WriteLine($"  {placed} tasks placed on a map, "
+                          + $"{tasks.Count(t => t.Group.Length > 0)} of {tasks.Count} with a trader");
     }
 
     /// <summary>The page title inside a Fandom link, as the API wants it.</summary>

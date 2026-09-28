@@ -2050,14 +2050,17 @@ public sealed partial class MainForm : Form
         _traderChoices.Add(null);
         _traderBox.Items.Add(Strings.TradersAll);
 
+        // The maps and the ways out of them, in one choice: they belong to no
+        // trader, and "no trader" describes them by what they are not.
+        _traderChoices.Add(PlacesChoice);
+        _traderBox.Items.Add(Strings.TraderPlaces);
+
         foreach (var trader in traders)
         {
             _traderChoices.Add(trader);
             _traderBox.Items.Add(trader);
         }
 
-        _traderChoices.Add("");
-        _traderBox.Items.Add(Strings.TraderNone);
         _traderBox.SelectedIndex = 0;
         _traderBox.Visible = !_keysOnly;
     }
@@ -2107,14 +2110,14 @@ public sealed partial class MainForm : Form
         if (_loading) return;
 
         SetStatus(Strings.Filtering(
-            Shown(SelectedTrader, Strings.TraderNone),
+            Shown(SelectedTrader, Strings.TraderPlaces),
             Shown(SelectedMap, Strings.MapsNone)));
 
         // The rows are already in hand; this only changes which of them show.
         PopulateRows(_lastRows);
 
-        static string? Shown(string? choice, string none) =>
-            choice is null ? null : choice.Length == 0 ? none : choice;
+        static string? Shown(string? choice, string special) =>
+            choice is null ? null : choice.Length == 0 || choice == PlacesChoice ? special : choice;
     }
 
     /// <summary>
@@ -2132,6 +2135,10 @@ public sealed partial class MainForm : Form
         EntryKind.Task => entry.Maps,
         _ => Array.Empty<string>(),
     };
+
+    /// <summary>The dropdown item that stands for the maps and their exits
+    /// rather than for a trader.</summary>
+    private const string PlacesChoice = "places";
 
     /// <summary>The trader an entry belongs to, or nothing.</summary>
     private static string TraderOf(WikiEntry entry) => entry.Kind switch
@@ -2156,8 +2163,11 @@ public sealed partial class MainForm : Form
             if (!here) return false;
         }
 
-        return SelectedTrader is not { } trader
-               || string.Equals(TraderOf(entry), trader, StringComparison.Ordinal);
+        if (SelectedTrader is not { } trader) return true;
+
+        if (trader == PlacesChoice) return entry.Kind is EntryKind.Map or EntryKind.Extract;
+
+        return string.Equals(TraderOf(entry), trader, StringComparison.Ordinal);
     }
 
     private void ToggleKeys()
