@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-09-28T21:43:15.8973122+08:00",
+  "UpdatedAt": "2026-09-28T22:32:53.5184882+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -19,7 +19,14 @@
       "Kind": 0,
       "Name": "A Kind Snow Maiden",
       "Group": "Therapist",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse",
+        "Customs",
+        "Reserve",
+        "Interchange",
+        "Shoreline",
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -250,7 +257,16 @@
       "Kind": 0,
       "Name": "Bad Santa",
       "Group": "Skier",
-      "Maps": [],
+      "Maps": [
+        "Interchange",
+        "Lighthouse",
+        "Reserve",
+        "Shoreline",
+        "Woods",
+        "Customs",
+        "Factory",
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -1144,7 +1160,11 @@
       "Kind": 0,
       "Name": "Disrupting the Party",
       "Group": "Skier",
-      "Maps": [],
+      "Maps": [
+        "Customs",
+        "Interchange",
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2593,7 +2613,9 @@
       "Kind": 0,
       "Name": "Make Amends - Quarantine",
       "Group": "Mechanic",
-      "Maps": [],
+      "Maps": [
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2697,7 +2719,9 @@
       "Kind": 0,
       "Name": "Morituri te salutant",
       "Group": "Ref",
-      "Maps": [],
+      "Maps": [
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -3386,7 +3410,9 @@
       "Kind": 0,
       "Name": "Root of All Evil",
       "Group": "Ragman",
-      "Maps": [],
+      "Maps": [
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -4473,7 +4499,14 @@
       "Kind": 0,
       "Name": "To the Tree!",
       "Group": "Mechanic",
-      "Maps": [],
+      "Maps": [
+        "Customs",
+        "Reserve",
+        "Lighthouse",
+        "Interchange",
+        "Shoreline",
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -4573,7 +4606,15 @@
       "Kind": 0,
       "Name": "Until Dawn",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Ground Zero",
+        "Lighthouse",
+        "Shoreline",
+        "Streets of Tarkov",
+        "Woods",
+        "Customs",
+        "Factory"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -4836,7 +4877,9 @@
       "Kind": 0,
       "Name": "Honest Review",
       "Group": "BTR Driver",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -5498,7 +5541,9 @@
       "Kind": 0,
       "Name": "Hunter",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -5512,7 +5557,9 @@
       "Kind": 0,
       "Name": "Hunting Trip",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -5696,7 +5743,9 @@
       "Kind": 0,
       "Name": "Swift One",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -5870,7 +5919,12 @@
       "Kind": 0,
       "Name": "The Huntsman Path - Forest Cleaning",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Streets of Tarkov",
+        "Reserve",
+        "Lighthouse",
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -5934,7 +5988,14 @@
       "Kind": 0,
       "Name": "The Huntsman Path - Relentless",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Factory",
+        "Interchange",
+        "Customs",
+        "Woods",
+        "Reserve",
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -6056,7 +6117,9 @@
       "Kind": 0,
       "Name": "The Survivalist Path - Eagle-Owl",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Factory"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -6148,7 +6211,9 @@
       "Kind": 0,
       "Name": "The Survivalist Path - Zhivchik",
       "Group": "Jaeger",
-      "Maps": [],
+      "Maps": [
+        "Factory"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -6894,7 +6959,9 @@
       "Kind": 0,
       "Name": "Forced Alliance",
       "Group": "Mechanic",
-      "Maps": [],
+      "Maps": [
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -6924,7 +6991,9 @@
       "Kind": 0,
       "Name": "Getting Acquainted",
       "Group": "Mechanic",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -7774,7 +7843,9 @@
       "Kind": 0,
       "Name": "Signal - Part 1",
       "Group": "Mechanic",
-      "Maps": [],
+      "Maps": [
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -7960,7 +8031,9 @@
       "Kind": 0,
       "Name": "Cargo X - Part 2",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -7990,7 +8063,9 @@
       "Kind": 0,
       "Name": "Cargo X - Part 4",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -8178,7 +8253,13 @@
       "Kind": 0,
       "Name": "Insomnia",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Streets of Tarkov",
+        "Lighthouse",
+        "Reserve",
+        "Ground Zero",
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -8484,7 +8565,9 @@
       "Kind": 0,
       "Name": "Spa Tour - Part 1",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Shoreline"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -8787,7 +8870,10 @@
       "Kind": 0,
       "Name": "Wet Job - Part 6",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Shoreline",
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -8817,7 +8903,12 @@
       "Kind": 0,
       "Name": "Worst Job in the World",
       "Group": "Peacekeeper",
-      "Maps": [],
+      "Maps": [
+        "Reserve",
+        "Lighthouse",
+        "Shoreline",
+        "Ground Zero"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -9290,7 +9381,9 @@
       "Kind": 0,
       "Name": "Ice Cream Cones",
       "Group": "Prapor",
-      "Maps": [],
+      "Maps": [
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -9889,7 +9982,13 @@
       "Kind": 0,
       "Name": "The Punisher - Part 6",
       "Group": "Prapor",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse",
+        "Shoreline",
+        "Reserve",
+        "Ground Zero",
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -10019,7 +10118,9 @@
       "Kind": 0,
       "Name": "Akimbo",
       "Group": "Ragman",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -10229,7 +10330,9 @@
       "Kind": 0,
       "Name": "Dressed to Kill",
       "Group": "Ragman",
-      "Maps": [],
+      "Maps": [
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -10687,7 +10790,9 @@
       "Kind": 0,
       "Name": "Sales Night",
       "Group": "Ragman",
-      "Maps": [],
+      "Maps": [
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -10788,7 +10893,9 @@
       "Kind": 0,
       "Name": "Sisyphus",
       "Group": "Ragman",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -12432,7 +12539,10 @@
       "Kind": 0,
       "Name": "Lend-Lease - Part 1",
       "Group": "Skier",
-      "Maps": [],
+      "Maps": [
+        "Shoreline",
+        "Woods"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -12744,7 +12854,9 @@
       "Kind": 0,
       "Name": "Stimulating Demand",
       "Group": "Skier",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -12931,7 +13043,10 @@
       "Kind": 0,
       "Name": "Vitamins - Part 1",
       "Group": "Skier",
-      "Maps": [],
+      "Maps": [
+        "Shoreline",
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -12973,7 +13088,9 @@
       "Kind": 0,
       "Name": "Accidental Witness",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "Streets of Tarkov"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -12987,7 +13104,11 @@
       "Kind": 0,
       "Name": "Batya",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "Reserve",
+        "Lighthouse",
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13001,7 +13122,9 @@
       "Kind": 0,
       "Name": "Blue Fire",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13015,7 +13138,15 @@
       "Kind": 0,
       "Name": "Boreas",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "Woods",
+        "Icebreaker",
+        "Reserve",
+        "Customs",
+        "Shoreline",
+        "Lighthouse",
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13043,7 +13174,9 @@
       "Kind": 0,
       "Name": "The Labyrinth",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "The Labyrinth"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13057,7 +13190,11 @@
       "Kind": 0,
       "Name": "The Ticket",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse",
+        "Interchange",
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13071,7 +13208,9 @@
       "Kind": 0,
       "Name": "The Unheard",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "The Lab"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13085,7 +13224,12 @@
       "Kind": 0,
       "Name": "They Are Already Here",
       "Group": "Story",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse",
+        "Woods",
+        "Shoreline",
+        "Interchange"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -13559,7 +13703,9 @@
       "Kind": 0,
       "Name": "Invasive Therapy",
       "Group": "Therapist",
-      "Maps": [],
+      "Maps": [
+        "Lighthouse"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,

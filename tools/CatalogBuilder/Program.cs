@@ -25,6 +25,7 @@ internal static class Program
         // "--taskmaps" fills in which maps each task names, in place. Fifty
         // pages a request, so it is a couple of minutes rather than an hour.
         var taskMapsOnly = args.Contains("--taskmaps", StringComparer.OrdinalIgnoreCase);
+        var objectivesOnly = args.Contains("--objectives", StringComparer.OrdinalIgnoreCase);
 
         var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
             ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
@@ -35,6 +36,21 @@ internal static class Program
 
             if (keysOnly) return await RefreshKeysAsync(wikis, output).ConfigureAwait(false);
             if (taskMapsOnly) return await RefreshTaskMapsAsync(wikis, output).ConfigureAwait(false);
+
+            if (objectivesOnly)
+            {
+                if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } only) return 1;
+
+                var onlyTasks = only.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
+                var onlyMaps = only.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+
+                await Tasks.AddMapsFromObjectivesAsync(onlyTasks, onlyMaps, wikis).ConfigureAwait(false);
+
+                only.UpdatedAt = DateTimeOffset.Now;
+                await WriteAsync(only, output).ConfigureAwait(false);
+                Report(only, output);
+                return 0;
+            }
 
             Console.WriteLine("tasks and seasonal events...");
             var tasks = await Tasks.FetchAsync(wikis);

@@ -248,8 +248,7 @@ public static partial class Tasks
     }
 
     /// <summary>The objectives, which are the last place a map is named.</summary>
-    [GeneratedRegex(@"(?is)==\s*Objectives\s*==(.*?)(?=
-==)")]
+    [GeneratedRegex(@"(?is)==\s*Objectives\s*==(.*?)(?=\r?\n==)")]
     private static partial Regex ObjectivesSection();
 
     /// <summary>
@@ -310,6 +309,10 @@ public static partial class Tasks
                 if (title is null || text is null || !byTitle.TryGetValue(title, out var entries)) continue;
 
                 var objectives = ObjectivesSection().Match(text);
+
+                if (Environment.GetEnvironmentVariable("CATALOG_DEBUG") is not null)
+                    Console.WriteLine($"    [{title}] objectives={objectives.Success} len={text.Length}");
+
                 if (!objectives.Success) continue;
 
                 var named = new List<string>();
