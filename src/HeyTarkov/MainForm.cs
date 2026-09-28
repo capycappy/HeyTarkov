@@ -2363,6 +2363,10 @@ public sealed partial class MainForm : Form
             _sortHeader.Invalidate();
         }
 
+        // With one trader chosen, that column has nothing left to say; the map
+        // the task is done on does.
+        _candidates.MapsForTasks = SelectedTrader is { } chosen && chosen != PlacesChoice;
+
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
         foreach (var row in Ordered(rows).Where(PassesFilters)) _candidates.Items.Add(row);

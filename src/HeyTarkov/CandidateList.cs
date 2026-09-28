@@ -1,4 +1,4 @@
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
 
@@ -91,6 +91,29 @@ public sealed class CandidateList : ListBox
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
     }
 
+    /// <summary>
+    /// Show a task's maps in the trader column.
+    ///
+    /// Set while the list is narrowed to one trader, where that column
+    /// otherwise repeats the same name down every row and says nothing. Where
+    /// the task is done is the next thing worth knowing.
+    /// </summary>
+    [System.ComponentModel.DefaultValue(false)]
+    public bool MapsForTasks { get; set; }
+
+    /// <summary>What the trader column shows for a row.</summary>
+    private string GroupText(WikiEntry task)
+    {
+        if (!MapsForTasks || task.Kind != EntryKind.Task) return task.Group;
+
+        return task.Maps.Count switch
+        {
+            0 => "",
+            1 => task.Maps[0],
+            _ => $"{task.Maps[0]} +{task.Maps.Count - 1}",
+        };
+    }
+
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
@@ -177,8 +200,8 @@ public sealed class CandidateList : ListBox
                 Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
             }
 
-            if (row.Match.Task.Group.Length > 0)
-                Column(g, row.Match.Task.Group, _small!, Theme.Muted, groupX, groupW, full);
+            if (GroupText(row.Match.Task) is { Length: > 0 } group)
+                Column(g, group, _small!, Theme.Muted, groupX, groupW, full);
         }
 
         var readingX = at.ReadingX;
