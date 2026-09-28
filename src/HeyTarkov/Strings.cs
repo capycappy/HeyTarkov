@@ -163,6 +163,15 @@ public static class Strings
     /// reads better than naming them for what they lack.</summary>
     public static string TraderPlaces => T("MAP", "MAP");
 
+    /// <summary>A trader as the dropdown lists it. Two of them read better
+    /// short, or as the game writes them.</summary>
+    public static string TraderName(string trader) => trader switch
+    {
+        "BTR Driver" => "BTR",
+        "Story" => "STORY",
+        _ => trader,
+    };
+
     public static string MapFilterName => T("マップで絞り込み", "Filter by map");
 
     public static string TraderFilterName => T("トレーダーで絞り込み", "Filter by trader");

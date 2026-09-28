@@ -2034,15 +2034,26 @@ public sealed partial class MainForm : Form
         _mapBox.SelectedIndex = 0;
         _mapBox.Visible = true;
 
-        // Whatever a task's own row calls its group: the traders, and the few
-        // that are not traders at all (Story, Collector). Read from the catalog
-        // rather than written here, so a new trader needs no code.
+        // The order the game itself puts the traders in, along the top of the
+        // trading screen, so the dropdown reads like the game rather than like
+        // the alphabet. Anything the catalog holds that is not on this list
+        // follows it, so a new trader still appears.
+        var order = new[]
+        {
+            "Prapor", "Therapist", "Fence", "Skier", "Peacekeeper",
+            "Mechanic", "Ragman", "Jaeger", "Ref", "Lightkeeper",
+            "BTR Driver", "Story",
+        };
+
+        // Collector is not a trader and its items have a button of their own,
+        // so it would only get in the way here.
         var traders = _catalog.Entries
-            .Where(e => e.Kind is EntryKind.Task or EntryKind.Item)
+            .Where(e => e.Kind == EntryKind.Task)
             .Select(e => e.Group)
             .Where(g => g.Length > 0)
             .Distinct(StringComparer.Ordinal)
-            .OrderBy(g => g, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => Array.IndexOf(order, g) is var at && at >= 0 ? at : order.Length)
+            .ThenBy(g => g, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         _traderChoices.Clear();
@@ -2050,15 +2061,18 @@ public sealed partial class MainForm : Form
         _traderChoices.Add(null);
         _traderBox.Items.Add(Strings.TradersAll);
 
-        // The maps and the ways out of them, in one choice: they belong to no
-        // trader, and "no trader" describes them by what they are not.
-        _traderChoices.Add(PlacesChoice);
-        _traderBox.Items.Add(Strings.TraderPlaces);
-
         foreach (var trader in traders)
         {
             _traderChoices.Add(trader);
-            _traderBox.Items.Add(trader);
+            _traderBox.Items.Add(Strings.TraderName(trader));
+
+            // The maps and the ways out of them sit between the last of the
+            // traders proper and the story - they belong to no trader, and
+            // "no trader" would describe them by what they are not.
+            if (trader != "BTR Driver") continue;
+
+            _traderChoices.Add(PlacesChoice);
+            _traderBox.Items.Add(Strings.TraderPlaces);
         }
 
         _traderBox.SelectedIndex = 0;
@@ -2110,7 +2124,8 @@ public sealed partial class MainForm : Form
         if (_loading) return;
 
         SetStatus(Strings.Filtering(
-            Shown(SelectedTrader, Strings.TraderPlaces),
+            Shown(SelectedTrader is { } who && who != PlacesChoice ? Strings.TraderName(who) : SelectedTrader,
+                Strings.TraderPlaces),
             Shown(SelectedMap, Strings.MapsNone)));
 
         // The rows are already in hand; this only changes which of them show.
