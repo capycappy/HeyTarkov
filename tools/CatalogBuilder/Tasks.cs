@@ -129,6 +129,113 @@ public static partial class Tasks
         return byKey.Values.ToList();
     }
 
+    /// <summary>MediaWiki takes fifty titles per request.</summary>
+    private const int Batch = 50;
+
+    [GeneratedRegex(@"(?im)^\s*\|\s*location\s*=\s*(.*)$")]
+    private static partial Regex LocationLine();
+
+    [GeneratedRegex(@"\[\[([^\]\|#]+)")]
+    private static partial Regex WikiLink();
+
+    /// <summary>
+    /// Where each task is done, from the infobox line the English page carries:
+    /// "|location =[[Woods]], [[Ground Zero]], [[Interchange]], [[Customs]]".
+    ///
+    /// A task can name several maps, and many name none - they are finished at
+    /// a trader, or anywhere at all - so this is a list that is often empty
+    /// rather than a single value with a blank in it.
+    ///
+    /// Read from the English wiki because fifty pages come back in one request
+    /// there; the Japanese pages say the same thing one page at a time, which
+    /// is nine hundred requests into a wiki that rate limits.
+    /// </summary>
+    public static async Task AddMapsAsync(
+        IReadOnlyList<WikiEntry> tasks, IReadOnlyList<string> maps, Wikis wikis,
+        CancellationToken ct = default)
+    {
+        var byTitle = new Dictionary<string, List<WikiEntry>>(StringComparer.Ordinal);
+
+        foreach (var task in tasks)
+        {
+            if (TitleOf(task.EnglishUrl) is not { } title) continue;
+
+            if (!byTitle.TryGetValue(title, out var list)) byTitle[title] = list = new List<WikiEntry>();
+            list.Add(task);
+        }
+
+        if (byTitle.Count == 0) return;
+
+        Console.WriteLine($"  reading {byTitle.Count} English pages for the maps they name");
+
+        var placed = 0;
+
+        foreach (var batch in byTitle.Keys.Chunk(Batch))
+        {
+            var url = $"{Wikis.FandomApi}?action=query&prop=revisions&rvprop=content&rvslots=main"
+                      + $"&titles={Uri.EscapeDataString(string.Join('|', batch))}"
+                      + "&format=json&formatversion=2";
+
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) continue;
+
+            using var document = System.Text.Json.JsonDocument.Parse(json);
+
+            if (!document.RootElement.TryGetProperty("query", out var query)
+                || !query.TryGetProperty("pages", out var pages))
+            {
+                continue;
+            }
+
+            foreach (var page in pages.EnumerateArray())
+            {
+                if (page.TryGetProperty("missing", out _)) continue;
+                if (!page.TryGetProperty("revisions", out var revisions) || revisions.GetArrayLength() == 0)
+                    continue;
+
+                var title = page.GetProperty("title").GetString();
+                var text = revisions[0].GetProperty("slots").GetProperty("main")
+                    .GetProperty("content").GetString();
+
+                if (title is null || text is null || !byTitle.TryGetValue(title, out var entries)) continue;
+
+                var line = LocationLine().Match(text);
+                if (!line.Success) continue;
+
+                var named = new List<string>();
+
+                foreach (Match link in WikiLink().Matches(line.Groups[1].Value))
+                {
+                    var target = link.Groups[1].Value.Trim();
+
+                    foreach (var map in maps)
+                    {
+                        if (string.Equals(map, target, StringComparison.OrdinalIgnoreCase)
+                            && !named.Contains(map))
+                        {
+                            named.Add(map);
+                        }
+                    }
+                }
+
+                if (named.Count == 0) continue;
+
+                foreach (var entry in entries) entry.Maps = named;
+                placed += entries.Count;
+            }
+        }
+
+        Console.WriteLine($"  {placed} tasks placed on a map");
+    }
+
+    /// <summary>The page title inside a Fandom link, as the API wants it.</summary>
+    private static string? TitleOf(string? url)
+    {
+        if (url is null || !url.StartsWith(Wikis.FandomWiki, StringComparison.Ordinal)) return null;
+
+        var title = WebUtility.UrlDecode(url[Wikis.FandomWiki.Length..]).Replace('_', ' ').Trim();
+        return title.Length == 0 ? null : title;
+    }
+
     /// <summary>
     /// wikiwiki files an event task under its trader with the event in the
     /// title - "Mechanic/KORD BREACH Break the Chain" - and links it from

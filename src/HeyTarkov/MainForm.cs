@@ -2118,15 +2118,19 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// The map an entry belongs to, as the dropdown means it: where a key is,
-    /// where an extract leads out of, and the map itself. A task belongs to a
-    /// trader rather than to a place, so it has no map at all.
+    /// The maps an entry belongs to, as the dropdown means it: where a key is,
+    /// where an extract leads out of, the map itself, and for a task every map
+    /// its page names - "Debut" is done on four of them. Empty for a task that
+    /// names none, which is a third of them: they are finished at a trader or
+    /// wherever the player happens to be.
     /// </summary>
-    private static string MapOf(WikiEntry entry) => entry.Kind switch
+    private static IReadOnlyList<string> MapsOf(WikiEntry entry) => entry.Kind switch
     {
-        EntryKind.Key or EntryKind.Extract => entry.Group,
-        EntryKind.Map => entry.Name,
-        _ => "",
+        EntryKind.Key or EntryKind.Extract =>
+            entry.Group.Length > 0 ? new[] { entry.Group } : Array.Empty<string>(),
+        EntryKind.Map => new[] { entry.Name },
+        EntryKind.Task => entry.Maps,
+        _ => Array.Empty<string>(),
     };
 
     /// <summary>The trader an entry belongs to, or nothing.</summary>
@@ -2141,8 +2145,16 @@ public sealed partial class MainForm : Form
     {
         var entry = row.Match.Task;
 
-        if (SelectedMap is { } map && !string.Equals(MapOf(entry), map, StringComparison.Ordinal))
-            return false;
+        if (SelectedMap is { } map)
+        {
+            var maps = MapsOf(entry);
+
+            var here = map.Length == 0
+                ? maps.Count == 0
+                : maps.Contains(map, StringComparer.Ordinal);
+
+            if (!here) return false;
+        }
 
         return SelectedTrader is not { } trader
                || string.Equals(TraderOf(entry), trader, StringComparison.Ordinal);
