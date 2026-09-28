@@ -1,4 +1,4 @@
-namespace HeyTarkov;
+﻿namespace HeyTarkov;
 
 /// <summary>
 /// The Collector checklist, in a window of its own.
@@ -23,13 +23,27 @@ public sealed class CollectorForm : Form
     private readonly Label _hint = new();
     private readonly PillButton _clear = new();
 
+    /// <summary>
+    /// What has been ticked since this window opened, so that "still needed
+    /// only" does not make a row vanish the instant it is ticked.
+    ///
+    /// A box is easy to hit by accident, and a row that disappears takes the
+    /// chance to undo it with it. They stay, struck through, until the window
+    /// is closed; opening it again starts the list clean.
+    /// </summary>
+    private readonly HashSet<string> _tickedHere = new(StringComparer.Ordinal);
+
     /// <summary>Raised whenever a tick changes, so whoever opened this window
     /// can keep its own count of them right.</summary>
     public event Action? Changed;
 
+    /// <summary>Raised when the "still needed only" box is used, so the choice
+    /// can be remembered for next time.</summary>
+    public event Action<bool>? RemainingOnlyChanged;
+
     public CollectorForm(
         IReadOnlyList<WikiEntry> items, CollectorRecord record,
-        WikiSource wiki, BrowserChoice browser)
+        WikiSource wiki, BrowserChoice browser, bool remainingOnly = false)
     {
         _items = items;
         _record = record;
@@ -55,6 +69,8 @@ public sealed class CollectorForm : Form
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
 
         BuildLayout();
+
+        _remaining.Checked = remainingOnly;
         Populate();
     }
 
@@ -201,7 +217,11 @@ public sealed class CollectorForm : Form
         _remaining.BackColor = Color.Transparent;
         _remaining.Anchor = AnchorStyles.Left;
         _remaining.Margin = new Padding(0, 8, 2, 0);
-        _remaining.CheckedChanged += (_, _) => Populate();
+        _remaining.CheckedChanged += (_, _) =>
+        {
+            RemainingOnlyChanged?.Invoke(_remaining.Checked);
+            Populate();
+        };
 
         row.Controls.Add(card, 0, 0);
         row.Controls.Add(_remaining, 1, 0);
@@ -307,7 +327,9 @@ public sealed class CollectorForm : Form
         var needle = _filter.Text.Trim();
 
         var shown = Ordered(_items
-                .Where(item => !_remaining.Checked || !_record.Has(item.Name))
+                .Where(item => !_remaining.Checked
+                               || !_record.Has(item.Name)
+                               || _tickedHere.Contains(item.Name))
                 .Where(item => Matches(item, needle)))
             .Select(item => new CollectorRow(item, _record.Has(item.Name)))
             .ToArray();
@@ -359,11 +381,13 @@ public sealed class CollectorForm : Form
         // Written the moment it is ticked. A checklist with a save button is a
         // checklist that loses an evening's raids to a closed window.
         _record.Set(row.Item.Name, row.Held);
+        _tickedHere.Add(row.Item.Name);
         Changed?.Invoke();
 
-        // "Still needed only" is on: the row just ticked no longer belongs.
-        if (_remaining.Checked) Populate();
-        else RefreshProgress();
+        // The row stays where it is, struck through, however the filter is set:
+        // it is the only way back if the box was hit by mistake.
+        RefreshProgress();
+        _list.Invalidate();
     }
 
     private void RefreshProgress()

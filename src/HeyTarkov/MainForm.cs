@@ -856,9 +856,16 @@ public sealed partial class MainForm : Form
         var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
 
         _collectorWindow = new CollectorForm(
-            items, CollectorRecordNow(), SelectedWiki, SelectedBrowser);
+            items, CollectorRecordNow(), SelectedWiki, SelectedBrowser,
+            _settings.CollectorRemainingOnly);
 
         _collectorWindow.Changed += RefreshCollectorCount;
+
+        _collectorWindow.RemainingOnlyChanged += only =>
+        {
+            _settings.CollectorRemainingOnly = only;
+            _settings.Save();
+        };
         _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
         _collectorWindow.Show(this);
     }

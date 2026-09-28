@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace HeyTarkov;
 
@@ -59,6 +59,13 @@ public sealed class Settings
     /// "owner/name" on GitHub. Empty disables the update check entirely, which
     /// is the right default while the project is not published.
     /// </summary>
+    /// <summary>
+    /// The state of "still needed only" in the KAPPA checklist. Kept because
+    /// somebody hunting the last few items wants that view every time, and
+    /// setting it again on every launch is a small tax on the same person.
+    /// </summary>
+    public bool CollectorRemainingOnly { get; set; }
+
     public string? UpdateRepository { get; set; }
 
     private static string Path =>
