@@ -247,6 +247,158 @@ public static partial class Tasks
                           + $"{tasks.Count(t => t.Group.Length > 0)} of {tasks.Count} with a trader");
     }
 
+    /// <summary>The objectives, which are the last place a map is named.</summary>
+    [GeneratedRegex(@"(?is)==\s*Objectives\s*==(.*?)(?=
+==)")]
+    private static partial Regex ObjectivesSection();
+
+    /// <summary>
+    /// The maps named in the objectives themselves - "Eliminate Scavs on
+    /// [[Woods]]" - for the tasks neither infobox nor Japanese table places.
+    ///
+    /// Last of the three, and deliberately so: a map named in passing is a
+    /// weaker claim than a map named in the box that exists to say where the
+    /// task is done. It covers eight tasks; the rest genuinely have no map.
+    /// </summary>
+    public static async Task AddMapsFromObjectivesAsync(
+        IReadOnlyList<WikiEntry> tasks, IReadOnlyList<string> maps, Wikis wikis,
+        CancellationToken ct = default)
+    {
+        var rest = tasks.Where(t => t.Maps.Count == 0).ToList();
+        if (rest.Count == 0) return;
+
+        var byTitle = new Dictionary<string, List<WikiEntry>>(StringComparer.Ordinal);
+
+        foreach (var task in rest)
+        {
+            if (TitleOf(task.EnglishUrl) is not { } title) continue;
+
+            if (!byTitle.TryGetValue(title, out var list)) byTitle[title] = list = new List<WikiEntry>();
+            list.Add(task);
+        }
+
+        if (byTitle.Count == 0) return;
+
+        var placed = 0;
+
+        foreach (var batch in byTitle.Keys.Chunk(Batch))
+        {
+            var url = $"{Wikis.FandomApi}?action=query&prop=revisions&rvprop=content&rvslots=main"
+                      + $"&titles={Uri.EscapeDataString(string.Join('|', batch))}"
+                      + "&format=json&formatversion=2";
+
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) continue;
+
+            using var document = System.Text.Json.JsonDocument.Parse(json);
+
+            if (!document.RootElement.TryGetProperty("query", out var query)
+                || !query.TryGetProperty("pages", out var pages))
+            {
+                continue;
+            }
+
+            foreach (var page in pages.EnumerateArray())
+            {
+                if (page.TryGetProperty("missing", out _)) continue;
+                if (!page.TryGetProperty("revisions", out var revisions) || revisions.GetArrayLength() == 0)
+                    continue;
+
+                var title = page.GetProperty("title").GetString();
+                var text = revisions[0].GetProperty("slots").GetProperty("main")
+                    .GetProperty("content").GetString();
+
+                if (title is null || text is null || !byTitle.TryGetValue(title, out var entries)) continue;
+
+                var objectives = ObjectivesSection().Match(text);
+                if (!objectives.Success) continue;
+
+                var named = new List<string>();
+
+                foreach (Match link in WikiLink().Matches(objectives.Groups[1].Value))
+                {
+                    var target = link.Groups[1].Value.Trim();
+
+                    foreach (var map in maps)
+                    {
+                        if (string.Equals(map, target, StringComparison.OrdinalIgnoreCase)
+                            && !named.Contains(map))
+                        {
+                            named.Add(map);
+                        }
+                    }
+                }
+
+                if (named.Count == 0) continue;
+
+                foreach (var entry in entries) entry.Maps = named;
+                placed += entries.Count;
+            }
+        }
+
+        Console.WriteLine($"  {placed} more from the maps their objectives name");
+    }
+
+    /// <summary>The "マップ" row of the data table the Japanese page opens with,
+    /// and the pages it links to.</summary>
+    [GeneratedRegex(@"<td>\s*マップ\s*</td>\s*<td>(.*?)</td>", RegexOptions.Singleline)]
+    private static partial Regex JapaneseMapRow();
+
+    [GeneratedRegex(@"href=""/eft/([^""#?]+)""")]
+    private static partial Regex JapaneseLinkTarget();
+
+    /// <summary>
+    /// The maps the Japanese page names, for the tasks the English one does
+    /// not. Its infobox leaves the location blank more often than the Japanese
+    /// table leaves マップ blank - "Hunting Trip" says nothing in English and
+    /// WOODS in Japanese - and some tasks have no English page at all.
+    ///
+    /// One request per page, so it is only asked about tasks still without a
+    /// map: a few hundred rather than nine hundred.
+    /// </summary>
+    public static async Task AddMapsFromJapaneseAsync(
+        IReadOnlyList<WikiEntry> tasks, IReadOnlyList<string> maps, Wikis wikis,
+        CancellationToken ct = default)
+    {
+        var rest = tasks.Where(t => t.Maps.Count == 0 && t.JapaneseUrl is not null).ToList();
+        if (rest.Count == 0) return;
+
+        Console.WriteLine($"  asking the Japanese wiki about {rest.Count} without a map");
+
+        var placed = 0;
+
+        foreach (var task in rest)
+        {
+            var page = await wikis.GetAsync(task.JapaneseUrl!, ct).ConfigureAwait(false);
+            if (page.Text is not { } html) continue;
+
+            var row = JapaneseMapRow().Match(html);
+            if (!row.Success) continue;
+
+            var named = new List<string>();
+
+            foreach (Match link in JapaneseLinkTarget().Matches(row.Groups[1].Value))
+            {
+                var target = WebUtility.UrlDecode(link.Groups[1].Value).Trim();
+
+                foreach (var map in maps)
+                {
+                    if (string.Equals(map, target, StringComparison.OrdinalIgnoreCase)
+                        && !named.Contains(map))
+                    {
+                        named.Add(map);
+                    }
+                }
+            }
+
+            if (named.Count == 0) continue;
+
+            task.Maps = named;
+            placed++;
+        }
+
+        Console.WriteLine($"  {placed} more placed on a map from the Japanese wiki");
+    }
+
     /// <summary>The page title inside a Fandom link, as the API wants it.</summary>
     private static string? TitleOf(string? url)
     {

@@ -50,7 +50,10 @@ internal static class Program
 
             Console.WriteLine();
             Console.WriteLine("where the tasks are done...");
-            await Tasks.AddMapsAsync(tasks, maps.Where(m => m.Kind == EntryKind.Map).Select(m => m.Name).ToList(), wikis);
+            var mapNames = maps.Where(m => m.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+            await Tasks.AddMapsAsync(tasks, mapNames, wikis);
+            await Tasks.AddMapsFromJapaneseAsync(tasks, mapNames, wikis);
+            await Tasks.AddMapsFromObjectivesAsync(tasks, mapNames, wikis);
 
             Console.WriteLine();
             Console.WriteLine("keys...");
@@ -191,6 +194,8 @@ internal static class Program
         Console.WriteLine($"task maps only, over {tasks.Count} tasks...");
 
         await Tasks.AddMapsAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
 
         if (tasks.All(t => t.Maps.Count == 0))
         {
