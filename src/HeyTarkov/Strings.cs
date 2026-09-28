@@ -301,6 +301,11 @@ public static class Strings
 
     public static string CollectorClearTitle => T("すべて解除", "Clear all");
 
+    /// <summary>The status line while the checklist is what the list shows.</summary>
+    public static string CollectorShowing => T(
+        "KAPPA品の一覧です。もう一度ボタンを押すと元に戻ります",
+        "Showing the KAPPA checklist. Press the button again to go back");
+
     public static string CollectorRemainingOnly => T("未所持だけ", "Still needed only");
 
     public static string CollectorHint =>

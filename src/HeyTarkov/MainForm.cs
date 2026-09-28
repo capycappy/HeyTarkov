@@ -144,7 +144,31 @@ public sealed partial class MainForm : Form
     /// </summary>
     private readonly PillButton _collector = new();
 
-    private CollectorForm? _collectorWindow;
+    /// <summary>
+    /// The checklist, in place of the candidate list. Built the first time the
+    /// KAPPA button is pressed, and thrown away when the wiki changes, because
+    /// the wiki decides which names it shows.
+    /// </summary>
+    private CollectorPanel? _collectorPanel;
+
+    /// <summary>The checklist is what the list area is showing.</summary>
+    private bool _collecting;
+
+    /// <summary>Holds the candidate list and the checklist, one at a time.</summary>
+    private readonly Panel _listArea = new() { Dock = DockStyle.Fill, BackColor = Color.Transparent };
+
+    /// <summary>The candidate list with its column titles, as one thing to hide.</summary>
+    private readonly Panel _candidateArea = new() { Dock = DockStyle.Fill, BackColor = Color.Transparent };
+
+    /// <summary>Wipes every tick. Only out while the checklist is.</summary>
+    private readonly PillButton _clearHeld = new();
+
+    /// <summary>Shows only what is still missing. Stands where the trader and
+    /// map dropdowns stand the rest of the time.</summary>
+    private readonly CheckBox _remainingOnly = new();
+
+    /// <summary>The line under the list: what to do with a row.</summary>
+    private readonly Label _listHint = new();
 
     /// <summary>
     /// Read once and kept, so the button's count and the checklist are the same
@@ -546,7 +570,11 @@ public sealed partial class MainForm : Form
         _typedBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _typedBox.Margin = new Padding(0);
         _typedBox.PlaceholderText = Strings.SearchPlaceholderShort;
-        _typedBox.TextChanged += (_, _) => ShowCandidatesFor(_typedBox.Text);
+        _typedBox.TextChanged += (_, _) =>
+        {
+            if (_collecting && _collectorPanel is not null) _collectorPanel.Filter = _typedBox.Text;
+            else ShowCandidatesFor(_typedBox.Text);
+        };
 
         // Enter opens a page and leaves the words that found it sitting there.
         // The next search is a different task, not an edit of that one.
@@ -591,6 +619,22 @@ public sealed partial class MainForm : Form
         _mapBox.Anchor = AnchorStyles.Left;
         _mapBox.Margin = new Padding(0, 0, 10, 0);
         _mapBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
+
+        _remainingOnly.Text = Strings.CollectorRemainingOnly;
+        _remainingOnly.AutoSize = false;
+        _remainingOnly.Size = new Size(140, 24);
+        _remainingOnly.Visible = false;
+        _remainingOnly.ForeColor = Theme.Muted;
+        _remainingOnly.BackColor = Color.Transparent;
+        _remainingOnly.Anchor = AnchorStyles.Left;
+        _remainingOnly.Margin = new Padding(0, 0, 10, 0);
+        _remainingOnly.CheckedChanged += (_, _) =>
+        {
+            _settings.CollectorRemainingOnly = _remainingOnly.Checked;
+            _settings.Save();
+
+            if (_collectorPanel is not null) _collectorPanel.RemainingOnly = _remainingOnly.Checked;
+        };
         _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
 
         _micHint.Text = Strings.MicPreparing;
@@ -631,11 +675,11 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 5,
+            ColumnCount = 6,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 4; column++)
+        for (var column = 0; column < 5; column++)
             row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -644,7 +688,8 @@ public sealed partial class MainForm : Form
         row.Controls.Add(_keysButton, 1, 0);
         row.Controls.Add(_traderBox, 2, 0);
         row.Controls.Add(_mapBox, 3, 0);
-        row.Controls.Add(box, 4, 0);
+        row.Controls.Add(_remainingOnly, 4, 0);
+        row.Controls.Add(box, 5, 0);
         return row;
     }
 
@@ -683,9 +728,37 @@ public sealed partial class MainForm : Form
         _countLabel.Font = new Font("Yu Gothic UI", 8.25f);
         _countLabel.Margin = new Padding(2, 0, 0, 6);
 
-        var hint = Micro(Strings.EnterToOpen);
-        hint.Anchor = AnchorStyles.Right;
-        hint.Margin = new Padding(0, 0, 2, 6);
+        _listHint.Text = Strings.EnterToOpen;
+        _listHint.AutoSize = true;
+        _listHint.BackColor = Color.Transparent;
+        _listHint.ForeColor = Theme.Faint;
+        _listHint.Font = new Font("Yu Gothic UI", 8.25f);
+        _listHint.Anchor = AnchorStyles.Right;
+        _listHint.Margin = new Padding(0, 0, 8, 6);
+
+        _clearHeld.Text = Strings.CollectorClear;
+        _clearHeld.Ghost = true;
+        _clearHeld.AutoSize = false;
+        _clearHeld.Size = new Size(96, 24);
+        _clearHeld.Visible = false;
+        _clearHeld.Anchor = AnchorStyles.Right;
+        _clearHeld.Margin = new Padding(0, 0, 2, 4);
+        _clearHeld.Click += (_, _) => _collectorPanel?.ClearAll();
+
+        var hints = new TableLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Anchor = AnchorStyles.Right,
+            Margin = new Padding(0),
+        };
+        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        hints.Controls.Add(_listHint, 0, 0);
+        hints.Controls.Add(_clearHeld, 1, 0);
 
         var header = new TableLayoutPanel
         {
@@ -701,31 +774,36 @@ public sealed partial class MainForm : Form
         header.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         header.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         header.Controls.Add(_countLabel, 0, 0);
-        header.Controls.Add(hint, 1, 0);
+        header.Controls.Add(hints, 1, 0);
 
         var stack = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             BackColor = Color.Transparent,
             ColumnCount = 1,
-            RowCount = 3,
+            RowCount = 2,
             Padding = new Padding(14, 12, 14, 12),
             Margin = new Padding(0),
         };
         stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         stack.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         stack.Controls.Add(header, 0, 0);
+
         _sortHeader = new CandidateHeader(_candidates)
         {
-            Dock = DockStyle.Fill,
+            Dock = DockStyle.Top,
             Margin = new Padding(0, 0, 0, 2),
         };
         _sortHeader.Picked += PickSort;
 
-        stack.Controls.Add(_sortHeader, 0, 1);
-        stack.Controls.Add(_candidates, 0, 2);
+        // The list goes in first: WinForms docks in reverse, so the titles
+        // added after it take the top edge.
+        _candidateArea.Controls.Add(_candidates);
+        _candidateArea.Controls.Add(_sortHeader);
+        _listArea.Controls.Add(_candidateArea);
+
+        stack.Controls.Add(_listArea, 0, 1);
 
         var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 12) };
         card.Controls.Add(stack);
@@ -785,10 +863,11 @@ public sealed partial class MainForm : Form
         _collector.AutoSize = false;
         _collector.Width = 172;
         _collector.Ticked = true;
+        _collector.Ghost = true;
         _collector.SameHeightAs = _themeBox;
         _collector.Anchor = AnchorStyles.None;
         _collector.Margin = new Padding(12, 0, 12, 0);
-        _collector.Click += (_, _) => OpenCollector();
+        _collector.Click += (_, _) => ToggleCollector();
 
         // The dropdown settles its own height, sometimes not the one it asked
         // for, and it changes again on a monitor with different scaling.
@@ -837,37 +916,118 @@ public sealed partial class MainForm : Form
     /// Opens the checklist, or brings back the one already open. A second copy
     /// would be two views of one file, each overwriting the other's ticks.
     /// </summary>
-    private void OpenCollector()
+    /// <summary>
+    /// The KAPPA button: it swaps the candidate list for the checklist and
+    /// back. The checklist used to be a window of its own, which made one app
+    /// look like two.
+    /// </summary>
+    private void ToggleCollector()
     {
-        if (_collectorWindow is { IsDisposed: false } open)
-        {
-            if (open.WindowState == FormWindowState.Minimized)
-                open.WindowState = FormWindowState.Normal;
+        if (_catalog is null) return;
 
-            open.Activate();
+        ShowCollector(!_collecting);
+    }
+
+    private void ShowCollector(bool collecting)
+    {
+        if (collecting == _collecting) return;
+        if (collecting && BuildCollector() is null) return;
+
+        _collecting = collecting;
+
+        _candidateArea.Visible = !collecting;
+        if (_collectorPanel is not null) _collectorPanel.Visible = collecting;
+
+        // Filled while it is the one showing, outlined while it is not - the
+        // same as the key button, so the two read the same way.
+        _collector.Ghost = !collecting;
+        _collector.Invalidate();
+
+        // The row above belongs to whatever is in the list: the dropdowns
+        // narrow tasks and keys, and "still needed only" narrows the checklist.
+        _traderBox.Visible = !collecting && !_keysOnly;
+        _mapBox.Visible = !collecting;
+        _keysButton.Visible = !collecting;
+        _remainingOnly.Visible = collecting;
+        _clearHeld.Visible = collecting;
+
+        _typedBox.PlaceholderText = collecting
+            ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
+            : Strings.SearchPlaceholderShort;
+
+        // The box belongs to whichever list is showing, so it starts empty for
+        // it rather than carrying the last search across.
+        _typedBox.Text = "";
+
+        if (collecting)
+        {
+            _collectorPanel!.Filter = "";
+            _collectorPanel.Forget();
+            ShowCollectorCounts();
+            SetStatus(Strings.CollectorShowing);
             return;
         }
 
-        // The catalog is loaded before the window is usable, but the button
-        // exists from the first paint, so this is not a promise the type makes.
-        if (_catalog is null) return;
+        _listHint.Text = Strings.EnterToOpen;
+        ListAllIfIdle();
+    }
 
-        // Order is the checklist's own business now - its header decides it.
+    /// <summary>
+    /// The checklist, built on demand. It is thrown away whenever the catalog
+    /// or the wiki changes, so its names and links always match the rest of the
+    /// window.
+    /// </summary>
+    private CollectorPanel? BuildCollector()
+    {
+        if (_collectorPanel is not null) return _collectorPanel;
+        if (_catalog is null) return null;
+
         var items = _catalog.Entries.Where(e => e.Kind == EntryKind.Item).ToList();
+        if (items.Count == 0) return null;
 
-        _collectorWindow = new CollectorForm(
-            items, CollectorRecordNow(), SelectedWiki, SelectedBrowser,
-            _settings.CollectorRemainingOnly);
-
-        _collectorWindow.Changed += RefreshCollectorCount;
-
-        _collectorWindow.RemainingOnlyChanged += only =>
+        _collectorPanel = new CollectorPanel(
+            items, CollectorRecordNow(), SelectedWiki, SelectedBrowser)
         {
-            _settings.CollectorRemainingOnly = only;
-            _settings.Save();
+            Dock = DockStyle.Fill,
+            Visible = false,
+            RemainingOnly = _settings.CollectorRemainingOnly,
         };
-        _collectorWindow.FormClosed += (_, _) => _collectorWindow = null;
-        _collectorWindow.Show(this);
+
+        _collectorPanel.Changed += RefreshCollectorCount;
+        _collectorPanel.Updated += ShowCollectorCounts;
+
+        _remainingOnly.Checked = _settings.CollectorRemainingOnly;
+        _listArea.Controls.Add(_collectorPanel);
+
+        return _collectorPanel;
+    }
+
+    /// <summary>The checklist's own count and hint, in the window's labels.</summary>
+    private void ShowCollectorCounts()
+    {
+        if (!_collecting || _collectorPanel is null) return;
+
+        _countLabel.Text = _collectorPanel.Progress;
+        _listHint.Text = _collectorPanel.Hint;
+        _clearHeld.Enabled = _collectorPanel.CanClear;
+    }
+
+    /// <summary>The wiki decides which names the checklist shows, so a change
+    /// of wiki is a reason to build it again.</summary>
+    private void DropCollector()
+    {
+        if (_collectorPanel is null) return;
+
+        var showing = _collecting;
+
+        _listArea.Controls.Remove(_collectorPanel);
+        _collectorPanel.Dispose();
+        _collectorPanel = null;
+
+        if (!showing) return;
+
+        _collecting = false;
+        ShowCollector(true);
     }
 
     /// <summary>
@@ -1707,6 +1867,10 @@ public sealed partial class MainForm : Form
     {
         _dial.Reset();
 
+        // Something was said: that is a search, and the checklist is not where
+        // its answer goes.
+        ShowCollector(false);
+
         if (outcome.IsEmpty)
         {
             // Say why. Silence, a too-quiet signal and "audio was fine but
@@ -2194,6 +2358,8 @@ public sealed partial class MainForm : Form
 
     private void ToggleKeys()
     {
+        ShowCollector(false);
+
         _keysOnly = !_keysOnly;
         _speech?.UseKeys(_keysOnly);
         _keysButton.Ghost = !_keysOnly;
