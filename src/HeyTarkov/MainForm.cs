@@ -987,6 +987,7 @@ public sealed partial class MainForm : Form
         _traderBox.Visible = !collecting && !_keysOnly;
         _mapBox.Visible = !collecting;
         _keysButton.Visible = !collecting;
+        _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
 
@@ -2401,11 +2402,7 @@ public sealed partial class MainForm : Form
         ShowCollector(false);
         LeaveImage();
 
-        _keysOnly = !_keysOnly;
-        _speech?.UseKeys(_keysOnly);
-        _keysButton.Ghost = !_keysOnly;
-        _keysButton.Invalidate();
-        _traderBox.Visible = !_keysOnly;
+        UseKeys(!_keysOnly);
 
         SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
 
@@ -2421,6 +2418,20 @@ public sealed partial class MainForm : Form
 
         SearchAgain();
         if (_candidates.Items.Count == 0) ListAll();
+    }
+
+    /// <summary>
+    /// The key half, or the other one. Kept apart from the button so that
+    /// anything else which has to leave key mode - reading a picture, which
+    /// answers with both halves at once - leaves the button looking like it.
+    /// </summary>
+    private void UseKeys(bool keys)
+    {
+        _keysOnly = keys;
+        _speech?.UseKeys(keys);
+        _keysButton.Ghost = !keys;
+        _keysButton.Invalidate();
+        _traderBox.Visible = !keys && !_collecting;
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -2657,6 +2668,7 @@ public sealed partial class MainForm : Form
         using (picture)
         {
             ShowCollector(false);
+            UseKeys(false);
             BuildTypedIndexes();
             SetStatus(Strings.ImageReading);
 
