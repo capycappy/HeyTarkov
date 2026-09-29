@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
@@ -78,6 +78,30 @@ public static class Painting
         g.DrawLine(pen, from, middle, to, middle);
         g.DrawLine(pen, to - stroke / 2f, middle, to - stroke / 2f, middle + box.Height * 0.22f);
         g.DrawLine(pen, to - box.Width * 0.26f, middle, to - box.Width * 0.26f, middle + box.Height * 0.16f);
+    }
+
+    /// <summary>
+    /// A picture: a frame with a hill and a sun in it. For the button that
+    /// reads a screenshot - a camera would promise that the app takes the
+    /// picture, which it does not; the user brings one.
+    /// </summary>
+    public static void ImageGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+
+        var frame = new RectangleF(box.X, box.Y + box.Height * 0.12f, box.Width, box.Height * 0.76f);
+        DrawRounded(g, Rectangle.Round(frame), colour, box.Width * 0.14f, stroke);
+
+        g.DrawEllipse(pen,
+            frame.X + frame.Width * 0.18f, frame.Y + frame.Height * 0.18f,
+            frame.Width * 0.2f, frame.Height * 0.2f);
+
+        // The hill, drawn as two strokes from the bottom corners to a peak.
+        var bottom = frame.Bottom - stroke;
+        var peak = new PointF(frame.X + frame.Width * 0.55f, frame.Y + frame.Height * 0.42f);
+
+        g.DrawLine(pen, frame.X + frame.Width * 0.12f, bottom, peak.X, peak.Y);
+        g.DrawLine(pen, peak.X, peak.Y, frame.Right - frame.Width * 0.08f, bottom);
     }
 
     public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
@@ -221,6 +245,10 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Keyed { get; set; }
 
+    /// <summary>A picture instead of a key, for the button that reads one.</summary>
+    [DefaultValue(false)]
+    public bool Pictured { get; set; }
+
     /// <summary>Tab pressed or mouse used: whether to show the ring changes.</summary>
     protected override void OnChangeUICues(UICuesEventArgs e) { Invalidate(); base.OnChangeUICues(e); }
 
@@ -269,13 +297,16 @@ public sealed class PillButton : Button
 
         var box = new Rectangle(0, 0, Width, Height);
 
-        if (Keyed && string.IsNullOrEmpty(Text))
+        if ((Keyed || Pictured) && string.IsNullOrEmpty(Text))
         {
             // Nothing but the picture, so it takes the middle of the button.
             var size = LogicalToDeviceUnits(18);
             var centre = new RectangleF((Width - size) / 2f, (Height - size) / 2f, size, size);
+            var stroke = Math.Max(1.8f, size * 0.13f);
 
-            Painting.KeyGlyph(g, centre, ink, Math.Max(1.8f, size * 0.13f));
+            if (Pictured) Painting.ImageGlyph(g, centre, ink, stroke);
+            else Painting.KeyGlyph(g, centre, ink, stroke);
+
             return;
         }
 

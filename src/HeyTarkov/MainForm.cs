@@ -154,6 +154,13 @@ public sealed partial class MainForm : Form
     /// <summary>The checklist is what the list area is showing.</summary>
     private bool _collecting;
 
+    /// <summary>Reads a screenshot of the game's task list.</summary>
+    private readonly PillButton _imageButton = new();
+
+    /// <summary>The list is showing what a picture was read as, so the open
+    /// button opens all of it rather than the one row selected.</summary>
+    private bool _fromImage;
+
     /// <summary>Holds the candidate list and the checklist, one at a time.</summary>
     private readonly Panel _listArea = new() { Dock = DockStyle.Fill, BackColor = Color.Transparent };
 
@@ -573,7 +580,11 @@ public sealed partial class MainForm : Form
         _typedBox.TextChanged += (_, _) =>
         {
             if (_collecting && _collectorPanel is not null) _collectorPanel.Filter = _typedBox.Text;
-            else ShowCandidatesFor(_typedBox.Text);
+            else
+            {
+                LeaveImage();
+                ShowCandidatesFor(_typedBox.Text);
+            }
         };
 
         // Enter opens a page and leaves the words that found it sitting there.
@@ -601,6 +612,19 @@ public sealed partial class MainForm : Form
         _keysButton.Anchor = AnchorStyles.Left;
         _keysButton.Margin = new Padding(0, 0, 10, 0);
         _keysButton.Click += (_, _) => ToggleKeys();
+
+        // Beside the key button, because it is another way of asking the same
+        // question - the microphone, the keyboard, or a picture of the screen.
+        _imageButton.Text = "";
+        _imageButton.AccessibleName = Strings.ImageButton;
+        _imageButton.Pictured = true;
+        _imageButton.Ghost = true;
+        _imageButton.Width = 44;
+        _imageButton.Height = 38;
+        _imageButton.Anchor = AnchorStyles.Left;
+        _imageButton.Margin = new Padding(0, 0, 10, 0);
+        _imageButton.Click += async (_, _) => await ReadImageAsync();
+        _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
 
         // Hidden until the key button is in: it is a tool for the keys, and an
         // empty dropdown beside the search box the rest of the time would be
@@ -675,21 +699,22 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 6,
+            ColumnCount = 7,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 5; column++)
+        for (var column = 0; column < 6; column++)
             row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         row.Controls.Add(_dial, 0, 0);
         row.Controls.Add(_keysButton, 1, 0);
-        row.Controls.Add(_traderBox, 2, 0);
-        row.Controls.Add(_mapBox, 3, 0);
-        row.Controls.Add(_remainingOnly, 4, 0);
-        row.Controls.Add(box, 5, 0);
+        row.Controls.Add(_imageButton, 2, 0);
+        row.Controls.Add(_traderBox, 3, 0);
+        row.Controls.Add(_mapBox, 4, 0);
+        row.Controls.Add(_remainingOnly, 5, 0);
+        row.Controls.Add(box, 6, 0);
         return row;
     }
 
@@ -716,6 +741,15 @@ public sealed partial class MainForm : Form
         _candidates.DoubleClick += (_, _) => OpenSelected();
         _candidates.KeyDown += (_, e) =>
         {
+            // A row read from a picture can be wrong, and the list is about to
+            // be opened all at once, so it can be thrown away.
+            if (e.KeyCode == Keys.Delete && _fromImage && _candidates.SelectedIndex >= 0)
+            {
+                e.SuppressKeyPress = true;
+                DropSelectedRow();
+                return;
+            }
+
             if (e.KeyCode != Keys.Enter) return;
             e.SuppressKeyPress = true;
             OpenSelected();
@@ -827,7 +861,11 @@ public sealed partial class MainForm : Form
         _openButton.Height = 38;
         _openButton.Font = new Font("Yu Gothic UI", 10.5f, FontStyle.Bold);
         _openButton.Margin = new Padding(0, 0, 0, 12);
-        _openButton.Click += (_, _) => OpenSelected();
+        _openButton.Click += (_, _) =>
+        {
+            if (_fromImage) OpenEverythingShown();
+            else OpenSelected();
+        };
         return _openButton;
     }
 
@@ -931,6 +969,7 @@ public sealed partial class MainForm : Form
     private void ShowCollector(bool collecting)
     {
         if (collecting == _collecting) return;
+        if (collecting) LeaveImage();
         if (collecting && BuildCollector() is null) return;
 
         _collecting = collecting;
@@ -948,6 +987,7 @@ public sealed partial class MainForm : Form
         _traderBox.Visible = !collecting && !_keysOnly;
         _mapBox.Visible = !collecting;
         _keysButton.Visible = !collecting;
+        _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
 
@@ -1867,9 +1907,10 @@ public sealed partial class MainForm : Form
     {
         _dial.Reset();
 
-        // Something was said: that is a search, and the checklist is not where
-        // its answer goes.
+        // Something was said: that is a search, and neither the checklist nor a
+        // picture's rows are where its answer goes.
         ShowCollector(false);
+        LeaveImage();
 
         if (outcome.IsEmpty)
         {
@@ -2359,12 +2400,9 @@ public sealed partial class MainForm : Form
     private void ToggleKeys()
     {
         ShowCollector(false);
+        LeaveImage();
 
-        _keysOnly = !_keysOnly;
-        _speech?.UseKeys(_keysOnly);
-        _keysButton.Ghost = !_keysOnly;
-        _keysButton.Invalidate();
-        _traderBox.Visible = !_keysOnly;
+        UseKeys(!_keysOnly);
 
         SetStatus(_keysOnly ? Strings.KeysOnly : Strings.KeysOff);
 
@@ -2380,6 +2418,20 @@ public sealed partial class MainForm : Form
 
         SearchAgain();
         if (_candidates.Items.Count == 0) ListAll();
+    }
+
+    /// <summary>
+    /// The key half, or the other one. Kept apart from the button so that
+    /// anything else which has to leave key mode - reading a picture, which
+    /// answers with both halves at once - leaves the button looking like it.
+    /// </summary>
+    private void UseKeys(bool keys)
+    {
+        _keysOnly = keys;
+        _speech?.UseKeys(keys);
+        _keysButton.Ghost = !keys;
+        _keysButton.Invalidate();
+        _traderBox.Visible = !keys && !_collecting;
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -2590,6 +2642,141 @@ public sealed partial class MainForm : Form
         return readings.Count > 0 ? readings[0] : null;
     }
 
+    /// <summary>
+    /// A picture of the game's task list, turned into rows.
+    ///
+    /// The picture comes from the clipboard - Windows' own Win+Shift+S put it
+    /// there - so the app neither watches the screen nor touches the game. What
+    /// it reads is shown as candidates rather than opened, because a recognizer
+    /// is wrong often enough that nine browser tabs would be a bad way to find
+    /// out.
+    /// </summary>
+    private async Task ReadImageAsync()
+    {
+        if (!ScreenText.Available)
+        {
+            SetStatus(Strings.ImageNoEngine);
+            return;
+        }
+
+        if (ClipboardImage() is not { } picture)
+        {
+            SetStatus(Strings.ImageNone);
+            return;
+        }
+
+        using (picture)
+        {
+            ShowCollector(false);
+            UseKeys(false);
+            BuildTypedIndexes();
+            SetStatus(Strings.ImageReading);
+
+            List<ReadName> found;
+
+            try
+            {
+                var lines = await ScreenText.LinesAsync(picture);
+                found = ReadNames.Match(lines, _typedRest, _typedKeys);
+            }
+            catch (Exception ex)
+            {
+                SetStatus(Strings.CannotOpenMic(ex.Message));
+                return;
+            }
+
+            if (found.Count == 0)
+            {
+                SetStatus(Strings.ImageNothing);
+                return;
+            }
+
+            _fromImage = true;
+            _imageButton.Ghost = false;
+            _imageButton.Invalidate();
+
+            // The line the recognizer read stands where a reading would, so
+            // every row says what it came from.
+            PopulateRows(found
+                .Select(name => new CandidateRow(
+                    new TaskMatch(name.Task, name.Score, name.Read), name.Read))
+                .ToList());
+
+            _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
+            SetStatus(Strings.ImageFound(_candidates.Items.Count));
+        }
+    }
+
+    /// <summary>
+    /// The clipboard's picture, or nothing. Windows hands these over as bitmaps
+    /// that belong to the clipboard, so it is copied before the caller uses it.
+    /// </summary>
+    private static Image? ClipboardImage()
+    {
+        try
+        {
+            return Clipboard.ContainsImage() && Clipboard.GetImage() is { } image
+                ? image
+                : null;
+        }
+        catch (ExternalException)
+        {
+            // Another program had the clipboard open. Nothing to do about it.
+            return null;
+        }
+    }
+
+    /// <summary>One row of a picture's reading, thrown away.</summary>
+    private void DropSelectedRow()
+    {
+        var at = _candidates.SelectedIndex;
+        if (at < 0) return;
+
+        _candidates.Items.RemoveAt(at);
+        _lastRows = _candidates.Items.Cast<CandidateRow>().ToList();
+
+        if (_candidates.Items.Count == 0)
+        {
+            LeaveImage();
+            _countLabel.Text = "";
+            ListAllIfIdle();
+            return;
+        }
+
+        _candidates.SelectedIndex = Math.Min(at, _candidates.Items.Count - 1);
+        _countLabel.Text = Strings.Candidates(_candidates.Items.Count);
+        _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
+    }
+
+    /// <summary>Back to an ordinary list of candidates.</summary>
+    private void LeaveImage()
+    {
+        if (!_fromImage) return;
+
+        _fromImage = false;
+        _imageButton.Ghost = true;
+        _imageButton.Invalidate();
+        _openButton.Text = Strings.OpenSelected;
+    }
+
+    /// <summary>
+    /// Every row on screen, in the browser. Asked about first: this is the one
+    /// button in the app that does a dozen things at once.
+    /// </summary>
+    private void OpenEverythingShown()
+    {
+        var rows = _candidates.Items.Cast<CandidateRow>().ToList();
+        if (rows.Count == 0) return;
+
+        var answer = MessageBox.Show(this, Strings.OpenAllAsk(rows.Count),
+            Strings.OpenAllTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question,
+            MessageBoxDefaultButton.Button1);
+
+        if (answer != DialogResult.OK) return;
+
+        foreach (var row in rows) OpenTask(row.Match.Task, row.Elsewhere);
+    }
+
     private void OpenSelected()
     {
         if (_candidates.SelectedItem is CandidateRow row) OpenTask(row.Match.Task, row.Elsewhere);
@@ -2620,6 +2807,22 @@ public sealed partial class MainForm : Form
         {
             SetStatus(Strings.CannotOpenBrowser(ex.Message));
         }
+    }
+
+    /// <summary>
+    /// Ctrl+V anywhere in the window reads a picture, which is where the hand
+    /// already is after Win+Shift+S. The search box keeps it when it is being
+    /// typed into - pasting a name there is the ordinary thing to want.
+    /// </summary>
+    protected override bool ProcessCmdKey(ref Message message, Keys keys)
+    {
+        if (keys == (Keys.Control | Keys.V) && !_typedBox.Focused && !_collecting)
+        {
+            _ = ReadImageAsync();
+            return true;
+        }
+
+        return base.ProcessCmdKey(ref message, keys);
     }
 
     private void SetStatus(string text) => _statusLabel.Text = text;

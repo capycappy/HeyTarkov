@@ -301,6 +301,44 @@ public static class Strings
 
     public static string CollectorClearTitle => T("すべて解除", "Clear all");
 
+    // ------------------------------------------------------ from a screenshot
+
+    public static string ImageButton => T("画像から探す", "Search from an image");
+
+    public static string ImageTip => T(
+        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）",
+        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same)");
+
+    public static string ImageNone => T(
+        "画像がありません。Win+Shift+S でタスク一覧を撮ってから、もう一度押してください",
+        "No picture to read. Take one of the task list with Win+Shift+S, then press this again");
+
+    public static string ImageReading => T("画像を読んでいます…", "Reading the picture...");
+
+    public static string ImageFound(int count) => T(
+        $"画像から {count} 件見つかりました。要らない行は Delete で消せます",
+        count == 1
+            ? "Found 1 entry in the picture. Press Delete to drop a row"
+            : $"Found {count} entries in the picture. Press Delete to drop a row");
+
+    public static string ImageNothing => T(
+        "画像から見つかりませんでした。タスク名が写る範囲を大きめに撮ってみてください",
+        "Nothing in the picture matched. Try a larger crop with the task names in it");
+
+    public static string ImageNoEngine => T(
+        "この Windows には文字を読む機能が入っていません",
+        "This Windows has no text recognition installed");
+
+    public static string OpenAll(int count) => T(
+        $"{count} 件をまとめて開く",
+        count == 1 ? "Open 1 page" : $"Open all {count} pages");
+
+    public static string OpenAllAsk(int count) => T(
+        $"ブラウザのタブを {count} 枚開きます。よろしいですか。",
+        $"This opens {count} browser tabs. Go ahead?");
+
+    public static string OpenAllTitle => T("まとめて開く", "Open all");
+
     /// <summary>The status line while the checklist is what the list shows.</summary>
     public static string CollectorShowing => T(
         "KAPPA品の一覧です。もう一度ボタンを押すと元に戻ります",
