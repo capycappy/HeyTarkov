@@ -1,4 +1,4 @@
-# Hey Tarkov v1.7.1
+# Hey Tarkov v1.8.0
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名・KAPPA品名・鍵の名前**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -21,8 +21,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.7.1-win-x64.zip` | 42MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.7.1-win-x64-framework-dependent.zip` | 0.6MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.8.0-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.8.0-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -40,6 +40,28 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 言語や Wiki を切り替えた直後は準備に約1秒かかる。その間に押しても、
 押したままにしておけば準備ができ次第そのまま聞き取りが始まる。
+
+### 画像から探す
+
+**ゲームのタスク一覧を撮って、写っているタスクをまとめて開ける。**
+
+1. ゲームでタスク一覧を開き、`Win+Shift+S` で撮る（範囲指定でよい）
+2. Hey Tarkov で **Ctrl+V**、またはマイクの右の**画像ボタン**を押す
+3. 読み取った名前が候補に並ぶ。「読み」の列に**実際に読めた文字**が出るので照合できる
+4. 要らない行は選んで `Delete`
+5. 下のボタンが **「N 件をまとめて開く」** に変わる（確認あり）
+
+```
+Honest Review       → Honest Review        100%
+lnvasive Therapy    → Invasive Therapy      94%
+Fog 0f War          → Fog of War            71%
+```
+
+文字を読むのは **Windows に入っている文字認識**で、オフラインで動く。画像はどこにも送らない。
+アプリが画面を撮ることはなく、**ユーザーが撮った画像を読むだけ**（オーバーレイもホットキーもない）。
+
+日本語でプレイしていてもタスク名は英語で表示されるので、そのまま照合できる。
+英語の文字認識を Windows に追加すると精度が上がる（なくても動く）。
 
 ### 一覧から絞り込む
 
@@ -287,7 +309,7 @@ dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarko
 ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
 
 ```
-$v = "1.7.1"
+$v = "1.8.0"
 $stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
 $out = "$env:USERPROFILE\app\HeyTarkov"
 
