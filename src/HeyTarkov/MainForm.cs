@@ -697,7 +697,7 @@ public sealed partial class MainForm : Form
         };
         // Beside the microphone, the language it listens in: a bubble, then
         // JA over EN, the chosen one lit.
-        _speakSwitch.Size = new Size(44, 64);
+        _speakSwitch.Size = new Size(58, 64);
         _speakSwitch.AccessibleName = Strings.SpeakLabel;
         _speakSwitch.Anchor = AnchorStyles.Right;
         _speakSwitch.Margin = new Padding(8, 0, 0, 0);

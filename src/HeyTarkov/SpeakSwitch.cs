@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace HeyTarkov;
 
@@ -47,20 +47,23 @@ public sealed class SpeakSwitch : Control
     {
         base.OnHandleCreated(e);
         _font?.Dispose();
-        _font = new Font("Segoe UI Semibold", Font.SizeInPoints * 0.92f, FontStyle.Bold);
+        _font = new Font("Yu Gothic UI", Font.SizeInPoints * 0.86f, FontStyle.Bold);
     }
 
-    /// <summary>The bubble, then the two cells, from the top down.</summary>
+    /// <summary>The bubble, then the two cells, from the top down, all inside
+    /// the frame.</summary>
     private (RectangleF Bubble, RectangleF Ja, RectangleF En) Cells()
     {
-        var gap = LogicalToDeviceUnits(2);
-        var bubble = LogicalToDeviceUnits(18);
-        var cell = (Height - bubble - gap * 2) / 2f;
+        var edge = LogicalToDeviceUnits(3);
+        var gap = LogicalToDeviceUnits(1);
+        var bubble = LogicalToDeviceUnits(17);
+        var width = Width - edge * 2;
+        var cell = (Height - edge * 2 - bubble - gap * 2) / 2f;
 
         return (
-            new RectangleF(0, 0, Width, bubble),
-            new RectangleF(0, bubble + gap, Width, cell),
-            new RectangleF(0, bubble + gap + cell + gap, Width, cell));
+            new RectangleF(edge, edge, width, bubble),
+            new RectangleF(edge, edge + bubble + gap, width, cell),
+            new RectangleF(edge, edge + bubble + gap + cell + gap, width, cell));
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -72,13 +75,17 @@ public sealed class SpeakSwitch : Control
 
         var (bubble, ja, en) = Cells();
 
+        // One frame round the three, so they read as one control rather than
+        // a picture with two words under it.
+        Painting.DrawRounded(g, ClientRectangle, Theme.Edge, LogicalToDeviceUnits(8), LogicalToDeviceUnits(1));
+
         // The bubble is small and sits in the middle of its band.
-        var side = LogicalToDeviceUnits(16);
+        var side = LogicalToDeviceUnits(14);
         var glyph = new RectangleF(bubble.X + (bubble.Width - side) / 2f, bubble.Y + (bubble.Height - side) / 2f, side, side);
         Painting.SpeechGlyph(g, glyph, Theme.Muted, Math.Max(1.4f, side * 0.11f));
 
-        Cell(g, ja, "JA", _language == RecognitionLanguage.Japanese, _hot == 1);
-        Cell(g, en, "EN", _language == RecognitionLanguage.English, _hot == 2);
+        Cell(g, ja, "日本語", _language == RecognitionLanguage.Japanese, _hot == 1);
+        Cell(g, en, "ENG", _language == RecognitionLanguage.English, _hot == 2);
 
         if (Focused && ShowFocusCues)
         {
@@ -91,9 +98,9 @@ public sealed class SpeakSwitch : Control
     /// waiting to be clicked, a little brighter under the mouse.</summary>
     private void Cell(Graphics g, RectangleF box, string text, bool chosen, bool hot)
     {
-        var inset = LogicalToDeviceUnits(2);
+        var inset = LogicalToDeviceUnits(1);
         var pill = RectangleF.Inflate(box, -inset, -inset);
-        var radius = LogicalToDeviceUnits(6);
+        var radius = LogicalToDeviceUnits(5);
 
         if (chosen) Painting.FillRounded(g, pill, Theme.Accent, radius);
         else if (hot) Painting.FillRounded(g, pill, Theme.PanelHi, radius);
