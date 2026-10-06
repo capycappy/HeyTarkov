@@ -160,6 +160,16 @@ public static class Strings
 
     /// <summary>The two buttons beside the key button: the places, and the
     /// story. Each shows one kind of thing, the way the key button does.</summary>
+    public static string TasksButton => T("タスク", "Tasks");
+
+    public static string TasksTip => T(
+        "タスクだけを表示（もう一度押すと元に戻る）",
+        "Show tasks only (press again to go back)");
+
+    public static string TasksOnly => T(
+        "タスクだけを表示しています。もう一度押すと元に戻ります",
+        "Showing tasks only. Press again to go back");
+
     public static string PlacesButton => T("マップと脱出地点", "Maps and exits");
 
     public static string PlacesTip => T(

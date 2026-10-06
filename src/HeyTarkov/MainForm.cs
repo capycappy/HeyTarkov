@@ -159,11 +159,13 @@ public sealed partial class MainForm : Form
 
     /// <summary>One kind of thing at a time: the places, or the story. They
     /// stand beside the key button and work the same way.</summary>
+    private readonly PillButton _tasksButton = new();
+
     private readonly PillButton _placesButton = new();
 
     private readonly PillButton _storyButton = new();
 
-    private enum Scope { Everything, Places, Story }
+    private enum Scope { Everything, Tasks, Places, Story }
 
     /// <summary>Which of those two buttons is in, if either.</summary>
     private Scope _scope = Scope.Everything;
@@ -747,6 +749,7 @@ public sealed partial class MainForm : Form
         // aloud, and the tooltip says what happens.
         foreach (var (button, name, tip) in new[]
                  {
+                     (_tasksButton, Strings.TasksButton, Strings.TasksTip),
                      (_keysButton, Strings.KeysButton, Strings.KeysTip),
                      (_placesButton, Strings.PlacesButton, Strings.PlacesTip),
                      (_storyButton, Strings.StoryButton, Strings.StoryTip),
@@ -762,9 +765,11 @@ public sealed partial class MainForm : Form
             _keysTip.SetToolTip(button, tip);
         }
 
+        _tasksButton.Listed = true;
         _keysButton.Keyed = true;
         _placesButton.Pinned = true;
         _storyButton.Storied = true;
+        _tasksButton.Click += (_, _) => ToggleScope(Scope.Tasks);
         _keysButton.Click += (_, _) => ToggleKeys();
         _placesButton.Click += (_, _) => ToggleScope(Scope.Places);
         _storyButton.Click += (_, _) => ToggleScope(Scope.Story);
@@ -809,8 +814,9 @@ public sealed partial class MainForm : Form
         _imageButton.Ghost = true;
         _imageButton.AutoSize = false;
         _imageButton.Size = new Size(100, 32);
-        _imageButton.Anchor = AnchorStyles.Left;
-        _imageButton.Margin = new Padding(0, 0, 8, 0);
+        _imageButton.MinimumSize = new Size(100, 0);
+        _imageButton.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _imageButton.Margin = new Padding(0);
         _imageButton.Click += async (_, _) =>
         {
             // Pressed in: the picture's rows are showing, and pressing again
@@ -832,7 +838,7 @@ public sealed partial class MainForm : Form
         // the theme dropdown.
         _mapBox.SizeChanged += (_, _) =>
         {
-            foreach (var button in new[] { _keysButton, _placesButton, _storyButton, _imageButton })
+            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton, _imageButton })
                 button.Height = _mapBox.Height;
         };
 
@@ -849,15 +855,18 @@ public sealed partial class MainForm : Form
         for (var column = 0; column < 7; column++)
             filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
+        // The picture button is last and takes whatever is left, so the row
+        // ends where the search box does whatever the window's width.
         filters.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         filters.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        filters.Controls.Add(_keysButton, 0, 0);
-        filters.Controls.Add(_placesButton, 1, 0);
-        filters.Controls.Add(_storyButton, 2, 0);
-        filters.Controls.Add(_traderBox, 3, 0);
-        filters.Controls.Add(_mapBox, 4, 0);
-        filters.Controls.Add(_remainingOnly, 5, 0);
-        filters.Controls.Add(_imageButton, 6, 0);
+        filters.Controls.Add(_tasksButton, 0, 0);
+        filters.Controls.Add(_keysButton, 1, 0);
+        filters.Controls.Add(_placesButton, 2, 0);
+        filters.Controls.Add(_storyButton, 3, 0);
+        filters.Controls.Add(_traderBox, 4, 0);
+        filters.Controls.Add(_mapBox, 5, 0);
+        filters.Controls.Add(_remainingOnly, 6, 0);
+        filters.Controls.Add(_imageButton, 7, 0);
 
         var rows = new TableLayoutPanel
         {
@@ -1145,6 +1154,7 @@ public sealed partial class MainForm : Form
         // narrow tasks and keys, and "still needed only" narrows the checklist.
         _traderBox.Visible = TraderBoxWanted;
         _mapBox.Visible = !collecting;
+        _tasksButton.Visible = !collecting;
         _keysButton.Visible = !collecting;
         _placesButton.Visible = !collecting;
         _storyButton.Visible = !collecting;
@@ -2513,7 +2523,7 @@ public sealed partial class MainForm : Form
     };
 
     /// <summary>The trader dropdown only means something over the tasks.</summary>
-    private bool TraderBoxWanted => !_keysOnly && !_collecting && _scope == Scope.Everything;
+    private bool TraderBoxWanted => !_keysOnly && !_collecting && _scope is Scope.Everything or Scope.Tasks;
 
     /// <summary>
     /// The places button or the story button, pressed. One at a time, and
@@ -2534,6 +2544,7 @@ public sealed partial class MainForm : Form
 
         SetStatus(_scope switch
         {
+            Scope.Tasks => Strings.TasksOnly,
             Scope.Places => Strings.PlacesOnly,
             Scope.Story => Strings.StoryOnly,
             _ => Strings.Filtering(null, null),
@@ -2551,8 +2562,10 @@ public sealed partial class MainForm : Form
 
     private void ShowScopeButtons()
     {
+        _tasksButton.Ghost = _scope != Scope.Tasks;
         _placesButton.Ghost = _scope != Scope.Places;
         _storyButton.Ghost = _scope != Scope.Story;
+        _tasksButton.Invalidate();
         _placesButton.Invalidate();
         _storyButton.Invalidate();
     }
@@ -2582,6 +2595,7 @@ public sealed partial class MainForm : Form
 
         switch (_scope)
         {
+            case Scope.Tasks when entry.Kind != EntryKind.Task:
             case Scope.Places when entry.Kind is not (EntryKind.Map or EntryKind.Extract):
             case Scope.Story when entry.Kind != EntryKind.Task || entry.Group != "Story":
                 return false;

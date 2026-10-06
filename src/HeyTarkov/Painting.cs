@@ -116,6 +116,25 @@ public static class Painting
         g.DrawLine(pen, peak.X, peak.Y, frame.Right - frame.Width * 0.08f, bottom);
     }
 
+    /// <summary>A clipboard with lines on it: the list of tasks.</summary>
+    public static void ListGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var board = new RectangleF(box.X + box.Width * 0.1f, box.Y + box.Height * 0.12f, box.Width * 0.8f, box.Height * 0.86f);
+        DrawRounded(g, Rectangle.Round(board), colour, box.Width * 0.12f, stroke);
+
+        // The clip at the top, and three lines of writing.
+        var clipW = board.Width * 0.4f;
+        g.DrawLine(pen, board.X + (board.Width - clipW) / 2f, board.Y, board.X + (board.Width + clipW) / 2f, board.Y);
+
+        for (var i = 0; i < 3; i++)
+        {
+            var y = board.Y + board.Height * (0.34f + i * 0.2f);
+            g.DrawLine(pen, board.X + board.Width * 0.24f, y, board.Right - board.Width * 0.24f, y);
+        }
+    }
+
     /// <summary>A map pin: a drop with a hole in it. For the button that shows
     /// the maps and the ways out of them.</summary>
     public static void PinGlyph(Graphics g, RectangleF box, Color colour, float stroke)
@@ -346,11 +365,15 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Pinned { get; set; }
 
+    /// <summary>A clipboard, for the button that shows the tasks.</summary>
+    [DefaultValue(false)]
+    public bool Listed { get; set; }
+
     /// <summary>An open book, for the button that shows the story.</summary>
     [DefaultValue(false)]
     public bool Storied { get; set; }
 
-    private bool Iconed => Keyed || Pictured || Pinned || Storied;
+    private bool Iconed => Keyed || Pictured || Pinned || Storied || Listed;
 
     private void Glyph(Graphics g, RectangleF box, Color ink, float stroke)
     {
@@ -358,6 +381,7 @@ public sealed class PillButton : Button
         else if (Pictured) Painting.ImageGlyph(g, box, ink, stroke);
         else if (Pinned) Painting.PinGlyph(g, box, ink, stroke);
         else if (Storied) Painting.BookGlyph(g, box, ink, stroke);
+        else if (Listed) Painting.ListGlyph(g, box, ink, stroke);
         else Painting.Tick(g, box, ink, stroke);
     }
 
