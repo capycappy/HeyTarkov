@@ -21,6 +21,9 @@ public sealed class ModernCombo : ComboBox
 
     private bool _hot;
 
+    /// <summary>Shows the whole name when the box is too narrow for it.</summary>
+    private readonly ToolTip _whole = new();
+
     /// <summary>
     /// What this sits on. The square border has to be painted out in the
     /// surrounding colour, and a card is not the page.
@@ -57,6 +60,68 @@ public sealed class ModernCombo : ComboBox
         base.OnHandleCreated(e);
         ApplyMetrics();
         ApplyColours();
+        OfferWholeName();
+    }
+
+    /// <summary>
+    /// The list, when it opens, is as wide as its longest item. The closed box
+    /// can cut a device name short - "Default device (Analog (1+2) (RME..." -
+    /// but the list is where the choice is made, and there every name is read
+    /// in full.
+    /// </summary>
+    protected override void OnDropDown(EventArgs e)
+    {
+        base.OnDropDown(e);
+
+        var widest = 0;
+
+        using (var g = CreateGraphics())
+        {
+            foreach (var item in Items)
+            {
+                var text = GetItemText(item) ?? "";
+                widest = Math.Max(widest, TextRenderer.MeasureText(g, text, Font,
+                    new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+            }
+        }
+
+        // Room for the text, the padding each side and the scrollbar.
+        DropDownWidth = Math.Max(Width, widest + LogicalToDeviceUnits(16) + SystemInformation.VerticalScrollBarWidth);
+    }
+
+    protected override void OnSelectedIndexChanged(EventArgs e)
+    {
+        base.OnSelectedIndexChanged(e);
+        OfferWholeName();
+    }
+
+    protected override void OnSizeChanged(EventArgs e)
+    {
+        base.OnSizeChanged(e);
+        OfferWholeName();
+    }
+
+    /// <summary>
+    /// A tooltip with the whole name, only when the box cannot show it. Over a
+    /// name that fits, a tooltip repeating it is noise.
+    /// </summary>
+    private void OfferWholeName()
+    {
+        if (!IsHandleCreated) return;
+
+        var text = SelectedItem is { } item ? GetItemText(item) ?? "" : "";
+        var room = Width - LogicalToDeviceUnits(ArrowWidth) - LogicalToDeviceUnits(10);
+
+        var width = text.Length == 0 ? 0 : TextRenderer.MeasureText(text, Font,
+            new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;
+
+        _whole.SetToolTip(this, width > room ? text : "");
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) _whole.Dispose();
+        base.Dispose(disposing);
     }
 
     protected override void OnFontChanged(EventArgs e)

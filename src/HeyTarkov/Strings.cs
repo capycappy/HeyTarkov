@@ -106,7 +106,7 @@ public static class Strings
         T("キーボードで探す（Ctrl+V で画像からも）", "Type to search (Ctrl+V reads a picture)");
 
     public static string HeardPlaceholder =>
-        T("聞き取り結果はここに出ます", "What you say appears here");
+        T("話した言葉や読み取った結果はここに出ます", "What was said or read appears here");
 
     public static string MicReady => T("押して話す ／ 打つ", "Hold to talk, or type");
     public static string MicListening => T("聞き取り中… 離すと検索します", "Listening… release to search");
@@ -164,6 +164,15 @@ public static class Strings
     /// narrow the list.</summary>
     public static string FilterLegend => T("絞り込み", "Narrow down");
 
+    /// <summary>The word on the frame round the three ways of asking: the box,
+    /// the microphone, the picture.</summary>
+    public static string SearchLegend => T("検索", "Search");
+
+    /// <summary>What the heard line says after a picture was read.</summary>
+    public static string ImageHeard(int lines) => T(
+        $"画像を読み取りました（{lines} 行）",
+        lines == 1 ? "Read the picture (1 line)" : $"Read the picture ({lines} lines)");
+
     public static string TasksButton => T("タスク", "Tasks");
 
     public static string TasksTip => T(
@@ -200,8 +209,8 @@ public static class Strings
         language == RecognitionLanguage.Japanese ? "JA" : "EN";
 
     public static string SpeakToggleTip => T(
-        "話す言語を切り替える（JA: 日本語 ／ EN: 英語）",
-        "Switch the language you speak (JA: Japanese / EN: English)");
+        "マイクが聞き取る言語（日本語 ／ ENG: 英語）",
+        "The language the microphone listens in (日本語: Japanese / ENG: English)");
 
     /// <summary>The microphone's settings fold away under the card: most
     /// people never touch them after the first day.</summary>

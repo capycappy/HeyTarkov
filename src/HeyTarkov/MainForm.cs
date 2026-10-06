@@ -710,7 +710,7 @@ public sealed partial class MainForm : Form
             BackColor = Color.Transparent,
             ColumnCount = 2,
             RowCount = 1,
-            Margin = new Padding(0, 0, 0, 4),
+            Margin = new Padding(0),
         };
         // Beside the microphone, the same size: a picture instead of a voice.
         _imageButton.Size = new Size(64, 64);
@@ -750,22 +750,15 @@ public sealed partial class MainForm : Form
         voice.Controls.Add(_dial, 0, 0);
         voice.Controls.Add(_imageButton, 1, 0);
 
-        var frame = new Card
-        {
-            Filled = false,
-            Radius = 12,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            Anchor = AnchorStyles.Right,
-            Margin = new Padding(10, 0, 0, 0),
-        };
-        frame.Controls.Add(voice);
+        voice.Padding = new Padding(0);
+        voice.Anchor = AnchorStyles.Right;
+        voice.Margin = new Padding(10, 0, 0, 0);
 
         search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         search.Controls.Add(box, 0, 0);
-        search.Controls.Add(frame, 1, 0);
+        search.Controls.Add(voice, 1, 0);
 
         // Three buttons that each show one kind of thing. The picture is the
         // label; the name is still there for anything that reads the window
@@ -896,7 +889,24 @@ public sealed partial class MainForm : Form
         narrowing.Padding = new Padding(8, narrowing.LegendHeight + 8, 8, 8);
         narrowing.Controls.Add(filters);
 
-        rows.Controls.Add(search, 0, 0);
+        // The three ways of asking - the box, the microphone, the picture -
+        // framed and named the same way as the row that narrows the answer.
+        search.Dock = DockStyle.Fill;
+
+        var asking = new Card
+        {
+            Filled = false,
+            Radius = 10,
+            Legend = Strings.SearchLegend,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 0, 0, 6),
+        };
+        asking.Padding = new Padding(8, asking.LegendHeight + 8, 8, 8);
+        asking.Controls.Add(search);
+
+        rows.Controls.Add(asking, 0, 0);
         rows.Controls.Add(narrowing, 0, 1);
         return rows;
     }
@@ -2920,9 +2930,12 @@ public sealed partial class MainForm : Form
 
             List<ReadName> found;
 
+            int lineCount;
+
             try
             {
                 var lines = await ScreenText.LinesAsync(picture);
+                lineCount = lines.Count;
                 found = ReadNames.Match(lines, _typedRest, _typedKeys);
             }
             catch (Exception ex)
@@ -2939,6 +2952,8 @@ public sealed partial class MainForm : Form
 
             _fromImage = true;
             _imageButton.Active = true;
+            _heardLabel.ForeColor = Theme.Text;
+            _heardLabel.Text = Strings.ImageHeard(lineCount);
 
             // Ordinary rows, with the ordinary reading: what the recognizer
             // read is kept as the matched phrase, not shown in its place.
@@ -3000,6 +3015,8 @@ public sealed partial class MainForm : Form
 
         _fromImage = false;
         _imageButton.Active = false;
+        _heardLabel.ForeColor = Theme.Faint;
+        _heardLabel.Text = Strings.HeardPlaceholder;
         _openButton.Text = Strings.OpenSelected;
     }
 
