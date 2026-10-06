@@ -26,8 +26,18 @@ public static class Painting
         return path;
     }
 
+    /// <summary>
+    /// A control can be asked to paint before it has been laid out - the first
+    /// frame after being shown, when it is still a point at the corner - and
+    /// GDI+ answers a rectangle with no area with "parameter is not valid".
+    /// Such a frame has nothing to show anyway.
+    /// </summary>
+    private static bool Paintable(RectangleF r) => r.Width > 0 && r.Height > 0;
+
     public static void FillRounded(Graphics g, RectangleF r, Color colour, float radius)
     {
+        if (!Paintable(r)) return;
+
         using var path = Rounded(r, radius);
         using var brush = new SolidBrush(colour);
         g.FillPath(brush, path);
@@ -39,6 +49,8 @@ public static class Painting
     {
         var inset = RectangleF.FromLTRB(
             r.Left + width / 2, r.Top + width / 2, r.Right - width / 2, r.Bottom - width / 2);
+
+        if (!Paintable(inset)) return;
 
         using var path = Rounded(inset, radius);
         using var pen = new Pen(colour, width) { DashStyle = dash };

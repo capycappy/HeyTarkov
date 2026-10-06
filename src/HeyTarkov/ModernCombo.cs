@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
@@ -150,6 +150,12 @@ public sealed class ModernCombo : ComboBox
         var arrow = LogicalToDeviceUnits(ArrowWidth);
         var line = LogicalToDeviceUnits(1);
         var radius = LogicalToDeviceUnits(6);
+
+        // The first paint after being shown can come before the layout that
+        // gives the control its size - a box folded away under the settings
+        // and unfolded is a point at the corner for one frame - and a frame
+        // with no room for its corners is not a frame GDI+ will draw.
+        if (area.Width < (radius + line) * 2 || area.Height < (radius + line) * 2) return;
 
         // Underneath all of this the OS has drawn its own square border around
         // the whole control, and filled the corners to match. Rounding the

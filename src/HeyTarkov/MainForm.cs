@@ -582,7 +582,12 @@ public sealed partial class MainForm : Form
         _micSettingsLink.Margin = new Padding(0, 2, 1, 0);
         _micSettingsLink.Click += (_, _) =>
         {
+            // Laid out before it is painted: shown bare, the row gets one frame
+            // at the corner of the card at no size, which is a flash at best.
+            stack.SuspendLayout();
             device.Visible = !device.Visible;
+            stack.ResumeLayout(true);
+
             _micSettingsLink.Text = device.Visible ? Strings.MicSettingsHide : Strings.MicSettingsShow;
         };
 
