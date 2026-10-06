@@ -2513,9 +2513,14 @@ public sealed partial class MainForm : Form
             ? _mapChoices[_mapBox.SelectedIndex]
             : null;
 
-    /// <summary>Which trader, when the keys are not the ones showing.</summary>
+    /// <summary>
+    /// Which trader, when the trader dropdown is showing. While it is hidden -
+    /// keys, places, the story, the checklist - its choice means nothing: a
+    /// map has no trader, and "Prapor" left in a hidden box was emptying the
+    /// list of maps.
+    /// </summary>
     private string? SelectedTrader =>
-        !_keysOnly && _traderBox.SelectedIndex > 0 && _traderBox.SelectedIndex < _traderChoices.Count
+        TraderBoxWanted && _traderBox.SelectedIndex > 0 && _traderBox.SelectedIndex < _traderChoices.Count
             ? _traderChoices[_traderBox.SelectedIndex]
             : null;
 
