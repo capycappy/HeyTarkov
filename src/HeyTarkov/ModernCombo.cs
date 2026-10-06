@@ -175,11 +175,15 @@ public sealed class ModernCombo : ComboBox
             outside.AddPath(rounded, false);
             using var brush = new SolidBrush(Backdrop);
             g.FillPath(brush, outside);
-        }
 
-        // Cover the button the OS drew, then put a chevron where it was.
-        using (var brush = new SolidBrush(Theme.PanelHi))
-            g.FillRectangle(brush, frame.Right - arrow, frame.Top, arrow, frame.Height);
+            // Cover the button the OS drew, then put a chevron where it was.
+            // Clipped to the rounded frame: a plain rectangle here put square
+            // corners back at the right-hand end, just inside the round ones.
+            g.SetClip(rounded);
+            using var panel = new SolidBrush(Theme.PanelHi);
+            g.FillRectangle(panel, frame.Right - arrow, frame.Top, arrow, frame.Height);
+            g.ResetClip();
+        }
 
         var cx = frame.Right - arrow / 2f;
         var cy = frame.Top + frame.Height / 2f;

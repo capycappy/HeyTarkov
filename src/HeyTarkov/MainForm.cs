@@ -177,7 +177,7 @@ public sealed partial class MainForm : Form
     /// dropdown it replaced still exists and still holds the choice - it is
     /// just no longer on screen - so everything that read it goes on working.
     /// </summary>
-    private readonly PillButton _speakToggle = new();
+    private readonly SpeakSwitch _speakSwitch = new();
 
     /// <summary>The list is showing what a picture was read as, so the open
     /// button opens all of it rather than the one row selected.</summary>
@@ -691,15 +691,29 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 2,
+            ColumnCount = 3,
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 8),
         };
+        // Beside the microphone, the language it listens in: a bubble, then
+        // JA over EN, the chosen one lit.
+        _speakSwitch.Size = new Size(44, 64);
+        _speakSwitch.AccessibleName = Strings.SpeakLabel;
+        _speakSwitch.Anchor = AnchorStyles.Right;
+        _speakSwitch.Margin = new Padding(8, 0, 0, 0);
+        _speakSwitch.Language = SelectedLanguage;
+        _speakSwitch.Picked += language =>
+            _languageBox.SelectedIndex = language == RecognitionLanguage.English ? 1 : 0;
+        _languageBox.SelectedIndexChanged += (_, _) => _speakSwitch.Language = SelectedLanguage;
+        _keysTip.SetToolTip(_speakSwitch, Strings.SpeakToggleTip);
+
         search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         search.Controls.Add(box, 0, 0);
         search.Controls.Add(_dial, 1, 0);
+        search.Controls.Add(_speakSwitch, 2, 0);
 
         // Three buttons that each show one kind of thing. The picture is the
         // label; the name is still there for anything that reads the window
@@ -717,7 +731,7 @@ public sealed partial class MainForm : Form
             button.Width = 44;
             button.Height = 32;
             button.Anchor = AnchorStyles.Left;
-            button.Margin = new Padding(0, 0, 6, 0);
+            button.Margin = new Padding(0, 0, 8, 0);
             _keysTip.SetToolTip(button, tip);
         }
 
@@ -732,7 +746,7 @@ public sealed partial class MainForm : Form
         _traderBox.Visible = false;
         _traderBox.Width = 158;
         _traderBox.Anchor = AnchorStyles.Left;
-        _traderBox.Margin = new Padding(6, 0, 8, 0);
+        _traderBox.Margin = new Padding(0, 0, 8, 0);
         _traderBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
         _keysTip.SetToolTip(_traderBox, Strings.TraderFilterTip);
 
@@ -768,8 +782,8 @@ public sealed partial class MainForm : Form
         _imageButton.Ghost = true;
         _imageButton.AutoSize = false;
         _imageButton.Size = new Size(100, 32);
-        _imageButton.Anchor = AnchorStyles.Right;
-        _imageButton.Margin = new Padding(8, 0, 0, 0);
+        _imageButton.Anchor = AnchorStyles.Left;
+        _imageButton.Margin = new Padding(0, 0, 8, 0);
         _imageButton.Click += async (_, _) =>
         {
             // Pressed in: the picture's rows are showing, and pressing again
@@ -785,32 +799,13 @@ public sealed partial class MainForm : Form
         };
         _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
 
-        // Under the microphone, as wide as the microphone: which language it
-        // listens in. One press swaps it.
-        _speakToggle.Text = Strings.SpeakToggle(SelectedLanguage);
-        _speakToggle.AccessibleName = Strings.SpeakLabel;
-        _speakToggle.Ghost = true;
-        _speakToggle.AutoSize = false;
-        _speakToggle.Size = new Size(56, 32);
-        _speakToggle.Font = new Font("Segoe UI Semibold", 9.75f, FontStyle.Bold);
-        _speakToggle.Anchor = AnchorStyles.Right;
-        _speakToggle.Margin = new Padding(12, 0, 0, 0);
-        _speakToggle.Click += (_, _) =>
-            _languageBox.SelectedIndex = SelectedLanguage == RecognitionLanguage.Japanese ? 1 : 0;
-        _keysTip.SetToolTip(_speakToggle, Strings.SpeakToggleTip);
-        _languageBox.SelectedIndexChanged += (_, _) =>
-        {
-            _speakToggle.Text = Strings.SpeakToggle(SelectedLanguage);
-            _speakToggle.Invalidate();
-        };
-
         // The dropdown settles its own height, sometimes not the one it asked
         // for, and again on a monitor with different scaling. Every button in
         // the row follows it, after the fact, the way the KAPPA button follows
         // the theme dropdown.
         _mapBox.SizeChanged += (_, _) =>
         {
-            foreach (var button in new[] { _keysButton, _placesButton, _storyButton, _imageButton, _speakToggle })
+            foreach (var button in new[] { _keysButton, _placesButton, _storyButton, _imageButton })
                 button.Height = _mapBox.Height;
         };
 
@@ -820,16 +815,14 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 9,
+            ColumnCount = 8,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 6; column++)
+        for (var column = 0; column < 7; column++)
             filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         filters.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         filters.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         filters.Controls.Add(_keysButton, 0, 0);
         filters.Controls.Add(_placesButton, 1, 0);
@@ -837,8 +830,7 @@ public sealed partial class MainForm : Form
         filters.Controls.Add(_traderBox, 3, 0);
         filters.Controls.Add(_mapBox, 4, 0);
         filters.Controls.Add(_remainingOnly, 5, 0);
-        filters.Controls.Add(_imageButton, 7, 0);
-        filters.Controls.Add(_speakToggle, 8, 0);
+        filters.Controls.Add(_imageButton, 6, 0);
 
         var rows = new TableLayoutPanel
         {
@@ -2893,11 +2885,11 @@ public sealed partial class MainForm : Form
             _imageButton.Ghost = false;
             _imageButton.Invalidate();
 
-            // The line the recognizer read stands where a reading would, so
-            // every row says what it came from.
+            // Ordinary rows, with the ordinary reading: what the recognizer
+            // read is kept as the matched phrase, not shown in its place.
             PopulateRows(found
                 .Select(name => new CandidateRow(
-                    new TaskMatch(name.Task, name.Score, name.Read), name.Read))
+                    new TaskMatch(name.Task, name.Score, name.Read), ReadingHint(name.Task)))
                 .ToList());
 
             _openButton.Text = Strings.OpenAll(_candidates.Items.Count);

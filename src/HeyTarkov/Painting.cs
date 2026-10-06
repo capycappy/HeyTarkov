@@ -164,6 +164,34 @@ public static class Painting
         g.DrawLine(pen, middle, top + sag, middle, bottom + sag * 0.4f);
     }
 
+    /// <summary>A speech bubble: a rounded box with a tail at the bottom left.
+    /// Over the language switch, so the switch reads as "what is said".</summary>
+    public static void SpeechGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var body = new RectangleF(box.X, box.Y + box.Height * 0.08f, box.Width, box.Height * 0.66f);
+        var radius = box.Width * 0.22f;
+        var d = radius * 2;
+
+        var path = new GraphicsPath();
+        path.AddArc(body.X, body.Y, d, d, 180, 90);
+        path.AddArc(body.Right - d, body.Y, d, d, 270, 90);
+        path.AddArc(body.Right - d, body.Bottom - d, d, d, 0, 90);
+
+        // The tail: down from the bottom edge and back up to it.
+        var tailFrom = body.X + body.Width * 0.42f;
+        var tailTip = new PointF(body.X + body.Width * 0.2f, box.Bottom - stroke / 2f);
+        var tailTo = body.X + body.Width * 0.24f;
+
+        path.AddLine(tailFrom, body.Bottom, tailTip.X, tailTip.Y);
+        path.AddLine(tailTip.X, tailTip.Y, tailTo, body.Bottom);
+        path.AddArc(body.X, body.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+
+        g.DrawPath(pen, path);
+    }
+
     public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
     {
         using var pen = new Pen(colour, stroke)
