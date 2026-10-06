@@ -50,20 +50,22 @@ public sealed class SpeakSwitch : Control
         _font = new Font("Yu Gothic UI", Font.SizeInPoints * 0.86f, FontStyle.Bold);
     }
 
-    /// <summary>The bubble, then the two cells, from the top down, all inside
-    /// the frame.</summary>
+    /// <summary>
+    /// The bubble, then the two cells, left to right: it sits in a row of
+    /// buttons now, in the microphone's settings, and reads as one of them.
+    /// </summary>
     private (RectangleF Bubble, RectangleF Ja, RectangleF En) Cells()
     {
         var edge = LogicalToDeviceUnits(1);
-        var gap = LogicalToDeviceUnits(1);
-        var bubble = LogicalToDeviceUnits(17);
-        var width = Width - edge * 2;
-        var cell = (Height - edge * 2 - bubble - gap * 2) / 2f;
+        var gap = LogicalToDeviceUnits(2);
+        var bubble = LogicalToDeviceUnits(20);
+        var height = Height - edge * 2;
+        var cell = (Width - edge * 2 - bubble - gap * 2) / 2f;
 
         return (
-            new RectangleF(edge, edge, width, bubble),
-            new RectangleF(edge, edge + bubble + gap, width, cell),
-            new RectangleF(edge, edge + bubble + gap + cell + gap, width, cell));
+            new RectangleF(edge, edge, bubble, height),
+            new RectangleF(edge + bubble + gap, edge, cell, height),
+            new RectangleF(edge + bubble + gap + cell + gap, edge, cell, height));
     }
 
     protected override void OnPaint(PaintEventArgs e)

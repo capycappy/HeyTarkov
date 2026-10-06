@@ -116,6 +116,32 @@ public static class Painting
         g.DrawLine(pen, peak.X, peak.Y, frame.Right - frame.Width * 0.08f, bottom);
     }
 
+    /// <summary>
+    /// A viewfinder - four corner brackets - with lines of text inside: a
+    /// captured screen being read. For the disc beside the microphone.
+    /// </summary>
+    public static void ScanGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var arm = box.Width * 0.26f;
+        var (l, t, r, b) = (box.Left, box.Top, box.Right, box.Bottom);
+
+        g.DrawLines(pen, new[] { new PointF(l, t + arm), new PointF(l, t), new PointF(l + arm, t) });
+        g.DrawLines(pen, new[] { new PointF(r - arm, t), new PointF(r, t), new PointF(r, t + arm) });
+        g.DrawLines(pen, new[] { new PointF(l, b - arm), new PointF(l, b), new PointF(l + arm, b) });
+        g.DrawLines(pen, new[] { new PointF(r - arm, b), new PointF(r, b), new PointF(r, b - arm) });
+
+        // Three lines of writing, the last one shorter, like a paragraph.
+        var inset = box.Width * 0.24f;
+        var step = box.Height * 0.2f;
+        var y = box.Top + box.Height * 0.3f;
+
+        g.DrawLine(pen, l + inset, y, r - inset, y);
+        g.DrawLine(pen, l + inset, y + step, r - inset, y + step);
+        g.DrawLine(pen, l + inset, y + step * 2, r - inset - box.Width * 0.18f, y + step * 2);
+    }
+
     /// <summary>A clipboard with lines on it: the list of tasks.</summary>
     public static void ListGlyph(Graphics g, RectangleF box, Color colour, float stroke)
     {

@@ -154,8 +154,9 @@ public sealed partial class MainForm : Form
     /// <summary>The checklist is what the list area is showing.</summary>
     private bool _collecting;
 
-    /// <summary>Reads a screenshot of the game's task list.</summary>
-    private readonly PillButton _imageButton = new();
+    /// <summary>Reads a screenshot of the game's task list. A disc beside the
+    /// microphone: speak, or show.</summary>
+    private readonly ScanButton _imageButton = new();
 
     /// <summary>One kind of thing at a time: the places, or the story. They
     /// stand beside the key button and work the same way.</summary>
@@ -546,12 +547,13 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 5,
             RowCount = 1,
             Margin = new Padding(0),
         };
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
@@ -565,6 +567,19 @@ public sealed partial class MainForm : Form
         device.Controls.Add(_deviceBox, 1, 0);
         device.Controls.Add(_rescanButton, 2, 0);
         device.Controls.Add(_levelTestButton, 3, 0);
+
+        // Which language the microphone listens in, at the end of its row: a
+        // bubble, then 日本語 and ENG, the chosen one lit.
+        _speakSwitch.Size = new Size(132, 26);
+        _speakSwitch.AccessibleName = Strings.SpeakLabel;
+        _speakSwitch.Anchor = AnchorStyles.Left;
+        _speakSwitch.Margin = new Padding(8, 0, 0, 0);
+        _speakSwitch.Language = SelectedLanguage;
+        _speakSwitch.Picked += language =>
+            _languageBox.SelectedIndex = language == RecognitionLanguage.English ? 1 : 0;
+        _languageBox.SelectedIndexChanged += (_, _) => _speakSwitch.Language = SelectedLanguage;
+        _keysTip.SetToolTip(_speakSwitch, Strings.SpeakToggleTip);
+        device.Controls.Add(_speakSwitch, 4, 0);
 
         var stack = new TableLayoutPanel
         {
@@ -697,20 +712,28 @@ public sealed partial class MainForm : Form
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 8),
         };
-        // Beside the microphone, the language it listens in: a bubble, then
-        // JA over EN, the chosen one lit.
-        _speakSwitch.Size = new Size(58, 64);
-        _speakSwitch.AccessibleName = Strings.SpeakLabel;
-        _speakSwitch.Anchor = AnchorStyles.Left;
-        _speakSwitch.Margin = new Padding(6, 0, 0, 0);
-        _speakSwitch.Language = SelectedLanguage;
-        _speakSwitch.Picked += language =>
-            _languageBox.SelectedIndex = language == RecognitionLanguage.English ? 1 : 0;
-        _languageBox.SelectedIndexChanged += (_, _) => _speakSwitch.Language = SelectedLanguage;
-        _keysTip.SetToolTip(_speakSwitch, Strings.SpeakToggleTip);
+        // Beside the microphone, the same size: a picture instead of a voice.
+        _imageButton.Size = new Size(64, 64);
+        _imageButton.AccessibleName = Strings.ImageButton;
+        _imageButton.Anchor = AnchorStyles.Left;
+        _imageButton.Margin = new Padding(8, 0, 0, 0);
+        _imageButton.Click += async (_, _) =>
+        {
+            // Pressed in: the picture's rows are showing, and pressing again
+            // puts the list back - the same as every other button in the row.
+            if (_fromImage)
+            {
+                LeaveImage();
+                ListAllIfIdle();
+                return;
+            }
 
-        // The microphone and its language in one frame, so the two read as
-        // one thing: the voice side of the window.
+            await ReadImageAsync();
+        };
+        _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
+
+        // The microphone and the picture in one frame: the two ways of asking
+        // without typing, side by side.
         var voice = new TableLayoutPanel
         {
             AutoSize = true,
@@ -725,7 +748,7 @@ public sealed partial class MainForm : Form
         voice.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         voice.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         voice.Controls.Add(_dial, 0, 0);
-        voice.Controls.Add(_speakSwitch, 1, 0);
+        voice.Controls.Add(_imageButton, 1, 0);
 
         var frame = new Card
         {
@@ -785,8 +808,8 @@ public sealed partial class MainForm : Form
         _mapBox.AccessibleName = Strings.MapFilterName;
         _mapBox.Visible = false;
         _mapBox.Width = 140;
-        _mapBox.Anchor = AnchorStyles.Left;
-        _mapBox.Margin = new Padding(0, 0, 8, 0);
+        _mapBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _mapBox.Margin = new Padding(0);
         _mapBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
         _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
 
@@ -806,39 +829,13 @@ public sealed partial class MainForm : Form
             if (_collectorPanel is not null) _collectorPanel.RemainingOnly = _remainingOnly.Checked;
         };
 
-        // At the far end of the row, with its name on it: a picture is the
-        // least obvious way in, so it says what it is rather than hinting.
-        _imageButton.Text = Strings.ImageButton;
-        _imageButton.AccessibleName = Strings.ImageButton;
-        _imageButton.Pictured = true;
-        _imageButton.Ghost = true;
-        _imageButton.AutoSize = false;
-        _imageButton.Size = new Size(100, 32);
-        _imageButton.MinimumSize = new Size(100, 0);
-        _imageButton.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        _imageButton.Margin = new Padding(0);
-        _imageButton.Click += async (_, _) =>
-        {
-            // Pressed in: the picture's rows are showing, and pressing again
-            // puts the list back - the same as every other button in the row.
-            if (_fromImage)
-            {
-                LeaveImage();
-                ListAllIfIdle();
-                return;
-            }
-
-            await ReadImageAsync();
-        };
-        _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
-
         // The dropdown settles its own height, sometimes not the one it asked
         // for, and again on a monitor with different scaling. Every button in
         // the row follows it, after the fact, the way the KAPPA button follows
         // the theme dropdown.
         _mapBox.SizeChanged += (_, _) =>
         {
-            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton, _imageButton })
+            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton })
                 button.Height = _mapBox.Height;
         };
 
@@ -848,16 +845,17 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 8,
+            ColumnCount = 7,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 7; column++)
+        for (var column = 0; column < 5; column++)
             filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-        // The picture button is last and takes whatever is left, so the row
+        // The map dropdown is last and takes whatever is left, so the row
         // ends where the search box does whatever the window's width.
         filters.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         filters.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         filters.Controls.Add(_tasksButton, 0, 0);
         filters.Controls.Add(_keysButton, 1, 0);
@@ -866,7 +864,6 @@ public sealed partial class MainForm : Form
         filters.Controls.Add(_traderBox, 4, 0);
         filters.Controls.Add(_mapBox, 5, 0);
         filters.Controls.Add(_remainingOnly, 6, 0);
-        filters.Controls.Add(_imageButton, 7, 0);
 
         var rows = new TableLayoutPanel
         {
@@ -2923,8 +2920,7 @@ public sealed partial class MainForm : Form
             }
 
             _fromImage = true;
-            _imageButton.Ghost = false;
-            _imageButton.Invalidate();
+            _imageButton.Active = true;
 
             // Ordinary rows, with the ordinary reading: what the recognizer
             // read is kept as the matched phrase, not shown in its place.
@@ -2985,8 +2981,7 @@ public sealed partial class MainForm : Form
         if (!_fromImage) return;
 
         _fromImage = false;
-        _imageButton.Ghost = true;
-        _imageButton.Invalidate();
+        _imageButton.Active = false;
         _openButton.Text = Strings.OpenSelected;
     }
 
