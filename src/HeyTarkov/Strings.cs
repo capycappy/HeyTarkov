@@ -180,6 +180,15 @@ public static class Strings
         "ストーリーのタスクだけを表示しています。もう一度押すと元に戻ります",
         "Showing story chapters only. Press again to go back");
 
+    /// <summary>Under the microphone: which language it listens in. Two
+    /// letters, because the button is as wide as the microphone and no wider.</summary>
+    public static string SpeakToggle(RecognitionLanguage language) =>
+        language == RecognitionLanguage.Japanese ? "JA" : "EN";
+
+    public static string SpeakToggleTip => T(
+        "話す言語を切り替える（JA: 日本語 ／ EN: 英語）",
+        "Switch the language you speak (JA: Japanese / EN: English)");
+
     /// <summary>The microphone's settings fold away under the card: most
     /// people never touch them after the first day.</summary>
     public static string MicSettingsShow => T("マイクの設定を表示 ▾", "Show microphone settings ▾");
@@ -335,11 +344,11 @@ public static class Strings
 
     // ------------------------------------------------------ from a screenshot
 
-    public static string ImageButton => T("画像から探す", "From a picture");
+    public static string ImageButton => T("画像から", "Picture");
 
     public static string ImageTip => T(
-        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）",
-        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same)");
+        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）。もう一度押すと元に戻る",
+        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same). Press again to go back");
 
     public static string ImageNone => T(
         "画像がありません。Win+Shift+S でタスク一覧を撮ってから、もう一度押してください",
@@ -348,10 +357,10 @@ public static class Strings
     public static string ImageReading => T("画像を読んでいます…", "Reading the picture...");
 
     public static string ImageFound(int count) => T(
-        $"画像から {count} 件見つかりました。要らない行は Delete で消せます",
+        $"画像から {count} 件見つかりました。要らない行は Delete で消せます。ボタンをもう一度押すと元に戻ります",
         count == 1
-            ? "Found 1 entry in the picture. Press Delete to drop a row"
-            : $"Found {count} entries in the picture. Press Delete to drop a row");
+            ? "Found 1 entry in the picture. Delete drops a row; press the button again to go back"
+            : $"Found {count} entries in the picture. Delete drops a row; press the button again to go back");
 
     public static string ImageNothing => T(
         "画像から見つかりませんでした。タスク名が写る範囲を大きめに撮ってみてください",
