@@ -253,6 +253,11 @@ public class Card : Panel
     [DefaultValue(true)]
     public bool Outlined { get; set; } = true;
 
+    /// <summary>Off for a frame that only groups what is inside it - the
+    /// microphone and its language - and leaves the page showing through.</summary>
+    [DefaultValue(true)]
+    public bool Filled { get; set; } = true;
+
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -261,7 +266,7 @@ public class Card : Panel
         var r = new RectangleF(0, 0, Width, Height);
         var radius = LogicalToDeviceUnits(Radius);
 
-        Painting.FillRounded(e.Graphics, r, Theme.Panel, radius);
+        if (Filled) Painting.FillRounded(e.Graphics, r, Theme.Panel, radius);
         if (Outlined) Painting.DrawRounded(e.Graphics, r, Theme.Edge, radius, LogicalToDeviceUnits(1));
 
         base.OnPaint(e);

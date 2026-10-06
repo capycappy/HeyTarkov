@@ -621,8 +621,8 @@ public sealed partial class MainForm : Form
     {
         _dial.Size = new Size(64, 64);
         _dial.Enabled = false;
-        _dial.Anchor = AnchorStyles.Right;
-        _dial.Margin = new Padding(12, 0, 0, 0);
+        _dial.Anchor = AnchorStyles.Left;
+        _dial.Margin = new Padding(0);
         _dial.HoldStarted += (_, _) => BeginHold();
         _dial.HoldEnded += (_, _) => EndHold();
 
@@ -691,7 +691,7 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 3,
+            ColumnCount = 2,
             RowCount = 1,
             Margin = new Padding(0, 0, 0, 8),
         };
@@ -699,21 +699,48 @@ public sealed partial class MainForm : Form
         // JA over EN, the chosen one lit.
         _speakSwitch.Size = new Size(58, 64);
         _speakSwitch.AccessibleName = Strings.SpeakLabel;
-        _speakSwitch.Anchor = AnchorStyles.Right;
-        _speakSwitch.Margin = new Padding(8, 0, 0, 0);
+        _speakSwitch.Anchor = AnchorStyles.Left;
+        _speakSwitch.Margin = new Padding(6, 0, 0, 0);
         _speakSwitch.Language = SelectedLanguage;
         _speakSwitch.Picked += language =>
             _languageBox.SelectedIndex = language == RecognitionLanguage.English ? 1 : 0;
         _languageBox.SelectedIndexChanged += (_, _) => _speakSwitch.Language = SelectedLanguage;
         _keysTip.SetToolTip(_speakSwitch, Strings.SpeakToggleTip);
 
+        // The microphone and its language in one frame, so the two read as
+        // one thing: the voice side of the window.
+        var voice = new TableLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+            Padding = new Padding(5),
+        };
+        voice.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        voice.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        voice.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        voice.Controls.Add(_dial, 0, 0);
+        voice.Controls.Add(_speakSwitch, 1, 0);
+
+        var frame = new Card
+        {
+            Filled = false,
+            Radius = 12,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Anchor = AnchorStyles.Right,
+            Margin = new Padding(10, 0, 0, 0),
+        };
+        frame.Controls.Add(voice);
+
         search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         search.Controls.Add(box, 0, 0);
-        search.Controls.Add(_dial, 1, 0);
-        search.Controls.Add(_speakSwitch, 2, 0);
+        search.Controls.Add(frame, 1, 0);
 
         // Three buttons that each show one kind of thing. The picture is the
         // label; the name is still there for anything that reads the window

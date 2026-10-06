@@ -54,7 +54,7 @@ public sealed class SpeakSwitch : Control
     /// the frame.</summary>
     private (RectangleF Bubble, RectangleF Ja, RectangleF En) Cells()
     {
-        var edge = LogicalToDeviceUnits(3);
+        var edge = LogicalToDeviceUnits(1);
         var gap = LogicalToDeviceUnits(1);
         var bubble = LogicalToDeviceUnits(17);
         var width = Width - edge * 2;
@@ -74,10 +74,6 @@ public sealed class SpeakSwitch : Control
         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
         var (bubble, ja, en) = Cells();
-
-        // One frame round the three, so they read as one control rather than
-        // a picture with two words under it.
-        Painting.DrawRounded(g, ClientRectangle, Theme.Edge, LogicalToDeviceUnits(8), LogicalToDeviceUnits(1));
 
         // The bubble is small and sits in the middle of its band.
         var side = LogicalToDeviceUnits(14);
