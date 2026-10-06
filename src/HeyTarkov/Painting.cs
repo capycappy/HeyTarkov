@@ -104,6 +104,54 @@ public static class Painting
         g.DrawLine(pen, peak.X, peak.Y, frame.Right - frame.Width * 0.08f, bottom);
     }
 
+    /// <summary>A map pin: a drop with a hole in it. For the button that shows
+    /// the maps and the ways out of them.</summary>
+    public static void PinGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var w = box.Width * 0.64f;
+        var x = box.X + (box.Width - w) / 2f;
+        var head = new RectangleF(x, box.Y + box.Height * 0.04f, w, w);
+
+        // The round head, open at the bottom, and the two sides meeting at
+        // the point.
+        var path = new GraphicsPath();
+        path.AddArc(head, 150f, 240f);
+        path.AddLine(head.Right - w * 0.067f, head.Y + w * 0.75f, box.X + box.Width / 2f, box.Bottom - stroke / 2f);
+        path.CloseFigure();
+        g.DrawPath(pen, path);
+
+        var hole = w * 0.3f;
+        g.DrawEllipse(pen, head.X + (w - hole) / 2f, head.Y + (w - hole) / 2f, hole, hole);
+    }
+
+    /// <summary>An open book: two pages meeting at the spine. For the button
+    /// that shows the story chapters.</summary>
+    public static void BookGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var top = box.Y + box.Height * 0.16f;
+        var bottom = box.Bottom - box.Height * 0.14f;
+        var middle = box.X + box.Width / 2f;
+        var sag = box.Height * 0.1f;
+
+        // Each page is a curve from the spine out to the edge, top and bottom,
+        // closed by the edge.
+        foreach (var side in new[] { -1f, 1f })
+        {
+            var edge = middle + side * box.Width * 0.46f;
+            var path = new GraphicsPath();
+            path.AddBezier(middle, top + sag, middle + side * box.Width * 0.12f, top, edge - side * box.Width * 0.1f, top, edge, top + sag * 0.6f);
+            path.AddLine(edge, top + sag * 0.6f, edge, bottom);
+            path.AddBezier(edge, bottom, edge - side * box.Width * 0.1f, bottom - sag * 0.6f, middle + side * box.Width * 0.12f, bottom - sag * 0.4f, middle, bottom + sag * 0.4f);
+            g.DrawPath(pen, path);
+        }
+
+        g.DrawLine(pen, middle, top + sag, middle, bottom + sag * 0.4f);
+    }
+
     public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
     {
         using var pen = new Pen(colour, stroke)
@@ -249,6 +297,25 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Pictured { get; set; }
 
+    /// <summary>A map pin, for the button that shows places.</summary>
+    [DefaultValue(false)]
+    public bool Pinned { get; set; }
+
+    /// <summary>An open book, for the button that shows the story.</summary>
+    [DefaultValue(false)]
+    public bool Storied { get; set; }
+
+    private bool Iconed => Keyed || Pictured || Pinned || Storied;
+
+    private void Glyph(Graphics g, RectangleF box, Color ink, float stroke)
+    {
+        if (Keyed) Painting.KeyGlyph(g, box, ink, stroke);
+        else if (Pictured) Painting.ImageGlyph(g, box, ink, stroke);
+        else if (Pinned) Painting.PinGlyph(g, box, ink, stroke);
+        else if (Storied) Painting.BookGlyph(g, box, ink, stroke);
+        else Painting.Tick(g, box, ink, stroke);
+    }
+
     /// <summary>Tab pressed or mouse used: whether to show the ring changes.</summary>
     protected override void OnChangeUICues(UICuesEventArgs e) { Invalidate(); base.OnChangeUICues(e); }
 
@@ -297,20 +364,17 @@ public sealed class PillButton : Button
 
         var box = new Rectangle(0, 0, Width, Height);
 
-        if ((Keyed || Pictured) && string.IsNullOrEmpty(Text))
+        if (Iconed && string.IsNullOrEmpty(Text))
         {
             // Nothing but the picture, so it takes the middle of the button.
             var size = LogicalToDeviceUnits(18);
             var centre = new RectangleF((Width - size) / 2f, (Height - size) / 2f, size, size);
-            var stroke = Math.Max(1.8f, size * 0.13f);
 
-            if (Pictured) Painting.ImageGlyph(g, centre, ink, stroke);
-            else Painting.KeyGlyph(g, centre, ink, stroke);
-
+            Glyph(g, centre, ink, Math.Max(1.8f, size * 0.13f));
             return;
         }
 
-        if (Ticked || Keyed)
+        if (Ticked || Iconed)
         {
             // The tick sits at the left edge and the word sits in the middle of
             // the button. Centring the two together would make the button read
@@ -322,8 +386,7 @@ public sealed class PillButton : Button
             var glyph = new RectangleF(inset, (Height - side) / 2f, side, side);
             var stroke = Math.Max(1.6f, side * 0.16f);
 
-            if (Keyed) Painting.KeyGlyph(g, glyph, ink, stroke);
-            else Painting.Tick(g, glyph, ink, stroke);
+            Glyph(g, glyph, ink, stroke);
 
             var textWidth = TextRenderer.MeasureText(g, Text, Font,
                 new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;

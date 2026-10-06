@@ -101,6 +101,10 @@ public static class Strings
     public static string SearchPlaceholderShort =>
         T("打って探す", "Search");
 
+    /// <summary>The box at full width: room to say what else it takes.</summary>
+    public static string SearchPlaceholderWide =>
+        T("キーボードで探す（Ctrl+V で画像からも）", "Type to search (Ctrl+V reads a picture)");
+
     public static string HeardPlaceholder =>
         T("聞き取り結果はここに出ます", "What you say appears here");
 
@@ -152,7 +156,35 @@ public static class Strings
     /// <summary>The first item of each dropdown: no filtering at all.</summary>
     public static string MapsAll => T("すべてのマップ", "All maps");
 
-    public static string TradersAll => T("すべて", "All traders");
+    public static string TradersAll => T("トレーダー（全て）", "All traders");
+
+    /// <summary>The two buttons beside the key button: the places, and the
+    /// story. Each shows one kind of thing, the way the key button does.</summary>
+    public static string PlacesButton => T("マップと脱出地点", "Maps and exits");
+
+    public static string PlacesTip => T(
+        "マップと脱出地点だけを表示（もう一度押すと元に戻る）",
+        "Show maps and exits only (press again to go back)");
+
+    public static string StoryButton => T("ストーリー", "Story");
+
+    public static string StoryTip => T(
+        "ストーリーのタスクだけを表示（もう一度押すと元に戻る）",
+        "Show story chapters only (press again to go back)");
+
+    public static string PlacesOnly => T(
+        "マップと脱出地点だけを表示しています。もう一度押すと元に戻ります",
+        "Showing maps and exits only. Press again to go back");
+
+    public static string StoryOnly => T(
+        "ストーリーのタスクだけを表示しています。もう一度押すと元に戻ります",
+        "Showing story chapters only. Press again to go back");
+
+    /// <summary>The microphone's settings fold away under the card: most
+    /// people never touch them after the first day.</summary>
+    public static string MicSettingsShow => T("マイクの設定を表示 ▾", "Show microphone settings ▾");
+
+    public static string MicSettingsHide => T("マイクの設定を隠す ▴", "Hide microphone settings ▴");
 
     /// <summary>Entries that belong to no map - a task belongs to a trader, and
     /// the wiki places a seventh of the keys nowhere.</summary>
@@ -303,7 +335,7 @@ public static class Strings
 
     // ------------------------------------------------------ from a screenshot
 
-    public static string ImageButton => T("画像から探す", "Search from an image");
+    public static string ImageButton => T("画像から探す", "From a picture");
 
     public static string ImageTip => T(
         "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）",
