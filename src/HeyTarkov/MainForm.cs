@@ -710,7 +710,7 @@ public sealed partial class MainForm : Form
             BackColor = Color.Transparent,
             ColumnCount = 2,
             RowCount = 1,
-            Margin = new Padding(0, 0, 0, 8),
+            Margin = new Padding(0, 0, 0, 4),
         };
         // Beside the microphone, the same size: a picture instead of a voice.
         _imageButton.Size = new Size(64, 64);
@@ -878,8 +878,26 @@ public sealed partial class MainForm : Form
         rows.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         rows.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         rows.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        // The row of ways to narrow the list, framed and named, so it reads
+        // as one thing with one job.
+        filters.Dock = DockStyle.Fill;
+        filters.Margin = new Padding(0);
+
+        var narrowing = new Card
+        {
+            Filled = false,
+            Radius = 10,
+            Legend = Strings.FilterLegend,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0),
+        };
+        narrowing.Padding = new Padding(8, narrowing.LegendHeight + 8, 8, 8);
+        narrowing.Controls.Add(filters);
+
         rows.Controls.Add(search, 0, 0);
-        rows.Controls.Add(filters, 0, 1);
+        rows.Controls.Add(narrowing, 0, 1);
         return rows;
     }
 

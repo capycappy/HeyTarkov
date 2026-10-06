@@ -303,6 +303,16 @@ public class Card : Panel
     [DefaultValue(true)]
     public bool Filled { get; set; } = true;
 
+    /// <summary>A word on the top edge saying what the frame holds, the way a
+    /// form's fieldset does. Empty for no word.</summary>
+    [DefaultValue("")]
+    public string Legend { get; set; } = "";
+
+    private Font? _legendFont;
+
+    /// <summary>Room the legend takes above the top edge, in device pixels.</summary>
+    public int LegendHeight => Legend.Length == 0 ? 0 : LogicalToDeviceUnits(7);
+
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -311,8 +321,31 @@ public class Card : Panel
         var r = new RectangleF(0, 0, Width, Height);
         var radius = LogicalToDeviceUnits(Radius);
 
-        if (Filled) Painting.FillRounded(e.Graphics, r, Theme.Panel, radius);
-        if (Outlined) Painting.DrawRounded(e.Graphics, r, Theme.Edge, radius, LogicalToDeviceUnits(1));
+        // With a legend the frame starts lower, so the word can sit on its
+        // top edge rather than above it.
+        var top = LegendHeight;
+        var frame = new RectangleF(0, top, Width, Height - top);
+
+        if (Filled) Painting.FillRounded(e.Graphics, frame, Theme.Panel, radius);
+        if (Outlined) Painting.DrawRounded(e.Graphics, frame, Theme.Edge, radius, LogicalToDeviceUnits(1));
+
+        if (Legend.Length > 0)
+        {
+            _legendFont ??= new Font("Yu Gothic UI", 8.25f);
+
+            var size = TextRenderer.MeasureText(e.Graphics, Legend, _legendFont,
+                new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding);
+            var pad = LogicalToDeviceUnits(5);
+            var x = LogicalToDeviceUnits(14);
+            var box = new Rectangle(x, top - size.Height / 2, size.Width + pad * 2, size.Height);
+
+            // The line is painted out behind the word, so the word interrupts
+            // the frame instead of crossing it.
+            using (var gap = new SolidBrush(Theme.Page)) e.Graphics.FillRectangle(gap, box);
+
+            TextRenderer.DrawText(e.Graphics, Legend, _legendFont, box, Theme.Faint,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
+        }
 
         base.OnPaint(e);
     }

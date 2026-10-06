@@ -160,6 +160,10 @@ public static class Strings
 
     /// <summary>The two buttons beside the key button: the places, and the
     /// story. Each shows one kind of thing, the way the key button does.</summary>
+    /// <summary>The word on the frame round the buttons and dropdowns that
+    /// narrow the list.</summary>
+    public static string FilterLegend => T("絞り込み", "Narrow down");
+
     public static string TasksButton => T("タスク", "Tasks");
 
     public static string TasksTip => T(
