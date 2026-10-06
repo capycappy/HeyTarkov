@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 namespace HeyTarkov;
@@ -20,6 +20,9 @@ public sealed class ModernCombo : ComboBox
     private const int ArrowWidth = 26;
 
     private bool _hot;
+
+    /// <summary>Shows the whole name when the box is too narrow for it.</summary>
+    private readonly ToolTip _whole = new();
 
     /// <summary>
     /// What this sits on. The square border has to be painted out in the
@@ -57,6 +60,68 @@ public sealed class ModernCombo : ComboBox
         base.OnHandleCreated(e);
         ApplyMetrics();
         ApplyColours();
+        OfferWholeName();
+    }
+
+    /// <summary>
+    /// The list, when it opens, is as wide as its longest item. The closed box
+    /// can cut a device name short - "Default device (Analog (1+2) (RME..." -
+    /// but the list is where the choice is made, and there every name is read
+    /// in full.
+    /// </summary>
+    protected override void OnDropDown(EventArgs e)
+    {
+        base.OnDropDown(e);
+
+        var widest = 0;
+
+        using (var g = CreateGraphics())
+        {
+            foreach (var item in Items)
+            {
+                var text = GetItemText(item) ?? "";
+                widest = Math.Max(widest, TextRenderer.MeasureText(g, text, Font,
+                    new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+            }
+        }
+
+        // Room for the text, the padding each side and the scrollbar.
+        DropDownWidth = Math.Max(Width, widest + LogicalToDeviceUnits(16) + SystemInformation.VerticalScrollBarWidth);
+    }
+
+    protected override void OnSelectedIndexChanged(EventArgs e)
+    {
+        base.OnSelectedIndexChanged(e);
+        OfferWholeName();
+    }
+
+    protected override void OnSizeChanged(EventArgs e)
+    {
+        base.OnSizeChanged(e);
+        OfferWholeName();
+    }
+
+    /// <summary>
+    /// A tooltip with the whole name, only when the box cannot show it. Over a
+    /// name that fits, a tooltip repeating it is noise.
+    /// </summary>
+    private void OfferWholeName()
+    {
+        if (!IsHandleCreated) return;
+
+        var text = SelectedItem is { } item ? GetItemText(item) ?? "" : "";
+        var room = Width - LogicalToDeviceUnits(ArrowWidth) - LogicalToDeviceUnits(10);
+
+        var width = text.Length == 0 ? 0 : TextRenderer.MeasureText(text, Font,
+            new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;
+
+        _whole.SetToolTip(this, width > room ? text : "");
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) _whole.Dispose();
+        base.Dispose(disposing);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -151,6 +216,12 @@ public sealed class ModernCombo : ComboBox
         var line = LogicalToDeviceUnits(1);
         var radius = LogicalToDeviceUnits(6);
 
+        // The first paint after being shown can come before the layout that
+        // gives the control its size - a box folded away under the settings
+        // and unfolded is a point at the corner for one frame - and a frame
+        // with no room for its corners is not a frame GDI+ will draw.
+        if (area.Width < (radius + line) * 2 || area.Height < (radius + line) * 2) return;
+
         // Underneath all of this the OS has drawn its own square border around
         // the whole control, and filled the corners to match. Rounding the
         // frame on top of that leaves the square showing at every corner, so
@@ -169,11 +240,15 @@ public sealed class ModernCombo : ComboBox
             outside.AddPath(rounded, false);
             using var brush = new SolidBrush(Backdrop);
             g.FillPath(brush, outside);
-        }
 
-        // Cover the button the OS drew, then put a chevron where it was.
-        using (var brush = new SolidBrush(Theme.PanelHi))
-            g.FillRectangle(brush, frame.Right - arrow, frame.Top, arrow, frame.Height);
+            // Cover the button the OS drew, then put a chevron where it was.
+            // Clipped to the rounded frame: a plain rectangle here put square
+            // corners back at the right-hand end, just inside the round ones.
+            g.SetClip(rounded);
+            using var panel = new SolidBrush(Theme.PanelHi);
+            g.FillRectangle(panel, frame.Right - arrow, frame.Top, arrow, frame.Height);
+            g.ResetClip();
+        }
 
         var cx = frame.Right - arrow / 2f;
         var cy = frame.Top + frame.Height / 2f;

@@ -101,8 +101,12 @@ public static class Strings
     public static string SearchPlaceholderShort =>
         T("打って探す", "Search");
 
+    /// <summary>The box at full width: room to say what else it takes.</summary>
+    public static string SearchPlaceholderWide =>
+        T("キーボードで探す（Ctrl+V で画像からも）", "Type to search (Ctrl+V reads a picture)");
+
     public static string HeardPlaceholder =>
-        T("聞き取り結果はここに出ます", "What you say appears here");
+        T("話した言葉や読み取った結果はここに出ます", "What was said or read appears here");
 
     public static string MicReady => T("押して話す ／ 打つ", "Hold to talk, or type");
     public static string MicListening => T("聞き取り中… 離すと検索します", "Listening… release to search");
@@ -152,7 +156,67 @@ public static class Strings
     /// <summary>The first item of each dropdown: no filtering at all.</summary>
     public static string MapsAll => T("すべてのマップ", "All maps");
 
-    public static string TradersAll => T("すべて", "All traders");
+    public static string TradersAll => T("トレーダー（全て）", "All traders");
+
+    /// <summary>The two buttons beside the key button: the places, and the
+    /// story. Each shows one kind of thing, the way the key button does.</summary>
+    /// <summary>The word on the frame round the buttons and dropdowns that
+    /// narrow the list.</summary>
+    public static string FilterLegend => T("絞り込み", "Narrow down");
+
+    /// <summary>The word on the frame round the three ways of asking: the box,
+    /// the microphone, the picture.</summary>
+    public static string SearchLegend => T("検索", "Search");
+
+    /// <summary>What the heard line says after a picture was read.</summary>
+    public static string ImageHeard(int lines) => T(
+        $"画像を読み取りました（{lines} 行）",
+        lines == 1 ? "Read the picture (1 line)" : $"Read the picture ({lines} lines)");
+
+    public static string TasksButton => T("タスク", "Tasks");
+
+    public static string TasksTip => T(
+        "タスクだけを表示（もう一度押すと元に戻る）",
+        "Show tasks only (press again to go back)");
+
+    public static string TasksOnly => T(
+        "タスクだけを表示しています。もう一度押すと元に戻ります",
+        "Showing tasks only. Press again to go back");
+
+    public static string PlacesButton => T("マップと脱出地点", "Maps and exits");
+
+    public static string PlacesTip => T(
+        "マップと脱出地点だけを表示（もう一度押すと元に戻る）",
+        "Show maps and exits only (press again to go back)");
+
+    public static string StoryButton => T("ストーリー", "Story");
+
+    public static string StoryTip => T(
+        "ストーリーのタスクだけを表示（もう一度押すと元に戻る）",
+        "Show story chapters only (press again to go back)");
+
+    public static string PlacesOnly => T(
+        "マップと脱出地点だけを表示しています。もう一度押すと元に戻ります",
+        "Showing maps and exits only. Press again to go back");
+
+    public static string StoryOnly => T(
+        "ストーリーのタスクだけを表示しています。もう一度押すと元に戻ります",
+        "Showing story chapters only. Press again to go back");
+
+    /// <summary>Under the microphone: which language it listens in. Two
+    /// letters, because the button is as wide as the microphone and no wider.</summary>
+    public static string SpeakToggle(RecognitionLanguage language) =>
+        language == RecognitionLanguage.Japanese ? "JA" : "EN";
+
+    public static string SpeakToggleTip => T(
+        "マイクが聞き取る言語（日本語 ／ ENG: 英語）",
+        "The language the microphone listens in (日本語: Japanese / ENG: English)");
+
+    /// <summary>The microphone's settings fold away under the card: most
+    /// people never touch them after the first day.</summary>
+    public static string MicSettingsShow => T("マイクの設定を表示 ▾", "Show microphone settings ▾");
+
+    public static string MicSettingsHide => T("マイクの設定を隠す ▴", "Hide microphone settings ▴");
 
     /// <summary>Entries that belong to no map - a task belongs to a trader, and
     /// the wiki places a seventh of the keys nowhere.</summary>
@@ -303,11 +367,11 @@ public static class Strings
 
     // ------------------------------------------------------ from a screenshot
 
-    public static string ImageButton => T("画像から探す", "Search from an image");
+    public static string ImageButton => T("画像から", "Picture");
 
     public static string ImageTip => T(
-        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）",
-        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same)");
+        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）。もう一度押すと元に戻る",
+        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same). Press again to go back");
 
     public static string ImageNone => T(
         "画像がありません。Win+Shift+S でタスク一覧を撮ってから、もう一度押してください",
@@ -316,10 +380,10 @@ public static class Strings
     public static string ImageReading => T("画像を読んでいます…", "Reading the picture...");
 
     public static string ImageFound(int count) => T(
-        $"画像から {count} 件見つかりました。要らない行は Delete で消せます",
+        $"画像から {count} 件見つかりました。要らない行は Delete で消せます。ボタンをもう一度押すと元に戻ります",
         count == 1
-            ? "Found 1 entry in the picture. Press Delete to drop a row"
-            : $"Found {count} entries in the picture. Press Delete to drop a row");
+            ? "Found 1 entry in the picture. Delete drops a row; press the button again to go back"
+            : $"Found {count} entries in the picture. Delete drops a row; press the button again to go back");
 
     public static string ImageNothing => T(
         "画像から見つかりませんでした。タスク名が写る範囲を大きめに撮ってみてください",

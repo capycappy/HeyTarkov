@@ -26,8 +26,18 @@ public static class Painting
         return path;
     }
 
+    /// <summary>
+    /// A control can be asked to paint before it has been laid out - the first
+    /// frame after being shown, when it is still a point at the corner - and
+    /// GDI+ answers a rectangle with no area with "parameter is not valid".
+    /// Such a frame has nothing to show anyway.
+    /// </summary>
+    private static bool Paintable(RectangleF r) => r.Width > 0 && r.Height > 0;
+
     public static void FillRounded(Graphics g, RectangleF r, Color colour, float radius)
     {
+        if (!Paintable(r)) return;
+
         using var path = Rounded(r, radius);
         using var brush = new SolidBrush(colour);
         g.FillPath(brush, path);
@@ -39,6 +49,8 @@ public static class Painting
     {
         var inset = RectangleF.FromLTRB(
             r.Left + width / 2, r.Top + width / 2, r.Right - width / 2, r.Bottom - width / 2);
+
+        if (!Paintable(inset)) return;
 
         using var path = Rounded(inset, radius);
         using var pen = new Pen(colour, width) { DashStyle = dash };
@@ -104,6 +116,127 @@ public static class Painting
         g.DrawLine(pen, peak.X, peak.Y, frame.Right - frame.Width * 0.08f, bottom);
     }
 
+    /// <summary>
+    /// A viewfinder - four corner brackets - with lines of text inside: a
+    /// captured screen being read. For the disc beside the microphone.
+    /// </summary>
+    public static void ScanGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var arm = box.Width * 0.26f;
+        var (l, t, r, b) = (box.Left, box.Top, box.Right, box.Bottom);
+
+        g.DrawLines(pen, new[] { new PointF(l, t + arm), new PointF(l, t), new PointF(l + arm, t) });
+        g.DrawLines(pen, new[] { new PointF(r - arm, t), new PointF(r, t), new PointF(r, t + arm) });
+        g.DrawLines(pen, new[] { new PointF(l, b - arm), new PointF(l, b), new PointF(l + arm, b) });
+        g.DrawLines(pen, new[] { new PointF(r - arm, b), new PointF(r, b), new PointF(r, b - arm) });
+
+        // Three lines of writing, the last one shorter, like a paragraph.
+        var inset = box.Width * 0.24f;
+        var step = box.Height * 0.2f;
+        var y = box.Top + box.Height * 0.3f;
+
+        g.DrawLine(pen, l + inset, y, r - inset, y);
+        g.DrawLine(pen, l + inset, y + step, r - inset, y + step);
+        g.DrawLine(pen, l + inset, y + step * 2, r - inset - box.Width * 0.18f, y + step * 2);
+    }
+
+    /// <summary>A clipboard with lines on it: the list of tasks.</summary>
+    public static void ListGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var board = new RectangleF(box.X + box.Width * 0.1f, box.Y + box.Height * 0.12f, box.Width * 0.8f, box.Height * 0.86f);
+        DrawRounded(g, Rectangle.Round(board), colour, box.Width * 0.12f, stroke);
+
+        // The clip at the top, and three lines of writing.
+        var clipW = board.Width * 0.4f;
+        g.DrawLine(pen, board.X + (board.Width - clipW) / 2f, board.Y, board.X + (board.Width + clipW) / 2f, board.Y);
+
+        for (var i = 0; i < 3; i++)
+        {
+            var y = board.Y + board.Height * (0.34f + i * 0.2f);
+            g.DrawLine(pen, board.X + board.Width * 0.24f, y, board.Right - board.Width * 0.24f, y);
+        }
+    }
+
+    /// <summary>A map pin: a drop with a hole in it. For the button that shows
+    /// the maps and the ways out of them.</summary>
+    public static void PinGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var w = box.Width * 0.64f;
+        var x = box.X + (box.Width - w) / 2f;
+        var head = new RectangleF(x, box.Y + box.Height * 0.04f, w, w);
+
+        // The round head, open at the bottom, and the two sides meeting at
+        // the point.
+        var path = new GraphicsPath();
+        path.AddArc(head, 150f, 240f);
+        path.AddLine(head.Right - w * 0.067f, head.Y + w * 0.75f, box.X + box.Width / 2f, box.Bottom - stroke / 2f);
+        path.CloseFigure();
+        g.DrawPath(pen, path);
+
+        var hole = w * 0.3f;
+        g.DrawEllipse(pen, head.X + (w - hole) / 2f, head.Y + (w - hole) / 2f, hole, hole);
+    }
+
+    /// <summary>An open book: two pages meeting at the spine. For the button
+    /// that shows the story chapters.</summary>
+    public static void BookGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var top = box.Y + box.Height * 0.16f;
+        var bottom = box.Bottom - box.Height * 0.14f;
+        var middle = box.X + box.Width / 2f;
+        var sag = box.Height * 0.1f;
+
+        // Each page is a curve from the spine out to the edge, top and bottom,
+        // closed by the edge.
+        foreach (var side in new[] { -1f, 1f })
+        {
+            var edge = middle + side * box.Width * 0.46f;
+            var path = new GraphicsPath();
+            path.AddBezier(middle, top + sag, middle + side * box.Width * 0.12f, top, edge - side * box.Width * 0.1f, top, edge, top + sag * 0.6f);
+            path.AddLine(edge, top + sag * 0.6f, edge, bottom);
+            path.AddBezier(edge, bottom, edge - side * box.Width * 0.1f, bottom - sag * 0.6f, middle + side * box.Width * 0.12f, bottom - sag * 0.4f, middle, bottom + sag * 0.4f);
+            g.DrawPath(pen, path);
+        }
+
+        g.DrawLine(pen, middle, top + sag, middle, bottom + sag * 0.4f);
+    }
+
+    /// <summary>A speech bubble: a rounded box with a tail at the bottom left.
+    /// Over the language switch, so the switch reads as "what is said".</summary>
+    public static void SpeechGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var body = new RectangleF(box.X, box.Y + box.Height * 0.08f, box.Width, box.Height * 0.66f);
+        var radius = box.Width * 0.22f;
+        var d = radius * 2;
+
+        var path = new GraphicsPath();
+        path.AddArc(body.X, body.Y, d, d, 180, 90);
+        path.AddArc(body.Right - d, body.Y, d, d, 270, 90);
+        path.AddArc(body.Right - d, body.Bottom - d, d, d, 0, 90);
+
+        // The tail: down from the bottom edge and back up to it.
+        var tailFrom = body.X + body.Width * 0.42f;
+        var tailTip = new PointF(body.X + body.Width * 0.2f, box.Bottom - stroke / 2f);
+        var tailTo = body.X + body.Width * 0.24f;
+
+        path.AddLine(tailFrom, body.Bottom, tailTip.X, tailTip.Y);
+        path.AddLine(tailTip.X, tailTip.Y, tailTo, body.Bottom);
+        path.AddArc(body.X, body.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+
+        g.DrawPath(pen, path);
+    }
+
     public static void Tick(Graphics g, RectangleF box, Color colour, float stroke)
     {
         using var pen = new Pen(colour, stroke)
@@ -165,6 +298,21 @@ public class Card : Panel
     [DefaultValue(true)]
     public bool Outlined { get; set; } = true;
 
+    /// <summary>Off for a frame that only groups what is inside it - the
+    /// microphone and its language - and leaves the page showing through.</summary>
+    [DefaultValue(true)]
+    public bool Filled { get; set; } = true;
+
+    /// <summary>A word on the top edge saying what the frame holds, the way a
+    /// form's fieldset does. Empty for no word.</summary>
+    [DefaultValue("")]
+    public string Legend { get; set; } = "";
+
+    private Font? _legendFont;
+
+    /// <summary>Room the legend takes above the top edge, in device pixels.</summary>
+    public int LegendHeight => Legend.Length == 0 ? 0 : LogicalToDeviceUnits(7);
+
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -173,8 +321,31 @@ public class Card : Panel
         var r = new RectangleF(0, 0, Width, Height);
         var radius = LogicalToDeviceUnits(Radius);
 
-        Painting.FillRounded(e.Graphics, r, Theme.Panel, radius);
-        if (Outlined) Painting.DrawRounded(e.Graphics, r, Theme.Edge, radius, LogicalToDeviceUnits(1));
+        // With a legend the frame starts lower, so the word can sit on its
+        // top edge rather than above it.
+        var top = LegendHeight;
+        var frame = new RectangleF(0, top, Width, Height - top);
+
+        if (Filled) Painting.FillRounded(e.Graphics, frame, Theme.Panel, radius);
+        if (Outlined) Painting.DrawRounded(e.Graphics, frame, Theme.Edge, radius, LogicalToDeviceUnits(1));
+
+        if (Legend.Length > 0)
+        {
+            _legendFont ??= new Font("Yu Gothic UI", 8.25f);
+
+            var size = TextRenderer.MeasureText(e.Graphics, Legend, _legendFont,
+                new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding);
+            var pad = LogicalToDeviceUnits(5);
+            var x = LogicalToDeviceUnits(14);
+            var box = new Rectangle(x, top - size.Height / 2, size.Width + pad * 2, size.Height);
+
+            // The line is painted out behind the word, so the word interrupts
+            // the frame instead of crossing it.
+            using (var gap = new SolidBrush(Theme.Page)) e.Graphics.FillRectangle(gap, box);
+
+            TextRenderer.DrawText(e.Graphics, Legend, _legendFont, box, Theme.Faint,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
+        }
 
         base.OnPaint(e);
     }
@@ -249,6 +420,30 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Pictured { get; set; }
 
+    /// <summary>A map pin, for the button that shows places.</summary>
+    [DefaultValue(false)]
+    public bool Pinned { get; set; }
+
+    /// <summary>A clipboard, for the button that shows the tasks.</summary>
+    [DefaultValue(false)]
+    public bool Listed { get; set; }
+
+    /// <summary>An open book, for the button that shows the story.</summary>
+    [DefaultValue(false)]
+    public bool Storied { get; set; }
+
+    private bool Iconed => Keyed || Pictured || Pinned || Storied || Listed;
+
+    private void Glyph(Graphics g, RectangleF box, Color ink, float stroke)
+    {
+        if (Keyed) Painting.KeyGlyph(g, box, ink, stroke);
+        else if (Pictured) Painting.ImageGlyph(g, box, ink, stroke);
+        else if (Pinned) Painting.PinGlyph(g, box, ink, stroke);
+        else if (Storied) Painting.BookGlyph(g, box, ink, stroke);
+        else if (Listed) Painting.ListGlyph(g, box, ink, stroke);
+        else Painting.Tick(g, box, ink, stroke);
+    }
+
     /// <summary>Tab pressed or mouse used: whether to show the ring changes.</summary>
     protected override void OnChangeUICues(UICuesEventArgs e) { Invalidate(); base.OnChangeUICues(e); }
 
@@ -297,20 +492,17 @@ public sealed class PillButton : Button
 
         var box = new Rectangle(0, 0, Width, Height);
 
-        if ((Keyed || Pictured) && string.IsNullOrEmpty(Text))
+        if (Iconed && string.IsNullOrEmpty(Text))
         {
             // Nothing but the picture, so it takes the middle of the button.
             var size = LogicalToDeviceUnits(18);
             var centre = new RectangleF((Width - size) / 2f, (Height - size) / 2f, size, size);
-            var stroke = Math.Max(1.8f, size * 0.13f);
 
-            if (Pictured) Painting.ImageGlyph(g, centre, ink, stroke);
-            else Painting.KeyGlyph(g, centre, ink, stroke);
-
+            Glyph(g, centre, ink, Math.Max(1.8f, size * 0.13f));
             return;
         }
 
-        if (Ticked || Keyed)
+        if (Ticked || Iconed)
         {
             // The tick sits at the left edge and the word sits in the middle of
             // the button. Centring the two together would make the button read
@@ -322,8 +514,7 @@ public sealed class PillButton : Button
             var glyph = new RectangleF(inset, (Height - side) / 2f, side, side);
             var stroke = Math.Max(1.6f, side * 0.16f);
 
-            if (Keyed) Painting.KeyGlyph(g, glyph, ink, stroke);
-            else Painting.Tick(g, glyph, ink, stroke);
+            Glyph(g, glyph, ink, stroke);
 
             var textWidth = TextRenderer.MeasureText(g, Text, Font,
                 new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width;

@@ -154,8 +154,33 @@ public sealed partial class MainForm : Form
     /// <summary>The checklist is what the list area is showing.</summary>
     private bool _collecting;
 
-    /// <summary>Reads a screenshot of the game's task list.</summary>
-    private readonly PillButton _imageButton = new();
+    /// <summary>Reads a screenshot of the game's task list. A disc beside the
+    /// microphone: speak, or show.</summary>
+    private readonly ScanButton _imageButton = new();
+
+    /// <summary>One kind of thing at a time: the places, or the story. They
+    /// stand beside the key button and work the same way.</summary>
+    private readonly PillButton _tasksButton = new();
+
+    private readonly PillButton _placesButton = new();
+
+    private readonly PillButton _storyButton = new();
+
+    private enum Scope { Everything, Tasks, Places, Story }
+
+    /// <summary>Which of those two buttons is in, if either.</summary>
+    private Scope _scope = Scope.Everything;
+
+    /// <summary>Folds the microphone's settings away. Most people set the
+    /// device once and never look again.</summary>
+    private readonly Label _micSettingsLink = new();
+
+    /// <summary>
+    /// JA or EN, under the microphone: which language it listens in. The
+    /// dropdown it replaced still exists and still holds the choice - it is
+    /// just no longer on screen - so everything that read it goes on working.
+    /// </summary>
+    private readonly SpeakSwitch _speakSwitch = new();
 
     /// <summary>The list is showing what a picture was read as, so the open
     /// button opens all of it rather than the one row selected.</summary>
@@ -459,23 +484,21 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 3,
             RowCount = 2,
             Margin = new Padding(0),
         };
-        // The browser name comes from Windows and can be long; the other three
+        // The browser name comes from Windows and can be long; the other two
         // only ever hold a language or "follow system".
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22));
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21));
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32));
-        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44));
+        choices.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
         choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         choices.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-        choices.Controls.Add(Micro(Strings.SpeakLabel), 0, 0);
-        choices.Controls.Add(Micro(Strings.WikiLabel), 1, 0);
-        choices.Controls.Add(Micro(Strings.BrowserLabel), 2, 0);
-        choices.Controls.Add(Micro(Strings.UiLanguageLabel), 3, 0);
+        choices.Controls.Add(Micro(Strings.WikiLabel), 0, 0);
+        choices.Controls.Add(Micro(Strings.BrowserLabel), 1, 0);
+        choices.Controls.Add(Micro(Strings.UiLanguageLabel), 2, 0);
 
         // Anchored, not docked: Dock.Fill stretches a ComboBox to the row height
         // and clips its bottom edge. Left+Right stretches the width only.
@@ -487,12 +510,17 @@ public sealed partial class MainForm : Form
         _uiLanguageBox.SelectedIndexChanged += (_, _) => OnUiLanguageChanged();
 
         foreach (var (box, column) in new[]
-                 { (_languageBox, 0), (_wikiBox, 1), (_browserBox, 2), (_uiLanguageBox, 3) })
+                 { (_wikiBox, 0), (_browserBox, 1), (_uiLanguageBox, 2) })
         {
             box.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            box.Margin = new Padding(0, 0, column == 3 ? 0 : 12, 0);
+            box.Margin = new Padding(0, 0, column == 2 ? 0 : 12, 0);
             choices.Controls.Add(box, column, 1);
         }
+
+        // The speaking language is a button under the microphone now, but the
+        // dropdown keeps holding the choice, so it is parked here unseen.
+        _languageBox.Visible = false;
+        choices.Controls.Add(_languageBox, 0, 1);
 
         _rescanButton.Text = Strings.Rescan;
         _levelTestButton.Text = Strings.CheckLevel;
@@ -519,12 +547,13 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 5,
             RowCount = 1,
             Margin = new Padding(0),
         };
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         device.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
@@ -539,6 +568,19 @@ public sealed partial class MainForm : Form
         device.Controls.Add(_rescanButton, 2, 0);
         device.Controls.Add(_levelTestButton, 3, 0);
 
+        // Which language the microphone listens in, at the end of its row: a
+        // bubble, then 日本語 and ENG, the chosen one lit.
+        _speakSwitch.Size = new Size(132, 26);
+        _speakSwitch.AccessibleName = Strings.SpeakLabel;
+        _speakSwitch.Anchor = AnchorStyles.Left;
+        _speakSwitch.Margin = new Padding(8, 0, 0, 0);
+        _speakSwitch.Language = SelectedLanguage;
+        _speakSwitch.Picked += language =>
+            _languageBox.SelectedIndex = language == RecognitionLanguage.English ? 1 : 0;
+        _languageBox.SelectedIndexChanged += (_, _) => _speakSwitch.Language = SelectedLanguage;
+        _keysTip.SetToolTip(_speakSwitch, Strings.SpeakToggleTip);
+        device.Controls.Add(_speakSwitch, 4, 0);
+
         var stack = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -547,11 +589,37 @@ public sealed partial class MainForm : Form
             BackColor = Color.Transparent,
             ColumnCount = 1,
             RowCount = 3,
-            Padding = new Padding(16, 12, 16, 14),
+            Padding = new Padding(16, 12, 16, 8),
         };
         stack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+        // The microphone row is folded away: it is set once, on the first day,
+        // and after that it is a line of text standing between the settings
+        // and the search box.
+        device.Visible = false;
+        device.Margin = new Padding(0, 8, 0, 0);
+
+        _micSettingsLink.AutoSize = true;
+        _micSettingsLink.Text = Strings.MicSettingsShow;
+        _micSettingsLink.ForeColor = Theme.Faint;
+        _micSettingsLink.BackColor = Color.Transparent;
+        _micSettingsLink.Font = new Font("Yu Gothic UI", 8.25f);
+        _micSettingsLink.Cursor = Cursors.Hand;
+        _micSettingsLink.Anchor = AnchorStyles.Right;
+        _micSettingsLink.Margin = new Padding(0, 2, 1, 0);
+        _micSettingsLink.Click += (_, _) =>
+        {
+            // Laid out before it is painted: shown bare, the row gets one frame
+            // at the corner of the card at no size, which is a flash at best.
+            stack.SuspendLayout();
+            device.Visible = !device.Visible;
+            stack.ResumeLayout(true);
+
+            _micSettingsLink.Text = device.Visible ? Strings.MicSettingsHide : Strings.MicSettingsShow;
+        };
+
         stack.Controls.Add(choices);
-        stack.Controls.Add(Divider());
+        stack.Controls.Add(_micSettingsLink);
         stack.Controls.Add(device);
         foreach (var _ in Enumerable.Range(0, 3)) stack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
@@ -561,12 +629,17 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>The dial and the search box: hold the one, or type in the other.</summary>
+    /// <summary>
+    /// Two rows. The first is the search box with the microphone at its right
+    /// hand; the second is what to show - the key, the places, the story, the
+    /// two dropdowns - and, at the far end, the other way in: a picture.
+    /// </summary>
     private TableLayoutPanel BuildInputRow()
     {
         _dial.Size = new Size(64, 64);
         _dial.Enabled = false;
         _dial.Anchor = AnchorStyles.Left;
-        _dial.Margin = new Padding(0, 0, 14, 0);
+        _dial.Margin = new Padding(0);
         _dial.HoldStarted += (_, _) => BeginHold();
         _dial.HoldEnded += (_, _) => EndHold();
 
@@ -576,7 +649,7 @@ public sealed partial class MainForm : Form
         _typedBox.Font = new Font("Yu Gothic UI", 10.5f);
         _typedBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         _typedBox.Margin = new Padding(0);
-        _typedBox.PlaceholderText = Strings.SearchPlaceholderShort;
+        _typedBox.PlaceholderText = Strings.SearchPlaceholderWide;
         _typedBox.TextChanged += (_, _) =>
         {
             if (_collecting && _collectorPanel is not null) _collectorPanel.Filter = _typedBox.Text;
@@ -596,70 +669,6 @@ public sealed partial class MainForm : Form
             e.SuppressKeyPress = true;
             OpenSelected();
         };
-
-        // Between the microphone and the box, because it belongs to both: it
-        // changes what speaking finds as much as what typing finds.
-        // The picture is the label. A word beside it made the button read as a
-        // second search box; a key on its own says what it does. The name is
-        // still there for anything that reads the window aloud.
-        _keysButton.Text = "";
-        _keysButton.AccessibleName = Strings.KeysButton;
-        _keysButton.Keyed = true;
-        _keysButton.Ghost = true;
-        _keysButton.Width = 44;
-        _keysButton.Height = 38;
-        _keysTip.SetToolTip(_keysButton, Strings.KeysTip);
-        _keysButton.Anchor = AnchorStyles.Left;
-        _keysButton.Margin = new Padding(0, 0, 10, 0);
-        _keysButton.Click += (_, _) => ToggleKeys();
-
-        // Beside the key button, because it is another way of asking the same
-        // question - the microphone, the keyboard, or a picture of the screen.
-        _imageButton.Text = "";
-        _imageButton.AccessibleName = Strings.ImageButton;
-        _imageButton.Pictured = true;
-        _imageButton.Ghost = true;
-        _imageButton.Width = 44;
-        _imageButton.Height = 38;
-        _imageButton.Anchor = AnchorStyles.Left;
-        _imageButton.Margin = new Padding(0, 0, 10, 0);
-        _imageButton.Click += async (_, _) => await ReadImageAsync();
-        _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
-
-        // Hidden until the key button is in: it is a tool for the keys, and an
-        // empty dropdown beside the search box the rest of the time would be
-        // one more thing to read past.
-        _traderBox.AccessibleName = Strings.TraderFilterName;
-        _traderBox.Visible = false;
-        _traderBox.Width = 118;
-        _traderBox.Anchor = AnchorStyles.Left;
-        _traderBox.Margin = new Padding(0, 0, 8, 0);
-        _traderBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
-        _keysTip.SetToolTip(_traderBox, Strings.TraderFilterTip);
-
-        _mapBox.AccessibleName = Strings.MapFilterName;
-        _mapBox.Visible = false;
-        _mapBox.Width = 134;
-        _mapBox.Anchor = AnchorStyles.Left;
-        _mapBox.Margin = new Padding(0, 0, 10, 0);
-        _mapBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
-
-        _remainingOnly.Text = Strings.CollectorRemainingOnly;
-        _remainingOnly.AutoSize = false;
-        _remainingOnly.Size = new Size(140, 24);
-        _remainingOnly.Visible = false;
-        _remainingOnly.ForeColor = Theme.Muted;
-        _remainingOnly.BackColor = Color.Transparent;
-        _remainingOnly.Anchor = AnchorStyles.Left;
-        _remainingOnly.Margin = new Padding(0, 0, 10, 0);
-        _remainingOnly.CheckedChanged += (_, _) =>
-        {
-            _settings.CollectorRemainingOnly = _remainingOnly.Checked;
-            _settings.Save();
-
-            if (_collectorPanel is not null) _collectorPanel.RemainingOnly = _remainingOnly.Checked;
-        };
-        _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
 
         _micHint.Text = Strings.MicPreparing;
         _micHint.AutoSize = true;
@@ -693,7 +702,137 @@ public sealed partial class MainForm : Form
         };
         box.Controls.Add(inner);
 
-        var row = new TableLayoutPanel
+        var search = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+        };
+        // Beside the microphone, the same size: a picture instead of a voice.
+        _imageButton.Size = new Size(64, 64);
+        _imageButton.AccessibleName = Strings.ImageButton;
+        _imageButton.Anchor = AnchorStyles.Left;
+        _imageButton.Margin = new Padding(8, 0, 0, 0);
+        _imageButton.Click += async (_, _) =>
+        {
+            // Pressed in: the picture's rows are showing, and pressing again
+            // puts the list back - the same as every other button in the row.
+            if (_fromImage)
+            {
+                LeaveImage();
+                ListAllIfIdle();
+                return;
+            }
+
+            await ReadImageAsync();
+        };
+        _keysTip.SetToolTip(_imageButton, Strings.ImageTip);
+
+        // The microphone and the picture in one frame: the two ways of asking
+        // without typing, side by side.
+        var voice = new TableLayoutPanel
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+            Padding = new Padding(5),
+        };
+        voice.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        voice.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        voice.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        voice.Controls.Add(_dial, 0, 0);
+        voice.Controls.Add(_imageButton, 1, 0);
+
+        voice.Padding = new Padding(0);
+        voice.Anchor = AnchorStyles.Right;
+        voice.Margin = new Padding(10, 0, 0, 0);
+
+        search.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        search.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        search.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        search.Controls.Add(box, 0, 0);
+        search.Controls.Add(voice, 1, 0);
+
+        // Three buttons that each show one kind of thing. The picture is the
+        // label; the name is still there for anything that reads the window
+        // aloud, and the tooltip says what happens.
+        foreach (var (button, name, tip) in new[]
+                 {
+                     (_tasksButton, Strings.TasksButton, Strings.TasksTip),
+                     (_keysButton, Strings.KeysButton, Strings.KeysTip),
+                     (_placesButton, Strings.PlacesButton, Strings.PlacesTip),
+                     (_storyButton, Strings.StoryButton, Strings.StoryTip),
+                 })
+        {
+            button.Text = "";
+            button.AccessibleName = name;
+            button.Ghost = true;
+            button.Width = 44;
+            button.Height = 32;
+            button.Anchor = AnchorStyles.Left;
+            button.Margin = new Padding(0, 0, 8, 0);
+            _keysTip.SetToolTip(button, tip);
+        }
+
+        _tasksButton.Listed = true;
+        _keysButton.Keyed = true;
+        _placesButton.Pinned = true;
+        _storyButton.Storied = true;
+        _tasksButton.Click += (_, _) => ToggleScope(Scope.Tasks);
+        _keysButton.Click += (_, _) => ToggleKeys();
+        _placesButton.Click += (_, _) => ToggleScope(Scope.Places);
+        _storyButton.Click += (_, _) => ToggleScope(Scope.Story);
+
+        _traderBox.AccessibleName = Strings.TraderFilterName;
+        _traderBox.Visible = false;
+        _traderBox.Width = 158;
+        _traderBox.Anchor = AnchorStyles.Left;
+        _traderBox.Margin = new Padding(0, 0, 8, 0);
+        _traderBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
+        _keysTip.SetToolTip(_traderBox, Strings.TraderFilterTip);
+
+        _mapBox.AccessibleName = Strings.MapFilterName;
+        _mapBox.Visible = false;
+        _mapBox.Width = 140;
+        _mapBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _mapBox.Margin = new Padding(0);
+        _mapBox.SelectedIndexChanged += (_, _) => OnFilterChanged();
+        _keysTip.SetToolTip(_mapBox, Strings.MapFilterTip);
+
+        _remainingOnly.Text = Strings.CollectorRemainingOnly;
+        _remainingOnly.AutoSize = false;
+        _remainingOnly.Size = new Size(140, 24);
+        _remainingOnly.Visible = false;
+        _remainingOnly.ForeColor = Theme.Muted;
+        _remainingOnly.BackColor = Color.Transparent;
+        _remainingOnly.Anchor = AnchorStyles.Left;
+        _remainingOnly.Margin = new Padding(0, 0, 10, 0);
+        _remainingOnly.CheckedChanged += (_, _) =>
+        {
+            _settings.CollectorRemainingOnly = _remainingOnly.Checked;
+            _settings.Save();
+
+            if (_collectorPanel is not null) _collectorPanel.RemainingOnly = _remainingOnly.Checked;
+        };
+
+        // The dropdown settles its own height, sometimes not the one it asked
+        // for, and again on a monitor with different scaling. Every button in
+        // the row follows it, after the fact, the way the KAPPA button follows
+        // the theme dropdown.
+        _mapBox.SizeChanged += (_, _) =>
+        {
+            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton })
+                button.Height = _mapBox.Height;
+        };
+
+        var filters = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
@@ -703,19 +842,73 @@ public sealed partial class MainForm : Form
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 6; column++)
-            row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        for (var column = 0; column < 5; column++)
+            filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        row.Controls.Add(_dial, 0, 0);
-        row.Controls.Add(_keysButton, 1, 0);
-        row.Controls.Add(_imageButton, 2, 0);
-        row.Controls.Add(_traderBox, 3, 0);
-        row.Controls.Add(_mapBox, 4, 0);
-        row.Controls.Add(_remainingOnly, 5, 0);
-        row.Controls.Add(box, 6, 0);
-        return row;
+        // The map dropdown is last and takes whatever is left, so the row
+        // ends where the search box does whatever the window's width.
+        filters.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        filters.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        filters.Controls.Add(_tasksButton, 0, 0);
+        filters.Controls.Add(_keysButton, 1, 0);
+        filters.Controls.Add(_placesButton, 2, 0);
+        filters.Controls.Add(_storyButton, 3, 0);
+        filters.Controls.Add(_traderBox, 4, 0);
+        filters.Controls.Add(_mapBox, 5, 0);
+        filters.Controls.Add(_remainingOnly, 6, 0);
+
+        var rows = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 1,
+            RowCount = 2,
+            Margin = new Padding(0),
+        };
+        rows.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        rows.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rows.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        // The row of ways to narrow the list, framed and named, so it reads
+        // as one thing with one job.
+        filters.Dock = DockStyle.Fill;
+        filters.Margin = new Padding(0);
+
+        var narrowing = new Card
+        {
+            Filled = false,
+            Radius = 10,
+            Legend = Strings.FilterLegend,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0),
+        };
+        narrowing.Padding = new Padding(8, narrowing.LegendHeight + 8, 8, 8);
+        narrowing.Controls.Add(filters);
+
+        // The three ways of asking - the box, the microphone, the picture -
+        // framed and named the same way as the row that narrows the answer.
+        search.Dock = DockStyle.Fill;
+
+        var asking = new Card
+        {
+            Filled = false,
+            Radius = 10,
+            Legend = Strings.SearchLegend,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 0, 0, 6),
+        };
+        asking.Padding = new Padding(8, asking.LegendHeight + 8, 8, 8);
+        asking.Controls.Add(search);
+
+        rows.Controls.Add(asking, 0, 0);
+        rows.Controls.Add(narrowing, 0, 1);
+        return rows;
     }
 
     /// <summary>What the recognizer heard, large enough to read at a glance.</summary>
@@ -984,16 +1177,19 @@ public sealed partial class MainForm : Form
 
         // The row above belongs to whatever is in the list: the dropdowns
         // narrow tasks and keys, and "still needed only" narrows the checklist.
-        _traderBox.Visible = !collecting && !_keysOnly;
+        _traderBox.Visible = TraderBoxWanted;
         _mapBox.Visible = !collecting;
+        _tasksButton.Visible = !collecting;
         _keysButton.Visible = !collecting;
+        _placesButton.Visible = !collecting;
+        _storyButton.Visible = !collecting;
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
 
         _typedBox.PlaceholderText = collecting
             ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
-            : Strings.SearchPlaceholderShort;
+            : Strings.SearchPlaceholderWide;
 
         // The box belongs to whichever list is showing, so it starts empty for
         // it rather than carrying the last search across.
@@ -2262,7 +2458,7 @@ public sealed partial class MainForm : Form
         var traders = _catalog.Entries
             .Where(e => e.Kind == EntryKind.Task)
             .Select(e => e.Group)
-            .Where(g => g.Length > 0)
+            .Where(g => g.Length > 0 && g != "Story")
             .Distinct(StringComparer.Ordinal)
             .OrderBy(g => Array.IndexOf(order, g) is var at && at >= 0 ? at : order.Length)
             .ThenBy(g => g, StringComparer.OrdinalIgnoreCase)
@@ -2277,18 +2473,10 @@ public sealed partial class MainForm : Form
         {
             _traderChoices.Add(trader);
             _traderBox.Items.Add(Strings.TraderName(trader));
-
-            // The maps and the ways out of them sit between the last of the
-            // traders proper and the story - they belong to no trader, and
-            // "no trader" would describe them by what they are not.
-            if (trader != "BTR Driver") continue;
-
-            _traderChoices.Add(PlacesChoice);
-            _traderBox.Items.Add(Strings.TraderPlaces);
         }
 
         _traderBox.SelectedIndex = 0;
-        _traderBox.Visible = !_keysOnly;
+        _traderBox.Visible = TraderBoxWanted;
     }
 
     /// <summary>
@@ -2336,15 +2524,11 @@ public sealed partial class MainForm : Form
         if (_loading) return;
 
         SetStatus(Strings.Filtering(
-            Shown(SelectedTrader is { } who && who != PlacesChoice ? Strings.TraderName(who) : SelectedTrader,
-                Strings.TraderPlaces),
-            Shown(SelectedMap, Strings.MapsNone)));
+            SelectedTrader is { } who ? Strings.TraderName(who) : null,
+            SelectedMap is { } map ? map.Length == 0 ? Strings.MapsNone : map : null));
 
         // The rows are already in hand; this only changes which of them show.
         PopulateRows(_lastRows);
-
-        static string? Shown(string? choice, string special) =>
-            choice is null ? null : choice.Length == 0 || choice == PlacesChoice ? special : choice;
     }
 
     /// <summary>
@@ -2363,9 +2547,53 @@ public sealed partial class MainForm : Form
         _ => Array.Empty<string>(),
     };
 
-    /// <summary>The dropdown item that stands for the maps and their exits
-    /// rather than for a trader.</summary>
-    private const string PlacesChoice = "places";
+    /// <summary>The trader dropdown only means something over the tasks.</summary>
+    private bool TraderBoxWanted => !_keysOnly && !_collecting && _scope is Scope.Everything or Scope.Tasks;
+
+    /// <summary>
+    /// The places button or the story button, pressed. One at a time, and
+    /// never together with the key button: each shows one kind of thing, and
+    /// two of them at once would show nothing.
+    /// </summary>
+    private void ToggleScope(Scope scope)
+    {
+        ShowCollector(false);
+        LeaveImage();
+
+        var next = _scope == scope ? Scope.Everything : scope;
+        if (next != Scope.Everything && _keysOnly) UseKeys(false);
+
+        _scope = next;
+        ShowScopeButtons();
+        _traderBox.Visible = TraderBoxWanted;
+
+        SetStatus(_scope switch
+        {
+            Scope.Tasks => Strings.TasksOnly,
+            Scope.Places => Strings.PlacesOnly,
+            Scope.Story => Strings.StoryOnly,
+            _ => Strings.Filtering(null, null),
+        });
+
+        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null)
+        {
+            ListAll();
+            return;
+        }
+
+        SearchAgain();
+        if (_candidates.Items.Count == 0) ListAll();
+    }
+
+    private void ShowScopeButtons()
+    {
+        _tasksButton.Ghost = _scope != Scope.Tasks;
+        _placesButton.Ghost = _scope != Scope.Places;
+        _storyButton.Ghost = _scope != Scope.Story;
+        _tasksButton.Invalidate();
+        _placesButton.Invalidate();
+        _storyButton.Invalidate();
+    }
 
     /// <summary>The trader an entry belongs to, or nothing.</summary>
     private static string TraderOf(WikiEntry entry) => entry.Kind switch
@@ -2390,9 +2618,15 @@ public sealed partial class MainForm : Form
             if (!here) return false;
         }
 
-        if (SelectedTrader is not { } trader) return true;
+        switch (_scope)
+        {
+            case Scope.Tasks when entry.Kind != EntryKind.Task:
+            case Scope.Places when entry.Kind is not (EntryKind.Map or EntryKind.Extract):
+            case Scope.Story when entry.Kind != EntryKind.Task || entry.Group != "Story":
+                return false;
+        }
 
-        if (trader == PlacesChoice) return entry.Kind is EntryKind.Map or EntryKind.Extract;
+        if (SelectedTrader is not { } trader) return true;
 
         return string.Equals(TraderOf(entry), trader, StringComparison.Ordinal);
     }
@@ -2431,7 +2665,14 @@ public sealed partial class MainForm : Form
         _speech?.UseKeys(keys);
         _keysButton.Ghost = !keys;
         _keysButton.Invalidate();
-        _traderBox.Visible = !keys && !_collecting;
+
+        if (keys && _scope != Scope.Everything)
+        {
+            _scope = Scope.Everything;
+            ShowScopeButtons();
+        }
+
+        _traderBox.Visible = TraderBoxWanted;
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -2568,6 +2809,21 @@ public sealed partial class MainForm : Form
 
     private IEnumerable<CandidateRow> Ordered(IEnumerable<CandidateRow> rows)
     {
+        // The places button shows the maps and their exits, and the maps
+        // come first whatever the order within each: fifteen names a player
+        // knows, above a hundred and forty they are looking one of up in.
+        if (_scope == Scope.Places)
+        {
+            var all = rows.ToList();
+            return OrderedWithin(all.Where(r => r.Match.Task.Kind == EntryKind.Map))
+                .Concat(OrderedWithin(all.Where(r => r.Match.Task.Kind != EntryKind.Map)));
+        }
+
+        return OrderedWithin(rows);
+    }
+
+    private IEnumerable<CandidateRow> OrderedWithin(IEnumerable<CandidateRow> rows)
+    {
         if (_sort == CandidateSort.Relevance) return rows;
 
         // Rows without the value being sorted on go last whichever way round.
@@ -2575,7 +2831,7 @@ public sealed partial class MainForm : Form
         {
             CandidateSort.Name => By(rows, r => r.Match.Task.Display),
             CandidateSort.Reading => By(rows, r => r.Reading),
-            CandidateSort.Group => By(rows, r => r.Match.Task.Group),
+            CandidateSort.Group => By(rows, r => _candidates.GroupText(r.Match.Task)),
             _ => _sortDescending
                 ? rows.OrderByDescending(r => r.Match.Score)
                 : rows.OrderBy(r => r.Match.Score),
@@ -2605,7 +2861,7 @@ public sealed partial class MainForm : Form
 
         // With one trader chosen, that column has nothing left to say; the map
         // the task is done on does.
-        _candidates.MapsForTasks = SelectedTrader is { } chosen && chosen != PlacesChoice;
+        _candidates.MapsForTasks = SelectedTrader is not null || _scope == Scope.Story;
 
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
@@ -2674,9 +2930,12 @@ public sealed partial class MainForm : Form
 
             List<ReadName> found;
 
+            int lineCount;
+
             try
             {
                 var lines = await ScreenText.LinesAsync(picture);
+                lineCount = lines.Count;
                 found = ReadNames.Match(lines, _typedRest, _typedKeys);
             }
             catch (Exception ex)
@@ -2692,14 +2951,15 @@ public sealed partial class MainForm : Form
             }
 
             _fromImage = true;
-            _imageButton.Ghost = false;
-            _imageButton.Invalidate();
+            _imageButton.Active = true;
+            _heardLabel.ForeColor = Theme.Text;
+            _heardLabel.Text = Strings.ImageHeard(lineCount);
 
-            // The line the recognizer read stands where a reading would, so
-            // every row says what it came from.
+            // Ordinary rows, with the ordinary reading: what the recognizer
+            // read is kept as the matched phrase, not shown in its place.
             PopulateRows(found
                 .Select(name => new CandidateRow(
-                    new TaskMatch(name.Task, name.Score, name.Read), name.Read))
+                    new TaskMatch(name.Task, name.Score, name.Read), ReadingHint(name.Task)))
                 .ToList());
 
             _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
@@ -2754,8 +3014,9 @@ public sealed partial class MainForm : Form
         if (!_fromImage) return;
 
         _fromImage = false;
-        _imageButton.Ghost = true;
-        _imageButton.Invalidate();
+        _imageButton.Active = false;
+        _heardLabel.ForeColor = Theme.Faint;
+        _heardLabel.Text = Strings.HeardPlaceholder;
         _openButton.Text = Strings.OpenSelected;
     }
 

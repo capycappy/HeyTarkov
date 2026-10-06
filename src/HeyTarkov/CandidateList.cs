@@ -101,9 +101,14 @@ public sealed class CandidateList : ListBox
     [System.ComponentModel.DefaultValue(false)]
     public bool MapsForTasks { get; set; }
 
-    /// <summary>What the trader column shows for a row.</summary>
-    private string GroupText(WikiEntry task)
+    /// <summary>
+    /// What the trader column shows for a row. A map's row says the map's own
+    /// name there: the column is what that column sorts by, and a blank cell
+    /// cannot be sorted among the others.
+    /// </summary>
+    public string GroupText(WikiEntry task)
     {
+        if (task.Kind == EntryKind.Map) return task.Name;
         if (!MapsForTasks || task.Kind != EntryKind.Task) return task.Group;
 
         return task.Maps.Count switch
