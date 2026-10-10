@@ -3082,13 +3082,31 @@ public sealed partial class MainForm : Form
     /// </summary>
     protected override bool ProcessCmdKey(ref Message message, Keys keys)
     {
-        if (keys == (Keys.Control | Keys.V) && !_typedBox.Focused && !_collecting)
+        // What is on the clipboard decides, not where the caret is. The window
+        // opens with the caret in the search box, so "not while typing" meant
+        // Ctrl+V right after Win+Shift+S pasted nothing into the box and read
+        // nothing. A picture with no text alongside it is a picture to read;
+        // anything with text is pasted as text, as a search box should.
+        if (keys is (Keys.Control | Keys.V) or (Keys.Shift | Keys.Insert) && ClipboardHoldsOnlyAPicture())
         {
             _ = ReadImageAsync();
             return true;
         }
 
         return base.ProcessCmdKey(ref message, keys);
+    }
+
+    private static bool ClipboardHoldsOnlyAPicture()
+    {
+        try
+        {
+            return Clipboard.ContainsImage() && !Clipboard.ContainsText();
+        }
+        catch (ExternalException)
+        {
+            // Another program had the clipboard open; let the paste go ahead.
+            return false;
+        }
     }
 
     private void SetStatus(string text) => _statusLabel.Text = text;
