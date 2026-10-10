@@ -27,6 +27,12 @@ internal static class Program
         var taskMapsOnly = args.Contains("--taskmaps", StringComparer.OrdinalIgnoreCase);
         var objectivesOnly = args.Contains("--objectives", StringComparer.OrdinalIgnoreCase);
 
+        // "--tasks" fetches the task list again and puts it in place of the
+        // tasks already in the file, leaving the maps, extracts, items and keys
+        // alone. New tasks appear on the wikis every few weeks; walking every
+        // page of everything else to pick them up costs most of an hour.
+        var tasksOnly = args.Contains("--tasks", StringComparer.OrdinalIgnoreCase);
+
         var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
             ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
 
@@ -36,6 +42,7 @@ internal static class Program
 
             if (keysOnly) return await RefreshKeysAsync(wikis, output).ConfigureAwait(false);
             if (taskMapsOnly) return await RefreshTaskMapsAsync(wikis, output).ConfigureAwait(false);
+            if (tasksOnly) return await RefreshTasksAsync(wikis, output).ConfigureAwait(false);
 
             if (objectivesOnly)
             {
@@ -224,6 +231,102 @@ internal static class Program
 
         Report(catalog, output);
         return 0;
+    }
+
+    /// <summary>
+    /// The task list fetched again, in place of the one in the file. Every
+    /// other kind of entry is kept as it is.
+    ///
+    /// Refuses to write a list noticeably shorter than the one it replaces, or
+    /// one fetched while the wikis were refusing requests: either means pages
+    /// were missed, and a catalog that silently lost tasks is worse than an old
+    /// one.
+    /// </summary>
+    private static async Task<int> RefreshTasksAsync(Wikis wikis, string output)
+    {
+        if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } catalog) return 1;
+
+        var before = catalog.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
+        var maps = catalog.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();
+
+        Console.WriteLine($"tasks only, in place of the {before.Count} in the file...");
+
+        var tasks = await Tasks.FetchAsync(wikis).ConfigureAwait(false);
+        Console.WriteLine($"  {tasks.Count} tasks");
+
+        await Tasks.AddMapsAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
+
+        CarryForward(before, tasks);
+
+        if (tasks.Count < before.Count * 0.98)
+        {
+            Console.Error.WriteLine(
+                $"Only {tasks.Count} tasks came back against {before.Count} before; leaving the file alone.");
+            return 1;
+        }
+
+        if (wikis.Unresolved.Count > 0)
+        {
+            Console.Error.WriteLine();
+            Console.Error.WriteLine(
+                $"{wikis.Unresolved.Count} page(s) the wiki would not answer about; leaving the file alone.");
+
+            foreach (var url in wikis.Unresolved.Take(20)) Console.Error.WriteLine($"  {url}");
+            return 1;
+        }
+
+        var old = before.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
+        var added = tasks.Where(t => !old.Contains(t.Name)).Select(t => t.Name).OrderBy(n => n).ToList();
+        var gone = before.Select(t => t.Name).Except(tasks.Select(t => t.Name)).OrderBy(n => n).ToList();
+
+        Console.WriteLine();
+        Console.WriteLine($"  added {added.Count}: {string.Join(", ", added)}");
+        Console.WriteLine($"  gone {gone.Count}: {string.Join(", ", gone)}");
+        Console.WriteLine($"  without a trader: {tasks.Count(t => t.Group.Length == 0)}");
+
+        catalog.Entries = catalog.Entries.Where(e => e.Kind != EntryKind.Task).Concat(tasks)
+            .OrderBy(e => e.Kind)
+            .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(e => e.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        catalog.UpdatedAt = DateTimeOffset.Now;
+        await WriteAsync(catalog, output).ConfigureAwait(false);
+
+        Report(catalog, output);
+        return 0;
+    }
+
+    /// <summary>
+    /// What the last fetch knew and this one could not find, kept.
+    ///
+    /// The wikis' index pages drop pages that still exist - all thirteen
+    /// "Gunsmith Master" parts left the Japanese task list while their pages
+    /// stayed up - and a refresh that believed the index would quietly take
+    /// those links away. A link, or a map, is only ever added by a refresh,
+    /// never removed by one; a page that is truly gone shows up as a dead link
+    /// someone reports, which is the cheaper mistake.
+    /// </summary>
+    private static void CarryForward(IReadOnlyList<WikiEntry> before, IReadOnlyList<WikiEntry> after)
+    {
+        var known = new Dictionary<string, WikiEntry>(StringComparer.Ordinal);
+        foreach (var entry in before) known.TryAdd(entry.Name, entry);
+
+        var kept = 0;
+
+        foreach (var entry in after)
+        {
+            if (!known.TryGetValue(entry.Name, out var was)) continue;
+
+            if (entry.JapaneseUrl is null && was.JapaneseUrl is not null) { entry.JapaneseUrl = was.JapaneseUrl; kept++; }
+            if (entry.EnglishUrl is null && was.EnglishUrl is not null) { entry.EnglishUrl = was.EnglishUrl; kept++; }
+            if (entry.Maps.Count == 0 && was.Maps.Count > 0) { entry.Maps = was.Maps; kept++; }
+            if (entry.Group.Length == 0 && was.Group.Length > 0) { entry.Group = was.Group; kept++; }
+        }
+
+        Console.WriteLine($"  {kept} links or maps kept from the last catalog");
     }
 
     private static async Task<WikiCatalog?> ReadCatalogAsync(string output)

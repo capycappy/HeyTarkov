@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-09-28T23:25:56.9345378+08:00",
+  "UpdatedAt": "2026-10-11T00:22:29.5073894+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -124,7 +124,7 @@
       "ShortName": null,
       "JapaneseName": null,
       "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Honest%20Review",
-      "EnglishUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Honest_Review",
       "Display": "Honest Review",
       "SpokenName": "Honest Review"
     },
@@ -159,6 +159,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hot_Wheels_-_Let's_Try_Again",
       "Display": "Hot Wheels - Let's Try Again",
       "SpokenName": "Hot Wheels - Let's Try Again"
+    },
+    {
+      "Kind": 0,
+      "Name": "I'm Something of a BTR Myself?",
+      "Group": "BTR Driver",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/I%27m%20Something%20of%20a%20BTR%20Myself%3F",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/I'm_Something_of_a_BTR_Myself",
+      "Display": "I'm Something of a BTR Myself?",
+      "SpokenName": "I'm Something of a BTR Myself?"
     },
     {
       "Kind": 0,
@@ -1158,6 +1174,22 @@
     },
     {
       "Kind": 0,
+      "Name": "Cut Down to the Root",
+      "Group": "Jaeger",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/Cut%20Down%20to%20the%20Root",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Cut_Down_to_the_Root",
+      "Display": "Cut Down to the Root",
+      "SpokenName": "Cut Down to the Root"
+    },
+    {
+      "Kind": 0,
       "Name": "Darkest Hour Is Just Before Dawn",
       "Group": "Jaeger",
       "Maps": [
@@ -1685,7 +1717,7 @@
       "Event": "KORD BREACH",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Jaeger/KORD%20BREACH%20Stay%20Clear%20of%20Blast%20Zone",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stay_Clear_of_Blast_Zone",
       "Display": "Stay Clear of Blast Zone",
       "SpokenName": "Stay Clear of Blast Zone"
@@ -2469,6 +2501,22 @@
     },
     {
       "Kind": 0,
+      "Name": "...for the Good of the Chosen",
+      "Group": "Lightkeeper",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/...for_the_Good_of_the_Chosen",
+      "Display": "...for the Good of the Chosen",
+      "SpokenName": "...for the Good of the Chosen"
+    },
+    {
+      "Kind": 0,
       "Name": "Ding-Ding-Ding",
       "Group": "Lightkeeper",
       "Maps": [
@@ -2513,10 +2561,27 @@
       "Event": "KORD BREACH",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/KORD%20BREACH%20Historical%20Prospects",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Historical_Prospects",
       "Display": "Historical Prospects",
       "SpokenName": "Historical Prospects"
+    },
+    {
+      "Kind": 0,
+      "Name": "In the Name of Humanity...",
+      "Group": "Lightkeeper",
+      "Maps": [
+        "Interchange",
+        "Streets of Tarkov"
+      ],
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/In_the_Name_of_Humanity...",
+      "Display": "In the Name of Humanity...",
+      "SpokenName": "In the Name of Humanity..."
     },
     {
       "Kind": 0,
@@ -2632,6 +2697,40 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Payback",
       "Display": "Payback",
       "SpokenName": "Payback"
+    },
+    {
+      "Kind": 0,
+      "Name": "Preserve a Valuable Piece",
+      "Group": "Lightkeeper",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/Preserve%20a%20Valuable%20Piece",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Preserve_a_Valuable_Piece",
+      "Display": "Preserve a Valuable Piece",
+      "SpokenName": "Preserve a Valuable Piece"
+    },
+    {
+      "Kind": 0,
+      "Name": "Price for Information",
+      "Group": "Lightkeeper",
+      "Maps": [
+        "Shoreline",
+        "Lighthouse",
+        "Reserve"
+      ],
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Lightkeeper/KORD%20BREACH%20Price%20for%20Information",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Price_for_Information",
+      "Display": "Price for Information",
+      "SpokenName": "Price for Information"
     },
     {
       "Kind": 0,
@@ -4752,6 +4851,82 @@
     },
     {
       "Kind": 0,
+      "Name": "To the Light - A Time to Gather Stones",
+      "Group": "Mechanic",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_A_Time_to_Gather_Stones",
+      "Display": "To the Light - A Time to Gather Stones",
+      "SpokenName": "To the Light - A Time to Gather Stones"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - A Time to Throw Stones",
+      "Group": "Mechanic",
+      "Maps": [
+        "The Lab"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_A_Time_to_Throw_Stones",
+      "Display": "To the Light - A Time to Throw Stones",
+      "SpokenName": "To the Light - A Time to Throw Stones"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - Clip Their Wings",
+      "Group": "Mechanic",
+      "Maps": [
+        "Woods",
+        "Customs",
+        "Shoreline"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Clip_Their_Wings",
+      "Display": "To the Light - Clip Their Wings",
+      "SpokenName": "To the Light - Clip Their Wings"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - Dangerous Ambitions",
+      "Group": "Mechanic",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Dangerous_Ambitions",
+      "Display": "To the Light - Dangerous Ambitions",
+      "SpokenName": "To the Light - Dangerous Ambitions"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - Fallen Bird",
+      "Group": "Mechanic",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Fallen_Bird",
+      "Display": "To the Light - Fallen Bird",
+      "SpokenName": "To the Light - Fallen Bird"
+    },
+    {
+      "Kind": 0,
       "Name": "To the Light - False Call",
       "Group": "Mechanic",
       "Maps": [
@@ -4781,6 +4956,40 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Getting_Acquainted",
       "Display": "To the Light - Getting Acquainted",
       "SpokenName": "To the Light - Getting Acquainted"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - Someone Called?",
+      "Group": "Mechanic",
+      "Maps": [
+        "Customs"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Someone_Called%3F",
+      "Display": "To the Light - Someone Called?",
+      "SpokenName": "To the Light - Someone Called?"
+    },
+    {
+      "Kind": 0,
+      "Name": "To the Light - The Other Side",
+      "Group": "Mechanic",
+      "Maps": [
+        "Reserve",
+        "Streets of Tarkov",
+        "Customs"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_The_Other_Side",
+      "Display": "To the Light - The Other Side",
+      "SpokenName": "To the Light - The Other Side"
     },
     {
       "Kind": 0,
@@ -5081,6 +5290,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Eagle_Eye",
       "Display": "Eagle Eye",
       "SpokenName": "Eagle Eye"
+    },
+    {
+      "Kind": 0,
+      "Name": "Ease the Move",
+      "Group": "Peacekeeper",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Peacekeeper/Ease%20the%20Move",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Ease_the_Move",
+      "Display": "Ease the Move",
+      "SpokenName": "Ease the Move"
     },
     {
       "Kind": 0,
@@ -5441,7 +5666,7 @@
       "Name": "One-Way Ticket",
       "Group": "Peacekeeper",
       "Maps": [
-        "Shoreline"
+        "Factory"
       ],
       "Faction": null,
       "Event": "",
@@ -5935,6 +6160,20 @@
     },
     {
       "Kind": 0,
+      "Name": "To the Light - Bite the Dust",
+      "Group": "Peacekeeper",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Bite_the_Dust",
+      "Display": "To the Light - Bite the Dust",
+      "SpokenName": "To the Light - Bite the Dust"
+    },
+    {
+      "Kind": 0,
       "Name": "Tracker",
       "Group": "Peacekeeper",
       "Maps": [
@@ -6204,7 +6443,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/All-Inclusive%20Support",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All-Inclusive_Support",
       "Display": "All-Inclusive Support",
       "SpokenName": "All-Inclusive Support"
@@ -6292,8 +6531,8 @@
       "Name": "Best Job in the World",
       "Group": "Prapor",
       "Maps": [
-        "Reserve",
-        "Lighthouse"
+        "Lighthouse",
+        "Reserve"
       ],
       "Faction": null,
       "Event": "",
@@ -6338,12 +6577,28 @@
     },
     {
       "Kind": 0,
+      "Name": "Callsign Malachite",
+      "Group": "Prapor",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Callsign%20Malachite",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Callsign_Malachite",
+      "Display": "Callsign Malachite",
+      "SpokenName": "Callsign Malachite"
+    },
+    {
+      "Kind": 0,
       "Name": "Capturing Outposts",
       "Group": "Prapor",
       "Maps": [
         "Customs",
-        "Woods",
-        "Shoreline"
+        "Shoreline",
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -6422,10 +6677,10 @@
       "Name": "Debut",
       "Group": "Prapor",
       "Maps": [
-        "Woods",
+        "Customs",
         "Ground Zero",
         "Interchange",
-        "Customs"
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -6604,8 +6859,8 @@
       "Name": "Easy-Breezy",
       "Group": "Prapor",
       "Maps": [
-        "Reserve",
-        "Lighthouse"
+        "Lighthouse",
+        "Reserve"
       ],
       "Faction": null,
       "Event": "",
@@ -6621,14 +6876,14 @@
       "Name": "Escort",
       "Group": "Prapor",
       "Maps": [
-        "Factory",
         "Customs",
-        "Shoreline",
-        "Reserve",
-        "Woods",
+        "Factory",
+        "Ground Zero",
         "Interchange",
+        "Reserve",
+        "Shoreline",
         "The Lab",
-        "Ground Zero"
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -6783,9 +7038,9 @@
       "Name": "Getting Some Air",
       "Group": "Prapor",
       "Maps": [
-        "Shoreline",
         "Lighthouse",
-        "Reserve"
+        "Reserve",
+        "Shoreline"
       ],
       "Faction": null,
       "Event": "",
@@ -7010,9 +7265,9 @@
       "Name": "Job for a Patriot",
       "Group": "Prapor",
       "Maps": [
-        "Streets of Tarkov",
+        "Ground Zero",
         "Shoreline",
-        "Ground Zero"
+        "Streets of Tarkov"
       ],
       "Faction": null,
       "Event": "",
@@ -7089,6 +7344,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Knuckle_Sandwich",
       "Display": "Knuckle Sandwich",
       "SpokenName": "Knuckle Sandwich"
+    },
+    {
+      "Kind": 0,
+      "Name": "Lose the Tail",
+      "Group": "Prapor",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Lose%20the%20Tail",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Lose_the_Tail",
+      "Display": "Lose the Tail",
+      "SpokenName": "Lose the Tail"
     },
     {
       "Kind": 0,
@@ -7181,7 +7452,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/Number%20Temporarily%20Unavailable",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Number_Temporarily_Unavailable",
       "Display": "Number Temporarily Unavailable",
       "SpokenName": "Number Temporarily Unavailable"
@@ -7317,10 +7588,10 @@
       "Name": "Power of Persuasion",
       "Group": "Prapor",
       "Maps": [
-        "Woods",
+        "Customs",
         "Ground Zero",
         "Interchange",
-        "Customs"
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -7499,10 +7770,10 @@
       "Name": "Shootout Picnic",
       "Group": "Prapor",
       "Maps": [
-        "Woods",
-        "Ground Zero",
         "Customs",
-        "Interchange"
+        "Ground Zero",
+        "Interchange",
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -7518,8 +7789,8 @@
       "Name": "Special Comms",
       "Group": "Prapor",
       "Maps": [
-        "Woods",
-        "Reserve"
+        "Reserve",
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -7993,9 +8264,9 @@
       "Name": "Viewer",
       "Group": "Prapor",
       "Maps": [
-        "Woods",
+        "Factory",
         "Shoreline",
-        "Factory"
+        "Woods"
       ],
       "Faction": null,
       "Event": "",
@@ -8087,7 +8358,7 @@
       "ShortName": null,
       "JapaneseName": null,
       "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Akimbo",
-      "EnglishUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Akimbo",
       "Display": "Akimbo",
       "SpokenName": "Akimbo"
     },
@@ -8214,6 +8485,20 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Break_the_Deal",
       "Display": "Break the Deal",
       "SpokenName": "Break the Deal"
+    },
+    {
+      "Kind": 0,
+      "Name": "Can't Drink Away Skill",
+      "Group": "Ragman",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Can't_Drink_Away_Skill",
+      "Display": "Can't Drink Away Skill",
+      "SpokenName": "Can't Drink Away Skill"
     },
     {
       "Kind": 0,
@@ -8991,6 +9276,8 @@
       "Name": "Sisyphus",
       "Group": "Ragman",
       "Maps": [
+        "Woods",
+        "Reserve",
         "Lighthouse"
       ],
       "Faction": null,
@@ -8998,7 +9285,7 @@
       "ShortName": null,
       "JapaneseName": null,
       "JapaneseUrl": "https://wikiwiki.jp/eft/Ragman/Sisyphus",
-      "EnglishUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sisyphus",
       "Display": "Sisyphus",
       "SpokenName": "Sisyphus"
     },
@@ -9170,6 +9457,20 @@
     },
     {
       "Kind": 0,
+      "Name": "A New Classic",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_New_Classic",
+      "Display": "A New Classic",
+      "SpokenName": "A New Classic"
+    },
+    {
+      "Kind": 0,
       "Name": "Adaptive Diplomacy",
       "Group": "Ref",
       "Maps": [
@@ -9299,6 +9600,20 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Against_the_Conscience_-_Part_2",
       "Display": "Against the Conscience - Part 2",
       "SpokenName": "Against the Conscience - Part 2"
+    },
+    {
+      "Kind": 0,
+      "Name": "All for the Show - Big Tour",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/All_for_the_Show_-_Big_Tour",
+      "Display": "All for the Show - Big Tour",
+      "SpokenName": "All for the Show - Big Tour"
     },
     {
       "Kind": 0,
@@ -9835,6 +10150,20 @@
     },
     {
       "Kind": 0,
+      "Name": "Double Tap",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Double_Tap",
+      "Display": "Double Tap",
+      "SpokenName": "Double Tap"
+    },
+    {
+      "Kind": 0,
       "Name": "Easy Money - Part 2",
       "Group": "Ref",
       "Maps": [],
@@ -9972,6 +10301,20 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Field_Testing",
       "Display": "Field Testing",
       "SpokenName": "Field Testing"
+    },
+    {
+      "Kind": 0,
+      "Name": "Firework",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Firework",
+      "Display": "Firework",
+      "SpokenName": "Firework"
     },
     {
       "Kind": 0,
@@ -10451,6 +10794,20 @@
     },
     {
       "Kind": 0,
+      "Name": "Miracle Worker",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Miracle_Worker",
+      "Display": "Miracle Worker",
+      "SpokenName": "Miracle Worker"
+    },
+    {
+      "Kind": 0,
       "Name": "More Red",
       "Group": "Ref",
       "Maps": [],
@@ -10927,6 +11284,20 @@
     },
     {
       "Kind": 0,
+      "Name": "Smells Like Gunpowder",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Smells_Like_Gunpowder",
+      "Display": "Smells Like Gunpowder",
+      "SpokenName": "Smells Like Gunpowder"
+    },
+    {
+      "Kind": 0,
       "Name": "Spinning the drums",
       "Group": "Ref",
       "Maps": [],
@@ -11182,6 +11553,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Weather_the_Blizzard",
       "Display": "Weather the Blizzard",
       "SpokenName": "Weather the Blizzard"
+    },
+    {
+      "Kind": 0,
+      "Name": "A Familiar Face...",
+      "Group": "Skier",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/A%20Familiar%20Face...",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Familiar_Face...",
+      "Display": "A Familiar Face...",
+      "SpokenName": "A Familiar Face..."
     },
     {
       "Kind": 0,
@@ -12071,7 +12458,8 @@
       "Name": "No Swiping",
       "Group": "Skier",
       "Maps": [
-        "Shoreline"
+        "Shoreline",
+        "Interchange"
       ],
       "Faction": null,
       "Event": "",
@@ -12288,6 +12676,22 @@
     },
     {
       "Kind": 0,
+      "Name": "Scope the Clearing",
+      "Group": "Skier",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Scope%20the%20Clearing",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Scope_the_Clearing",
+      "Display": "Scope the Clearing",
+      "SpokenName": "Scope the Clearing"
+    },
+    {
+      "Kind": 0,
       "Name": "Serious Allegations",
       "Group": "Skier",
       "Maps": [
@@ -12435,7 +12839,7 @@
       "ShortName": null,
       "JapaneseName": null,
       "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Stimulating%20Demand",
-      "EnglishUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Stimulating_Demand",
       "Display": "Stimulating Demand",
       "SpokenName": "Stimulating Demand"
     },
@@ -13486,7 +13890,7 @@
       "ShortName": null,
       "JapaneseName": null,
       "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Invasive%20Therapy",
-      "EnglishUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Invasive_Therapy",
       "Display": "Invasive Therapy",
       "SpokenName": "Invasive Therapy"
     },
