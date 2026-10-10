@@ -258,6 +258,8 @@ internal static class Program
         await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
         await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
 
+        CarryForward(before, tasks);
+
         if (tasks.Count < before.Count * 0.98)
         {
             Console.Error.WriteLine(
@@ -295,6 +297,36 @@ internal static class Program
 
         Report(catalog, output);
         return 0;
+    }
+
+    /// <summary>
+    /// What the last fetch knew and this one could not find, kept.
+    ///
+    /// The wikis' index pages drop pages that still exist - all thirteen
+    /// "Gunsmith Master" parts left the Japanese task list while their pages
+    /// stayed up - and a refresh that believed the index would quietly take
+    /// those links away. A link, or a map, is only ever added by a refresh,
+    /// never removed by one; a page that is truly gone shows up as a dead link
+    /// someone reports, which is the cheaper mistake.
+    /// </summary>
+    private static void CarryForward(IReadOnlyList<WikiEntry> before, IReadOnlyList<WikiEntry> after)
+    {
+        var known = new Dictionary<string, WikiEntry>(StringComparer.Ordinal);
+        foreach (var entry in before) known.TryAdd(entry.Name, entry);
+
+        var kept = 0;
+
+        foreach (var entry in after)
+        {
+            if (!known.TryGetValue(entry.Name, out var was)) continue;
+
+            if (entry.JapaneseUrl is null && was.JapaneseUrl is not null) { entry.JapaneseUrl = was.JapaneseUrl; kept++; }
+            if (entry.EnglishUrl is null && was.EnglishUrl is not null) { entry.EnglishUrl = was.EnglishUrl; kept++; }
+            if (entry.Maps.Count == 0 && was.Maps.Count > 0) { entry.Maps = was.Maps; kept++; }
+            if (entry.Group.Length == 0 && was.Group.Length > 0) { entry.Group = was.Group; kept++; }
+        }
+
+        Console.WriteLine($"  {kept} links or maps kept from the last catalog");
     }
 
     private static async Task<WikiCatalog?> ReadCatalogAsync(string output)
