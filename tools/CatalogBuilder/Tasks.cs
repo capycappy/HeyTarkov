@@ -512,6 +512,10 @@ public static partial class Tasks
             foreach (var title in await wikis.CategoryMembersAsync(category, ct).ConfigureAwait(false))
             {
                 if (FandomExcluded.Contains(title)) continue;
+
+                // A category holds other categories too - "Category:Community
+                // Goal Quests" turned up among the quests - and those are not tasks.
+                if (title.StartsWith("Category:", StringComparison.OrdinalIgnoreCase)) continue;
                 if (!seen.Add(title)) continue;
 
                 var name = FandomQualifier().Replace(title, "").Trim();
