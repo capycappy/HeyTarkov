@@ -223,13 +223,27 @@ public sealed class CandidateList : ListBox
     }
 
     /// <summary>The kind, as a pill. Returns its width so the name can follow it.</summary>
-    private int Badge(Graphics g, string text, Color colour, int x, Rectangle row)
+    /// <summary>Every word a badge can say. The widest of them sets the width
+    /// of all of them.</summary>
+    private static readonly string[] BadgeWords = { "TASK", "MAP", "EXIT", "ITEM", "KEY", "EVENT", "STORY" };
+
+    /// <summary>
+    /// One width for every badge, so the names after them start in one
+    /// column. Sized to its word, "EVENT" pushed its name further right than
+    /// "TASK" did, and a list read down its names zig-zagged.
+    /// </summary>
+    private int BadgeWidth(Graphics g)
     {
         var padX = LogicalToDeviceUnits(6);
-        var size = TextRenderer.MeasureText(g, text, _badge!, new Size(int.MaxValue, int.MaxValue),
-            TextFormatFlags.NoPadding);
+        var widest = BadgeWords.Max(word => TextRenderer.MeasureText(g, word, _badge!,
+            new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
 
-        var w = size.Width + padX * 2;
+        return widest + padX * 2;
+    }
+
+    private int Badge(Graphics g, string text, Color colour, int x, Rectangle row)
+    {
+        var w = BadgeWidth(g);
         var h = _badge!.Height + LogicalToDeviceUnits(3);
         var box = new RectangleF(x, row.Y + (row.Height - h) / 2f, w, h);
 
