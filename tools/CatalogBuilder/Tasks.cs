@@ -113,6 +113,16 @@ public static partial class Tasks
             entry.EnglishUrl ??= url;
         }
 
+        // The event on now, from the Events page: a time-limited event does not
+        // mark its tasks the way a season does.
+        if (await Events.FetchNewestAsync(wikis, ct).ConfigureAwait(false) is { } current)
+        {
+            var named = current.Tasks.Select(Naming.Normalize).ToHashSet(StringComparer.Ordinal);
+
+            foreach (var (key, entry) in byKey)
+                if (entry.Event.Length == 0 && named.Contains(key)) entry.Event = current.Name;
+        }
+
         foreach (var (key, entry) in byKey)
         {
             if (!events.TryGetValue(key, out var season)) continue;
@@ -127,6 +137,39 @@ public static partial class Tasks
         await FindJapaneseEventPagesAsync(wikis, byKey.Values, ct).ConfigureAwait(false);
 
         return byKey.Values.ToList();
+    }
+
+    /// <summary>
+    /// Japanese pages for tasks the Japanese index does not link yet.
+    ///
+    /// The index is edited by hand and lags behind: the six tasks of a new
+    /// event had pages of their own for days before it listed any of them. A
+    /// task's page is always "Trader/Name", and both are known from the English
+    /// wiki, so the page is asked for directly. Only for the tasks given - new
+    /// ones - rather than every task without a link: most of those are arena
+    /// tasks the Japanese wiki does not cover, and asking about three hundred
+    /// of them each time would mean three hundred refusals.
+    /// </summary>
+    public static async Task FindJapanesePagesAsync(
+        IEnumerable<WikiEntry> tasks, Wikis wikis, CancellationToken ct = default)
+    {
+        var found = 0;
+
+        foreach (var task in tasks)
+        {
+            if (task.JapaneseUrl is not null || task.Group.Length == 0) continue;
+
+            var category = task.Group == StoryTrader ? StoryCategoryJapanese : task.Group;
+            if (!JapaneseCategories.Contains(category)) continue;
+
+            var url = wikis.JapaneseUrl($"{category}/{task.Name}");
+            if (!(await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists) continue;
+
+            task.JapaneseUrl = url;
+            found++;
+        }
+
+        Console.WriteLine($"  {found} Japanese pages found by asking for them directly");
     }
 
     /// <summary>MediaWiki takes fifty titles per request.</summary>

@@ -260,6 +260,9 @@ internal static class Program
 
         CarryForward(before, tasks);
 
+        var known = before.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
+        await Tasks.FindJapanesePagesAsync(tasks.Where(t => !known.Contains(t.Name)), wikis).ConfigureAwait(false);
+
         if (tasks.Count < before.Count * 0.98)
         {
             Console.Error.WriteLine(
@@ -324,6 +327,10 @@ internal static class Program
             if (entry.EnglishUrl is null && was.EnglishUrl is not null) { entry.EnglishUrl = was.EnglishUrl; kept++; }
             if (entry.Maps.Count == 0 && was.Maps.Count > 0) { entry.Maps = was.Maps; kept++; }
             if (entry.Group.Length == 0 && was.Group.Length > 0) { entry.Group = was.Group; kept++; }
+
+            // An event task stays one after the next event takes the top of
+            // the Events page.
+            if (entry.Event.Length == 0 && was.Event.Length > 0) { entry.Event = was.Event; kept++; }
         }
 
         Console.WriteLine($"  {kept} links or maps kept from the last catalog");
