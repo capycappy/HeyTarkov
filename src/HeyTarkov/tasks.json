@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-10-11T00:22:29.5073894+08:00",
+  "UpdatedAt": "2026-10-18T02:02:50.5207919+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -374,6 +374,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Action_test",
       "Display": "Action test",
       "SpokenName": "Action test"
+    },
+    {
+      "Kind": 0,
+      "Name": "Against the Conscience - Part 1",
+      "Group": "Fence",
+      "Maps": [
+        "Customs"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Fence/Against%20the%20Conscience%20-%20Part%201",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Against_the_Conscience_-_Part_1",
+      "Display": "Against the Conscience - Part 1",
+      "SpokenName": "Against the Conscience - Part 1"
     },
     {
       "Kind": 0,
@@ -938,7 +954,10 @@
       "Name": "All This Filth...",
       "Group": "Jaeger",
       "Maps": [
-        "Woods"
+        "Interchange",
+        "Ground Zero",
+        "Woods",
+        "Customs"
       ],
       "Faction": null,
       "Event": "",
@@ -3248,6 +3267,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Digital_Puzzle",
       "Display": "Digital Puzzle",
       "SpokenName": "Digital Puzzle"
+    },
+    {
+      "Kind": 0,
+      "Name": "Doxed",
+      "Group": "Mechanic",
+      "Maps": [
+        "Ground Zero"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Doxed",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Doxed",
+      "Display": "Doxed",
+      "SpokenName": "Doxed"
     },
     {
       "Kind": 0,
@@ -9573,22 +9608,6 @@
     },
     {
       "Kind": 0,
-      "Name": "Against the Conscience - Part 1",
-      "Group": "Ref",
-      "Maps": [
-        "Customs"
-      ],
-      "Faction": null,
-      "Event": "",
-      "ShortName": null,
-      "JapaneseName": null,
-      "JapaneseUrl": "https://wikiwiki.jp/eft/Ref/Against%20the%20Conscience%20-%20Part%201",
-      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Against_the_Conscience_-_Part_1",
-      "Display": "Against the Conscience - Part 1",
-      "SpokenName": "Against the Conscience - Part 1"
-    },
-    {
-      "Kind": 0,
       "Name": "Against the Conscience - Part 2",
       "Group": "Ref",
       "Maps": [],
@@ -11556,6 +11575,132 @@
     },
     {
       "Kind": 0,
+      "Name": "Wildcard: Breaking the Mold",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Breaking_the_Mold",
+      "Display": "Wildcard: Breaking the Mold",
+      "SpokenName": "Wildcard: Breaking the Mold"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Heavy Weapons Guy",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Heavy_Weapons_Guy",
+      "Display": "Wildcard: Heavy Weapons Guy",
+      "SpokenName": "Wildcard: Heavy Weapons Guy"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: In a Hurry",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_In_a_Hurry",
+      "Display": "Wildcard: In a Hurry",
+      "SpokenName": "Wildcard: In a Hurry"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Let's Start Over",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Let's_Start_Over",
+      "Display": "Wildcard: Let's Start Over",
+      "SpokenName": "Wildcard: Let's Start Over"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Limits Are Only in Your Head",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Limits_Are_Only_in_Your_Head",
+      "Display": "Wildcard: Limits Are Only in Your Head",
+      "SpokenName": "Wildcard: Limits Are Only in Your Head"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Next Candidate!",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Next_Candidate!",
+      "Display": "Wildcard: Next Candidate!",
+      "SpokenName": "Wildcard: Next Candidate!"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Slayer",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Slayer",
+      "Display": "Wildcard: Slayer",
+      "SpokenName": "Wildcard: Slayer"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: True Marksman",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_True_Marksman",
+      "Display": "Wildcard: True Marksman",
+      "SpokenName": "Wildcard: True Marksman"
+    },
+    {
+      "Kind": 0,
+      "Name": "Wildcard: Winner's Pick",
+      "Group": "Ref",
+      "Maps": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Wildcard:_Winner's_Pick",
+      "Display": "Wildcard: Winner's Pick",
+      "SpokenName": "Wildcard: Winner's Pick"
+    },
+    {
+      "Kind": 0,
       "Name": "A Familiar Face...",
       "Group": "Skier",
       "Maps": [
@@ -13378,6 +13523,22 @@
     },
     {
       "Kind": 0,
+      "Name": "A Simple Task in a Difficult Place",
+      "Group": "Therapist",
+      "Maps": [
+        "The Lab"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/A%20Simple%20Task%20in%20a%20Difficult%20Place",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/A_Simple_Task_in_a_Difficult_Place",
+      "Display": "A Simple Task in a Difficult Place",
+      "SpokenName": "A Simple Task in a Difficult Place"
+    },
+    {
+      "Kind": 0,
       "Name": "Abandoned Cargo",
       "Group": "Therapist",
       "Maps": [
@@ -13653,6 +13814,22 @@
     },
     {
       "Kind": 0,
+      "Name": "Extending the Operation",
+      "Group": "Therapist",
+      "Maps": [
+        "The Lab"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Extending%20the%20Operation",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Extending_the_Operation",
+      "Display": "Extending the Operation",
+      "SpokenName": "Extending the Operation"
+    },
+    {
+      "Kind": 0,
       "Name": "Fall Ailment",
       "Group": "Therapist",
       "Maps": [],
@@ -13852,6 +14029,22 @@
     },
     {
       "Kind": 0,
+      "Name": "Hidden Route",
+      "Group": "Therapist",
+      "Maps": [
+        "Factory"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Hidden%20Route",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Hidden_Route",
+      "Display": "Hidden Route",
+      "SpokenName": "Hidden Route"
+    },
+    {
+      "Kind": 0,
       "Name": "Hippocratic Oath",
       "Group": "Therapist",
       "Maps": [],
@@ -13877,6 +14070,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Important_Patient",
       "Display": "Important Patient",
       "SpokenName": "Important Patient"
+    },
+    {
+      "Kind": 0,
+      "Name": "Information Trail",
+      "Group": "Therapist",
+      "Maps": [
+        "The Lab"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Information%20Trail",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Information_Trail",
+      "Display": "Information Trail",
+      "SpokenName": "Information Trail"
     },
     {
       "Kind": 0,
@@ -14294,6 +14503,22 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Shortage",
       "Display": "Shortage",
       "SpokenName": "Shortage"
+    },
+    {
+      "Kind": 0,
+      "Name": "Side Hustle",
+      "Group": "Therapist",
+      "Maps": [
+        "The Lab"
+      ],
+      "Faction": null,
+      "Event": "Scourge Incursion",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Side%20Hustle",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Side_Hustle",
+      "Display": "Side Hustle",
+      "SpokenName": "Side Hustle"
     },
     {
       "Kind": 0,
