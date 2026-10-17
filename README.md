@@ -1,4 +1,4 @@
-# Hey Tarkov v1.8.1
+# Hey Tarkov v1.8.2
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名・KAPPA品名・鍵の名前**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -21,8 +21,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.8.1-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.8.1-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.8.2-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.8.2-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -85,7 +85,7 @@ Fog 0f War          → Fog of War            71%
 **トレーダーを選んでいる間は、右の列がそのタスクのマップ名になります**（複数なら `Customs +2`）。
 マップのボタンでは、マップが先頭に並び、その行の右の列にもマップ名が入ります。
 
-タスクのマップは Wiki に書かれているものだけです（902件中538件）。
+タスクのマップは Wiki に書かれているものだけです（943件中559件）。
 「渡すだけ」「どこでもよい」タスクは「マップ指定なし」に入ります。
 
 ### 途中まで言えば候補が出る
@@ -100,7 +100,7 @@ Fog 0f War          → Fog of War            71%
 
 | 種別 | 件数 | 例 |
 |---|---|---|
-| タスク | 902 | 「ウェット ジョブ パート フォー」 |
+| タスク | 943 | 「ウェット ジョブ パート フォー」 |
 | マップ | 15 | 「グラウンドゼロ」 |
 | 脱出地点 | 143 | 「グラウンドゼロ エマーコムチェックポイント」 |
 | KAPPA品 | 44 | 「ゴールデンエッグ」 |
@@ -320,7 +320,7 @@ dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarko
 ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
 
 ```
-$v = "1.8.1"
+$v = "1.8.2"
 $stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
 $out = "$env:USERPROFILE\app\HeyTarkov"
 
