@@ -33,6 +33,9 @@ internal static class Program
         // page of everything else to pick them up costs most of an hour.
         var tasksOnly = args.Contains("--tasks", StringComparer.OrdinalIgnoreCase);
 
+        // "--chain" fills in the tasks before and after each task, in place.
+        var chainOnly = args.Contains("--chain", StringComparer.OrdinalIgnoreCase);
+
         var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
             ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
 
@@ -43,6 +46,7 @@ internal static class Program
             if (keysOnly) return await RefreshKeysAsync(wikis, output).ConfigureAwait(false);
             if (taskMapsOnly) return await RefreshTaskMapsAsync(wikis, output).ConfigureAwait(false);
             if (tasksOnly) return await RefreshTasksAsync(wikis, output).ConfigureAwait(false);
+            if (chainOnly) return await RefreshChainAsync(wikis, output).ConfigureAwait(false);
 
             if (objectivesOnly)
             {
@@ -77,6 +81,7 @@ internal static class Program
             await Tasks.AddMapsAsync(tasks, mapNames, wikis);
             await Tasks.AddMapsFromJapaneseAsync(tasks, mapNames, wikis);
             await Tasks.AddMapsFromObjectivesAsync(tasks, mapNames, wikis);
+            await Tasks.AddChainAsync(tasks, wikis);
 
             Console.WriteLine();
             Console.WriteLine("keys...");
@@ -234,6 +239,32 @@ internal static class Program
     }
 
     /// <summary>
+    /// Fills in the tasks before and after each task already in the file,
+    /// leaving everything else untouched.
+    /// </summary>
+    private static async Task<int> RefreshChainAsync(Wikis wikis, string output)
+    {
+        if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } catalog) return 1;
+
+        var tasks = catalog.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
+        Console.WriteLine($"tasks before and after only, over {tasks.Count} tasks...");
+
+        await Tasks.AddChainAsync(tasks, wikis).ConfigureAwait(false);
+
+        if (wikis.Unresolved.Count > 0 || tasks.All(t => t.Previous.Count == 0 && t.Next.Count == 0))
+        {
+            Console.Error.WriteLine("Pages were missed; leaving the file alone.");
+            return 1;
+        }
+
+        catalog.UpdatedAt = DateTimeOffset.Now;
+        await WriteAsync(catalog, output).ConfigureAwait(false);
+
+        Report(catalog, output);
+        return 0;
+    }
+
+    /// <summary>
     /// The task list fetched again, in place of the one in the file. Every
     /// other kind of entry is kept as it is.
     ///
@@ -257,6 +288,7 @@ internal static class Program
         await Tasks.AddMapsAsync(tasks, maps, wikis).ConfigureAwait(false);
         await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
         await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
+        await Tasks.AddChainAsync(tasks, wikis).ConfigureAwait(false);
 
         CarryForward(before, tasks);
 
@@ -327,6 +359,8 @@ internal static class Program
             if (entry.EnglishUrl is null && was.EnglishUrl is not null) { entry.EnglishUrl = was.EnglishUrl; kept++; }
             if (entry.Maps.Count == 0 && was.Maps.Count > 0) { entry.Maps = was.Maps; kept++; }
             if (entry.Group.Length == 0 && was.Group.Length > 0) { entry.Group = was.Group; kept++; }
+            if (entry.Previous.Count == 0 && was.Previous.Count > 0) { entry.Previous = was.Previous; kept++; }
+            if (entry.Next.Count == 0 && was.Next.Count > 0) { entry.Next = was.Next; kept++; }
 
             // An event task stays one after the next event takes the top of
             // the Events page.

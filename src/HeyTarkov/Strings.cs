@@ -121,6 +121,21 @@ public static class Strings
     // ------------------------------------------------------------ the list
 
     public static string EnterToOpen => T("Enter で開く", "Enter to open");
+
+    public static string PreviousTask(int count) =>
+        count > 1 ? T($"‹ 前のタスク（{count}）", $"‹ Previous ({count})") : T("‹ 前のタスク", "‹ Previous");
+
+    public static string NextTask(int count) =>
+        count > 1 ? T($"次のタスク（{count}）›", $"Next ({count}) ›") : T("次のタスク ›", "Next ›");
+
+    public static string PreviousTaskTip(IEnumerable<string> names) =>
+        T("前のタスク（Alt+←）", "Previous task (Alt+Left)") + Environment.NewLine + string.Join(Environment.NewLine, names);
+
+    public static string NextTaskTip(IEnumerable<string> names) =>
+        T("次のタスク（Alt+→）", "Next task (Alt+Right)") + Environment.NewLine + string.Join(Environment.NewLine, names);
+
+    /// <summary>The heard line while a task's neighbours are listed.</summary>
+    public static string ChainOf(string name) => T($"「{name}」の前後のタスク", $"Before and after “{name}”");
     public static string Candidates(int count) =>
         T($"候補 {count} 件", count == 1 ? "1 match" : $"{count} matches");
 

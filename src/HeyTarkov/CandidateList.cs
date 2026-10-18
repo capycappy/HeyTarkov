@@ -4,7 +4,7 @@ namespace HeyTarkov;
 
 /// <summary>One row of the candidate list.</summary>
 public sealed class CandidateRow(
-    TaskMatch match, string? reading, WikiSource? elsewhere = null, bool listed = false)
+    TaskMatch match, string? reading, WikiSource? elsewhere = null, bool listed = false, bool chain = false)
 {
     public TaskMatch Match { get; } = match;
 
@@ -14,6 +14,13 @@ public sealed class CandidateRow(
     /// column of "0%" beside every key would read as a failure.
     /// </summary>
     public bool Listed { get; } = listed;
+
+    /// <summary>
+    /// One of a task's neighbours along its chain, shown because the previous
+    /// or next button was pressed. Asked for by name, so the trader and map
+    /// dropdowns do not hide it, and kept in the order of the chain.
+    /// </summary>
+    public bool Chain { get; } = chain;
 
     /// <summary>The katakana reading, when the microphone is in Japanese.</summary>
     public string? Reading { get; } = reading;

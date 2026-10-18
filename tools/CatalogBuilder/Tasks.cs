@@ -290,6 +290,114 @@ public static partial class Tasks
                           + $"{tasks.Count(t => t.Group.Length > 0)} of {tasks.Count} with a trader");
     }
 
+    [GeneratedRegex(@"(?im)^\s*\|\s*previous[ \t]*=[ \t]*(.*)$")]
+    private static partial Regex PreviousLine();
+
+    [GeneratedRegex(@"(?im)^\s*\|\s*leads to[ \t]*=[ \t]*(.*)$")]
+    private static partial Regex LeadsToLine();
+
+    /// <summary>
+    /// Which tasks come before and after each one, from the infobox lines the
+    /// English page carries: "|previous =[[Hidden Route]]" and
+    /// "|leads to =[[Extending the Operation]]".
+    ///
+    /// Only links to tasks in the catalog are kept. The lines also name loyalty
+    /// levels and items now and then, and those are not somewhere to go next.
+    ///
+    /// Blanks are matched on their own line: "\s*" after the "=" would run
+    /// on into the next line and read "|leads to" as the previous task.
+    ///
+    /// Each side is completed from the other: a page that forgets its
+    /// "leads to" is still named as "previous" by the task after it, and the
+    /// two pages are not always edited together.
+    /// </summary>
+    public static async Task AddChainAsync(IReadOnlyList<WikiEntry> tasks, Wikis wikis, CancellationToken ct = default)
+    {
+        var byTitle = new Dictionary<string, WikiEntry>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var task in tasks)
+        {
+            if (TitleOf(task.EnglishUrl) is { } title) byTitle.TryAdd(title, task);
+            byTitle.TryAdd(task.Name, task);
+        }
+
+        WikiEntry? TaskAt(string link)
+        {
+            var title = link.Replace('_', ' ').Trim();
+            return byTitle.TryGetValue(title, out var found) ? found : null;
+        }
+
+        var previous = tasks.ToDictionary(t => t, _ => new List<WikiEntry>());
+        var next = tasks.ToDictionary(t => t, _ => new List<WikiEntry>());
+
+        static void Link(List<WikiEntry> list, WikiEntry task)
+        {
+            if (!list.Contains(task)) list.Add(task);
+        }
+
+        var titles = tasks.Select(t => TitleOf(t.EnglishUrl)).OfType<string>().Distinct().ToList();
+        Console.WriteLine($"  reading {titles.Count} English pages for the tasks before and after");
+
+        foreach (var batch in titles.Chunk(Batch))
+        {
+            var url = $"{Wikis.FandomApi}?action=query&prop=revisions&rvprop=content&rvslots=main"
+                      + $"&titles={Uri.EscapeDataString(string.Join('|', batch))}"
+                      + "&format=json&formatversion=2";
+
+            if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) continue;
+
+            using var document = System.Text.Json.JsonDocument.Parse(json);
+
+            if (!document.RootElement.TryGetProperty("query", out var query)
+                || !query.TryGetProperty("pages", out var pages))
+            {
+                continue;
+            }
+
+            foreach (var page in pages.EnumerateArray())
+            {
+                if (page.TryGetProperty("missing", out _)) continue;
+                if (!page.TryGetProperty("revisions", out var revisions) || revisions.GetArrayLength() == 0)
+                    continue;
+
+                var title = page.GetProperty("title").GetString();
+                var text = revisions[0].GetProperty("slots").GetProperty("main")
+                    .GetProperty("content").GetString();
+
+                if (title is null || text is null || TaskAt(title) is not { } task) continue;
+
+                if (PreviousLine().Match(text) is { Success: true } before)
+                {
+                    foreach (Match link in WikiLink().Matches(before.Groups[1].Value))
+                    {
+                        if (TaskAt(link.Groups[1].Value) is not { } other || other == task) continue;
+                        Link(previous[task], other);
+                        Link(next[other], task);
+                    }
+                }
+
+                if (LeadsToLine().Match(text) is { Success: true } after)
+                {
+                    foreach (Match link in WikiLink().Matches(after.Groups[1].Value))
+                    {
+                        if (TaskAt(link.Groups[1].Value) is not { } other || other == task) continue;
+                        Link(next[task], other);
+                        Link(previous[other], task);
+                    }
+                }
+            }
+        }
+
+        foreach (var task in tasks)
+        {
+            task.Previous = previous[task].Select(t => t.Name).ToList();
+            task.Next = next[task].Select(t => t.Name).ToList();
+        }
+
+        Console.WriteLine($"  {tasks.Count(t => t.Previous.Count > 0 || t.Next.Count > 0)} of {tasks.Count} tasks "
+                          + "linked to a task before or after");
+    }
+
     /// <summary>The objectives, which are the last place a map is named.</summary>
     [GeneratedRegex(@"(?is)==\s*Objectives\s*==(.*?)(?=\r?\n==)")]
     private static partial Regex ObjectivesSection();

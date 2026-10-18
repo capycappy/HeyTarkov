@@ -194,6 +194,8 @@ public sealed partial class MainForm : Form
 
     /// <summary>Wipes every tick. Only out while the checklist is.</summary>
     private readonly PillButton _clearHeld = new();
+    private readonly PillButton _previousButton = new();
+    private readonly PillButton _nextButton = new();
 
     /// <summary>Shows only what is still missing. Stands where the trader and
     /// map dropdowns stand the rest of the time.</summary>
@@ -972,20 +974,43 @@ public sealed partial class MainForm : Form
         _clearHeld.Margin = new Padding(0, 0, 2, 4);
         _clearHeld.Click += (_, _) => _collectorPanel?.ClearAll();
 
+        // Along the chain a task belongs to, as the wiki's own "previous" and
+        // "next" links go. Shown only while the selected row is a task that has
+        // a neighbour that way.
+        foreach (var (button, forward) in new[] { (_previousButton, false), (_nextButton, true) })
+        {
+            button.Ghost = true;
+            button.AutoSize = false;
+            button.Size = new Size(118, 24);
+            button.Font = new Font("Yu Gothic UI", 8.25f);
+            button.Visible = false;
+            button.Anchor = AnchorStyles.Right;
+            button.Margin = new Padding(0, 0, 6, 4);
+            button.Click += (_, _) => GoAlongChain(forward);
+        }
+
+        _candidates.SelectedIndexChanged += (_, _) => ShowChainButtons();
+
         var hints = new TableLayoutPanel
         {
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 2,
+            ColumnCount = 4,
             RowCount = 1,
             Anchor = AnchorStyles.Right,
             Margin = new Padding(0),
+
+            // As tall as the buttons whether or not they are showing, so the
+            // list does not jump as the selection moves between tasks that
+            // have neighbours and rows that do not.
+            MinimumSize = new Size(0, 28),
         };
-        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        hints.Controls.Add(_listHint, 0, 0);
-        hints.Controls.Add(_clearHeld, 1, 0);
+        for (var column = 0; column < 4; column++) hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        hints.Controls.Add(_previousButton, 0, 0);
+        hints.Controls.Add(_nextButton, 1, 0);
+        hints.Controls.Add(_listHint, 2, 0);
+        hints.Controls.Add(_clearHeld, 3, 0);
 
         var header = new TableLayoutPanel
         {
@@ -1186,6 +1211,7 @@ public sealed partial class MainForm : Form
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
+        ShowChainButtons();
 
         _typedBox.PlaceholderText = collecting
             ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
@@ -2610,6 +2636,8 @@ public sealed partial class MainForm : Form
     /// <summary>Whether a row survives both dropdowns.</summary>
     private bool PassesFilters(CandidateRow row)
     {
+        if (row.Chain) return true;
+
         var entry = row.Match.Task;
 
         if (SelectedMap is { } map)
@@ -2868,12 +2896,16 @@ public sealed partial class MainForm : Form
         // the task is done on does.
         _candidates.MapsForTasks = SelectedTrader is not null || _scope == Scope.Story;
 
+        // A chain is shown in its own order: before, the task, after.
+        var chain = rows.Count > 0 && rows.All(r => r.Chain);
+
         _candidates.BeginUpdate();
         _candidates.Items.Clear();
-        foreach (var row in Ordered(rows).Where(PassesFilters)) _candidates.Items.Add(row);
+        foreach (var row in (chain ? rows : Ordered(rows)).Where(PassesFilters)) _candidates.Items.Add(row);
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
+        ShowChainButtons();
 
         // An empty list under a map filter is not the same answer as an empty
         // search: the key exists, it is just somewhere else.
@@ -2888,6 +2920,92 @@ public sealed partial class MainForm : Form
             : elsewhere > 0 && (SelectedMap ?? SelectedTrader) is { } narrowed
                 ? Strings.NoneHere(narrowed.Length == 0 ? Strings.MapsNone : narrowed, elsewhere)
                 : "";
+    }
+
+    /// <summary>The task in the selected row, if the selected row is a task.</summary>
+    private WikiEntry? SelectedTask =>
+        _candidates.SelectedItem is CandidateRow { Match.Task: { Kind: EntryKind.Task } task } ? task : null;
+
+    /// <summary>The tasks with these names, in the order given.</summary>
+    private List<WikiEntry> TasksNamed(IReadOnlyList<string> names)
+    {
+        if (_catalog is null) return new List<WikiEntry>();
+
+        return names
+            .SelectMany(name => _catalog.Entries.Where(e => e.Kind == EntryKind.Task && e.Name == name))
+            .Distinct()
+            .ToList();
+    }
+
+    /// <summary>
+    /// The previous and next buttons, for the selected row. Each says how many
+    /// tasks are that way when it is more than one, and its tooltip names them.
+    /// </summary>
+    private void ShowChainButtons()
+    {
+        var task = _collecting ? null : SelectedTask;
+        var before = task is null ? new List<WikiEntry>() : TasksNamed(task.Previous);
+        var after = task is null ? new List<WikiEntry>() : TasksNamed(task.Next);
+
+        _previousButton.Visible = before.Count > 0;
+        _nextButton.Visible = after.Count > 0;
+
+        _previousButton.Text = Strings.PreviousTask(before.Count);
+        _nextButton.Text = Strings.NextTask(after.Count);
+
+        _keysTip.SetToolTip(_previousButton, Strings.PreviousTaskTip(before.Select(t => t.Name)));
+        _keysTip.SetToolTip(_nextButton, Strings.NextTaskTip(after.Select(t => t.Name)));
+    }
+
+    /// <summary>
+    /// One step along the selected task's chain.
+    ///
+    /// A neighbour already in the list is simply selected, so stepping through
+    /// the full list keeps the list. Otherwise the list becomes the chain around
+    /// where the step lands - the tasks before it, it, and the tasks after - so
+    /// the next press has somewhere to go. Where one task leads to several, the
+    /// list is the chain around the task the step started from, with the first
+    /// of them selected.
+    /// </summary>
+    private void GoAlongChain(bool forward)
+    {
+        if (SelectedTask is not { } from) return;
+
+        var targets = TasksNamed(forward ? from.Next : from.Previous);
+        if (targets.Count == 0) return;
+
+        var rows = _candidates.Items.Cast<CandidateRow>().ToList();
+
+        if (targets.All(t => rows.Any(r => r.Match.Task == t)))
+        {
+            _candidates.SelectedIndex = rows.FindIndex(r => r.Match.Task == targets[0]);
+            return;
+        }
+
+        var centre = targets.Count == 1 ? targets[0] : from;
+
+        LeaveImage();
+        _heardLabel.ForeColor = Theme.Text;
+        _heardLabel.Text = Strings.ChainOf(centre.Name);
+
+        PopulateRows(TasksNamed(centre.Previous)
+            .Append(centre)
+            .Concat(TasksNamed(centre.Next))
+            .Distinct()
+            .Select(task => new CandidateRow(
+                new TaskMatch(task, 0, ""), ReadingHint(task),
+                task.IsOn(SelectedWiki) ? null : OtherWiki(task), listed: true, chain: true))
+            .ToList());
+
+        var landed = _candidates.Items.Cast<CandidateRow>().ToList().FindIndex(r => r.Match.Task == targets[0]);
+        if (landed >= 0) _candidates.SelectedIndex = landed;
+    }
+
+    /// <summary>The other wiki, when it is the only one with a page for this.</summary>
+    private WikiSource? OtherWiki(WikiEntry task)
+    {
+        var other = SelectedWiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese;
+        return task.IsOn(other) ? other : null;
     }
 
     /// <summary>The katakana reading, so the list also teaches how to say it.</summary>
@@ -3082,6 +3200,15 @@ public sealed partial class MainForm : Form
     /// </summary>
     protected override bool ProcessCmdKey(ref Message message, Keys keys)
     {
+        // Alt+Left and Alt+Right step along the chain, as back and forward do
+        // in a browser - the arrows alone already move through the list.
+        if (keys is (Keys.Alt | Keys.Left) or (Keys.Alt | Keys.Right))
+        {
+            var forward = keys == (Keys.Alt | Keys.Right);
+            if ((forward ? _nextButton : _previousButton).Visible) GoAlongChain(forward);
+            return true;
+        }
+
         // What is on the clipboard decides, not where the caret is. The window
         // opens with the caret in the search box, so "not while typing" meant
         // Ctrl+V right after Win+Shift+S pasted nothing into the box and read

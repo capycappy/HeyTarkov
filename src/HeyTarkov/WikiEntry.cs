@@ -63,6 +63,15 @@ public sealed class WikiEntry
     /// </summary>
     public List<string> Maps { get; set; } = new();
 
+    /// <summary>
+    /// The tasks that come before this one, by name - usually one, sometimes
+    /// two that both have to be done first. Only tasks carry this.
+    /// </summary>
+    public List<string> Previous { get; set; } = new();
+
+    /// <summary>The tasks this one leads to, by name.</summary>
+    public List<string> Next { get; set; } = new();
+
     /// <summary>"PMC" or "SCAV" when an extract is faction-specific.</summary>
     public string? Faction { get; set; }
 
