@@ -95,12 +95,14 @@ public sealed class CandidateHeader : Control
 
         var at = At;
 
-        var picked = e.X >= at.ScoreX - LogicalToDeviceUnits(8) ? CandidateSort.Score
+        var picked = e.X >= at.ScoreX - LogicalToDeviceUnits(8)
+            ? _list.ShowScores ? CandidateSort.Score : (CandidateSort?)null
             : e.X >= at.GroupX ? CandidateSort.Group
             : ShowReading && e.X >= at.ReadingX ? CandidateSort.Reading
             : CandidateSort.Name;
 
-        Picked?.Invoke(picked);
+        // Over the < > the title is blank, and a blank is not a column.
+        if (picked is { } sort) Picked?.Invoke(sort);
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -122,8 +124,11 @@ public sealed class CandidateHeader : Control
         }
 
         Column(g, Strings.CandidateColumnGroup, at.GroupX, at.GroupW, CandidateSort.Group, right: true);
-        Column(g, Strings.CandidateColumnScore, at.ScoreX - LogicalToDeviceUnits(8),
-            at.ScoreW + LogicalToDeviceUnits(8), CandidateSort.Score, right: true);
+        if (_list.ShowScores)
+        {
+            Column(g, Strings.CandidateColumnScore, at.ScoreX - LogicalToDeviceUnits(8),
+                at.ScoreW + LogicalToDeviceUnits(8), CandidateSort.Score, right: true);
+        }
 
         // A hairline under the titles, so they read as a header rather than as
         // a first row.

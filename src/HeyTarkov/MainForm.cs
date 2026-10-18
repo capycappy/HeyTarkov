@@ -194,8 +194,6 @@ public sealed partial class MainForm : Form
 
     /// <summary>Wipes every tick. Only out while the checklist is.</summary>
     private readonly PillButton _clearHeld = new();
-    private readonly PillButton _previousButton = new();
-    private readonly PillButton _nextButton = new();
 
     /// <summary>Shows only what is still missing. Stands where the trader and
     /// map dropdowns stand the rest of the time.</summary>
@@ -974,43 +972,25 @@ public sealed partial class MainForm : Form
         _clearHeld.Margin = new Padding(0, 0, 2, 4);
         _clearHeld.Click += (_, _) => _collectorPanel?.ClearAll();
 
-        // Along the chain a task belongs to, as the wiki's own "previous" and
-        // "next" links go. Shown only while the selected row is a task that has
-        // a neighbour that way.
-        foreach (var (button, forward) in new[] { (_previousButton, false), (_nextButton, true) })
-        {
-            button.Ghost = true;
-            button.AutoSize = false;
-            button.Size = new Size(118, 24);
-            button.Font = new Font("Yu Gothic UI", 8.25f);
-            button.Visible = false;
-            button.Anchor = AnchorStyles.Right;
-            button.Margin = new Padding(0, 0, 6, 4);
-            button.Click += (_, _) => GoAlongChain(forward);
-        }
-
-        _candidates.SelectedIndexChanged += (_, _) => ShowChainButtons();
+        // The < > in the selected row: along the chain the task belongs to, as
+        // the wiki's own "previous" and "next" links go.
+        _candidates.ChainPicked += GoAlongChain;
+        _candidates.ChainHovered += ShowChainTip;
 
         var hints = new TableLayoutPanel
         {
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 4,
+            ColumnCount = 2,
             RowCount = 1,
             Anchor = AnchorStyles.Right,
             Margin = new Padding(0),
-
-            // As tall as the buttons whether or not they are showing, so the
-            // list does not jump as the selection moves between tasks that
-            // have neighbours and rows that do not.
-            MinimumSize = new Size(0, 28),
         };
-        for (var column = 0; column < 4; column++) hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        hints.Controls.Add(_previousButton, 0, 0);
-        hints.Controls.Add(_nextButton, 1, 0);
-        hints.Controls.Add(_listHint, 2, 0);
-        hints.Controls.Add(_clearHeld, 3, 0);
+        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        hints.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        hints.Controls.Add(_listHint, 0, 0);
+        hints.Controls.Add(_clearHeld, 1, 0);
 
         var header = new TableLayoutPanel
         {
@@ -1211,7 +1191,6 @@ public sealed partial class MainForm : Form
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
-        ShowChainButtons();
 
         _typedBox.PlaceholderText = collecting
             ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
@@ -2895,6 +2874,7 @@ public sealed partial class MainForm : Form
         // With one trader chosen, that column has nothing left to say; the map
         // the task is done on does.
         _candidates.MapsForTasks = SelectedTrader is not null || _scope == Scope.Story;
+        ShowScores(_fromImage);
 
         // A chain is shown in its own order: before, the task, after.
         var chain = rows.Count > 0 && rows.All(r => r.Chain);
@@ -2905,7 +2885,6 @@ public sealed partial class MainForm : Form
         _candidates.EndUpdate();
 
         if (_candidates.Items.Count > 0) _candidates.SelectedIndex = 0;
-        ShowChainButtons();
 
         // An empty list under a map filter is not the same answer as an empty
         // search: the key exists, it is just somewhere else.
@@ -2938,23 +2917,27 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// The previous and next buttons, for the selected row. Each says how many
-    /// tasks are that way when it is more than one, and its tooltip names them.
+    /// The match column, or the &lt; &gt; in its place. A score only helps where
+    /// a row may be wrong - lines read from a picture - and everywhere else the
+    /// column is better spent on getting to the task before or after.
     /// </summary>
-    private void ShowChainButtons()
+    private void ShowScores(bool scores)
     {
-        var task = _collecting ? null : SelectedTask;
-        var before = task is null ? new List<WikiEntry>() : TasksNamed(task.Previous);
-        var after = task is null ? new List<WikiEntry>() : TasksNamed(task.Next);
+        if (_candidates.ShowScores == scores) return;
 
-        _previousButton.Visible = before.Count > 0;
-        _nextButton.Visible = after.Count > 0;
+        _candidates.ShowScores = scores;
+        _candidates.Invalidate();
+        _sortHeader?.Invalidate();
+    }
 
-        _previousButton.Text = Strings.PreviousTask(before.Count);
-        _nextButton.Text = Strings.NextTask(after.Count);
+    /// <summary>Names the tasks a &lt; or &gt; leads to, while the pointer is on it.</summary>
+    private void ShowChainTip(bool? forward)
+    {
+        var tip = forward is { } way && SelectedTask is { } task && TasksNamed(way ? task.Next : task.Previous) is { Count: > 0 } there
+            ? way ? Strings.NextTaskTip(there.Select(t => t.Name)) : Strings.PreviousTaskTip(there.Select(t => t.Name))
+            : "";
 
-        _keysTip.SetToolTip(_previousButton, Strings.PreviousTaskTip(before.Select(t => t.Name)));
-        _keysTip.SetToolTip(_nextButton, Strings.NextTaskTip(after.Select(t => t.Name)));
+        _keysTip.SetToolTip(_candidates, tip);
     }
 
     /// <summary>
@@ -3141,6 +3124,7 @@ public sealed partial class MainForm : Form
         _heardLabel.ForeColor = Theme.Faint;
         _heardLabel.Text = Strings.HeardPlaceholder;
         _openButton.Text = Strings.OpenSelected;
+        ShowScores(false);
     }
 
     /// <summary>
@@ -3204,8 +3188,7 @@ public sealed partial class MainForm : Form
         // in a browser - the arrows alone already move through the list.
         if (keys is (Keys.Alt | Keys.Left) or (Keys.Alt | Keys.Right))
         {
-            var forward = keys == (Keys.Alt | Keys.Right);
-            if ((forward ? _nextButton : _previousButton).Visible) GoAlongChain(forward);
+            GoAlongChain(keys == (Keys.Alt | Keys.Right));
             return true;
         }
 

@@ -109,6 +109,110 @@ public sealed class CandidateList : ListBox
     public bool MapsForTasks { get; set; }
 
     /// <summary>
+    /// Show the match column. Only for lines read from a picture, where a row
+    /// can be a misreading and the score is how to tell. Everywhere else that
+    /// column holds the &lt; &gt; of the selected task instead.
+    /// </summary>
+    [System.ComponentModel.DefaultValue(false)]
+    public bool ShowScores { get; set; }
+
+    /// <summary>The &lt; (false) or &gt; (true) of the selected row was pressed.</summary>
+    public event Action<bool>? ChainPicked;
+
+    /// <summary>The pointer came onto a &lt; or &gt; (which one), or left it (null).</summary>
+    public event Action<bool?>? ChainHovered;
+
+    private bool? _hot;
+    private bool? _pressed;
+
+    private const int WmLButtonDown = 0x0201;
+    private const int WmLButtonUp = 0x0202;
+    private const int WmLButtonDblClk = 0x0203;
+
+    private static bool HasChain(WikiEntry task) =>
+        task.Kind == EntryKind.Task && (task.Previous.Count > 0 || task.Next.Count > 0);
+
+    /// <summary>Where the &lt; or &gt; of a row sits.</summary>
+    private Rectangle ChainButton(Rectangle row, bool forward)
+    {
+        var at = CandidateLayout.For(this, row.X, row.Width);
+        var size = Math.Min(LogicalToDeviceUnits(22), row.Height);
+        var right = at.ScoreX + at.ScoreW;
+        var x = forward ? right - size : right - size * 2 - LogicalToDeviceUnits(2);
+        return new Rectangle(x, row.Y + (row.Height - size) / 2, size, size);
+    }
+
+    /// <summary>The &lt; or &gt; under a point, if the selected row has one there.</summary>
+    public bool? ChainButtonAt(Point point)
+    {
+        if (ShowScores || SelectedIndex < 0 || SelectedIndex >= Items.Count) return null;
+        if (Items[SelectedIndex] is not CandidateRow row || !HasChain(row.Match.Task)) return null;
+
+        var bounds = GetItemRectangle(SelectedIndex);
+        if (ChainButton(bounds, false).Contains(point)) return false;
+        if (ChainButton(bounds, true).Contains(point)) return true;
+        return null;
+    }
+
+    /// <summary>
+    /// A press on the &lt; or &gt; is taken before the list sees it. Let
+    /// through, it would move the selection first, and two quick presses would
+    /// arrive as a double click - which opens the page.
+    /// </summary>
+    protected override void WndProc(ref Message m)
+    {
+        if (m.Msg is WmLButtonDown or WmLButtonDblClk or WmLButtonUp)
+        {
+            var point = new Point(unchecked((short)(long)m.LParam), unchecked((short)((long)m.LParam >> 16)));
+
+            if (m.Msg == WmLButtonUp)
+            {
+                if (_pressed is { } way)
+                {
+                    _pressed = null;
+                    if (ChainButtonAt(point) == way) ChainPicked?.Invoke(way);
+                    return;
+                }
+            }
+            else if (ChainButtonAt(point) is { } way)
+            {
+                _pressed = way;
+                return;
+            }
+        }
+
+        base.WndProc(ref m);
+    }
+
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        base.OnMouseMove(e);
+        Hover(ChainButtonAt(e.Location));
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        base.OnMouseLeave(e);
+        Hover(null);
+    }
+
+    protected override void OnSelectedIndexChanged(EventArgs e)
+    {
+        base.OnSelectedIndexChanged(e);
+        Hover(ChainButtonAt(PointToClient(MousePosition)));
+    }
+
+    private void Hover(bool? hot)
+    {
+        if (_hot == hot) return;
+
+        _hot = hot;
+        Cursor = hot is null ? Cursors.Default : Cursors.Hand;
+        if (SelectedIndex >= 0) Invalidate(GetItemRectangle(SelectedIndex));
+        ChainHovered?.Invoke(hot);
+    }
+
+    /// <summary>
     /// What the trader column shows for a row. A map's row says the map's own
     /// name there: the column is what that column sorts by, and a blank cell
     /// cannot be sorted among the others.
@@ -197,16 +301,26 @@ public sealed class CandidateList : ListBox
         var groupW = at.GroupW;
         var groupX = at.GroupX;
 
+        var chain = !ShowScores && selected && HasChain(row.Match.Task);
+
+        if (chain)
+        {
+            Chevron(g, ChainButton(full, false), forward: false,
+                enabled: row.Match.Task.Previous.Count > 0, hot: _hot == false);
+            Chevron(g, ChainButton(full, true), forward: true,
+                enabled: row.Match.Task.Next.Count > 0, hot: _hot == true);
+        }
+
         if (row.Elsewhere is { } other)
         {
             // Where it can be found, in place of a score and a trader - neither
             // of which answers the question this row raises.
             Column(g, Strings.OnlyOnWiki(other), _small!, Theme.Clip,
-                groupX, groupW + scoreW + LogicalToDeviceUnits(8), full);
+                groupX, groupW + (chain ? 0 : scoreW + LogicalToDeviceUnits(8)), full);
         }
         else
         {
-            if (!row.Listed)
+            if (ShowScores && !row.Listed)
             {
                 var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
                 Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
@@ -259,6 +373,36 @@ public sealed class CandidateList : ListBox
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
 
         return w;
+    }
+
+    /// <summary>
+    /// A &lt; or &gt;. Faint where there is nothing that way, so the pair keeps
+    /// its place and the one that works is not mistaken for the other.
+    /// </summary>
+    private void Chevron(Graphics g, Rectangle box, bool forward, bool enabled, bool hot)
+    {
+        if (hot && enabled)
+            Painting.FillRounded(g, box, Color.FromArgb(48, Theme.Accent), LogicalToDeviceUnits(4));
+
+        var colour = !enabled ? Color.FromArgb(60, Theme.Faint) : hot ? Theme.Accent : Theme.Muted;
+
+        using var pen = new Pen(colour, LogicalToDeviceUnits(2));
+        pen.StartCap = LineCap.Round;
+        pen.EndCap = LineCap.Round;
+        pen.LineJoin = LineJoin.Round;
+
+        var cx = box.X + box.Width / 2f;
+        var cy = box.Y + box.Height / 2f;
+        var w = box.Width * 0.14f;
+        var h = box.Height * 0.26f;
+        var way = forward ? 1 : -1;
+
+        g.DrawLines(pen, new[]
+        {
+            new PointF(cx - way * w, cy - h),
+            new PointF(cx + way * w, cy),
+            new PointF(cx - way * w, cy + h),
+        });
     }
 
     private static void LeftText(Graphics g, string text, Font font, Color colour, int x, int w, Rectangle row) =>

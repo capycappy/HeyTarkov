@@ -122,12 +122,6 @@ public static class Strings
 
     public static string EnterToOpen => T("Enter で開く", "Enter to open");
 
-    public static string PreviousTask(int count) =>
-        count > 1 ? T($"‹ 前のタスク（{count}）", $"‹ Previous ({count})") : T("‹ 前のタスク", "‹ Previous");
-
-    public static string NextTask(int count) =>
-        count > 1 ? T($"次のタスク（{count}）›", $"Next ({count}) ›") : T("次のタスク ›", "Next ›");
-
     public static string PreviousTaskTip(IEnumerable<string> names) =>
         T("前のタスク（Alt+←）", "Previous task (Alt+Left)") + Environment.NewLine + string.Join(Environment.NewLine, names);
 
