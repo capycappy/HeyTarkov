@@ -43,7 +43,7 @@ public sealed class CandidateHeader : Control
     private bool OverChainTitle(Point point)
     {
         var at = At;
-        return !_list.ShowScores && at.ScoreW > 0 && point.X >= at.ScoreX - LogicalToDeviceUnits(8);
+        return at.ChainW > 0 && point.X >= at.ChainX - LogicalToDeviceUnits(4);
     }
 
     private void ChainTitle(bool on)
@@ -127,8 +127,8 @@ public sealed class CandidateHeader : Control
 
         var at = At;
 
-        var picked = e.X >= at.ScoreX - LogicalToDeviceUnits(8) && at.ScoreW > 0
-            ? _list.ShowScores ? CandidateSort.Score : (CandidateSort?)null
+        var picked = at.ChainW > 0 && e.X >= at.ChainX - LogicalToDeviceUnits(4) ? (CandidateSort?)null
+            : at.MatchW > 0 && e.X >= at.MatchX - LogicalToDeviceUnits(8) ? CandidateSort.Score
             : e.X >= at.GroupX ? CandidateSort.Group
             : ShowReading && e.X >= at.ReadingX ? CandidateSort.Reading
             : CandidateSort.Name;
@@ -156,15 +156,16 @@ public sealed class CandidateHeader : Control
         }
 
         Column(g, Strings.CandidateColumnGroup, at.GroupX, at.GroupW, CandidateSort.Group, right: true);
-        if (_list.ShowScores)
+        if (at.MatchW > 0)
         {
-            Column(g, Strings.CandidateColumnScore, at.ScoreX - LogicalToDeviceUnits(8),
-                at.ScoreW + LogicalToDeviceUnits(8), CandidateSort.Score, right: true);
+            Column(g, Strings.CandidateColumnScore, at.MatchX - LogicalToDeviceUnits(8),
+                at.MatchW + LogicalToDeviceUnits(8), CandidateSort.Score, right: true);
         }
-        else if (at.ScoreW > 0)
+
+        if (at.ChainW > 0)
         {
             // Not a sort: the < > lead out of the list, not through it.
-            Title(g, Strings.CandidateColumnChain, at.ScoreX, at.ScoreW);
+            Title(g, Strings.CandidateColumnChain, at.ChainX, at.ChainW);
         }
 
         // A hairline under the titles, so they read as a header rather than as

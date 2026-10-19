@@ -1013,7 +1013,7 @@ public sealed partial class MainForm : Form
                 if (_leaveChain.Parent != _chainFooter) _chainFooter.Controls.Add(_leaveChain);
 
                 var at = CandidateLayout.For(_candidates, 0, _candidates.ClientSize.Width);
-                _leaveChain.Location = new Point(at.ScoreX + at.ScoreW - _leaveChain.Width, gap);
+                _leaveChain.Location = new Point(at.ChainX + at.ChainW - _leaveChain.Width, gap);
             }
 
             _leaveChain.Visible = true;

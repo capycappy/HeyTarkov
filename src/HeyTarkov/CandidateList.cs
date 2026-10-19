@@ -66,26 +66,32 @@ public sealed class CandidateRow(
 /// header above it both ask this, so each title stays over its column.
 /// </summary>
 public readonly record struct CandidateLayout(
-    int NameX, int ReadingX, int GroupX, int GroupW, int ScoreX, int ScoreW)
+    int NameX, int ReadingX, int GroupX, int GroupW, int MatchX, int MatchW, int ChainX, int ChainW)
 {
     /// <summary>
-    /// The right-hand column is the match score for lines read from a picture,
-    /// nothing for keys (which have no chain), and the &lt; &gt; otherwise -
-    /// wide enough for two buttons a thumb can find.
+    /// The &lt; &gt; take the right edge - wide enough for two buttons a thumb
+    /// can find - except for keys, which have no chain. The match score sits
+    /// just inside them, and only for lines read from a picture.
     /// </summary>
     public static CandidateLayout For(CandidateList list, int left, int width)
     {
         var control = list;
         var pad = control.LogicalToDeviceUnits(8);
         var right = left + width - pad - control.LogicalToDeviceUnits(4);
-        var scoreW = control.LogicalToDeviceUnits(list.ShowScores ? 40 : list.ShowReadings ? 0 : 64);
+
+        var chainW = control.LogicalToDeviceUnits(list.ShowReadings ? 0 : 64);
+        var chainX = right - chainW;
+
+        var matchW = control.LogicalToDeviceUnits(list.ShowScores ? 40 : 0);
+        var matchX = chainX - (chainW > 0 && matchW > 0 ? control.LogicalToDeviceUnits(8) : 0) - matchW;
+
         var groupW = control.LogicalToDeviceUnits(96);
-        var groupX = right - scoreW - control.LogicalToDeviceUnits(scoreW > 0 ? 12 : 0) - groupW;
+        var groupX = matchX - control.LogicalToDeviceUnits(matchX < right ? 12 : 0) - groupW;
 
         return new CandidateLayout(
             left + pad + control.LogicalToDeviceUnits(12),
             left + (int)(width * 0.46f),
-            groupX, groupW, right - scoreW, scoreW);
+            groupX, groupW, matchX, matchW, chainX, chainW);
     }
 }
 
@@ -129,7 +135,7 @@ public sealed class CandidateList : ListBox
         var gap = LogicalToDeviceUnits(8);
         var below = Items.Count > 0 ? GetItemRectangle(Items.Count - 1).Bottom + gap : gap;
         var y = Math.Min(below, ClientSize.Height - size.Height - gap);
-        return new Point(at.ScoreX + at.ScoreW - size.Width, Math.Max(0, y));
+        return new Point(at.ChainX + at.ChainW - size.Width, Math.Max(0, y));
     }
 
     /// <summary>
@@ -181,7 +187,7 @@ public sealed class CandidateList : ListBox
     private static bool HasChain(WikiEntry task) =>
         task.Kind == EntryKind.Task && (task.Previous.Count > 0 || task.Next.Count > 0);
 
-    private bool ShowsChain => !ShowScores && !ShowReadings;
+    private bool ShowsChain => !ShowReadings;
 
     /// <summary>Where the &lt; or &gt; of a row sits.</summary>
     private Rectangle ChainButton(Rectangle row, bool forward)
@@ -190,7 +196,7 @@ public sealed class CandidateList : ListBox
         var w = LogicalToDeviceUnits(28);
         var h = Math.Min(LogicalToDeviceUnits(22), row.Height - LogicalToDeviceUnits(4));
         var gap = LogicalToDeviceUnits(6);
-        var right = at.ScoreX + at.ScoreW;
+        var right = at.ChainX + at.ChainW;
         var x = forward ? right - w : right - w * 2 - gap;
         return new Rectangle(x, row.Y + (row.Height - h) / 2, w, h);
     }
@@ -367,8 +373,6 @@ public sealed class CandidateList : ListBox
 
         // Right-hand columns are placed first; the name takes whatever is left.
         var at = CandidateLayout.For(this, full.X, full.Width);
-        var right = at.ScoreX + at.ScoreW;
-        var scoreW = at.ScoreW;
         var groupW = at.GroupW;
         var groupX = at.GroupX;
 
@@ -388,14 +392,14 @@ public sealed class CandidateList : ListBox
             // Where it can be found, in place of a score and a trader - neither
             // of which answers the question this row raises.
             Column(g, Strings.OnlyOnWiki(other), _small!, Theme.Clip,
-                groupX, groupW + (chain ? 0 : scoreW + LogicalToDeviceUnits(8)), full);
+                groupX, (chain ? at.MatchX + at.MatchW : at.ChainX + at.ChainW) - groupX, full);
         }
         else
         {
             if (ShowScores && !row.Listed)
             {
                 var scoreColour = row.Match.Score >= 0.995 ? Theme.Accent : Theme.Faint;
-                Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, right - scoreW, scoreW, full);
+                Column(g, $"{row.Match.Score:P0}", _small!, scoreColour, at.MatchX, at.MatchW, full);
             }
 
             if (GroupText(row.Match.Task) is { Length: > 0 } group)
