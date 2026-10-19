@@ -186,6 +186,18 @@ public sealed partial class MainForm : Form
     /// button opens all of it rather than the one row selected.</summary>
     private bool _fromImage;
 
+    /// <summary>
+    /// The lists a &lt; or &gt; left behind, newest last, for the mouse's back
+    /// button. Any other new list starts the trail again.
+    /// </summary>
+    private readonly Stack<ListState> _back = new();
+
+    /// <summary>Set while a step or a step back fills the list, so it keeps the trail.</summary>
+    private bool _stepping;
+
+    private sealed record ListState(
+        List<CandidateRow> Rows, string Heard, Color HeardColour, WikiEntry? Selected, int Top, bool FromImage);
+
     /// <summary>Holds the candidate list and the checklist, one at a time.</summary>
     private readonly Panel _listArea = new() { Dock = DockStyle.Fill, BackColor = Color.Transparent };
 
@@ -312,6 +324,9 @@ public sealed partial class MainForm : Form
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+
+        _backButton = new BackButton(this);
+        Application.AddMessageFilter(_backButton);
 
         if (_placement is null) return;
 
@@ -2863,7 +2878,11 @@ public sealed partial class MainForm : Form
 
     private void PopulateRows(IReadOnlyList<CandidateRow> rows)
     {
-        if (!ReferenceEquals(rows, _lastRows)) _lastRows = rows.ToList();
+        if (!ReferenceEquals(rows, _lastRows))
+        {
+            _lastRows = rows.ToList();
+            if (!_stepping) _back.Clear();
+        }
 
         if (_sortHeader is not null)
         {
@@ -2965,6 +2984,9 @@ public sealed partial class MainForm : Form
 
         var rows = _candidates.Items.Cast<CandidateRow>().ToList();
 
+        _back.Push(new ListState(_lastRows, _heardLabel.Text, _heardLabel.ForeColor, from,
+            _candidates.TopIndex, _fromImage));
+
         if (targets.All(t => rows.Any(r => r.Match.Task == t)))
         {
             _candidates.SelectedIndex = rows.FindIndex(r => r.Match.Task == targets[0]);
@@ -2975,15 +2997,83 @@ public sealed partial class MainForm : Form
         _heardLabel.ForeColor = Theme.Text;
         _heardLabel.Text = Strings.ChainStep(from.Name, forward);
 
-        PopulateRows(targets
-            .Select(task => new CandidateRow(
-                new TaskMatch(task, 0, ""), ReadingHint(task),
-                task.IsOn(SelectedWiki) ? null : OtherWiki(task), listed: true, chain: true))
-            .ToList());
+        _stepping = true;
+        try
+        {
+            PopulateRows(targets
+                .Select(task => new CandidateRow(
+                    new TaskMatch(task, 0, ""), ReadingHint(task),
+                    task.IsOn(SelectedWiki) ? null : OtherWiki(task), listed: true, chain: true))
+                .ToList());
+        }
+        finally
+        {
+            _stepping = false;
+        }
 
         var landed = _candidates.Items.Cast<CandidateRow>().ToList().FindIndex(r => r.Match.Task == targets[0]);
         if (landed >= 0) _candidates.SelectedIndex = landed;
     }
+
+    /// <summary>
+    /// The list as it was before the last &lt; or &gt;, with the same row
+    /// selected and scrolled to where it was - the mouse's back button, as in
+    /// a browser.
+    /// </summary>
+    private void StepBack()
+    {
+        if (_collecting || !_back.TryPop(out var state)) return;
+
+        if (!ReferenceEquals(state.Rows, _lastRows))
+        {
+            LeaveImage();
+
+            _stepping = true;
+            try
+            {
+                _fromImage = state.FromImage;
+                _imageButton.Active = state.FromImage;
+                PopulateRows(state.Rows);
+            }
+            finally
+            {
+                _stepping = false;
+            }
+
+            _heardLabel.ForeColor = state.HeardColour;
+            _heardLabel.Text = state.Heard;
+            if (state.FromImage) _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
+        }
+
+        var rows = _candidates.Items.Cast<CandidateRow>().ToList();
+        var at = rows.FindIndex(r => r.Match.Task == state.Selected);
+        if (at >= 0) _candidates.SelectedIndex = at;
+        if (state.Top < _candidates.Items.Count) _candidates.TopIndex = state.Top;
+    }
+
+    /// <summary>
+    /// The mouse's back button, wherever the pointer is over the window. The
+    /// button arrives at whichever control is under the pointer, so it is
+    /// caught before any of them sees it.
+    /// </summary>
+    private sealed class BackButton(MainForm form) : IMessageFilter
+    {
+        private const int WmXButtonDown = 0x020B;
+        private const int WmXButtonUp = 0x020C;
+        private const int XButton1 = 1;
+
+        public bool PreFilterMessage(ref Message m)
+        {
+            if (m.Msg is not (WmXButtonDown or WmXButtonUp)) return false;
+            if ((((long)m.WParam >> 16) & 0xFFFF) != XButton1) return false;
+            if (Control.FromHandle(m.HWnd) is not { } control || control.FindForm() != form) return false;
+
+            if (m.Msg == WmXButtonUp) form.StepBack();
+            return true;
+        }
+    }
+
+    private BackButton? _backButton;
 
     /// <summary>The other wiki, when it is the only one with a page for this.</summary>
     private WikiSource? OtherWiki(WikiEntry task)
@@ -3347,6 +3437,7 @@ public sealed partial class MainForm : Form
 
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
+        if (_backButton is not null) Application.RemoveMessageFilter(_backButton);
         StopLevelTest();
         _speech?.Dispose();
         base.OnFormClosed(e);
