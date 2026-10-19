@@ -54,6 +54,12 @@ public sealed partial class MainForm : Form
 
     private readonly Label _micHint = new();
     private readonly Label _heardLabel = new();
+
+    /// <summary>
+    /// Beside the heard line while a &lt; or &gt; has replaced the list: back
+    /// to the list as it was before the first step, however many were taken.
+    /// </summary>
+    private readonly PillButton _leaveChain = new();
     private readonly TextBox _typedBox = new();
     private readonly CandidateList _candidates = new();
 
@@ -930,7 +936,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>What the recognizer heard, large enough to read at a glance.</summary>
-    private Label BuildHeard()
+    private Control BuildHeard()
     {
         _heardLabel.Dock = DockStyle.Fill;
         _heardLabel.Height = 34;
@@ -940,7 +946,33 @@ public sealed partial class MainForm : Form
         _heardLabel.BackColor = Color.Transparent;
         _heardLabel.Margin = new Padding(2, 10, 0, 6);
         _heardLabel.Text = Strings.HeardPlaceholder;
-        return _heardLabel;
+
+        _leaveChain.Text = Strings.LeaveChain;
+        _leaveChain.Ghost = true;
+        _leaveChain.AutoSize = false;
+        _leaveChain.Size = new Size(128, 28);
+        _leaveChain.Font = new Font("Yu Gothic UI", 9f);
+        _leaveChain.Visible = false;
+        _leaveChain.Anchor = AnchorStyles.Right;
+        _leaveChain.Margin = new Padding(8, 10, 0, 6);
+        _leaveChain.Click += (_, _) => LeaveChain();
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            BackColor = Color.Transparent,
+            ColumnCount = 2,
+            RowCount = 1,
+            Margin = new Padding(0),
+        };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        row.Controls.Add(_heardLabel, 0, 0);
+        row.Controls.Add(_leaveChain, 1, 0);
+        return row;
     }
 
     private Card BuildResultsCard()
@@ -1211,6 +1243,7 @@ public sealed partial class MainForm : Form
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
+        _leaveChain.Visible = !collecting && _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
 
         _typedBox.PlaceholderText = collecting
             ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
@@ -2889,6 +2922,8 @@ public sealed partial class MainForm : Form
             if (!_stepping) _back.Clear();
         }
 
+        _leaveChain.Visible = _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
+
         if (_sortHeader is not null)
         {
             _sortHeader.ShowReading = _keysOnly && SelectedLanguage == RecognitionLanguage.Japanese;
@@ -3019,6 +3054,25 @@ public sealed partial class MainForm : Form
     {
         if (_collecting || !_back.TryPop(out var state)) return;
 
+        Restore(state);
+    }
+
+    /// <summary>
+    /// The list from before the first &lt; or &gt;, in one go - the trail of
+    /// steps can be long, and back and forth between two tasks makes it longer
+    /// without going anywhere.
+    /// </summary>
+    private void LeaveChain()
+    {
+        if (_back.Count == 0) return;
+
+        var first = _back.Last();
+        _back.Clear();
+        Restore(first);
+    }
+
+    private void Restore(ListState state)
+    {
         if (!ReferenceEquals(state.Rows, _lastRows))
         {
             LeaveImage();

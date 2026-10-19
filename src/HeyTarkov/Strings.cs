@@ -131,6 +131,8 @@ public static class Strings
         "‹ › で前後のタスクへ移ります" + Environment.NewLine + "Alt+← / Alt+→ でも移れます",
         "‹ › go to the task before or after" + Environment.NewLine + "Alt+Left / Alt+Right do the same");
 
+    public static string LeaveChain => T("✕ 一覧に戻る", "✕ Back to list");
+
     /// <summary>The heard line while the tasks one step along are listed.</summary>
     public static string ChainStep(string name, bool forward) => forward
         ? T($"「{name}」の次のタスク", $"After “{name}”")
