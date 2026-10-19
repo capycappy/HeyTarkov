@@ -95,7 +95,7 @@ public sealed class CandidateHeader : Control
 
         var at = At;
 
-        var picked = e.X >= at.ScoreX - LogicalToDeviceUnits(8)
+        var picked = e.X >= at.ScoreX - LogicalToDeviceUnits(8) && at.ScoreW > 0
             ? _list.ShowScores ? CandidateSort.Score : (CandidateSort?)null
             : e.X >= at.GroupX ? CandidateSort.Group
             : ShowReading && e.X >= at.ReadingX ? CandidateSort.Reading
@@ -128,6 +128,11 @@ public sealed class CandidateHeader : Control
         {
             Column(g, Strings.CandidateColumnScore, at.ScoreX - LogicalToDeviceUnits(8),
                 at.ScoreW + LogicalToDeviceUnits(8), CandidateSort.Score, right: true);
+        }
+        else if (at.ScoreW > 0)
+        {
+            // Not a sort: the < > lead out of the list, not through it.
+            Title(g, Strings.CandidateColumnChain, at.ScoreX, at.ScoreW);
         }
 
         // A hairline under the titles, so they read as a header rather than as
@@ -163,6 +168,13 @@ public sealed class CandidateHeader : Control
 
         Arrow(g, right ? textX - arrow : textX + textWidth + LogicalToDeviceUnits(5), colour);
     }
+
+    /// <summary>A title that is not a way to sort, centred over its column.</summary>
+    private void Title(Graphics g, string text, int x, int width) =>
+        TextRenderer.DrawText(g, text, _font!, new Rectangle(x - LogicalToDeviceUnits(8), 0,
+                width + LogicalToDeviceUnits(16), Height), Theme.Faint,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix
+            | TextFormatFlags.NoPadding);
 
     /// <summary>Which way the column runs. Small: it is a footnote to the title.</summary>
     private void Arrow(Graphics g, int x, Color colour)

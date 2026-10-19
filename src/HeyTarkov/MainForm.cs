@@ -975,7 +975,7 @@ public sealed partial class MainForm : Form
         // The < > in the selected row: along the chain the task belongs to, as
         // the wiki's own "previous" and "next" links go.
         _candidates.ChainPicked += GoAlongChain;
-        _candidates.ChainHovered += ShowChainTip;
+        _candidates.Hovered += ShowRowTip;
 
         var hints = new TableLayoutPanel
         {
@@ -2867,13 +2867,14 @@ public sealed partial class MainForm : Form
 
         if (_sortHeader is not null)
         {
-            _sortHeader.ShowReading = SelectedLanguage == RecognitionLanguage.Japanese;
+            _sortHeader.ShowReading = _keysOnly && SelectedLanguage == RecognitionLanguage.Japanese;
             _sortHeader.Invalidate();
         }
 
         // With one trader chosen, that column has nothing left to say; the map
         // the task is done on does.
         _candidates.MapsForTasks = SelectedTrader is not null || _scope == Scope.Story;
+        _candidates.ShowReadings = _keysOnly;
         ShowScores(_fromImage);
 
         // A chain is shown in its own order: before, the task, after.
@@ -2930,25 +2931,30 @@ public sealed partial class MainForm : Form
         _sortHeader?.Invalidate();
     }
 
-    /// <summary>Names the tasks a &lt; or &gt; leads to, while the pointer is on it.</summary>
-    private void ShowChainTip(bool? forward)
+    /// <summary>
+    /// What the pointer is resting on: on a &lt; or &gt;, the tasks it leads
+    /// to; elsewhere on a row, its reading - the column that used to hold it is
+    /// the &lt; &gt; now.
+    /// </summary>
+    private void ShowRowTip(int index, bool? forward)
     {
-        var tip = forward is { } way && SelectedTask is { } task && TasksNamed(way ? task.Next : task.Previous) is { Count: > 0 } there
+        var row = index >= 0 && index < _candidates.Items.Count ? _candidates.Items[index] as CandidateRow : null;
+        var task = row?.Match.Task;
+
+        var tip = forward is { } way && task is not null && TasksNamed(way ? task.Next : task.Previous) is { Count: > 0 } there
             ? way ? Strings.NextTaskTip(there.Select(t => t.Name)) : Strings.PreviousTaskTip(there.Select(t => t.Name))
+            : !_candidates.ShowReadings && row?.Reading is { } reading ? reading
             : "";
 
-        _keysTip.SetToolTip(_candidates, tip);
+        if (_keysTip.GetToolTip(_candidates) != tip) _keysTip.SetToolTip(_candidates, tip);
     }
 
     /// <summary>
     /// One step along the selected task's chain.
     ///
     /// A neighbour already in the list is simply selected, so stepping through
-    /// the full list keeps the list. Otherwise the list becomes the chain around
-    /// where the step lands - the tasks before it, it, and the tasks after - so
-    /// the next press has somewhere to go. Where one task leads to several, the
-    /// list is the chain around the task the step started from, with the first
-    /// of them selected.
+    /// the full list keeps the list. Otherwise the list becomes just the tasks
+    /// the step leads to - usually one - and the next step goes on from there.
     /// </summary>
     private void GoAlongChain(bool forward)
     {
@@ -2965,16 +2971,11 @@ public sealed partial class MainForm : Form
             return;
         }
 
-        var centre = targets.Count == 1 ? targets[0] : from;
-
         LeaveImage();
         _heardLabel.ForeColor = Theme.Text;
-        _heardLabel.Text = Strings.ChainOf(centre.Name);
+        _heardLabel.Text = Strings.ChainStep(from.Name, forward);
 
-        PopulateRows(TasksNamed(centre.Previous)
-            .Append(centre)
-            .Concat(TasksNamed(centre.Next))
-            .Distinct()
+        PopulateRows(targets
             .Select(task => new CandidateRow(
                 new TaskMatch(task, 0, ""), ReadingHint(task),
                 task.IsOn(SelectedWiki) ? null : OtherWiki(task), listed: true, chain: true))

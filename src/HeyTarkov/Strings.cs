@@ -128,8 +128,10 @@ public static class Strings
     public static string NextTaskTip(IEnumerable<string> names) =>
         T("次のタスク（Alt+→）", "Next task (Alt+Right)") + Environment.NewLine + string.Join(Environment.NewLine, names);
 
-    /// <summary>The heard line while a task's neighbours are listed.</summary>
-    public static string ChainOf(string name) => T($"「{name}」の前後のタスク", $"Before and after “{name}”");
+    /// <summary>The heard line while the tasks one step along are listed.</summary>
+    public static string ChainStep(string name, bool forward) => forward
+        ? T($"「{name}」の次のタスク", $"After “{name}”")
+        : T($"「{name}」の前のタスク", $"Before “{name}”");
     public static string Candidates(int count) =>
         T($"候補 {count} 件", count == 1 ? "1 match" : $"{count} matches");
 
@@ -143,6 +145,8 @@ public static class Strings
     public static string CandidateColumnReading => T("読み", "Reading");
     public static string CandidateColumnGroup => T("トレーダー・マップ", "Trader / map");
     public static string CandidateColumnScore => T("一致度", "Match");
+
+    public static string CandidateColumnChain => T("前後タスク", "Prev / Next");
 
     /// <summary>The button beside the microphone. Short: it sits in a row that
     /// belongs to the search box.</summary>

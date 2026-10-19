@@ -68,13 +68,19 @@ public sealed class CandidateRow(
 public readonly record struct CandidateLayout(
     int NameX, int ReadingX, int GroupX, int GroupW, int ScoreX, int ScoreW)
 {
-    public static CandidateLayout For(Control control, int left, int width)
+    /// <summary>
+    /// The right-hand column is the match score for lines read from a picture,
+    /// nothing for keys (which have no chain), and the &lt; &gt; otherwise -
+    /// wide enough for two buttons a thumb can find.
+    /// </summary>
+    public static CandidateLayout For(CandidateList list, int left, int width)
     {
+        var control = list;
         var pad = control.LogicalToDeviceUnits(8);
         var right = left + width - pad - control.LogicalToDeviceUnits(4);
-        var scoreW = control.LogicalToDeviceUnits(40);
+        var scoreW = control.LogicalToDeviceUnits(list.ShowScores ? 40 : list.ShowReadings ? 0 : 64);
         var groupW = control.LogicalToDeviceUnits(96);
-        var groupX = right - scoreW - control.LogicalToDeviceUnits(8) - groupW;
+        var groupX = right - scoreW - control.LogicalToDeviceUnits(scoreW > 0 ? 12 : 0) - groupW;
 
         return new CandidateLayout(
             left + pad + control.LogicalToDeviceUnits(12),
@@ -116,14 +122,29 @@ public sealed class CandidateList : ListBox
     [System.ComponentModel.DefaultValue(false)]
     public bool ShowScores { get; set; }
 
-    /// <summary>The &lt; (false) or &gt; (true) of the selected row was pressed.</summary>
+    /// <summary>
+    /// Show the reading column. Only for keys, where it holds the name the game
+    /// prints - which is what a player reads off the screen. For everything
+    /// else the reading is a hint, shown when the pointer rests on the row.
+    /// </summary>
+    [System.ComponentModel.DefaultValue(false)]
+    public bool ShowReadings { get; set; }
+
+    /// <summary>
+    /// A row's &lt; (false) or &gt; (true) was pressed. The row is selected
+    /// first, so the step starts from it.
+    /// </summary>
     public event Action<bool>? ChainPicked;
 
-    /// <summary>The pointer came onto a &lt; or &gt; (which one), or left it (null).</summary>
-    public event Action<bool?>? ChainHovered;
+    /// <summary>
+    /// The pointer moved to another row (-1 for none), or onto or off one of
+    /// its &lt; &gt; (which one, or null).
+    /// </summary>
+    public event Action<int, bool?>? Hovered;
 
+    private int _hotRow = -1;
     private bool? _hot;
-    private bool? _pressed;
+    private (int Row, bool Way)? _pressed;
 
     private const int WmLButtonDown = 0x0201;
     private const int WmLButtonUp = 0x0202;
@@ -132,26 +153,38 @@ public sealed class CandidateList : ListBox
     private static bool HasChain(WikiEntry task) =>
         task.Kind == EntryKind.Task && (task.Previous.Count > 0 || task.Next.Count > 0);
 
+    private bool ShowsChain => !ShowScores && !ShowReadings;
+
     /// <summary>Where the &lt; or &gt; of a row sits.</summary>
     private Rectangle ChainButton(Rectangle row, bool forward)
     {
         var at = CandidateLayout.For(this, row.X, row.Width);
-        var size = Math.Min(LogicalToDeviceUnits(22), row.Height);
+        var w = LogicalToDeviceUnits(28);
+        var h = Math.Min(LogicalToDeviceUnits(22), row.Height - LogicalToDeviceUnits(4));
+        var gap = LogicalToDeviceUnits(6);
         var right = at.ScoreX + at.ScoreW;
-        var x = forward ? right - size : right - size * 2 - LogicalToDeviceUnits(2);
-        return new Rectangle(x, row.Y + (row.Height - size) / 2, size, size);
+        var x = forward ? right - w : right - w * 2 - gap;
+        return new Rectangle(x, row.Y + (row.Height - h) / 2, w, h);
     }
 
-    /// <summary>The &lt; or &gt; under a point, if the selected row has one there.</summary>
-    public bool? ChainButtonAt(Point point)
-    {
-        if (ShowScores || SelectedIndex < 0 || SelectedIndex >= Items.Count) return null;
-        if (Items[SelectedIndex] is not CandidateRow row || !HasChain(row.Match.Task)) return null;
+    private static bool Leads(WikiEntry task, bool forward) =>
+        (forward ? task.Next : task.Previous).Count > 0;
 
-        var bounds = GetItemRectangle(SelectedIndex);
-        if (ChainButton(bounds, false).Contains(point)) return false;
-        if (ChainButton(bounds, true).Contains(point)) return true;
-        return null;
+    /// <summary>The row under a point, and the &lt; or &gt; there if it leads anywhere.</summary>
+    private (int Row, bool? Way) HitTest(Point point)
+    {
+        var index = IndexFromPoint(point);
+        if (index < 0 || index >= Items.Count || !GetItemRectangle(index).Contains(point)) return (-1, null);
+        if (!ShowsChain || Items[index] is not CandidateRow row || !HasChain(row.Match.Task)) return (index, null);
+
+        var bounds = GetItemRectangle(index);
+
+        foreach (var way in new[] { false, true })
+        {
+            if (Leads(row.Match.Task, way) && ChainButton(bounds, way).Contains(point)) return (index, way);
+        }
+
+        return (index, null);
     }
 
     /// <summary>
@@ -167,16 +200,22 @@ public sealed class CandidateList : ListBox
 
             if (m.Msg == WmLButtonUp)
             {
-                if (_pressed is { } way)
+                if (_pressed is { } pressed)
                 {
                     _pressed = null;
-                    if (ChainButtonAt(point) == way) ChainPicked?.Invoke(way);
+
+                    if (HitTest(point) is var hit && hit.Row == pressed.Row && hit.Way == pressed.Way)
+                    {
+                        SelectedIndex = pressed.Row;
+                        ChainPicked?.Invoke(pressed.Way);
+                    }
+
                     return;
                 }
             }
-            else if (ChainButtonAt(point) is { } way)
+            else if (HitTest(point) is { Way: { } way } hit)
             {
-                _pressed = way;
+                _pressed = (hit.Row, way);
                 return;
             }
         }
@@ -187,29 +226,33 @@ public sealed class CandidateList : ListBox
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
-        Hover(ChainButtonAt(e.Location));
+        Hover(HitTest(e.Location));
     }
 
     protected override void OnMouseLeave(EventArgs e)
     {
         base.OnMouseLeave(e);
-        Hover(null);
+        Hover((-1, null));
     }
 
-    protected override void OnSelectedIndexChanged(EventArgs e)
+    private void Hover((int Row, bool? Way) hit)
     {
-        base.OnSelectedIndexChanged(e);
-        Hover(ChainButtonAt(PointToClient(MousePosition)));
-    }
+        if (_hotRow == hit.Row && _hot == hit.Way) return;
 
-    private void Hover(bool? hot)
-    {
-        if (_hot == hot) return;
+        var was = _hotRow;
+        var wayChanged = _hot != hit.Way;
 
-        _hot = hot;
-        Cursor = hot is null ? Cursors.Default : Cursors.Hand;
-        if (SelectedIndex >= 0) Invalidate(GetItemRectangle(SelectedIndex));
-        ChainHovered?.Invoke(hot);
+        _hotRow = hit.Row;
+        _hot = hit.Way;
+        Cursor = hit.Way is null ? Cursors.Default : Cursors.Hand;
+
+        if (wayChanged)
+        {
+            if (was >= 0 && was < Items.Count) Invalidate(GetItemRectangle(was));
+            if (hit.Row >= 0 && hit.Row < Items.Count) Invalidate(GetItemRectangle(hit.Row));
+        }
+
+        Hovered?.Invoke(hit.Row, hit.Way);
     }
 
     /// <summary>
@@ -301,14 +344,15 @@ public sealed class CandidateList : ListBox
         var groupW = at.GroupW;
         var groupX = at.GroupX;
 
-        var chain = !ShowScores && selected && HasChain(row.Match.Task);
+        var chain = ShowsChain && HasChain(row.Match.Task);
 
         if (chain)
         {
-            Chevron(g, ChainButton(full, false), forward: false,
-                enabled: row.Match.Task.Previous.Count > 0, hot: _hot == false);
-            Chevron(g, ChainButton(full, true), forward: true,
-                enabled: row.Match.Task.Next.Count > 0, hot: _hot == true);
+            foreach (var way in new[] { false, true })
+            {
+                ChainButtonFace(g, ChainButton(full, way), way, Leads(row.Match.Task, way),
+                    hot: _hotRow == e.Index && _hot == way, selected);
+            }
         }
 
         if (row.Elsewhere is { } other)
@@ -332,12 +376,12 @@ public sealed class CandidateList : ListBox
 
         var readingX = at.ReadingX;
         var readingW = groupX - LogicalToDeviceUnits(10) - readingX;
+        var reading = ShowReadings && row.Reading is not null && readingW > LogicalToDeviceUnits(40);
 
-        if (row.Reading is not null && readingW > LogicalToDeviceUnits(40))
-            LeftText(g, row.Reading, _small!, Theme.Faint, readingX, readingW, full);
+        if (reading)
+            LeftText(g, row.Reading!, _small!, Theme.Faint, readingX, readingW, full);
 
-        var nameW = (row.Reading is not null && readingW > LogicalToDeviceUnits(40) ? readingX : groupX)
-                    - LogicalToDeviceUnits(10) - x;
+        var nameW = (reading ? readingX : groupX) - LogicalToDeviceUnits(10) - x;
 
         if (nameW > 0)
             LeftText(g, row.Match.Task.Display, selected ? _nameSelected! : _name!, Theme.Text, x, nameW, full);
@@ -376,25 +420,40 @@ public sealed class CandidateList : ListBox
     }
 
     /// <summary>
-    /// A &lt; or &gt;. Faint where there is nothing that way, so the pair keeps
-    /// its place and the one that works is not mistaken for the other.
+    /// A &lt; or &gt;, as a small outlined button - the same rounded outline as
+    /// the buttons above the list, so the row reads as part of the same window.
+    /// Where there is nothing that way only a faint mark is left, so the pair
+    /// keeps its place and the one that works is not mistaken for the other.
     /// </summary>
-    private void Chevron(Graphics g, Rectangle box, bool forward, bool enabled, bool hot)
+    private void ChainButtonFace(Graphics g, Rectangle box, bool forward, bool enabled, bool hot, bool selected)
     {
-        if (hot && enabled)
-            Painting.FillRounded(g, box, Color.FromArgb(48, Theme.Accent), LogicalToDeviceUnits(4));
+        var radius = LogicalToDeviceUnits(6);
 
-        var colour = !enabled ? Color.FromArgb(60, Theme.Faint) : hot ? Theme.Accent : Theme.Muted;
+        if (enabled)
+        {
+            if (hot)
+            {
+                Painting.FillRounded(g, box, Color.FromArgb(40, Theme.Accent), radius);
+                Painting.DrawRounded(g, box, Theme.Accent, radius);
+            }
+            else
+            {
+                Painting.FillRounded(g, box, selected ? Theme.Panel : Theme.PanelHi, radius);
+                Painting.DrawRounded(g, box, selected ? Theme.Field : Theme.Edge, radius);
+            }
+        }
 
-        using var pen = new Pen(colour, LogicalToDeviceUnits(2));
+        var colour = !enabled ? Color.FromArgb(50, Theme.Faint) : hot ? Theme.Accent : Theme.Muted;
+
+        using var pen = new Pen(colour, LogicalToDeviceUnits(2) * 0.8f);
         pen.StartCap = LineCap.Round;
         pen.EndCap = LineCap.Round;
         pen.LineJoin = LineJoin.Round;
 
         var cx = box.X + box.Width / 2f;
         var cy = box.Y + box.Height / 2f;
-        var w = box.Width * 0.14f;
-        var h = box.Height * 0.26f;
+        var w = box.Height * 0.13f;
+        var h = box.Height * 0.24f;
         var way = forward ? 1 : -1;
 
         g.DrawLines(pen, new[]
