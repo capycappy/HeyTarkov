@@ -22,7 +22,10 @@ public sealed partial class MainForm : Form
     private readonly PillButton _keysButton = new();
 
     /// <summary>What the key button does, since it no longer says.</summary>
-    private readonly ToolTip _keysTip = new();
+    private readonly ThemedTip _keysTip = new();
+
+    /// <summary>For the list and its header, where each part says something different.</summary>
+    private readonly ThemedTip _restTip = new();
 
     /// <summary>
     /// Which map's keys to show, beside the key button and only while it is
@@ -991,6 +994,7 @@ public sealed partial class MainForm : Form
         // the wiki's own "previous" and "next" links go.
         _candidates.ChainPicked += GoAlongChain;
         _candidates.Hovered += ShowRowTip;
+        _candidates.MouseLeave += (_, _) => _restTip.Rest(_candidates, "");
 
         var hints = new TableLayoutPanel
         {
@@ -1043,6 +1047,7 @@ public sealed partial class MainForm : Form
             Margin = new Padding(0, 0, 0, 2),
         };
         _sortHeader.Picked += PickSort;
+        _sortHeader.ChainTitleHovered += on => _restTip.Rest(_sortHeader, on ? Strings.ChainKeysTip : "");
 
         // The list goes in first: WinForms docks in reverse, so the titles
         // added after it take the top edge.
@@ -2965,7 +2970,7 @@ public sealed partial class MainForm : Form
             : !_candidates.ShowReadings && row?.Reading is { } reading ? reading
             : "";
 
-        if (_keysTip.GetToolTip(_candidates) != tip) _keysTip.SetToolTip(_candidates, tip);
+        _restTip.Rest(_candidates, tip);
     }
 
     /// <summary>

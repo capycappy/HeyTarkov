@@ -35,6 +35,38 @@ public sealed class CandidateHeader : Control
     /// <summary>Raised when a column title is clicked.</summary>
     public event Action<CandidateSort>? Picked;
 
+    /// <summary>The pointer came onto the "previous / next" title (true) or left it.</summary>
+    public event Action<bool>? ChainTitleHovered;
+
+    private bool _onChainTitle;
+
+    private bool OverChainTitle(Point point)
+    {
+        var at = At;
+        return !_list.ShowScores && at.ScoreW > 0 && point.X >= at.ScoreX - LogicalToDeviceUnits(8);
+    }
+
+    private void ChainTitle(bool on)
+    {
+        if (_onChainTitle == on) return;
+
+        _onChainTitle = on;
+        Cursor = on ? Cursors.Default : Cursors.Hand;
+        ChainTitleHovered?.Invoke(on);
+    }
+
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        base.OnMouseMove(e);
+        ChainTitle(OverChainTitle(e.Location));
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        base.OnMouseLeave(e);
+        ChainTitle(false);
+    }
+
     public CandidateHeader(CandidateList list)
     {
         _list = list;

@@ -22,7 +22,7 @@ public sealed class ModernCombo : ComboBox
     private bool _hot;
 
     /// <summary>Shows the whole name when the box is too narrow for it.</summary>
-    private readonly ToolTip _whole = new();
+    private readonly ThemedTip _whole = new();
 
     /// <summary>
     /// What this sits on. The square border has to be painted out in the

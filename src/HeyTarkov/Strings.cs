@@ -122,11 +122,18 @@ public static class Strings
 
     public static string EnterToOpen => T("Enter で開く", "Enter to open");
 
-    public static string PreviousTaskTip(IEnumerable<string> names) =>
-        T("前のタスク（Alt+←）", "Previous task (Alt+Left)") + Environment.NewLine + string.Join(Environment.NewLine, names);
+    public static string PreviousTaskTip(IEnumerable<string> names) => string.Join(Environment.NewLine, names);
 
-    public static string NextTaskTip(IEnumerable<string> names) =>
-        T("次のタスク（Alt+→）", "Next task (Alt+Right)") + Environment.NewLine + string.Join(Environment.NewLine, names);
+    public static string NextTaskTip(IEnumerable<string> names) => string.Join(Environment.NewLine, names);
+
+    /// <summary>Over the column title: the ways round the chain that are not on screen.</summary>
+    public static string ChainKeysTip => T(
+        "‹ › で前後のタスクへ移ります" + Environment.NewLine
+        + "Alt+← / Alt+→ でも移れます" + Environment.NewLine
+        + "マウスの戻るボタンで前の一覧に戻ります",
+        "‹ › go to the task before or after" + Environment.NewLine
+        + "Alt+Left / Alt+Right do the same" + Environment.NewLine
+        + "The mouse's back button returns to the previous list");
 
     /// <summary>The heard line while the tasks one step along are listed.</summary>
     public static string ChainStep(string name, bool forward) => forward
