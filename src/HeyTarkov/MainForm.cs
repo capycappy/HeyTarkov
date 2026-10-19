@@ -60,6 +60,17 @@ public sealed partial class MainForm : Form
     /// to the list as it was before the first step, however many were taken.
     /// </summary>
     private readonly PillButton _leaveChain = new();
+
+    /// <summary>
+    /// A strip under the list for that button, used only when the rows fill
+    /// the list and there is no room under them.
+    /// </summary>
+    private readonly Panel _chainFooter = new() { Dock = DockStyle.Bottom, Visible = false, BackColor = Color.Transparent };
+
+    /// <summary>Whether the list is a step along a chain, and so wants the button.</summary>
+    private bool _inChain;
+
+    private bool _placing;
     private readonly TextBox _typedBox = new();
     private readonly CandidateList _candidates = new();
 
@@ -936,7 +947,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>What the recognizer heard, large enough to read at a glance.</summary>
-    private Control BuildHeard()
+    private Label BuildHeard()
     {
         _heardLabel.Dock = DockStyle.Fill;
         _heardLabel.Height = 34;
@@ -949,30 +960,68 @@ public sealed partial class MainForm : Form
 
         _leaveChain.Text = Strings.LeaveChain;
         _leaveChain.Ghost = true;
+        _leaveChain.OnCard = true;
         _leaveChain.AutoSize = false;
         _leaveChain.Size = new Size(128, 28);
         _leaveChain.Font = new Font("Yu Gothic UI", 9f);
         _leaveChain.Visible = false;
-        _leaveChain.Anchor = AnchorStyles.Right;
-        _leaveChain.Margin = new Padding(8, 10, 0, 6);
         _leaveChain.Click += (_, _) => LeaveChain();
 
-        var row = new TableLayoutPanel
+        // Inside the list, under the rows, where the eye already is after a
+        // step - above the list it went unnoticed.
+        _candidates.Controls.Add(_leaveChain);
+        _candidates.Resize += (_, _) => PlaceLeaveChain();
+        return _heardLabel;
+    }
+
+    /// <summary>
+    /// The button under the last row when there is room for it there, and in
+    /// a strip under the list when the rows fill it - laid over the rows, it
+    /// covered the &lt; &gt; of whichever row was under it.
+    /// </summary>
+    private void PlaceLeaveChain()
+    {
+        if (_placing) return;
+        _placing = true;
+
+        try
         {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            BackColor = Color.Transparent,
-            ColumnCount = 2,
-            RowCount = 1,
-            Margin = new Padding(0),
-        };
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        row.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        row.Controls.Add(_heardLabel, 0, 0);
-        row.Controls.Add(_leaveChain, 1, 0);
-        return row;
+            var wanted = _inChain && !_collecting;
+            var gap = _candidates.LogicalToDeviceUnits(8);
+            var height = _leaveChain.Height;
+
+            if (!wanted)
+            {
+                _leaveChain.Visible = false;
+                _chainFooter.Visible = false;
+                return;
+            }
+
+            var room = _candidates.ClientSize.Height + (_chainFooter.Visible ? _chainFooter.Height : 0);
+            var fits = _candidates.Items.Count * _candidates.ItemHeight + gap + height + gap <= room;
+
+            if (fits)
+            {
+                _chainFooter.Visible = false;
+                if (_leaveChain.Parent != _candidates) _candidates.Controls.Add(_leaveChain);
+                _leaveChain.Location = _candidates.UnderRows(_leaveChain.Size);
+            }
+            else
+            {
+                _chainFooter.Height = height + gap * 2;
+                _chainFooter.Visible = true;
+                if (_leaveChain.Parent != _chainFooter) _chainFooter.Controls.Add(_leaveChain);
+
+                var at = CandidateLayout.For(_candidates, 0, _candidates.ClientSize.Width);
+                _leaveChain.Location = new Point(at.ScoreX + at.ScoreW - _leaveChain.Width, gap);
+            }
+
+            _leaveChain.Visible = true;
+        }
+        finally
+        {
+            _placing = false;
+        }
     }
 
     private Card BuildResultsCard()
@@ -1084,6 +1133,7 @@ public sealed partial class MainForm : Form
         // The list goes in first: WinForms docks in reverse, so the titles
         // added after it take the top edge.
         _candidateArea.Controls.Add(_candidates);
+        _candidateArea.Controls.Add(_chainFooter);
         _candidateArea.Controls.Add(_sortHeader);
         _listArea.Controls.Add(_candidateArea);
 
@@ -1243,7 +1293,7 @@ public sealed partial class MainForm : Form
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
-        _leaveChain.Visible = !collecting && _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
+        PlaceLeaveChain();
 
         _typedBox.PlaceholderText = collecting
             ? Strings.CollectorFilter(SelectedWiki == WikiSource.Japanese)
@@ -2922,7 +2972,8 @@ public sealed partial class MainForm : Form
             if (!_stepping) _back.Clear();
         }
 
-        _leaveChain.Visible = _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
+        _inChain = _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
+        PlaceLeaveChain();
 
         if (_sortHeader is not null)
         {

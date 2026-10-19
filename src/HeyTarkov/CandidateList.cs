@@ -105,6 +105,34 @@ public sealed class CandidateList : ListBox
     }
 
     /// <summary>
+    /// Children are painted around, not over: the "back to list" button sits
+    /// inside the list, under the rows it belongs to.
+    /// </summary>
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            const int WsClipChildren = 0x02000000;
+            var cp = base.CreateParams;
+            cp.Style |= WsClipChildren;
+            return cp;
+        }
+    }
+
+    /// <summary>
+    /// Where a control goes to sit under the last row with its right edge on
+    /// the &lt; &gt; column's - or at the foot of the list when the rows fill it.
+    /// </summary>
+    public Point UnderRows(Size size)
+    {
+        var at = CandidateLayout.For(this, 0, ClientSize.Width);
+        var gap = LogicalToDeviceUnits(8);
+        var below = Items.Count > 0 ? GetItemRectangle(Items.Count - 1).Bottom + gap : gap;
+        var y = Math.Min(below, ClientSize.Height - size.Height - gap);
+        return new Point(at.ScoreX + at.ScoreW - size.Width, Math.Max(0, y));
+    }
+
+    /// <summary>
     /// Show a task's maps in the trader column.
     ///
     /// Set while the list is narrowed to one trader, where that column
