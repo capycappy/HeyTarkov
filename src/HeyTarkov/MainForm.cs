@@ -2974,11 +2974,9 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// One step along the selected task's chain.
-    ///
-    /// A neighbour already in the list is simply selected, so stepping through
-    /// the full list keeps the list. Otherwise the list becomes just the tasks
-    /// the step leads to - usually one - and the next step goes on from there.
+    /// One step along the selected task's chain: the list becomes just the
+    /// tasks the step leads to - usually one - and the next step goes on from
+    /// there. The mouse's back button returns to the list it left.
     /// </summary>
     private void GoAlongChain(bool forward)
     {
@@ -2987,16 +2985,8 @@ public sealed partial class MainForm : Form
         var targets = TasksNamed(forward ? from.Next : from.Previous);
         if (targets.Count == 0) return;
 
-        var rows = _candidates.Items.Cast<CandidateRow>().ToList();
-
         _back.Push(new ListState(_lastRows, _heardLabel.Text, _heardLabel.ForeColor, from,
             _candidates.TopIndex, _fromImage));
-
-        if (targets.All(t => rows.Any(r => r.Match.Task == t)))
-        {
-            _candidates.SelectedIndex = rows.FindIndex(r => r.Match.Task == targets[0]);
-            return;
-        }
 
         LeaveImage();
         _heardLabel.ForeColor = Theme.Text;
