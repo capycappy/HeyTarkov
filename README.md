@@ -1,4 +1,4 @@
-# Hey Tarkov v1.8.3
+# Hey Tarkov v1.8.4
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名・KAPPA品名・鍵の名前**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -21,8 +21,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.8.3-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.8.3-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.8.4-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.8.4-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -53,8 +53,11 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 2. Hey Tarkov で **Ctrl+V**、またはマイクの右の**丸いボタン**（四隅と文字の絵）を押す
 3. 読み取った名前が候補に並ぶ。右の**一致度**で、どのくらい確かに読めたかが分かる（一致度の列が出るのはこのときだけ）
 4. 要らない行は選んで `Delete`
-5. 下のボタンが **「N 件をまとめて開く」** に変わる（確認あり）
-6. もう一度丸いボタンを押すと、元の一覧に戻る
+5. 下のボタンが **「N 件をまとめて開く」** に変わる（2件以上なら確認あり）
+6. 続けて別の画面を撮れば、Ctrl+V か丸いボタンでそのまま読み直せる。同じ画像のまま丸いボタンを押すと、元の一覧に戻る
+
+1件だけ読めたときは、「確信度が高いときは自動で開く」にチェックがあればそのまま開く。
+タスク・鍵・ストーリーなどで絞り込んでいても、画像を読むときは絞り込みを外して全部から探す。
 
 ```
 Honest Review       → Honest Review        100%
@@ -338,7 +341,7 @@ dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarko
 ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
 
 ```
-$v = "1.8.3"
+$v = "1.8.4"
 $stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
 $out = "$env:USERPROFILE\app\HeyTarkov"
 
