@@ -2627,7 +2627,11 @@ public sealed partial class MainForm : Form
     /// <summary>The list with nothing asked of it, when nothing has been.</summary>
     private void ListAllIfIdle()
     {
-        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null) ListAll();
+        // A picture's rows and a step along a chain are answers too, though
+        // nothing was typed or said. The microphone finishing its setup a few
+        // seconds after start-up came through here and put the whole list over
+        // a picture read in those first seconds.
+        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null && !_fromImage && !_inChain) ListAll();
     }
 
     /// <summary>Which map the list is narrowed to: null for all of them.</summary>
