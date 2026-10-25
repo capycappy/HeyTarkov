@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace HeyTarkov;
 
@@ -205,6 +207,13 @@ public sealed partial class MainForm : Form
     /// <summary>The list is showing what a picture was read as, so the open
     /// button opens all of it rather than the one row selected.</summary>
     private bool _fromImage;
+
+    /// <summary>
+    /// The last picture read, by its pixels. Pressing the picture button again
+    /// reads a new picture, and only puts the list back when the clipboard
+    /// still holds this one - so picture after picture can be read in a row.
+    /// </summary>
+    private string? _lastPicture;
 
     /// <summary>
     /// The lists a &lt; or &gt; left behind, newest last, for the mouse's back
@@ -754,13 +763,19 @@ public sealed partial class MainForm : Form
         _imageButton.Margin = new Padding(8, 0, 0, 0);
         _imageButton.Click += async (_, _) =>
         {
-            // Pressed in: the picture's rows are showing, and pressing again
-            // puts the list back - the same as every other button in the row.
+            // Pressed in: the picture's rows are showing. A new picture on the
+            // clipboard is read in their place; the same one again puts the
+            // list back, the same as every other button in the row.
             if (_fromImage)
             {
-                LeaveImage();
-                ListAllIfIdle();
-                return;
+                using var waiting = ClipboardImage();
+
+                if (waiting is null || PictureKey(waiting) == _lastPicture)
+                {
+                    LeaveImage();
+                    ListAllIfIdle();
+                    return;
+                }
             }
 
             await ReadImageAsync();
@@ -3222,8 +3237,11 @@ public sealed partial class MainForm : Form
         {
             ShowCollector(false);
             UseKeys(false);
+            ClearFilters();
             BuildTypedIndexes();
             SetStatus(Strings.ImageReading);
+
+            _lastPicture = PictureKey(picture);
 
             List<ReadName> found;
 
@@ -3261,6 +3279,51 @@ public sealed partial class MainForm : Form
 
             _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
             SetStatus(Strings.ImageFound(_candidates.Items.Count));
+
+            // One task in the picture is one page to open, the same as a name
+            // said clearly - there is nothing to choose between.
+            if (_candidates.Items.Count == 1 && _autoOpen.Checked
+                && _candidates.Items[0] is CandidateRow only)
+            {
+                OpenTask(only.Match.Task, only.Elsewhere);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Every narrowing undone: the kind buttons, the trader and the map. A
+    /// picture of the task list is read whole - left under "story", its tasks
+    /// were read and then hidden.
+    /// </summary>
+    private void ClearFilters()
+    {
+        if (_scope != Scope.Everything)
+        {
+            _scope = Scope.Everything;
+            ShowScopeButtons();
+        }
+
+        if (_traderBox.SelectedIndex > 0) _traderBox.SelectedIndex = 0;
+        if (_mapBox.SelectedIndex > 0) _mapBox.SelectedIndex = 0;
+        _traderBox.Visible = TraderBoxWanted;
+    }
+
+    /// <summary>A picture told apart from another by its pixels.</summary>
+    private static string PictureKey(Image image)
+    {
+        using var copy = new Bitmap(image);
+        var data = copy.LockBits(new Rectangle(0, 0, copy.Width, copy.Height),
+            ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+        try
+        {
+            var bytes = new byte[Math.Abs(data.Stride) * data.Height];
+            Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+            return Convert.ToHexString(SHA256.HashData(bytes));
+        }
+        finally
+        {
+            copy.UnlockBits(data);
         }
     }
 
@@ -3327,11 +3390,15 @@ public sealed partial class MainForm : Form
         var rows = _candidates.Items.Cast<CandidateRow>().ToList();
         if (rows.Count == 0) return;
 
-        var answer = MessageBox.Show(this, Strings.OpenAllAsk(rows.Count),
-            Strings.OpenAllTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question,
-            MessageBoxDefaultButton.Button1);
+        // One tab is not "a dozen things at once"; it is just opening a page.
+        if (rows.Count > 1)
+        {
+            var answer = MessageBox.Show(this, Strings.OpenAllAsk(rows.Count),
+                Strings.OpenAllTitle, MessageBoxButtons.OKCancel, MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button1);
 
-        if (answer != DialogResult.OK) return;
+            if (answer != DialogResult.OK) return;
+        }
 
         foreach (var row in rows) OpenTask(row.Match.Task, row.Elsewhere);
     }

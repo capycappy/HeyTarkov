@@ -392,8 +392,8 @@ public static class Strings
     public static string ImageButton => T("画像から", "Picture");
 
     public static string ImageTip => T(
-        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）。もう一度押すと元に戻る",
-        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same). Press again to go back");
+        "ゲームのタスク一覧を Win+Shift+S で撮ってから押す（Ctrl+V でも同じ）。続けて撮れば、押すたびに新しい画像を読む。同じ画像のまま押すと元に戻る",
+        "Take a picture of the task list with Win+Shift+S, then press this (Ctrl+V does the same). Each new picture is read in turn; pressing again with the same one goes back");
 
     public static string ImageNone => T(
         "画像がありません。Win+Shift+S でタスク一覧を撮ってから、もう一度押してください",
@@ -402,10 +402,10 @@ public static class Strings
     public static string ImageReading => T("画像を読んでいます…", "Reading the picture...");
 
     public static string ImageFound(int count) => T(
-        $"画像から {count} 件見つかりました。要らない行は Delete で消せます。ボタンをもう一度押すと元に戻ります",
+        $"画像から {count} 件見つかりました。要らない行は Delete で消せます。新しい画像はそのまま Ctrl+V かボタンで読めます",
         count == 1
-            ? "Found 1 entry in the picture. Delete drops a row; press the button again to go back"
-            : $"Found {count} entries in the picture. Delete drops a row; press the button again to go back");
+            ? "Found 1 entry in the picture. Delete drops a row; a new picture can be read straight away"
+            : $"Found {count} entries in the picture. Delete drops a row; a new picture can be read straight away");
 
     public static string ImageNothing => T(
         "画像から見つかりませんでした。タスク名が写る範囲を大きめに撮ってみてください",
