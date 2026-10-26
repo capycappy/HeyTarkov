@@ -1774,6 +1774,12 @@ public sealed partial class MainForm : Form
         _settings.Wiki = SelectedWiki;
         _settings.Save();
 
+        // Rows read from a picture, or reached along a chain, came from neither
+        // the box nor the microphone, so searching again would find nothing to
+        // search for. They are kept and laid out again for the new wiki.
+        var kept = _fromImage || _inChain ? _lastRows : null;
+        var selected = (_candidates.SelectedItem as CandidateRow)?.Match.Task;
+
         // The wiki decides which tasks exist, so the grammar, the typed search
         // and the index of the wiki now on the other side all have to be built
         // again against the new sets.
@@ -1785,7 +1791,39 @@ public sealed partial class MainForm : Form
         _candidates.Items.Clear();
 
         await RebuildForLanguageAsync();
+
+        if (kept is not null)
+        {
+            ShowOnThisWiki(kept, selected);
+            return;
+        }
+
         SearchAgain();
+    }
+
+    /// <summary>
+    /// The same rows on the wiki now selected: one this wiki has no page for
+    /// says so, and opens on the other one, as a row found there always has.
+    /// </summary>
+    private void ShowOnThisWiki(List<CandidateRow> rows, WikiEntry? selected)
+    {
+        _stepping = true;
+        try
+        {
+            PopulateRows(rows
+                .Select(row => new CandidateRow(row.Match, ReadingHint(row.Match.Task),
+                    row.Match.Task.IsOn(SelectedWiki) ? null : OtherWiki(row.Match.Task),
+                    row.Listed, row.Chain))
+                .ToList());
+        }
+        finally
+        {
+            _stepping = false;
+        }
+
+        var at = _candidates.Items.Cast<CandidateRow>().ToList().FindIndex(r => r.Match.Task == selected);
+        if (at >= 0) _candidates.SelectedIndex = at;
+        if (_fromImage) _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
     }
 
     /// <summary>Re-enumerate capture devices, keeping the current pick if it is
