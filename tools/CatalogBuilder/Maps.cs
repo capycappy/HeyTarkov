@@ -37,6 +37,36 @@ public static partial class Maps
         ("TERMINAL", "Terminal"),
     };
 
+    /// <summary>
+    /// Event versions of a map, by the name the event's tasks give them, paired
+    /// with the ordinary map whose pages they open. Neither wiki gives them a
+    /// page of their own; without an entry, a task done on "Infected Lab" fell
+    /// under "no map" in the map dropdown.
+    /// </summary>
+    private static readonly (string Name, string Map)[] EventVersions =
+    {
+        ("Infected Factory", "Factory"),
+        ("Infected Lab", "The Lab"),
+    };
+
+    /// <summary>The event versions of the maps, added where they are missing.</summary>
+    public static void AddEventVersions(List<WikiEntry> entries)
+    {
+        foreach (var (name, map) in EventVersions)
+        {
+            if (entries.Any(e => e.Kind == EntryKind.Map && e.Name == name)) continue;
+            if (entries.FirstOrDefault(e => e.Kind == EntryKind.Map && e.Name == map) is not { } ordinary) continue;
+
+            entries.Add(new WikiEntry
+            {
+                Kind = EntryKind.Map,
+                Name = name,
+                JapaneseUrl = ordinary.JapaneseUrl,
+                EnglishUrl = ordinary.EnglishUrl,
+            });
+        }
+    }
+
     /// <summary>h2 sections on wikiwiki whose h3 children are extraction points.</summary>
     private static readonly string[] ExtractSections = { "脱出地点", "exfil", "脱出口" };
 

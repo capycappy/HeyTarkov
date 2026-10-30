@@ -70,6 +70,7 @@ internal static class Program
             Console.WriteLine();
             Console.WriteLine("maps and extracts...");
             var maps = await Maps.FetchAsync(wikis);
+            Maps.AddEventVersions(maps);
 
             Console.WriteLine();
             Console.WriteLine("collector items...");
@@ -276,6 +277,8 @@ internal static class Program
     private static async Task<int> RefreshTasksAsync(Wikis wikis, string output)
     {
         if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } catalog) return 1;
+
+        Maps.AddEventVersions(catalog.Entries);
 
         var before = catalog.Entries.Where(e => e.Kind == EntryKind.Task).ToList();
         var maps = catalog.Entries.Where(e => e.Kind == EntryKind.Map).Select(m => m.Name).ToList();

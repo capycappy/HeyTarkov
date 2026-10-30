@@ -162,14 +162,30 @@ public static partial class Tasks
             var category = task.Group == StoryTrader ? StoryCategoryJapanese : task.Group;
             if (!JapaneseCategories.Contains(category)) continue;
 
-            var url = wikis.JapaneseUrl($"{category}/{task.Name}");
-            if (!(await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists) continue;
+            foreach (var name in JapanesePageNames(task.Name))
+            {
+                var url = wikis.JapaneseUrl($"{category}/{name}");
+                if (!(await wikis.GetAsync(url, ct).ConfigureAwait(false)).Exists) continue;
 
-            task.JapaneseUrl = url;
-            found++;
+                task.JapaneseUrl = url;
+                found++;
+                break;
+            }
         }
 
         Console.WriteLine($"  {found} Japanese pages found by asking for them directly");
+    }
+
+    /// <summary>
+    /// What wikiwiki may have called a task's page. A colon cannot stand in a
+    /// page name there, so "Halloween: Rumors" is filed as "Halloween Rumors".
+    /// </summary>
+    private static IEnumerable<string> JapanesePageNames(string name)
+    {
+        yield return name;
+
+        var withoutColons = string.Join(' ', name.Replace(':', ' ').Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (withoutColons != name) yield return withoutColons;
     }
 
     /// <summary>MediaWiki takes fifty titles per request.</summary>
