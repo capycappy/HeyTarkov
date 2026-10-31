@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-10-19T02:28:15.2378693+08:00",
+  "UpdatedAt": "2026-11-01T00:49:30.9550859+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -118,8 +118,8 @@
         "Protect the Sky"
       ],
       "Next": [
-        "The Price of Independence",
-        "Choose Your Friends Wisely"
+        "Choose Your Friends Wisely",
+        "The Price of Independence"
       ],
       "Faction": null,
       "Event": "",
@@ -179,14 +179,14 @@
         "Reserve"
       ],
       "Previous": [
+        "A Helping Hand",
         "Shipping Delay - Part 1",
-        "Natural Exchange",
-        "A Helping Hand"
+        "Natural Exchange"
       ],
       "Next": [
+        "Another Shipping Delay",
         "Swift Retribution",
-        "Hot Wheels - Let's Try Again",
-        "Another Shipping Delay"
+        "Hot Wheels - Let's Try Again"
       ],
       "Faction": null,
       "Event": "",
@@ -251,9 +251,9 @@
         "Hot Wheels - Let's Try Again"
       ],
       "Next": [
-        "Building Foundations",
         "The Higher They Fly",
-        "Order From Outside"
+        "Order From Outside",
+        "Building Foundations"
       ],
       "Faction": null,
       "Event": "",
@@ -276,8 +276,8 @@
       ],
       "Next": [
         "Forge a Friendship",
-        "Hot Wheels",
-        "Another Shipping Delay"
+        "Another Shipping Delay",
+        "Hot Wheels"
       ],
       "Faction": null,
       "Event": "",
@@ -426,10 +426,10 @@
         "Hot Wheels"
       ],
       "Next": [
-        "Building Foundations",
+        "Forge a Friendship",
         "The Higher They Fly",
         "Simple Side Job",
-        "Forge a Friendship"
+        "Building Foundations"
       ],
       "Faction": null,
       "Event": "",
@@ -598,10 +598,9 @@
       "Group": "Fence",
       "Maps": [],
       "Previous": [
-        "The Tarkov Shooter - Part 4",
+        "Chemical - Part 3",
         "Shooter Born in Heaven",
-        "Sew it Good - Part 2",
-        "Chemical - Part 3"
+        "The Tarkov Shooter - Part 4"
       ],
       "Next": [],
       "Faction": null,
@@ -758,8 +757,8 @@
         "Sheep in Wolf's Clothing"
       ],
       "Next": [
-        "Desperate Assault",
-        "Consequences of Our Decisions"
+        "Consequences of Our Decisions",
+        "Desperate Assault"
       ],
       "Faction": null,
       "Event": "KORD BREACH",
@@ -861,14 +860,14 @@
       "Name": "Is This a Reference?",
       "Group": "Fence",
       "Maps": [
-        "Streets of Tarkov",
+        "Customs",
+        "Factory",
         "Ground Zero",
         "Lighthouse",
         "Reserve",
-        "Customs",
-        "Factory",
-        "Woods",
-        "Shoreline"
+        "Shoreline",
+        "Streets of Tarkov",
+        "Woods"
       ],
       "Previous": [],
       "Next": [
@@ -1097,8 +1096,8 @@
         "Lighthouse"
       ],
       "Previous": [
-        "The TerraGroup Trail - Part 10",
-        "The TerraGroup Trail - Part 14"
+        "The TerraGroup Trail - Part 14",
+        "The TerraGroup Trail - Part 10"
       ],
       "Next": [
         "The TerraGroup Trail - Part 16",
@@ -1244,15 +1243,9 @@
         "Introduction"
       ],
       "Next": [
-        "Swift",
-        "First Aid",
-        "The Huntsman Path - Woods Keeper",
-        "Hustle (2024)",
         "Chilly",
         "Fight Back",
-        "The Tarkov Shooter - Part 1",
-        "Rough Tarkov",
-        "Work Smarter"
+        "Hustle (2024)"
       ],
       "Faction": null,
       "Event": "",
@@ -1371,8 +1364,7 @@
         "Broadcast - Part 3"
       ],
       "Next": [
-        "Broadcast - Part 5",
-        "Slaughterhouse"
+        "Broadcast - Part 5"
       ],
       "Faction": null,
       "Event": "",
@@ -1578,9 +1570,11 @@
         "Lighthouse"
       ],
       "Previous": [
-        "Callsign Malachite"
+        "Scope the Clearing"
       ],
-      "Next": [],
+      "Next": [
+        "Preserve a Valuable Piece"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2073,7 +2067,6 @@
         "Courtesy Visit"
       ],
       "Next": [
-        "Fishing Place",
         "Forester's Duty"
       ],
       "Faction": null,
@@ -2507,9 +2500,11 @@
       "Group": "Jaeger",
       "Maps": [],
       "Previous": [
-        "The Huntsman Path - Forest Cleaning"
+        "The Survivalist Path - Tough Guy"
       ],
-      "Next": [],
+      "Next": [
+        "The Survivalist Path - Cold Blooded"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2810,9 +2805,11 @@
       "Group": "Jaeger",
       "Maps": [],
       "Previous": [
-        "The Survivalist Path - Wounded Beast"
+        "The Huntsman Path - Controller"
       ],
-      "Next": [],
+      "Next": [
+        "The Survivalist Path - Eagle-Owl"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2846,9 +2843,11 @@
         "Factory"
       ],
       "Previous": [
-        "The Survivalist Path - Tough Guy"
+        "The Survivalist Path - Cold Blooded"
       ],
-      "Next": [],
+      "Next": [
+        "The Survivalist Path - Junkie"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -2865,7 +2864,9 @@
       "Maps": [
         "Woods"
       ],
-      "Previous": [],
+      "Previous": [
+        "The Survivalist Path - Eagle-Owl"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -2887,8 +2888,7 @@
         "The Survivalist Path - Unprotected but Dangerous"
       ],
       "Next": [
-        "The Survivalist Path - Zhivchik",
-        "The Delicious Sausage"
+        "The Survivalist Path - Zhivchik"
       ],
       "Faction": null,
       "Event": "",
@@ -2910,10 +2910,7 @@
         "The Survivalist Path - Wounded Beast"
       ],
       "Next": [
-        "Courtesy Visit",
-        "The Hermit",
-        "The Survivalist Path - Eagle-Owl",
-        "The Huntsman Path - Secured Perimeter"
+        "The Huntsman Path - Controller"
       ],
       "Faction": null,
       "Event": "",
@@ -2931,9 +2928,11 @@
       "Maps": [
         "Woods"
       ],
-      "Previous": [],
+      "Previous": [
+        "The Survivalist Path - Zhivchik"
+      ],
       "Next": [
-        "The Survivalist Path - Thrifty"
+        "The Survivalist Path - Wounded Beast"
       ],
       "Faction": null,
       "Event": "",
@@ -2950,11 +2949,10 @@
       "Group": "Jaeger",
       "Maps": [],
       "Previous": [
-        "The Survivalist Path - Zhivchik"
+        "The Survivalist Path - Unprotected but Dangerous"
       ],
       "Next": [
-        "The Survivalist Path - Tough Guy",
-        "The Survivalist Path - Cold Blooded"
+        "The Survivalist Path - Tough Guy"
       ],
       "Faction": null,
       "Event": "",
@@ -2992,7 +2990,7 @@
         "The Survivalist Path - Thrifty"
       ],
       "Next": [
-        "The Survivalist Path - Wounded Beast"
+        "The Survivalist Path - Unprotected but Dangerous"
       ],
       "Faction": null,
       "Event": "",
@@ -3052,8 +3050,7 @@
         "The Tarkov Shooter - Part 2"
       ],
       "Next": [
-        "The Tarkov Shooter - Part 4",
-        "The Huntsman Path - Secured Perimeter"
+        "The Tarkov Shooter - Part 4"
       ],
       "Faction": null,
       "Event": "",
@@ -3435,12 +3432,12 @@
         "The Labyrinth"
       ],
       "Previous": [
-        "Sensory Analysis - Part 2",
+        "This Tape Sucks",
+        "Confidential Info",
         "Hypotheses Testing",
         "Vacate the Premises",
-        "Confidential Info",
-        "Indisputable Authority",
-        "This Tape Sucks"
+        "Sensory Analysis - Part 2",
+        "Indisputable Authority"
       ],
       "Next": [],
       "Faction": null,
@@ -3563,7 +3560,7 @@
         "Lighthouse"
       ],
       "Previous": [
-        "Callsign Malachite"
+        "Cut Down to the Root"
       ],
       "Next": [],
       "Faction": null,
@@ -3782,8 +3779,8 @@
       ],
       "Previous": [],
       "Next": [
-        "Shipping Delay - Part 2",
         "Shipping Delay - Part 1",
+        "Shipping Delay - Part 2",
         "Hot Wheels"
       ],
       "Faction": null,
@@ -4228,12 +4225,12 @@
         "The Lab"
       ],
       "Previous": [
-        "Final Stretch",
-        "Consequences of Our Decisions"
+        "Consequences of Our Decisions",
+        "Final Stretch"
       ],
       "Next": [
-        "Stay Clear of Blast Zone",
-        "Break the Chain"
+        "Break the Chain",
+        "Stay Clear of Blast Zone"
       ],
       "Faction": null,
       "Event": "KORD BREACH",
@@ -5343,7 +5340,6 @@
       ],
       "Previous": [],
       "Next": [
-        "Acquaintance",
         "Friend from Norvinsk - Part 1"
       ],
       "Faction": null,
@@ -5665,11 +5661,11 @@
         "Hidden Layer"
       ],
       "Next": [
-        "Vacate the Premises",
-        "Hypotheses Testing",
-        "Confidential Info",
+        "This Tape Sucks",
         "Indisputable Authority",
-        "This Tape Sucks"
+        "Confidential Info",
+        "Vacate the Premises",
+        "Hypotheses Testing"
       ],
       "Faction": null,
       "Event": "",
@@ -5787,8 +5783,8 @@
         "Progression Difficulties - Part 1"
       ],
       "Next": [
-        "External Interest",
-        "Game Review - Part 2"
+        "Game Review - Part 2",
+        "External Interest"
       ],
       "Faction": null,
       "Event": "",
@@ -5921,8 +5917,8 @@
         "Forgotten Acquaintance"
       ],
       "Next": [
-        "Obstacle Course",
-        "Obstruction Destruction"
+        "Obstruction Destruction",
+        "Obstacle Course"
       ],
       "Faction": null,
       "Event": "",
@@ -6286,8 +6282,8 @@
         "The TerraGroup Trail - Part 5"
       ],
       "Next": [
-        "The TerraGroup Trail - Part 11",
-        "The TerraGroup Trail - Part 7"
+        "The TerraGroup Trail - Part 7",
+        "The TerraGroup Trail - Part 11"
       ],
       "Faction": null,
       "Event": "",
@@ -6544,9 +6540,9 @@
         "Gunsmith - MP-133"
       ],
       "Next": [
-        "Home Comfort",
         "Disrupting the Party",
         "Fairy Tale Showdown",
+        "Home Comfort",
         "Stop the Fight!"
       ],
       "Faction": null,
@@ -6890,7 +6886,7 @@
         "Lighthouse"
       ],
       "Previous": [
-        "Callsign Malachite"
+        "Scope the Clearing"
       ],
       "Next": [],
       "Faction": null,
@@ -6911,9 +6907,9 @@
       ],
       "Previous": [],
       "Next": [
+        "Bulldogs Under The Rug",
         "Global Threat",
-        "Foreign Support",
-        "Bulldogs Under The Rug"
+        "Foreign Support"
       ],
       "Faction": null,
       "Event": "",
@@ -7323,7 +7319,7 @@
       ],
       "Previous": [],
       "Next": [
-        "Dragnet"
+        "A Healthy Alternative"
       ],
       "Faction": null,
       "Event": "",
@@ -8127,8 +8123,8 @@
         "Wet Job - Part 4"
       ],
       "Next": [
-        "Mentor",
-        "Wet Job - Part 6"
+        "Wet Job - Part 6",
+        "Mentor"
       ],
       "Faction": null,
       "Event": "",
@@ -8277,7 +8273,6 @@
         "Number Temporarily Unavailable"
       ],
       "Next": [
-        "A Familiar Face...",
         "Lose the Tail"
       ],
       "Faction": null,
@@ -8581,9 +8576,9 @@
       ],
       "Previous": [],
       "Next": [
-        "The TerraGroup Trail - Part 1",
         "Afterparty",
-        "Down the Rabbit Hole - Part 1"
+        "Down the Rabbit Hole - Part 1",
+        "The TerraGroup Trail - Part 1"
       ],
       "Faction": null,
       "Event": "",
@@ -8941,8 +8936,8 @@
         "Shoreline"
       ],
       "Previous": [
-        "Natural Exchange",
-        "Swift Retribution"
+        "Swift Retribution",
+        "Natural Exchange"
       ],
       "Next": [
         "Half Empty"
@@ -9629,11 +9624,14 @@
       "Name": "Polikhim Hobo",
       "Group": "Prapor",
       "Maps": [
-        "Interchange",
         "Ground Zero",
+        "Interchange",
         "Woods"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -10655,8 +10653,8 @@
         "Woods"
       ],
       "Previous": [
-        "Natural Exchange",
-        "Hot Wheels"
+        "Hot Wheels",
+        "Natural Exchange"
       ],
       "Next": [
         "Ask for Directions"
@@ -11710,10 +11708,7 @@
         "Sew it Good - Part 1"
       ],
       "Next": [
-        "Sew it Good - Part 3",
-        "Textile - Part 1",
-        "Collector",
-        "The Key to Success"
+        "Sew it Good - Part 3"
       ],
       "Faction": null,
       "Event": "",
@@ -11733,8 +11728,7 @@
         "Sew it Good - Part 2"
       ],
       "Next": [
-        "Sew it Good - Part 4",
-        "The Key to Success"
+        "Sew it Good - Part 4"
       ],
       "Faction": null,
       "Event": "",
@@ -12176,8 +12170,8 @@
       ],
       "Next": [
         "Between Two Fires",
-        "Surprise Gift",
-        "Decisions, Decisions"
+        "Decisions, Decisions",
+        "Surprise Gift"
       ],
       "Faction": null,
       "Event": "",
@@ -12413,8 +12407,8 @@
         "Easy Money - Part 2"
       ],
       "Next": [
-        "Arena Business",
         "Balancing - Part 2",
+        "Arena Business",
         "Professional Fitness — Part 1"
       ],
       "Faction": null,
@@ -13218,6 +13212,26 @@
     },
     {
       "Kind": 0,
+      "Name": "Flesh of Steel",
+      "Group": "Ref",
+      "Maps": [],
+      "Previous": [
+        "Scream in the Dark"
+      ],
+      "Next": [
+        "The Final Scene"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Flesh_of_Steel",
+      "Display": "Flesh of Steel",
+      "SpokenName": "Flesh of Steel"
+    },
+    {
+      "Kind": 0,
       "Name": "Frost and Sun",
       "Group": "Ref",
       "Maps": [],
@@ -13813,6 +13827,24 @@
     },
     {
       "Kind": 0,
+      "Name": "Let the Blades Do the Talking",
+      "Group": "Ref",
+      "Maps": [],
+      "Previous": [],
+      "Next": [
+        "Movie Star"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Let_the_Blades_Do_the_Talking",
+      "Display": "Let the Blades Do the Talking",
+      "SpokenName": "Let the Blades Do the Talking"
+    },
+    {
+      "Kind": 0,
       "Name": "Magazines Are for the Weak",
       "Group": "Ref",
       "Maps": [],
@@ -13884,6 +13916,26 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Morituri_te_salutant",
       "Display": "Morituri te salutant",
       "SpokenName": "Morituri te salutant"
+    },
+    {
+      "Kind": 0,
+      "Name": "Movie Star",
+      "Group": "Ref",
+      "Maps": [],
+      "Previous": [
+        "Let the Blades Do the Talking"
+      ],
+      "Next": [
+        "Scream in the Dark"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Movie_Star",
+      "Display": "Movie Star",
+      "SpokenName": "Movie Star"
     },
     {
       "Kind": 0,
@@ -14463,6 +14515,26 @@
     },
     {
       "Kind": 0,
+      "Name": "Scream in the Dark",
+      "Group": "Ref",
+      "Maps": [],
+      "Previous": [
+        "Movie Star"
+      ],
+      "Next": [
+        "Flesh of Steel"
+      ],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Scream_in_the_Dark",
+      "Display": "Scream in the Dark",
+      "SpokenName": "Scream in the Dark"
+    },
+    {
+      "Kind": 0,
       "Name": "Sharpest Shooter",
       "Group": "Ref",
       "Maps": [],
@@ -14652,6 +14724,24 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Bad_Batch",
       "Display": "The Bad Batch",
       "SpokenName": "The Bad Batch"
+    },
+    {
+      "Kind": 0,
+      "Name": "The Final Scene",
+      "Group": "Ref",
+      "Maps": [],
+      "Previous": [
+        "Flesh of Steel"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Final_Scene",
+      "Display": "The Final Scene",
+      "SpokenName": "The Final Scene"
     },
     {
       "Kind": 0,
@@ -15164,8 +15254,8 @@
         "The Tarkov Mystery"
       ],
       "Next": [
-        "Decryption Hurdles - Part 1",
-        "Take Two"
+        "Take Two",
+        "Decryption Hurdles - Part 1"
       ],
       "Faction": null,
       "Event": "",
@@ -15203,6 +15293,14 @@
       ],
       "Previous": [],
       "Next": [
+        "Polikhim Hobo",
+        "The Extortionist",
+        "What’s on the Flash Drive?",
+        "Golden Swag",
+        "Informed Means Armed",
+        "No Swiping",
+        "Private Club",
+        "Chemical - Part 1",
         "Cheer Up",
         "The Tarkov Mystery"
       ],
@@ -15222,7 +15320,10 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [
         "Chemical - Part 2"
       ],
@@ -15314,8 +15415,8 @@
         "Lighthouse"
       ],
       "Previous": [
-        "Discombobulate",
-        "Killer Argument"
+        "Killer Argument",
+        "Discombobulate"
       ],
       "Next": [],
       "Faction": null,
@@ -15333,8 +15434,8 @@
       "Group": "Skier",
       "Maps": [
         "Customs",
-        "Woods",
-        "Interchange"
+        "Interchange",
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -15512,8 +15613,8 @@
         "Distributed Strike"
       ],
       "Next": [
-        "Wolf's Grip (Finale)",
-        "Project of the Century (Finale)"
+        "Project of the Century (Finale)",
+        "Wolf's Grip (Finale)"
       ],
       "Faction": null,
       "Event": "",
@@ -15537,8 +15638,8 @@
         "To the Tree!"
       ],
       "Next": [
-        "No Gifts for You",
-        "Bad Santa"
+        "Bad Santa",
+        "No Gifts for You"
       ],
       "Faction": null,
       "Event": "",
@@ -15763,7 +15864,10 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -15793,6 +15897,228 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Habet,_hoc_habet!",
       "Display": "Habet, hoc habet!",
       "SpokenName": "Habet, hoc habet!"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Blind the Enemy",
+      "Group": "Skier",
+      "Maps": [
+        "Woods",
+        "Customs",
+        "Lighthouse",
+        "Reserve",
+        "Shoreline"
+      ],
+      "Previous": [
+        "Halloween: Enemy of My Enemy"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Blind%20the%20Enemy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Blind_the_Enemy",
+      "Display": "Halloween: Blind the Enemy",
+      "SpokenName": "Halloween: Blind the Enemy"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Coincidence?",
+      "Group": "Skier",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Previous": [
+        "Halloween: Danger Zone"
+      ],
+      "Next": [
+        "Halloween: Enemy of My Enemy"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Coincidence%3F",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Coincidence%3F",
+      "Display": "Halloween: Coincidence?",
+      "SpokenName": "Halloween: Coincidence?"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Danger Zone",
+      "Group": "Skier",
+      "Maps": [
+        "Ground Zero",
+        "Woods",
+        "Shoreline",
+        "Lighthouse"
+      ],
+      "Previous": [
+        "Halloween: Tightening the Quarantine"
+      ],
+      "Next": [
+        "Halloween: Prototyping",
+        "Halloween: Coincidence?"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Danger%20Zone",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Danger_Zone",
+      "Display": "Halloween: Danger Zone",
+      "SpokenName": "Halloween: Danger Zone"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Enemy of My Enemy",
+      "Group": "Skier",
+      "Maps": [],
+      "Previous": [
+        "Halloween: Coincidence?"
+      ],
+      "Next": [
+        "Halloween: Blind the Enemy",
+        "Halloween: Enemy of My Enemy - An Agreement"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Enemy%20of%20My%20Enemy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Enemy_of_My_Enemy",
+      "Display": "Halloween: Enemy of My Enemy",
+      "SpokenName": "Halloween: Enemy of My Enemy"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: For the Greater Good - An Agreement",
+      "Group": "Skier",
+      "Maps": [],
+      "Previous": [
+        "Halloween: For the Greater Good"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20For%20the%20Greater%20Good%20-%20An%20Agreement",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_For_the_Greater_Good_-_An_Agreement",
+      "Display": "Halloween: For the Greater Good - An Agreement",
+      "SpokenName": "Halloween: For the Greater Good - An Agreement"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Prototyping",
+      "Group": "Skier",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Previous": [
+        "Halloween: Danger Zone"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Prototyping",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Prototyping",
+      "Display": "Halloween: Prototyping",
+      "SpokenName": "Halloween: Prototyping"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Rumors",
+      "Group": "Skier",
+      "Maps": [
+        "Infected Factory"
+      ],
+      "Previous": [],
+      "Next": [
+        "Halloween: The Best Defense"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Rumors",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Rumors",
+      "Display": "Halloween: Rumors",
+      "SpokenName": "Halloween: Rumors"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: The Best Defense",
+      "Group": "Skier",
+      "Maps": [
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: Rumors"
+      ],
+      "Next": [
+        "Halloween: Follow-Up Examination",
+        "Halloween: Unexpected Help"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20The%20Best%20Defense",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_The_Best_Defense",
+      "Display": "Halloween: The Best Defense",
+      "SpokenName": "Halloween: The Best Defense"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Tightening the Quarantine",
+      "Group": "Skier",
+      "Maps": [],
+      "Previous": [
+        "Halloween: Unexpected Help",
+        "Halloween: A New Vaccine",
+        "Halloween: Initial Examination"
+      ],
+      "Next": [
+        "Halloween: A New Vaccine",
+        "Halloween: Danger Zone"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Tightening_the_Quarantine",
+      "Display": "Halloween: Tightening the Quarantine",
+      "SpokenName": "Halloween: Tightening the Quarantine"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Unexpected Help",
+      "Group": "Skier",
+      "Maps": [
+        "Lighthouse",
+        "Customs"
+      ],
+      "Previous": [
+        "Halloween: The Best Defense",
+        "Halloween: Follow-Up Examination"
+      ],
+      "Next": [
+        "Halloween: Tightening the Quarantine",
+        "Halloween: Initial Examination"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Halloween%20Unexpected%20Help",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Unexpected_Help",
+      "Display": "Halloween: Unexpected Help",
+      "SpokenName": "Halloween: Unexpected Help"
     },
     {
       "Kind": 0,
@@ -15919,7 +16245,10 @@
         "Interchange",
         "Woods"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -16183,10 +16512,13 @@
       "Name": "No Swiping",
       "Group": "Skier",
       "Maps": [
-        "Shoreline",
-        "Interchange"
+        "Interchange",
+        "Shoreline"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -16248,7 +16580,10 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -16469,7 +16804,10 @@
       "Previous": [
         "A Familiar Face..."
       ],
-      "Next": [],
+      "Next": [
+        "Ease the Move",
+        "Cut Down to the Root"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -16592,9 +16930,9 @@
       "Name": "Silent Caliber",
       "Group": "Skier",
       "Maps": [
-        "Reserve",
-        "Lighthouse",
         "Ground Zero",
+        "Lighthouse",
+        "Reserve",
         "The Lab"
       ],
       "Previous": [],
@@ -16704,7 +17042,16 @@
       "Group": "Skier",
       "Maps": [],
       "Previous": [],
-      "Next": [],
+      "Next": [
+        "Polikhim Hobo",
+        "The Extortionist",
+        "What’s on the Flash Drive?",
+        "Golden Swag",
+        "Informed Means Armed",
+        "No Swiping",
+        "Private Club",
+        "Chemical - Part 1"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -16759,7 +17106,10 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -16778,8 +17128,8 @@
         "Woods"
       ],
       "Previous": [
-        "Inevitable Response",
-        "Swift Retribution"
+        "Swift Retribution",
+        "Inevitable Response"
       ],
       "Next": [
         "Route Deviation"
@@ -16845,8 +17195,8 @@
         "Burning Rubber"
       ],
       "Next": [
-        "U Turn",
-        "Break Through"
+        "Break Through",
+        "U Turn"
       ],
       "Faction": null,
       "Event": "",
@@ -16994,7 +17344,10 @@
       "Name": "What’s on the Flash Drive?",
       "Group": "Skier",
       "Maps": [],
-      "Previous": [],
+      "Previous": [
+        "Burning Rubber",
+        "Supplier"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -17207,7 +17560,16 @@
       "Name": "Tour",
       "Group": "Story",
       "Maps": [
-        "Ground Zero"
+        "Ground Zero",
+        "Streets of Tarkov",
+        "Interchange",
+        "Customs",
+        "Factory",
+        "Woods",
+        "Reserve",
+        "Shoreline",
+        "Lighthouse",
+        "The Lab"
       ],
       "Previous": [],
       "Next": [
@@ -17247,7 +17609,9 @@
       "Maps": [
         "Factory"
       ],
-      "Previous": [],
+      "Previous": [
+        "One Less Loose End"
+      ],
       "Next": [
         "Dragnet"
       ],
@@ -17330,7 +17694,11 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -17473,7 +17841,11 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -17667,7 +18039,11 @@
       "Name": "Fall Ailment",
       "Group": "Therapist",
       "Maps": [],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -17708,7 +18084,14 @@
         "Ground Zero"
       ],
       "Previous": [],
-      "Next": [],
+      "Next": [
+        "Shortage",
+        "Blood in the Water",
+        "Pharmacist",
+        "Abandoned Cargo",
+        "Shipment Tracking",
+        "Fall Ailment"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -17756,6 +18139,202 @@
     },
     {
       "Kind": 0,
+      "Name": "Halloween: A New Vaccine",
+      "Group": "Therapist",
+      "Maps": [
+        "Infected Factory",
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: Initial Examination",
+        "Halloween: Tightening the Quarantine"
+      ],
+      "Next": [
+        "Halloween: High-Risk, High-Reward",
+        "Halloween: Tightening the Quarantine"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_A_New_Vaccine",
+      "Display": "Halloween: A New Vaccine",
+      "SpokenName": "Halloween: A New Vaccine"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Enemy of My Enemy - An Agreement",
+      "Group": "Therapist",
+      "Maps": [],
+      "Previous": [
+        "Halloween: Enemy of My Enemy"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20Enemy%20of%20My%20Enemy%20-%20An%20Agreement",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Enemy_of_My_Enemy_-_An_Agreement",
+      "Display": "Halloween: Enemy of My Enemy - An Agreement",
+      "SpokenName": "Halloween: Enemy of My Enemy - An Agreement"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: First Results",
+      "Group": "Therapist",
+      "Maps": [
+        "Infected Factory",
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: High-Risk, High-Reward"
+      ],
+      "Next": [
+        "Halloween: For the Greater Good"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20First%20Results",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_First_Results",
+      "Display": "Halloween: First Results",
+      "SpokenName": "Halloween: First Results"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Follow-Up Examination",
+      "Group": "Therapist",
+      "Maps": [
+        "Infected Factory",
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: The Best Defense"
+      ],
+      "Next": [
+        "Halloween: Unexpected Help"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20Follow-Up%20Examination",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Follow-Up_Examination",
+      "Display": "Halloween: Follow-Up Examination",
+      "SpokenName": "Halloween: Follow-Up Examination"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: For the Greater Good",
+      "Group": "Therapist",
+      "Maps": [],
+      "Previous": [
+        "Halloween: First Results"
+      ],
+      "Next": [
+        "Halloween: The Final Push",
+        "Halloween: For the Greater Good - An Agreement"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20For%20the%20Greater%20Good",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_For_the_Greater_Good",
+      "Display": "Halloween: For the Greater Good",
+      "SpokenName": "Halloween: For the Greater Good"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: High-Risk, High-Reward",
+      "Group": "Therapist",
+      "Maps": [
+        "Infected Factory",
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: A New Vaccine"
+      ],
+      "Next": [
+        "Halloween: First Results",
+        "Halloween: Studying the Enemy"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": null,
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_High-Risk,_High-Reward",
+      "Display": "Halloween: High-Risk, High-Reward",
+      "SpokenName": "Halloween: High-Risk, High-Reward"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Initial Examination",
+      "Group": "Therapist",
+      "Maps": [
+        "Lighthouse"
+      ],
+      "Previous": [
+        "Halloween: Unexpected Help"
+      ],
+      "Next": [
+        "Halloween: A New Vaccine",
+        "Halloween: Tightening the Quarantine"
+      ],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20Initial%20Examination",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Initial_Examination",
+      "Display": "Halloween: Initial Examination",
+      "SpokenName": "Halloween: Initial Examination"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: Studying the Enemy",
+      "Group": "Therapist",
+      "Maps": [],
+      "Previous": [
+        "Halloween: High-Risk, High-Reward"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20Studying%20the%20Enemy",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_Studying_the_Enemy",
+      "Display": "Halloween: Studying the Enemy",
+      "SpokenName": "Halloween: Studying the Enemy"
+    },
+    {
+      "Kind": 0,
+      "Name": "Halloween: The Final Push",
+      "Group": "Therapist",
+      "Maps": [
+        "Infected Factory",
+        "Infected Lab"
+      ],
+      "Previous": [
+        "Halloween: For the Greater Good"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "Halloween 2026",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Therapist/Halloween%20The%20Final%20Push",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Halloween:_The_Final_Push",
+      "Display": "Halloween: The Final Push",
+      "SpokenName": "Halloween: The Final Push"
+    },
+    {
+      "Kind": 0,
       "Name": "Healer",
       "Group": "Therapist",
       "Maps": [],
@@ -17763,8 +18342,8 @@
         "Poisoning"
       ],
       "Next": [
-        "Straw",
-        "Remedy"
+        "Remedy",
+        "Straw"
       ],
       "Faction": null,
       "Event": "",
@@ -18081,7 +18660,14 @@
         "Customs"
       ],
       "Previous": [],
-      "Next": [],
+      "Next": [
+        "Shortage",
+        "Blood in the Water",
+        "Pharmacist",
+        "Abandoned Cargo",
+        "Shipment Tracking",
+        "Fall Ailment"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -18190,7 +18776,11 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -18210,8 +18800,8 @@
       ],
       "Previous": [],
       "Next": [
-        "Parasites",
-        "Healer"
+        "Healer",
+        "Parasites"
       ],
       "Faction": null,
       "Event": "",
@@ -18356,8 +18946,8 @@
         "Healer"
       ],
       "Next": [
-        "Virtue",
-        "Healing"
+        "Healing",
+        "Virtue"
       ],
       "Faction": null,
       "Event": "",
@@ -18474,7 +19064,11 @@
       "Maps": [
         "Customs"
       ],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -18490,7 +19084,11 @@
       "Name": "Shortage",
       "Group": "Therapist",
       "Maps": [],
-      "Previous": [],
+      "Previous": [
+        "First in Line",
+        "Operation Aquarius",
+        "Supply Plans"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -18506,7 +19104,8 @@
       "Name": "Side Hustle",
       "Group": "Therapist",
       "Maps": [
-        "The Lab"
+        "The Lab",
+        "Streets of Tarkov"
       ],
       "Previous": [
         "Information Trail"
@@ -18549,7 +19148,14 @@
         "Woods"
       ],
       "Previous": [],
-      "Next": [],
+      "Next": [
+        "Shortage",
+        "Blood in the Water",
+        "Pharmacist",
+        "Abandoned Cargo",
+        "Shipment Tracking",
+        "Fall Ailment"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -18889,6 +19495,38 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Icebreaker",
       "Display": "Icebreaker",
       "SpokenName": "Icebreaker"
+    },
+    {
+      "Kind": 1,
+      "Name": "Infected Factory",
+      "Group": "",
+      "Maps": [],
+      "Previous": [],
+      "Next": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/FACTORY",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Factory",
+      "Display": "Infected Factory",
+      "SpokenName": "Infected Factory"
+    },
+    {
+      "Kind": 1,
+      "Name": "Infected Lab",
+      "Group": "",
+      "Maps": [],
+      "Previous": [],
+      "Next": [],
+      "Faction": null,
+      "Event": "",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/THE%20LAB",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/The_Lab",
+      "Display": "Infected Lab",
+      "SpokenName": "Infected Lab"
     },
     {
       "Kind": 1,
