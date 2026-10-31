@@ -119,8 +119,17 @@ public static partial class Tasks
         {
             var named = current.Tasks.Select(Naming.Normalize).ToHashSet(StringComparer.Ordinal);
 
+            // Tasks the event added later, or whose page lacks the notice,
+            // still carry the event's name in front: "Halloween: A New Vaccine".
+            var prefix = current.Name.Split(' ')[0] + ":";
+
             foreach (var (key, entry) in byKey)
-                if (entry.Event.Length == 0 && named.Contains(key)) entry.Event = current.Name;
+            {
+                if (entry.Event.Length > 0) continue;
+
+                if (named.Contains(key) || entry.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    entry.Event = current.Name;
+            }
         }
 
         foreach (var (key, entry) in byKey)

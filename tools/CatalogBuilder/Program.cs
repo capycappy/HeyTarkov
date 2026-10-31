@@ -288,15 +288,23 @@ internal static class Program
         var tasks = await Tasks.FetchAsync(wikis).ConfigureAwait(false);
         Console.WriteLine($"  {tasks.Count} tasks");
 
+        var known = before.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
+        var newTasks = tasks.Where(t => !known.Contains(t.Name)).ToList();
+
         await Tasks.AddMapsAsync(tasks, maps, wikis).ConfigureAwait(false);
-        await Tasks.AddMapsFromJapaneseAsync(tasks, maps, wikis).ConfigureAwait(false);
+
+        // After the maps: a task only the English wiki has gets its trader
+        // from the page read there, and the Japanese page is filed under it.
+        await Tasks.FindJapanesePagesAsync(newTasks, wikis).ConfigureAwait(false);
+
+        // One page at a time into a wiki that rate limits: two hundred tasks
+        // with no map took most of an hour. Only the new ones are asked about;
+        // the rest keep the maps the last refresh found (CarryForward).
+        await Tasks.AddMapsFromJapaneseAsync(newTasks, maps, wikis).ConfigureAwait(false);
         await Tasks.AddMapsFromObjectivesAsync(tasks, maps, wikis).ConfigureAwait(false);
         await Tasks.AddChainAsync(tasks, wikis).ConfigureAwait(false);
 
         CarryForward(before, tasks);
-
-        var known = before.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
-        await Tasks.FindJapanesePagesAsync(tasks.Where(t => !known.Contains(t.Name)), wikis).ConfigureAwait(false);
 
         if (tasks.Count < before.Count * 0.98)
         {
