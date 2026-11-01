@@ -2861,6 +2861,10 @@ public sealed partial class MainForm : Form
         LeaveImage();
 
         var next = _scope == scope ? Scope.Everything : scope;
+
+        // An event opens in the order its tasks are done, whatever column
+        // was chosen before.
+        if (next == Scope.Event) ForgetSort();
         if (next != Scope.Everything && _keysOnly) UseKeys(false);
 
         _scope = next;
@@ -3097,21 +3101,41 @@ public sealed partial class MainForm : Form
     /// <summary>
     /// A column title was clicked. The same title again turns the order round;
     /// a new one starts in the direction a person would expect - the best match
-    /// first, names from A. From here on that choice stands.
+    /// first, names from A. A third time puts the list back in the order it
+    /// came in - an event's tasks in the order they are done, a search's best
+    /// match first - which no column can give back once another was chosen.
     /// </summary>
     private void PickSort(CandidateSort sort)
     {
+        var firstWay = sort == CandidateSort.Score;
+
+        if (sort == _sort && _sortPicked && _sortDescending != firstWay)
+        {
+            ForgetSort();
+            PopulateRows(_lastRows);
+            return;
+        }
+
         _sortPicked = true;
 
         if (sort == _sort) _sortDescending = !_sortDescending;
         else
         {
             _sort = sort;
-            _sortDescending = sort == CandidateSort.Score;
+            _sortDescending = firstWay;
         }
 
         _sortHeader?.Show(_sort, _sortDescending);
         PopulateRows(_lastRows);
+    }
+
+    /// <summary>No column chosen: the list in the order it was made.</summary>
+    private void ForgetSort()
+    {
+        _sortPicked = false;
+        _sort = CandidateSort.Relevance;
+        _sortDescending = false;
+        _sortHeader?.Show(_sort, _sortDescending);
     }
 
     private IEnumerable<CandidateRow> Ordered(IEnumerable<CandidateRow> rows)
