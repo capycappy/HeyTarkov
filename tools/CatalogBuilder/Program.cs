@@ -36,6 +36,9 @@ internal static class Program
         // "--chain" fills in the tasks before and after each task, in place.
         var chainOnly = args.Contains("--chain", StringComparer.OrdinalIgnoreCase);
 
+        // "--events" puts the events in order, newest first, in place.
+        var eventsOnly = args.Contains("--events", StringComparer.OrdinalIgnoreCase);
+
         var output = args.FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal))
             ?? Path.Combine(FindRepositoryRoot(), "src", "HeyTarkov", "tasks.json");
 
@@ -47,6 +50,17 @@ internal static class Program
             if (taskMapsOnly) return await RefreshTaskMapsAsync(wikis, output).ConfigureAwait(false);
             if (tasksOnly) return await RefreshTasksAsync(wikis, output).ConfigureAwait(false);
             if (chainOnly) return await RefreshChainAsync(wikis, output).ConfigureAwait(false);
+
+            if (eventsOnly)
+            {
+                if (await ReadCatalogAsync(output).ConfigureAwait(false) is not { } dated) return 1;
+
+                dated.Events = await Events.OrderAsync(dated.Entries, wikis).ConfigureAwait(false);
+                dated.UpdatedAt = DateTimeOffset.Now;
+                await WriteAsync(dated, output).ConfigureAwait(false);
+                Report(dated, output);
+                return 0;
+            }
 
             if (objectivesOnly)
             {
@@ -126,6 +140,7 @@ internal static class Program
             }
 
             var catalog = new WikiCatalog { UpdatedAt = DateTimeOffset.Now, Entries = entries };
+            catalog.Events = await Events.OrderAsync(entries, wikis);
 
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
             await File.WriteAllTextAsync(output, JsonSerializer.Serialize(catalog,
@@ -337,6 +352,8 @@ internal static class Program
             .ThenBy(e => e.Group, StringComparer.OrdinalIgnoreCase)
             .ThenBy(e => e.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
+
+        catalog.Events = await Events.OrderAsync(catalog.Entries, wikis).ConfigureAwait(false);
 
         catalog.UpdatedAt = DateTimeOffset.Now;
         await WriteAsync(catalog, output).ConfigureAwait(false);

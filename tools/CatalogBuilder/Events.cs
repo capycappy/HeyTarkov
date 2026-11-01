@@ -35,25 +35,54 @@ public static partial class Events
     /// <summary>The newest event's name, and the names of its tasks.</summary>
     public readonly record struct Current(string Name, IReadOnlySet<string> Tasks);
 
-    public static async Task<Current?> FetchNewestAsync(Wikis wikis, CancellationToken ct = default)
+    /// <summary>The Events page's wikitext, or nothing if the wiki would not say.</summary>
+    private static async Task<string?> PageAsync(Wikis wikis, CancellationToken ct)
     {
         var url = $"{Wikis.FandomApi}?action=parse&page={Uri.EscapeDataString(EventsPage)}"
                   + "&prop=wikitext&format=json&formatversion=2";
 
         if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) return null;
 
-        string text;
-        using (var document = JsonDocument.Parse(json))
-        {
-            if (!document.RootElement.TryGetProperty("parse", out var parse)
-                || !parse.TryGetProperty("wikitext", out var wikitext)
-                || wikitext.GetString() is not { } body)
-            {
-                return null;
-            }
+        using var document = JsonDocument.Parse(json);
 
-            text = body;
+        return document.RootElement.TryGetProperty("parse", out var parse)
+               && parse.TryGetProperty("wikitext", out var wikitext)
+            ? wikitext.GetString()
+            : null;
+    }
+
+    /// <summary>
+    /// The events with tasks in the catalog, newest first. Those on the Events
+    /// page come in its order - newest at the top - and the seasons, which it
+    /// does not list, after them; a season runs for months, so it is older
+    /// than whatever event is on.
+    /// </summary>
+    public static async Task<List<string>> OrderAsync(
+        IEnumerable<WikiEntry> entries, Wikis wikis, CancellationToken ct = default)
+    {
+        var named = entries.Select(e => e.Event).Where(e => e.Length > 0).Distinct(StringComparer.Ordinal).ToList();
+        var order = new List<string>();
+
+        if (await PageAsync(wikis, ct).ConfigureAwait(false) is { } text)
+        {
+            foreach (var line in text.Split('\n'))
+            {
+                if (Heading().Match(line.TrimEnd('\r')) is not { Success: true } heading) continue;
+
+                var name = DateSuffix().Replace(heading.Groups[1].Value, "").Trim();
+                if (named.Contains(name) && !order.Contains(name)) order.Add(name);
+            }
         }
+
+        order.AddRange(named.Where(n => !order.Contains(n)).OrderBy(n => n, StringComparer.OrdinalIgnoreCase));
+
+        Console.WriteLine($"  events, newest first: {string.Join(" / ", order)}");
+        return order;
+    }
+
+    public static async Task<Current?> FetchNewestAsync(Wikis wikis, CancellationToken ct = default)
+    {
+        if (await PageAsync(wikis, ct).ConfigureAwait(false) is not { } text) return null;
 
         string? name = null;
         var listed = new HashSet<string>(StringComparer.Ordinal);

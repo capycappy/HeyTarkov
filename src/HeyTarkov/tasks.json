@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-11-01T00:49:30.9550859+08:00",
+  "UpdatedAt": "2026-11-01T21:44:30.4039958+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -26616,5 +26616,10 @@
       "Display": "ZB-014 key",
       "SpokenName": "ZB-014 key"
     }
+  ],
+  "Events": [
+    "Halloween 2026",
+    "Scourge Incursion",
+    "KORD BREACH"
   ]
 }

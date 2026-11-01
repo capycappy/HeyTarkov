@@ -17,6 +17,9 @@ public enum CandidateSort
     Group,
 
     Score,
+
+    /// <summary>The badge: tasks, event tasks, the story, then places, items and keys.</summary>
+    Kind,
 }
 
 /// <summary>
@@ -131,6 +134,7 @@ public sealed class CandidateHeader : Control
             : at.MatchW > 0 && e.X >= at.MatchX - LogicalToDeviceUnits(8) ? CandidateSort.Score
             : e.X >= at.GroupX ? CandidateSort.Group
             : ShowReading && e.X >= at.ReadingX ? CandidateSort.Reading
+            : e.X < at.NameX + _list.BadgeSpan ? CandidateSort.Kind
             : CandidateSort.Name;
 
         // Over the < > the title is blank, and a blank is not a column.
@@ -147,7 +151,11 @@ public sealed class CandidateHeader : Control
 
         var at = At;
 
-        Column(g, Strings.CandidateColumnName, at.NameX, at.ReadingX - at.NameX, CandidateSort.Name, right: false);
+        // Over the badges, and over the names after them: two ways to order
+        // what was one column.
+        var nameX = at.NameX + _list.BadgeSpan;
+        Column(g, Strings.CandidateColumnKind, at.NameX, _list.BadgeSpan, CandidateSort.Kind, right: false);
+        Column(g, Strings.CandidateColumnName, nameX, at.ReadingX - nameX, CandidateSort.Name, right: false);
 
         if (ShowReading)
         {

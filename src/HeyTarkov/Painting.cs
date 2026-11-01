@@ -183,6 +183,28 @@ public static class Painting
         g.DrawEllipse(pen, head.X + (w - hole) / 2f, head.Y + (w - hole) / 2f, hole, hole);
     }
 
+    /// <summary>A five-pointed star, outlined. For the button that shows the
+    /// event on now.</summary>
+    public static void StarGlyph(Graphics g, RectangleF box, Color colour, float stroke)
+    {
+        using var pen = new Pen(colour, stroke) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var cx = box.X + box.Width / 2f;
+        var cy = box.Y + box.Height * 0.54f;
+        var outer = Math.Min(box.Width, box.Height) * 0.5f;
+        var inner = outer * 0.45f;
+
+        var points = new PointF[10];
+        for (var i = 0; i < 10; i++)
+        {
+            var r = i % 2 == 0 ? outer : inner;
+            var angle = -Math.PI / 2 + i * Math.PI / 5;
+            points[i] = new PointF(cx + (float)(r * Math.Cos(angle)), cy + (float)(r * Math.Sin(angle)));
+        }
+
+        g.DrawPolygon(pen, points);
+    }
+
     /// <summary>An open book: two pages meeting at the spine. For the button
     /// that shows the story chapters.</summary>
     public static void BookGlyph(Graphics g, RectangleF box, Color colour, float stroke)
@@ -432,7 +454,11 @@ public sealed class PillButton : Button
     [DefaultValue(false)]
     public bool Storied { get; set; }
 
-    private bool Iconed => Keyed || Pictured || Pinned || Storied || Listed;
+    /// <summary>A star, for the button that shows the event on now.</summary>
+    [DefaultValue(false)]
+    public bool Evented { get; set; }
+
+    private bool Iconed => Keyed || Pictured || Pinned || Storied || Listed || Evented;
 
     private void Glyph(Graphics g, RectangleF box, Color ink, float stroke)
     {
@@ -440,6 +466,7 @@ public sealed class PillButton : Button
         else if (Pictured) Painting.ImageGlyph(g, box, ink, stroke);
         else if (Pinned) Painting.PinGlyph(g, box, ink, stroke);
         else if (Storied) Painting.BookGlyph(g, box, ink, stroke);
+        else if (Evented) Painting.StarGlyph(g, box, ink, stroke);
         else if (Listed) Painting.ListGlyph(g, box, ink, stroke);
         else Painting.Tick(g, box, ink, stroke);
     }

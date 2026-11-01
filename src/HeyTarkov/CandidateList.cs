@@ -189,6 +189,13 @@ public sealed class CandidateList : ListBox
 
     private bool ShowsChain => !ShowReadings;
 
+    /// <summary>
+    /// How far a row's name starts after its badge: the badge, which is the
+    /// same width on every row, and the gap after it. The header puts its
+    /// "type" and "name" titles either side of this.
+    /// </summary>
+    public int BadgeSpan { get; private set; }
+
     /// <summary>Where the &lt; or &gt; of a row sits.</summary>
     private Rectangle ChainButton(Rectangle row, bool forward)
     {
@@ -335,6 +342,10 @@ public sealed class CandidateList : ListBox
         _nameSelected = new Font("Segoe UI Semibold", size);
         _small = new Font("Yu Gothic UI", size * 0.88f);
         _badge = new Font("Segoe UI Semibold", size * 0.74f, FontStyle.Bold);
+
+        var widest = BadgeWords.Max(word => TextRenderer.MeasureText(word, _badge,
+            new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding).Width);
+        BadgeSpan = widest + LogicalToDeviceUnits(6) * 2 + LogicalToDeviceUnits(10);
 
         ItemHeight = Font.Height + LogicalToDeviceUnits(9);
     }

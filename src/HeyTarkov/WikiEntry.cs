@@ -145,6 +145,13 @@ public sealed class WikiCatalog
     public DateTimeOffset UpdatedAt { get; set; }
     public List<WikiEntry> Entries { get; set; } = new();
 
+    /// <summary>
+    /// The events the catalog has tasks for, newest first: those on the wiki's
+    /// Events page in its order, then the seasons, which that page does not
+    /// date. The first is the one on now, as far as the last refresh knew.
+    /// </summary>
+    public List<string> Events { get; set; } = new();
+
     public int CountOn(WikiSource source) => Entries.Count(e => e.IsOn(source));
 
     /// <summary>

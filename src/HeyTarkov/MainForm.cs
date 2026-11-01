@@ -188,7 +188,12 @@ public sealed partial class MainForm : Form
 
     private readonly PillButton _storyButton = new();
 
-    private enum Scope { Everything, Tasks, Places, Story }
+    /// <summary>The event on now, and in the box beside it, the ones before.</summary>
+    private readonly PillButton _eventButton = new();
+    private readonly ModernCombo _eventBox = new();
+    private readonly List<string> _eventChoices = new();
+
+    private enum Scope { Everything, Tasks, Places, Story, Event }
 
     /// <summary>Which of those two buttons is in, if either.</summary>
     private Scope _scope = Scope.Everything;
@@ -819,6 +824,7 @@ public sealed partial class MainForm : Form
                      (_keysButton, Strings.KeysButton, Strings.KeysTip),
                      (_placesButton, Strings.PlacesButton, Strings.PlacesTip),
                      (_storyButton, Strings.StoryButton, Strings.StoryTip),
+                     (_eventButton, Strings.EventButton, Strings.EventTip(null)),
                  })
         {
             button.Text = "";
@@ -835,10 +841,23 @@ public sealed partial class MainForm : Form
         _keysButton.Keyed = true;
         _placesButton.Pinned = true;
         _storyButton.Storied = true;
+        _eventButton.Evented = true;
+        _eventButton.Visible = false;
         _tasksButton.Click += (_, _) => ToggleScope(Scope.Tasks);
         _keysButton.Click += (_, _) => ToggleKeys();
         _placesButton.Click += (_, _) => ToggleScope(Scope.Places);
         _storyButton.Click += (_, _) => ToggleScope(Scope.Story);
+        _eventButton.Click += (_, _) => ToggleScope(Scope.Event);
+
+        // In the trader box's place while the event button is in: an event's
+        // tasks come from several traders, and which event is the question.
+        _eventBox.AccessibleName = Strings.EventFilterName;
+        _eventBox.Visible = false;
+        _eventBox.Width = 208;
+        _eventBox.Anchor = AnchorStyles.Left;
+        _eventBox.Margin = new Padding(0, 0, 8, 0);
+        _eventBox.SelectedIndexChanged += (_, _) => OnEventChanged();
+        _keysTip.SetToolTip(_eventBox, Strings.EventFilterTip);
 
         _traderBox.AccessibleName = Strings.TraderFilterName;
         _traderBox.Visible = false;
@@ -878,7 +897,7 @@ public sealed partial class MainForm : Form
         // the theme dropdown.
         _mapBox.SizeChanged += (_, _) =>
         {
-            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton })
+            foreach (var button in new[] { _tasksButton, _keysButton, _placesButton, _storyButton, _eventButton })
                 button.Height = _mapBox.Height;
         };
 
@@ -888,11 +907,11 @@ public sealed partial class MainForm : Form
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             BackColor = Color.Transparent,
-            ColumnCount = 7,
+            ColumnCount = 9,
             RowCount = 1,
             Margin = new Padding(0),
         };
-        for (var column = 0; column < 5; column++)
+        for (var column = 0; column < 7; column++)
             filters.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         // The map dropdown is last and takes whatever is left, so the row
@@ -904,9 +923,11 @@ public sealed partial class MainForm : Form
         filters.Controls.Add(_keysButton, 1, 0);
         filters.Controls.Add(_placesButton, 2, 0);
         filters.Controls.Add(_storyButton, 3, 0);
-        filters.Controls.Add(_traderBox, 4, 0);
-        filters.Controls.Add(_mapBox, 5, 0);
-        filters.Controls.Add(_remainingOnly, 6, 0);
+        filters.Controls.Add(_eventButton, 4, 0);
+        filters.Controls.Add(_traderBox, 5, 0);
+        filters.Controls.Add(_eventBox, 6, 0);
+        filters.Controls.Add(_mapBox, 7, 0);
+        filters.Controls.Add(_remainingOnly, 8, 0);
 
         var rows = new TableLayoutPanel
         {
@@ -1299,12 +1320,13 @@ public sealed partial class MainForm : Form
 
         // The row above belongs to whatever is in the list: the dropdowns
         // narrow tasks and keys, and "still needed only" narrows the checklist.
-        _traderBox.Visible = TraderBoxWanted;
+        ShowNarrowingBoxes();
         _mapBox.Visible = !collecting;
         _tasksButton.Visible = !collecting;
         _keysButton.Visible = !collecting;
         _placesButton.Visible = !collecting;
         _storyButton.Visible = !collecting;
+        _eventButton.Visible = !collecting && _eventChoices.Count > 0;
         _imageButton.Visible = !collecting;
         _remainingOnly.Visible = collecting;
         _clearHeld.Visible = collecting;
@@ -2637,7 +2659,103 @@ public sealed partial class MainForm : Form
         }
 
         _traderBox.SelectedIndex = 0;
+
+        BuildEventChoices();
+    }
+
+    /// <summary>
+    /// The events with tasks, newest first, as the catalog orders them. The
+    /// newest is the one the event button opens on.
+    /// </summary>
+    private void BuildEventChoices()
+    {
+        if (_catalog is null) return;
+
+        _eventChoices.Clear();
+        _eventBox.Items.Clear();
+
+        foreach (var name in _catalog.Events)
+        {
+            var count = _catalog.Entries.Count(e => e.Kind == EntryKind.Task && e.Event == name);
+            if (count == 0) continue;
+
+            _eventChoices.Add(name);
+            _eventBox.Items.Add(Strings.EventChoice(name, count));
+        }
+
+        if (_eventChoices.Count > 0) _eventBox.SelectedIndex = 0;
+
+        _eventButton.Visible = _eventChoices.Count > 0 && !_collecting;
+        _keysTip.SetToolTip(_eventButton, Strings.EventTip(_eventChoices.FirstOrDefault()));
+
+        if (_eventChoices.Count == 0 && _scope == Scope.Event) _scope = Scope.Everything;
+        ShowNarrowingBoxes();
+    }
+
+    /// <summary>The event the list is narrowed to, while the event button is in.</summary>
+    private string? SelectedEvent =>
+        _eventBox.SelectedIndex >= 0 && _eventBox.SelectedIndex < _eventChoices.Count
+            ? _eventChoices[_eventBox.SelectedIndex]
+            : null;
+
+    /// <summary>The trader box, or in its place the event box, whichever the buttons want.</summary>
+    private void ShowNarrowingBoxes()
+    {
         _traderBox.Visible = TraderBoxWanted;
+        _eventBox.Visible = _scope == Scope.Event && !_collecting && !_keysOnly && _eventChoices.Count > 0;
+    }
+
+    /// <summary>
+    /// An event's tasks in the order they are done: each after the ones
+    /// before it, by the chain the wiki gives, and by name where the chain
+    /// branches or says nothing.
+    /// </summary>
+    private List<WikiEntry> EventInOrder(string name)
+    {
+        if (_catalog is null) return new List<WikiEntry>();
+
+        var tasks = _catalog.Entries.Where(e => e.Kind == EntryKind.Task && e.Event == name).ToList();
+        var byName = tasks.GroupBy(t => t.Name).ToDictionary(g => g.Key, g => g.First());
+        var waiting = tasks.ToDictionary(t => t, t => t.Previous.Count(byName.ContainsKey));
+
+        var ordered = new List<WikiEntry>();
+
+        while (ordered.Count < tasks.Count)
+        {
+            var left = tasks.Where(t => !ordered.Contains(t)).ToList();
+
+            // Ready first. The wiki's chains can loop - two tasks each naming
+            // the other as before - and then the one waiting on the fewest goes
+            // next, rather than the rest of the event falling to the bottom.
+            var next = left
+                .OrderBy(t => waiting[t])
+                .ThenBy(t => t.Name, NaturalOrder.Instance)
+                .First();
+
+            ordered.Add(next);
+
+            foreach (var after in next.Next.Where(byName.ContainsKey).Select(n => byName[n]))
+                if (!ordered.Contains(after) && waiting[after] > 0) waiting[after]--;
+        }
+
+        return ordered;
+    }
+
+    private void OnEventChanged()
+    {
+        if (_loading || _scope != Scope.Event || SelectedEvent is not { } name) return;
+
+        LeaveImage();
+        SetStatus(Strings.EventOnly(name, _catalog?.Entries.Count(e => e.Kind == EntryKind.Task && e.Event == name) ?? 0));
+
+        if (_typedBox.Text.Trim().Length == 0 && _lastHeard is null)
+        {
+            ListAll();
+            return;
+        }
+
+        SearchAgain();
+        if (_candidates.Items.Count == 0) ListAll();
     }
 
     /// <summary>
@@ -2651,6 +2769,18 @@ public sealed partial class MainForm : Form
     private void ListAll()
     {
         if (_catalog is null) return;
+
+        // The event's tasks in the order they are done, from both wikis: an
+        // event is new, and the Japanese wiki is usually a few pages behind.
+        if (_scope == Scope.Event && SelectedEvent is { } name)
+        {
+            DefaultSort(CandidateSort.Relevance);
+            PopulateRows(EventInOrder(name)
+                .Select(e => new CandidateRow(new TaskMatch(e, 0, ""), ReadingHint(e),
+                    e.IsOn(SelectedWiki) ? null : OtherWiki(e), listed: true))
+                .ToList());
+            return;
+        }
 
         var rows = _catalog.On(SelectedWiki)
             .Where(e => (e.Kind == EntryKind.Key) == _keysOnly)
@@ -2735,13 +2865,15 @@ public sealed partial class MainForm : Form
 
         _scope = next;
         ShowScopeButtons();
-        _traderBox.Visible = TraderBoxWanted;
+        ShowNarrowingBoxes();
 
         SetStatus(_scope switch
         {
             Scope.Tasks => Strings.TasksOnly,
             Scope.Places => Strings.PlacesOnly,
             Scope.Story => Strings.StoryOnly,
+            Scope.Event when SelectedEvent is { } shown => Strings.EventOnly(shown,
+                _catalog?.Entries.Count(e => e.Kind == EntryKind.Task && e.Event == shown) ?? 0),
             _ => Strings.Filtering(null, null),
         });
 
@@ -2760,9 +2892,11 @@ public sealed partial class MainForm : Form
         _tasksButton.Ghost = _scope != Scope.Tasks;
         _placesButton.Ghost = _scope != Scope.Places;
         _storyButton.Ghost = _scope != Scope.Story;
+        _eventButton.Ghost = _scope != Scope.Event;
         _tasksButton.Invalidate();
         _placesButton.Invalidate();
         _storyButton.Invalidate();
+        _eventButton.Invalidate();
     }
 
     /// <summary>The trader an entry belongs to, or nothing.</summary>
@@ -2795,6 +2929,7 @@ public sealed partial class MainForm : Form
             case Scope.Tasks when entry.Kind != EntryKind.Task:
             case Scope.Places when entry.Kind is not (EntryKind.Map or EntryKind.Extract):
             case Scope.Story when entry.Kind != EntryKind.Task || entry.Group != "Story":
+            case Scope.Event when entry.Kind != EntryKind.Task || entry.Event != SelectedEvent:
                 return false;
         }
 
@@ -2844,7 +2979,7 @@ public sealed partial class MainForm : Form
             ShowScopeButtons();
         }
 
-        _traderBox.Visible = TraderBoxWanted;
+        ShowNarrowingBoxes();
     }
 
     private void Populate(IReadOnlyList<TaskMatch> matches) =>
@@ -3004,6 +3139,9 @@ public sealed partial class MainForm : Form
             CandidateSort.Name => By(rows, r => r.Match.Task.Display),
             CandidateSort.Reading => By(rows, r => r.Reading),
             CandidateSort.Group => By(rows, r => _candidates.GroupText(r.Match.Task)),
+            CandidateSort.Kind => _sortDescending
+                ? rows.OrderByDescending(r => KindRank(r.Match.Task))
+                : rows.OrderBy(r => KindRank(r.Match.Task)),
             _ => _sortDescending
                 ? rows.OrderByDescending(r => r.Match.Score)
                 : rows.OrderBy(r => r.Match.Score),
@@ -3011,6 +3149,18 @@ public sealed partial class MainForm : Form
 
         return ordered.ThenBy(r => r.Match.Task.Name, NaturalOrder.Instance);
     }
+
+    /// <summary>Where a badge sorts: the tasks first, then what is not a task.</summary>
+    private static int KindRank(WikiEntry entry) => entry.Kind switch
+    {
+        EntryKind.Task when entry.Event.Length > 0 => 1,
+        EntryKind.Task when entry.Group == "Story" => 2,
+        EntryKind.Task => 0,
+        EntryKind.Map => 3,
+        EntryKind.Extract => 4,
+        EntryKind.Item => 5,
+        _ => 6,
+    };
 
     private IOrderedEnumerable<CandidateRow> By(IEnumerable<CandidateRow> rows, Func<CandidateRow, string?> key)
     {
@@ -3347,7 +3497,7 @@ public sealed partial class MainForm : Form
 
         if (_traderBox.SelectedIndex > 0) _traderBox.SelectedIndex = 0;
         if (_mapBox.SelectedIndex > 0) _mapBox.SelectedIndex = 0;
-        _traderBox.Visible = TraderBoxWanted;
+        ShowNarrowingBoxes();
     }
 
     /// <summary>A picture told apart from another by its pixels.</summary>

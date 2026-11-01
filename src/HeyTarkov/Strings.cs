@@ -147,6 +147,8 @@ public static class Strings
     public static string KindKey => T("鍵 ", "Key ");
 
     public static string CandidateColumnName => T("名前", "Name");
+
+    public static string CandidateColumnKind => T("種別", "Type");
     /// <summary>
     /// The reading column is only shown for keys, where it holds the name the
     /// game prints rather than a reading.
@@ -212,6 +214,24 @@ public static class Strings
         "Show maps and exits only (press again to go back)");
 
     public static string StoryButton => T("ストーリー", "Story");
+
+    public static string EventButton => T("イベント", "Event");
+
+    public static string EventTip(string? newest) => newest is null
+        ? T("イベントのタスクだけを表示", "Show event tasks only")
+        : T($"今のイベント（{newest}）のタスクだけを表示（もう一度押すと元に戻る）。右の欄で前のイベントにも切り替えられる",
+            $"Show the tasks of the event on now ({newest}) only (press again to go back). The box beside it goes to earlier events");
+
+    public static string EventOnly(string name, int count) => T(
+        $"{name} のタスクだけを表示しています（{count} 件）。もう一度押すと元に戻ります",
+        $"Showing the {count} tasks of {name} only. Press again to go back");
+
+    /// <summary>One event in its dropdown: the name, and how many tasks it has.</summary>
+    public static string EventChoice(string name, int count) => $"{name}（{count}）";
+
+    public static string EventFilterName => T("イベント", "Event");
+
+    public static string EventFilterTip => T("表示するイベント（上ほど新しい）", "Which event to show (newest at the top)");
 
     public static string StoryTip => T(
         "ストーリーのタスクだけを表示（もう一度押すと元に戻る）",
