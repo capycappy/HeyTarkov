@@ -626,7 +626,12 @@ public static partial class Tasks
         var found = new List<(string, string, string)>();
         var seen = new HashSet<string>(StringComparer.Ordinal);
 
-        foreach (var page in JapaneseIndexPages)
+        // The trader pages as well: newer chains - "To the Light" - are listed
+        // under their trader and nowhere in the task list.
+        var pages = JapaneseIndexPages
+            .Concat(JapaneseCategories.Where(c => c != StoryCategoryJapanese).OrderBy(c => c, StringComparer.Ordinal));
+
+        foreach (var page in pages)
         {
             if (await wikis.GetAsync(wikis.JapaneseUrl(page), ct).ConfigureAwait(false)
                 is not { Text: { } html }) continue;
