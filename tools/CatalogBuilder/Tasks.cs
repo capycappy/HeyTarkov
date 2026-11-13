@@ -627,9 +627,12 @@ public static partial class Tasks
         var seen = new HashSet<string>(StringComparer.Ordinal);
 
         // The trader pages as well: newer chains - "To the Light" - are listed
-        // under their trader and nowhere in the task list.
+        // under their trader and nowhere in the task list. Not Arena's: its
+        // page lists the arena's maps and modes, which are not tasks.
         var pages = JapaneseIndexPages
-            .Concat(JapaneseCategories.Where(c => c != StoryCategoryJapanese).OrderBy(c => c, StringComparer.Ordinal));
+            .Concat(JapaneseCategories
+                .Where(c => c != StoryCategoryJapanese && c != "Arena")
+                .OrderBy(c => c, StringComparer.Ordinal));
 
         foreach (var page in pages)
         {

@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-11-01T21:44:30.4039958+08:00",
+  "UpdatedAt": "2026-11-14T02:42:13.8360575+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -1597,9 +1597,9 @@
         "Sample IV - A New Hope"
       ],
       "Next": [
+        "Contagious Beast",
         "Forgotten Oaths",
-        "Radical Treatment",
-        "Contagious Beast"
+        "Radical Treatment"
       ],
       "Faction": null,
       "Event": "",
@@ -1665,11 +1665,11 @@
       ],
       "Previous": [],
       "Next": [
+        "Conservation Area",
         "Dirty Blood",
         "Watch the Watcher",
         "Global Threat",
         "Not a Step Back!",
-        "Conservation Area",
         "Every Man for Himself",
         "Pressured by Circumstances",
         "Reduce the Distance",
@@ -5504,7 +5504,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Quarantine",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Quarantine",
       "Display": "Make Amends - Quarantine",
       "SpokenName": "Make Amends - Quarantine"
@@ -5542,7 +5542,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Make%20Amends%20-%20Software",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Make_Amends_-_Software",
       "Display": "Make Amends - Software",
       "SpokenName": "Make Amends - Software"
@@ -5783,8 +5783,8 @@
         "Progression Difficulties - Part 1"
       ],
       "Next": [
-        "Game Review - Part 2",
-        "External Interest"
+        "External Interest",
+        "Game Review - Part 2"
       ],
       "Faction": null,
       "Event": "",
@@ -5917,8 +5917,8 @@
         "Forgotten Acquaintance"
       ],
       "Next": [
-        "Obstruction Destruction",
-        "Obstacle Course"
+        "Obstacle Course",
+        "Obstruction Destruction"
       ],
       "Faction": null,
       "Event": "",
@@ -6282,8 +6282,8 @@
         "The TerraGroup Trail - Part 5"
       ],
       "Next": [
-        "The TerraGroup Trail - Part 7",
-        "The TerraGroup Trail - Part 11"
+        "The TerraGroup Trail - Part 11",
+        "The TerraGroup Trail - Part 7"
       ],
       "Faction": null,
       "Event": "",
@@ -6325,7 +6325,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20A%20Time%20to%20Gather%20Stones",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_A_Time_to_Gather_Stones",
       "Display": "To the Light - A Time to Gather Stones",
       "SpokenName": "To the Light - A Time to Gather Stones"
@@ -6347,7 +6347,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20A%20Time%20to%20Throw%20Stones",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_A_Time_to_Throw_Stones",
       "Display": "To the Light - A Time to Throw Stones",
       "SpokenName": "To the Light - A Time to Throw Stones"
@@ -6371,7 +6371,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20Clip%20Their%20Wings",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Clip_Their_Wings",
       "Display": "To the Light - Clip Their Wings",
       "SpokenName": "To the Light - Clip Their Wings"
@@ -6389,7 +6389,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20Dangerous%20Ambitions",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Dangerous_Ambitions",
       "Display": "To the Light - Dangerous Ambitions",
       "SpokenName": "To the Light - Dangerous Ambitions"
@@ -6410,7 +6410,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20Fallen%20Bird",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Fallen_Bird",
       "Display": "To the Light - Fallen Bird",
       "SpokenName": "To the Light - Fallen Bird"
@@ -6433,7 +6433,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20False%20Call",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_False_Call",
       "Display": "To the Light - False Call",
       "SpokenName": "To the Light - False Call"
@@ -6455,7 +6455,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20Getting%20Acquainted",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Getting_Acquainted",
       "Display": "To the Light - Getting Acquainted",
       "SpokenName": "To the Light - Getting Acquainted"
@@ -6475,7 +6475,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20Someone%20Called%3F",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_Someone_Called%3F",
       "Display": "To the Light - Someone Called?",
       "SpokenName": "To the Light - Someone Called?"
@@ -6499,7 +6499,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/To%20the%20Light%20-%20The%20Other%20Side",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/To_the_Light_-_The_Other_Side",
       "Display": "To the Light - The Other Side",
       "SpokenName": "To the Light - The Other Side"
@@ -6540,8 +6540,8 @@
         "Gunsmith - MP-133"
       ],
       "Next": [
-        "Disrupting the Party",
         "Fairy Tale Showdown",
+        "Disrupting the Party",
         "Home Comfort",
         "Stop the Fight!"
       ],
@@ -6829,7 +6829,11 @@
       "Name": "Counteraction",
       "Group": "Peacekeeper",
       "Maps": [
-        "Lighthouse"
+        "Ground Zero",
+        "Lighthouse",
+        "Reserve",
+        "Shoreline",
+        "Streets of Tarkov"
       ],
       "Previous": [],
       "Next": [],
@@ -7097,11 +7101,11 @@
       "Name": "Insomnia",
       "Group": "Peacekeeper",
       "Maps": [
-        "Streets of Tarkov",
+        "Ground Zero",
         "Lighthouse",
         "Reserve",
-        "Ground Zero",
-        "Shoreline"
+        "Shoreline",
+        "Streets of Tarkov"
       ],
       "Previous": [],
       "Next": [],
@@ -7393,14 +7397,14 @@
       "Name": "Peacekeeping Mission",
       "Group": "Peacekeeper",
       "Maps": [
-        "Woods",
-        "Reserve",
         "Customs",
+        "Ground Zero",
+        "Interchange",
         "Lighthouse",
+        "Reserve",
         "Shoreline",
         "Streets of Tarkov",
-        "Ground Zero",
-        "Interchange"
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -7762,16 +7766,16 @@
       "Name": "The Guide",
       "Group": "Peacekeeper",
       "Maps": [
-        "Interchange",
-        "Shoreline",
-        "Factory",
-        "The Lab",
-        "Woods",
         "Customs",
-        "Reserve",
+        "Factory",
+        "Ground Zero",
+        "Interchange",
         "Lighthouse",
+        "Reserve",
+        "Shoreline",
         "Streets of Tarkov",
-        "Ground Zero"
+        "The Lab",
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -7994,8 +7998,8 @@
       "Name": "Weapons Circulation",
       "Group": "Peacekeeper",
       "Maps": [
-        "Woods",
-        "Shoreline"
+        "Shoreline",
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -8201,10 +8205,10 @@
       "Name": "Worst Job in the World",
       "Group": "Peacekeeper",
       "Maps": [
-        "Reserve",
+        "Ground Zero",
         "Lighthouse",
-        "Shoreline",
-        "Ground Zero"
+        "Reserve",
+        "Shoreline"
       ],
       "Previous": [],
       "Next": [],
@@ -8482,7 +8486,6 @@
       "Name": "Cast the Net",
       "Group": "Prapor",
       "Maps": [
-        "Streets of Tarkov",
         "Shoreline",
         "Ground Zero"
       ],
@@ -9453,22 +9456,6 @@
     },
     {
       "Kind": 0,
-      "Name": "No Offence",
-      "Group": "Prapor",
-      "Maps": [],
-      "Previous": [],
-      "Next": [],
-      "Faction": null,
-      "Event": "",
-      "ShortName": null,
-      "JapaneseName": null,
-      "JapaneseUrl": "https://wikiwiki.jp/eft/Prapor/No%20Offence",
-      "EnglishUrl": null,
-      "Display": "No Offence",
-      "SpokenName": "No Offence"
-    },
-    {
-      "Kind": 0,
       "Name": "No Place for Renegades",
       "Group": "Prapor",
       "Maps": [
@@ -9805,7 +9792,6 @@
       "Name": "Reverse Gear",
       "Group": "Prapor",
       "Maps": [
-        "Streets of Tarkov",
         "Shoreline",
         "Ground Zero"
       ],
@@ -11664,6 +11650,7 @@
       "Group": "Ragman",
       "Maps": [
         "Woods",
+        "Lighthouse",
         "Streets of Tarkov"
       ],
       "Previous": [
@@ -15551,8 +15538,8 @@
         "The Lab"
       ],
       "Previous": [
-        "Profit Retention",
-        "Get a Foothold"
+        "Get a Foothold",
+        "Profit Retention"
       ],
       "Next": [],
       "Faction": null,
@@ -15950,9 +15937,13 @@
       "Group": "Skier",
       "Maps": [
         "Ground Zero",
+        "Customs",
         "Woods",
+        "Interchange",
         "Shoreline",
-        "Lighthouse"
+        "Streets of Tarkov",
+        "Lighthouse",
+        "Reserve"
       ],
       "Previous": [
         "Halloween: Tightening the Quarantine"
@@ -17250,8 +17241,8 @@
       "Name": "Thirsty - Delivery",
       "Group": "Skier",
       "Maps": [
-        "Woods",
-        "Customs"
+        "Customs",
+        "Woods"
       ],
       "Previous": [
         "Thirsty - Breadwinner"
@@ -17322,22 +17313,6 @@
       "EnglishUrl": null,
       "Display": "Vitamins - Part 1",
       "SpokenName": "Vitamins - Part 1"
-    },
-    {
-      "Kind": 0,
-      "Name": "Vitamins - Part 2",
-      "Group": "Skier",
-      "Maps": [],
-      "Previous": [],
-      "Next": [],
-      "Faction": null,
-      "Event": "",
-      "ShortName": null,
-      "JapaneseName": null,
-      "JapaneseUrl": "https://wikiwiki.jp/eft/Skier/Vitamins%20-%20Part%202",
-      "EnglishUrl": null,
-      "Display": "Vitamins - Part 2",
-      "SpokenName": "Vitamins - Part 2"
     },
     {
       "Kind": 0,
@@ -18208,8 +18183,8 @@
       "Name": "Halloween: Follow-Up Examination",
       "Group": "Therapist",
       "Maps": [
-        "Infected Factory",
-        "Infected Lab"
+        "Infected Lab",
+        "Infected Factory"
       ],
       "Previous": [
         "Halloween: The Best Defense"
@@ -18235,8 +18210,8 @@
         "Halloween: First Results"
       ],
       "Next": [
-        "Halloween: The Final Push",
-        "Halloween: For the Greater Good - An Agreement"
+        "Halloween: For the Greater Good - An Agreement",
+        "Halloween: The Final Push"
       ],
       "Faction": null,
       "Event": "Halloween 2026",
