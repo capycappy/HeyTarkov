@@ -44,7 +44,7 @@ public static partial class ReadNames
     /// come back empty because a button was in the wrong position.
     /// </summary>
     public static List<ReadName> Match(
-        IEnumerable<string> lines, TaskIndex? tasks, TaskIndex? keys)
+        IEnumerable<string> lines, TaskIndex? tasks, TaskIndex? keys, TaskIndex? elsewhere = null)
     {
         var found = new List<ReadName>();
         var seen = new HashSet<WikiEntry>();
@@ -58,6 +58,12 @@ public static partial class ReadNames
             var other = Best(text, keys);
 
             if (other.Task is not null && other.Score > best.Score) best = other;
+
+            // Only on the wiki not chosen: a new task the chosen one has no page
+            // for yet still has a name in the game, and a picture of it read
+            // as nothing looked like the app had broken.
+            var away = Best(text, elsewhere);
+            if (away.Task is not null && away.Score > best.Score) best = away;
 
             if (best.Task is null || best.Score < Confident) continue;
             if (!seen.Add(best.Task)) continue;

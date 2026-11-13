@@ -431,6 +431,14 @@ public static class Strings
         "画像から見つかりませんでした。タスク名が写る範囲を大きめに撮ってみてください",
         "Nothing in the picture matched. Try a larger crop with the task names in it");
 
+    /// <summary>The heard line when a picture held nothing the catalog knows.</summary>
+    public static string ImageNothingHeard(int lines) => T(
+        $"画像を読み取りましたが、一致するものがありませんでした（{lines} 行）",
+        lines == 1 ? "Read the picture, but nothing in it matched (1 line)" : $"Read the picture, but nothing in it matched ({lines} lines)");
+
+    /// <summary>Across the middle of an empty list.</summary>
+    public static string NothingFound => T("見つかりませんでした", "Nothing found");
+
     public static string ImageNoEngine => T(
         "この Windows には文字を読む機能が入っていません",
         "This Windows has no text recognition installed");

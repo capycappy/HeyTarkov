@@ -111,6 +111,36 @@ public sealed class CandidateList : ListBox
     }
 
     /// <summary>
+    /// Written across the middle while the list is empty. A search that found
+    /// nothing left a blank panel that looked the same as one that had not
+    /// run, and the same picture was pasted again and again.
+    /// </summary>
+    [System.ComponentModel.DefaultValue("")]
+    public string EmptyText
+    {
+        get => _emptyText;
+        set
+        {
+            if (_emptyText == value) return;
+            _emptyText = value;
+            Invalidate();
+        }
+    }
+
+    private string _emptyText = "";
+
+    private void PaintEmptyText()
+    {
+        if (Items.Count > 0 || _emptyText.Length == 0 || _small is null) return;
+
+        using var g = CreateGraphics();
+        using var font = new Font(_name!.FontFamily, _name.SizeInPoints * 1.1f);
+        TextRenderer.DrawText(g, _emptyText, font,
+            new Rectangle(0, 0, ClientSize.Width, Math.Min(ClientSize.Height, LogicalToDeviceUnits(120))),
+            Theme.Muted, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+    }
+
+    /// <summary>
     /// Children are painted around, not over: the "back to list" button sits
     /// inside the list, under the rows it belongs to.
     /// </summary>
@@ -180,6 +210,7 @@ public sealed class CandidateList : ListBox
     private bool? _hot;
     private (int Row, bool Way)? _pressed;
 
+    private const int WmPaint = 0x000F;
     private const int WmLButtonDown = 0x0201;
     private const int WmLButtonUp = 0x0202;
     private const int WmLButtonDblClk = 0x0203;
@@ -235,6 +266,13 @@ public sealed class CandidateList : ListBox
     /// </summary>
     protected override void WndProc(ref Message m)
     {
+        if (m.Msg == WmPaint)
+        {
+            base.WndProc(ref m);
+            PaintEmptyText();
+            return;
+        }
+
         if (m.Msg is WmLButtonDown or WmLButtonDblClk or WmLButtonUp)
         {
             var point = new Point(unchecked((short)(long)m.LParam), unchecked((short)((long)m.LParam >> 16)));

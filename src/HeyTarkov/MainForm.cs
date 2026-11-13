@@ -3234,6 +3234,12 @@ public sealed partial class MainForm : Form
 
         var listing = rows.Count > 0 && rows[0].Listed;
 
+        // Nothing at all to show, and nothing hidden by a filter either: say so
+        // where the rows would have been.
+        _candidates.EmptyText = _candidates.Items.Count == 0 && rows.Count == 0 && !_collecting
+            ? Strings.NothingFound
+            : "";
+
         _countLabel.Text = _candidates.Items.Count > 0
             ? listing
                 ? Strings.Listed(_candidates.Items.Count)
@@ -3467,7 +3473,7 @@ public sealed partial class MainForm : Form
             {
                 var lines = await ScreenText.LinesAsync(picture);
                 lineCount = lines.Count;
-                found = ReadNames.Match(lines, _typedRest, _typedKeys);
+                found = ReadNames.Match(lines, _typedRest, _typedKeys, OnlyOnTheOtherWiki());
             }
             catch (Exception ex)
             {
@@ -3477,6 +3483,12 @@ public sealed partial class MainForm : Form
 
             if (found.Count == 0)
             {
+                // Said plainly, with the list emptied under it: the rows of the
+                // last picture staying put read as this one not having been read.
+                LeaveImage();
+                _heardLabel.ForeColor = Theme.Warning;
+                _heardLabel.Text = Strings.ImageNothingHeard(lineCount);
+                PopulateRows(new List<CandidateRow>());
                 SetStatus(Strings.ImageNothing);
                 return;
             }
@@ -3490,7 +3502,8 @@ public sealed partial class MainForm : Form
             // read is kept as the matched phrase, not shown in its place.
             PopulateRows(found
                 .Select(name => new CandidateRow(
-                    new TaskMatch(name.Task, name.Score, name.Read), ReadingHint(name.Task)))
+                    new TaskMatch(name.Task, name.Score, name.Read), ReadingHint(name.Task),
+                    name.Task.IsOn(SelectedWiki) ? null : OtherWiki(name.Task)))
                 .ToList());
 
             _openButton.Text = Strings.OpenAll(_candidates.Items.Count);
@@ -3504,6 +3517,21 @@ public sealed partial class MainForm : Form
                 OpenTask(only.Match.Task, only.Elsewhere);
             }
         }
+    }
+
+    /// <summary>
+    /// What only the wiki not chosen has a page for, tasks and keys together,
+    /// to read a picture against once this wiki's own names have had their
+    /// turn.
+    /// </summary>
+    private TaskIndex? OnlyOnTheOtherWiki()
+    {
+        if (_catalog is null || _typedRest is null) return null;
+
+        var other = SelectedWiki == WikiSource.Japanese ? WikiSource.English : WikiSource.Japanese;
+        var entries = _catalog.Entries.Where(e => !e.IsOn(SelectedWiki) && e.IsOn(other)).ToList();
+
+        return entries.Count == 0 ? null : new TaskIndex(entries, _typedRest.Scheme);
     }
 
     /// <summary>
