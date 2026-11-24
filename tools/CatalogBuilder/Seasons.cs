@@ -13,6 +13,10 @@ namespace HeyTarkov.CatalogBuilder;
 /// others - so the event list is read from it rather than written down here.
 /// A new season needs no change to this file.
 ///
+/// Since November 2026 each season also has a page of its own - "Season 1:
+/// KORD BREACH" - and newer tasks link there instead: "[[Season_1:_KORD_BREACH
+/// |Seasonal mode]]". Both kinds of link are followed.
+///
 /// Finding them without reading 870 pages: everything that links to Seasons is
 /// one query, and the handful of those that are quests is a second. Only those
 /// are read in full.
@@ -25,8 +29,12 @@ public static partial class Seasons
     /// <summary>The API takes 50 titles at a time; 45 leaves room to spare.</summary>
     private const int BatchSize = 45;
 
-    [GeneratedRegex(@"\[\[Seasons#Season\s*\d+\s*:\s*([^|\]]+)")]
+    [GeneratedRegex(@"\[\[(?:Seasons#)?Season[\s_]*\d+[\s_]*:[\s_]*([^|\]#]+)")]
     private static partial Regex SeasonLink();
+
+    /// <summary>A season's own page: "Season 1: KORD BREACH".</summary>
+    [GeneratedRegex(@"^Season \d+\s*:")]
+    private static partial Regex SeasonPage();
 
     /// <summary>The trader the task comes from, out of the infobox.</summary>
     [GeneratedRegex(@"\|\s*given by\s*=\s*\[\[([^\]|]+)")]
@@ -41,11 +49,20 @@ public static partial class Seasons
     {
         var found = new Dictionary<string, Seasonal>(StringComparer.Ordinal);
 
-        var linking = await BacklinksAsync(wikis, ct).ConfigureAwait(false);
+        var targets = new List<string> { SeasonsPage };
+        targets.AddRange(await SeasonPagesAsync(wikis, ct).ConfigureAwait(false));
+
+        var linking = new List<string>();
+        foreach (var target in targets)
+        {
+            foreach (var title in await BacklinksAsync(wikis, target, ct).ConfigureAwait(false))
+                if (!linking.Contains(title)) linking.Add(title);
+        }
+
         if (linking.Count == 0) return found;
 
         var quests = await QuestsAmongAsync(wikis, linking, ct).ConfigureAwait(false);
-        Console.WriteLine($"  {linking.Count} pages link to {SeasonsPage}; {quests.Count} are tasks");
+        Console.WriteLine($"  {linking.Count} pages link to {string.Join(" / ", targets)}; {quests.Count} are tasks");
 
         foreach (var batch in Batches(quests))
         {
@@ -79,7 +96,7 @@ public static partial class Seasons
                 var marker = SeasonLink().Match(text);
                 if (!marker.Success) continue;
 
-                var name = marker.Groups[1].Value.Trim();
+                var name = marker.Groups[1].Value.Replace('_', ' ').Trim();
                 if (name.Length == 0) continue;
 
                 var giver = Giver().Match(text);
@@ -94,8 +111,32 @@ public static partial class Seasons
         return found;
     }
 
-    /// <summary>Every page that links to the Seasons page.</summary>
-    private static async Task<List<string>> BacklinksAsync(Wikis wikis, CancellationToken ct)
+    /// <summary>The seasons' own pages, whatever number the wiki is up to.</summary>
+    private static async Task<List<string>> SeasonPagesAsync(Wikis wikis, CancellationToken ct)
+    {
+        var url = $"{Wikis.FandomApi}?action=query&list=allpages&apprefix={Uri.EscapeDataString("Season ")}"
+                  + "&apnamespace=0&aplimit=50&apfilterredir=nonredirects&format=json";
+
+        var pages = new List<string>();
+        if (await wikis.GetAsync(url, ct).ConfigureAwait(false) is not { Text: { } json }) return pages;
+
+        using var document = JsonDocument.Parse(json);
+
+        if (document.RootElement.TryGetProperty("query", out var query)
+            && query.TryGetProperty("allpages", out var all))
+        {
+            foreach (var page in all.EnumerateArray())
+            {
+                if (page.GetProperty("title").GetString() is { } title && SeasonPage().IsMatch(title))
+                    pages.Add(title);
+            }
+        }
+
+        return pages;
+    }
+
+    /// <summary>Every page that links to the given one.</summary>
+    private static async Task<List<string>> BacklinksAsync(Wikis wikis, string target, CancellationToken ct)
     {
         var titles = new List<string>();
         string? continuation = null;
@@ -103,7 +144,7 @@ public static partial class Seasons
         do
         {
             var url = $"{Wikis.FandomApi}?action=query&list=backlinks"
-                      + $"&bltitle={Uri.EscapeDataString(SeasonsPage)}"
+                      + $"&bltitle={Uri.EscapeDataString(target)}"
                       + "&blnamespace=0&bllimit=500&format=json"
                       + (continuation is null ? "" : $"&blcontinue={Uri.EscapeDataString(continuation)}");
 

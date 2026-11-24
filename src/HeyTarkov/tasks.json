@@ -1,5 +1,5 @@
 {
-  "UpdatedAt": "2026-11-14T02:42:13.8360575+08:00",
+  "UpdatedAt": "2026-11-24T21:39:48.335993+08:00",
   "Entries": [
     {
       "Kind": 0,
@@ -369,7 +369,7 @@
       "Event": "",
       "ShortName": null,
       "JapaneseName": null,
-      "JapaneseUrl": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/BTR%20Driver/Sensory%20Analysis%20-%20Part%202",
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Sensory_Analysis_-_Part_2",
       "Display": "Sensory Analysis - Part 2",
       "SpokenName": "Sensory Analysis - Part 2"
@@ -536,7 +536,10 @@
       "Previous": [
         "Against the Conscience - Part 2"
       ],
-      "Next": [],
+      "Next": [
+        "Decisions, Decisions",
+        "Surprise Gift"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -600,6 +603,7 @@
       "Previous": [
         "Chemical - Part 3",
         "Shooter Born in Heaven",
+        "Sew it Good - Part 2",
         "The Tarkov Shooter - Part 4"
       ],
       "Next": [],
@@ -1261,10 +1265,10 @@
       "Name": "All This Filth...",
       "Group": "Jaeger",
       "Maps": [
-        "Interchange",
+        "Customs",
         "Ground Zero",
-        "Woods",
-        "Customs"
+        "Interchange",
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -1736,8 +1740,8 @@
       "Name": "Every Hunter Knows This",
       "Group": "Jaeger",
       "Maps": [
-        "Factory",
-        "Customs"
+        "Customs",
+        "Factory"
       ],
       "Previous": [
         "Rough Tarkov"
@@ -2188,8 +2192,8 @@
       "Name": "Rough Tarkov",
       "Group": "Jaeger",
       "Maps": [
-        "Woods",
-        "Ground Zero"
+        "Ground Zero",
+        "Woods"
       ],
       "Previous": [
         "Acquaintance"
@@ -2227,15 +2231,15 @@
       "Name": "Slaughterhouse",
       "Group": "Jaeger",
       "Maps": [
-        "Factory",
-        "Streets of Tarkov",
-        "Lighthouse",
-        "Woods",
-        "Shoreline",
-        "Interchange",
         "Customs",
+        "Factory",
+        "Ground Zero",
+        "Interchange",
+        "Lighthouse",
         "Reserve",
-        "Ground Zero"
+        "Shoreline",
+        "Streets of Tarkov",
+        "Woods"
       ],
       "Previous": [
         "Broadcast - Part 4",
@@ -2293,9 +2297,9 @@
       "Group": "Jaeger",
       "Maps": [
         "Customs",
-        "Woods",
+        "Lighthouse",
         "Shoreline",
-        "Lighthouse"
+        "Woods"
       ],
       "Previous": [
         "The Huntsman Path - Trophy",
@@ -2579,10 +2583,10 @@
       "Name": "The Huntsman Path - Forest Cleaning",
       "Group": "Jaeger",
       "Maps": [
-        "Streets of Tarkov",
-        "Reserve",
         "Lighthouse",
-        "Shoreline"
+        "Reserve",
+        "Shoreline",
+        "Streets of Tarkov"
       ],
       "Previous": [],
       "Next": [
@@ -3434,8 +3438,8 @@
       "Previous": [
         "This Tape Sucks",
         "Confidential Info",
-        "Hypotheses Testing",
         "Vacate the Premises",
+        "Hypotheses Testing",
         "Sensory Analysis - Part 2",
         "Indisputable Authority"
       ],
@@ -3714,6 +3718,7 @@
         "Customs"
       ],
       "Previous": [
+        "Between Two Fires",
         "Against the Conscience - Part 2"
       ],
       "Next": [
@@ -5181,8 +5186,8 @@
       "Name": "Hobby Club",
       "Group": "Mechanic",
       "Maps": [
-        "Reserve",
-        "Customs"
+        "Customs",
+        "Reserve"
       ],
       "Previous": [],
       "Next": [
@@ -5350,6 +5355,29 @@
       "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Introduction",
       "Display": "Introduction",
       "SpokenName": "Introduction"
+    },
+    {
+      "Kind": 0,
+      "Name": "Keep Them in Line",
+      "Group": "Mechanic",
+      "Maps": [
+        "Customs",
+        "Lighthouse",
+        "Shoreline",
+        "Woods"
+      ],
+      "Previous": [
+        "Saving the Mole"
+      ],
+      "Next": [],
+      "Faction": null,
+      "Event": "KORD BREACH",
+      "ShortName": null,
+      "JapaneseName": null,
+      "JapaneseUrl": "https://wikiwiki.jp/eft/Mechanic/Keep%20Them%20in%20Line",
+      "EnglishUrl": "https://escapefromtarkov.fandom.com/wiki/Keep_Them_in_Line",
+      "Display": "Keep Them in Line",
+      "SpokenName": "Keep Them in Line"
     },
     {
       "Kind": 0,
@@ -5598,8 +5626,8 @@
       "Maps": [
         "Ground Zero",
         "Interchange",
-        "Streets of Tarkov",
-        "Shoreline"
+        "Shoreline",
+        "Streets of Tarkov"
       ],
       "Previous": [
         "Shady Contractor"
@@ -5856,7 +5884,8 @@
       ],
       "Previous": [],
       "Next": [
-        "Import Control"
+        "Import Control",
+        "Keep Them in Line"
       ],
       "Faction": null,
       "Event": "",
@@ -5917,8 +5946,8 @@
         "Forgotten Acquaintance"
       ],
       "Next": [
-        "Obstacle Course",
-        "Obstruction Destruction"
+        "Obstruction Destruction",
+        "Obstacle Course"
       ],
       "Faction": null,
       "Event": "",
@@ -5986,14 +6015,14 @@
       "Name": "Shooter Born in Heaven",
       "Group": "Mechanic",
       "Maps": [
-        "Woods",
+        "Customs",
+        "Ground Zero",
+        "Interchange",
+        "Lighthouse",
         "Reserve",
         "Shoreline",
-        "Customs",
-        "Lighthouse",
         "Streets of Tarkov",
-        "Interchange",
-        "Ground Zero"
+        "Woods"
       ],
       "Previous": [],
       "Next": [
@@ -6485,9 +6514,9 @@
       "Name": "To the Light - The Other Side",
       "Group": "Mechanic",
       "Maps": [
+        "Customs",
         "Reserve",
-        "Streets of Tarkov",
-        "Customs"
+        "Streets of Tarkov"
       ],
       "Previous": [
         "To the Light - A Time to Gather Stones"
@@ -11176,8 +11205,8 @@
       "Name": "Know Your Place!",
       "Group": "Ragman",
       "Maps": [
-        "Streets of Tarkov",
-        "Interchange"
+        "Interchange",
+        "Streets of Tarkov"
       ],
       "Previous": [],
       "Next": [],
@@ -11271,7 +11300,9 @@
         "The Lab"
       ],
       "Previous": [],
-      "Next": [],
+      "Next": [
+        "New Beginning (Prestige 2)"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -11288,8 +11319,12 @@
       "Maps": [
         "The Lab"
       ],
-      "Previous": [],
-      "Next": [],
+      "Previous": [
+        "New Beginning (Prestige 1)"
+      ],
+      "Next": [
+        "New Beginning (Prestige 3)"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -11304,11 +11339,15 @@
       "Name": "New Beginning (Prestige 3)",
       "Group": "Ragman",
       "Maps": [
-        "The Lab",
-        "Streets of Tarkov"
+        "Streets of Tarkov",
+        "The Lab"
       ],
-      "Previous": [],
-      "Next": [],
+      "Previous": [
+        "New Beginning (Prestige 2)"
+      ],
+      "Next": [
+        "New Beginning (Prestige 4)"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -11323,12 +11362,16 @@
       "Name": "New Beginning (Prestige 4)",
       "Group": "Ragman",
       "Maps": [
-        "The Lab",
+        "Interchange",
         "Streets of Tarkov",
-        "Interchange"
+        "The Lab"
       ],
-      "Previous": [],
-      "Next": [],
+      "Previous": [
+        "New Beginning (Prestige 3)"
+      ],
+      "Next": [
+        "New Beginning (Prestige 5)"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -11343,13 +11386,17 @@
       "Name": "New Beginning (Prestige 5)",
       "Group": "Ragman",
       "Maps": [
-        "The Lab",
-        "Streets of Tarkov",
+        "Customs",
         "Interchange",
-        "Customs"
+        "Streets of Tarkov",
+        "The Lab"
       ],
-      "Previous": [],
-      "Next": [],
+      "Previous": [
+        "New Beginning (Prestige 4)"
+      ],
+      "Next": [
+        "New Beginning (Prestige 6)"
+      ],
       "Faction": null,
       "Event": "",
       "ShortName": null,
@@ -11364,13 +11411,15 @@
       "Name": "New Beginning (Prestige 6)",
       "Group": "Ragman",
       "Maps": [
-        "The Lab",
-        "Streets of Tarkov",
-        "Interchange",
         "Customs",
-        "Reserve"
+        "Interchange",
+        "Reserve",
+        "Streets of Tarkov",
+        "The Lab"
       ],
-      "Previous": [],
+      "Previous": [
+        "New Beginning (Prestige 5)"
+      ],
       "Next": [],
       "Faction": null,
       "Event": "",
@@ -11649,9 +11698,9 @@
       "Name": "Sensory Analysis - Part 1",
       "Group": "Ragman",
       "Maps": [
-        "Woods",
         "Lighthouse",
-        "Streets of Tarkov"
+        "Streets of Tarkov",
+        "Woods"
       ],
       "Previous": [
         "Hidden Layer"
@@ -11695,7 +11744,8 @@
         "Sew it Good - Part 1"
       ],
       "Next": [
-        "Sew it Good - Part 3"
+        "Sew it Good - Part 3",
+        "Collector"
       ],
       "Faction": null,
       "Event": "",
@@ -11751,9 +11801,9 @@
       "Name": "Sisyphus",
       "Group": "Ragman",
       "Maps": [
-        "Woods",
+        "Lighthouse",
         "Reserve",
-        "Lighthouse"
+        "Woods"
       ],
       "Previous": [],
       "Next": [],
@@ -12878,6 +12928,7 @@
         "Customs"
       ],
       "Previous": [
+        "Between Two Fires",
         "Against the Conscience - Part 2"
       ],
       "Next": [],
@@ -15397,9 +15448,9 @@
       "Group": "Skier",
       "Maps": [
         "Customs",
+        "Lighthouse",
         "Reserve",
-        "Woods",
-        "Lighthouse"
+        "Woods"
       ],
       "Previous": [
         "Killer Argument",
@@ -15421,7 +15472,6 @@
       "Group": "Skier",
       "Maps": [
         "Customs",
-        "Interchange",
         "Woods"
       ],
       "Previous": [],
