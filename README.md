@@ -1,4 +1,4 @@
-# Hey Tarkov v1.8.6
+# Hey Tarkov v1.8.7
 
 マイクボタンを押している間に**タスク名・マップ名・脱出地点名・KAPPA品名・鍵の名前**を言うと、
 Escape from Tarkov の Wiki の該当ページをブラウザで開くデスクトップアプリ。
@@ -21,8 +21,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 
 | | サイズ | 必要なもの |
 |---|---|---|
-| `HeyTarkov-v1.8.6-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
-| `HeyTarkov-v1.8.6-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
+| `HeyTarkov-v1.8.7-win-x64.zip` | 50MB | **なし**（これを選べばよい） |
+| `HeyTarkov-v1.8.7-win-x64-framework-dependent.zip` | 7MB | .NET 10 Desktop Runtime |
 
 ## つかいかた
 
@@ -42,7 +42,8 @@ Escape from Tarkov の Wiki の該当ページをブラウザで開くデスク�
 音声を使わずキーボードで探すこともできる（下の検索ボックス）。英語で打てば英語の名前から、
 日本語（ひらがな・カタカナ・漢字）で打てば日本語の名前から探す（「こんこるでぃあ」「廃工場」など）。
 
-言語や Wiki を切り替えた直後は準備に約1秒かかる。その間に押しても、
+言語や Wiki を切り替えた直後や起動直後は、マイクの準備に数秒かかる（その間、マイクの丸の縁を弧が回る）。
+一覧・打ち込み・画像から探すは、準備を待たずにすぐ使える。準備中にマイクを押しても、
 押したままにしておけば準備ができ次第そのまま聞き取りが始まる。
 
 ### 画像から探す
@@ -88,7 +89,7 @@ Fog 0f War          → Fog of War            71%
 **トレーダーを選んでいる間は、右の列がそのタスクのマップ名になります**（複数なら `Customs +2`）。
 マップのボタンでは、マップが先頭に並び、その行の右の列にもマップ名が入ります。
 
-タスクのマップは Wiki に書かれているものだけです（965件中572件）。
+タスクのマップは Wiki に書かれているものだけです（966件中573件）。
 「渡すだけ」「どこでもよい」タスクは「マップ指定なし」に入ります。
 
 ### 前後のタスクへ移る
@@ -106,7 +107,7 @@ Hidden Route › A Simple Task in a Difficult Place › Extending the Operation 
 - たどっている間は一覧の下に **「✕ 一覧に戻る」** が出て、押すとたどる前の一覧に一発で戻る
 - マウスの戻るボタンで1つ前の一覧に戻る。キーボードでは Alt+← / Alt+→
 
-前後のつながりは英語 Wiki のタスク欄（前のタスク・次のタスク）から取り込んだもの（965件中666件）。
+前後のつながりは英語 Wiki のタスク欄（前のタスク・次のタスク）から取り込んだもの（966件中673件）。
 
 ### 途中まで言えば候補が出る
 
@@ -120,7 +121,7 @@ Hidden Route › A Simple Task in a Difficult Place › Extending the Operation 
 
 | 種別 | 件数 | 例 |
 |---|---|---|
-| タスク | 965 | 「ウェット ジョブ パート フォー」 |
+| タスク | 966 | 「ウェット ジョブ パート フォー」 |
 | マップ | 17 | 「グラウンドゼロ」 |
 | 脱出地点 | 143 | 「グラウンドゼロ エマーコムチェックポイント」 |
 | KAPPA品 | 44 | 「ゴールデンエッグ」 |
@@ -155,7 +156,7 @@ Hidden Route › A Simple Task in a Difficult Place › Extending the Operation 
 **イベント名を言うとそのイベントのタスクだけが並ぶ。**
 
 ```
-「コード ブリーチ」 → KORD BREACH の 19 件
+「コード ブリーチ」 → KORD BREACH の 23 件
 ```
 
 日本語 Wiki にまだ記事が無いタスクは、**英語 Wiki に切り替えれば同じ言葉のまま探し直される。**
@@ -350,7 +351,7 @@ dotnet run --project tools\PathCheck -- "$env:USERPROFILE\app\HeyTarkov\HeyTarko
 ZIP は `%USERPROFILE%\app\HeyTarkov\` に作る。中身は `HeyTarkov.exe` `LICENSE` `README.md` の3つ。
 
 ```
-$v = "1.8.6"
+$v = "1.8.7"
 $stage = "$env:LOCALAPPDATA\HeyTarkov\build\publish"
 $out = "$env:USERPROFILE\app\HeyTarkov"
 
