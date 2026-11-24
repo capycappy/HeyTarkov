@@ -3206,6 +3206,10 @@ public sealed partial class MainForm : Form
         _inChain = _lastRows.Count > 0 && _lastRows.All(r => r.Chain);
         PlaceLeaveChain();
 
+        // Again once the list has settled - selecting a row can scroll it, and
+        // the button has to sit under the rows as they end up.
+        if (_inChain && IsHandleCreated) BeginInvoke(PlaceLeaveChain);
+
         if (_sortHeader is not null)
         {
             _sortHeader.ShowReading = _keysOnly && SelectedLanguage == RecognitionLanguage.Japanese;

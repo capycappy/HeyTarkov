@@ -163,7 +163,10 @@ public sealed class CandidateList : ListBox
     {
         var at = CandidateLayout.For(this, 0, ClientSize.Width);
         var gap = LogicalToDeviceUnits(8);
-        var below = Items.Count > 0 ? GetItemRectangle(Items.Count - 1).Bottom + gap : gap;
+        // From the number of rows, not from where the last one is drawn: right
+        // after a long list is swapped for a short one, the old scroll position
+        // can still be in effect, and the button landed a row too high.
+        var below = Items.Count * ItemHeight + gap;
         var y = Math.Min(below, ClientSize.Height - size.Height - gap);
         return new Point(at.ChainX + at.ChainW - size.Width, Math.Max(0, y));
     }
