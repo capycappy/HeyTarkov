@@ -1595,6 +1595,11 @@ public sealed partial class MainForm : Form
         _hintForms = new JapaneseForms(_lexicon);
 
         LoadCatalog();
+
+        // The list needs the catalog, not the microphone: it is on screen
+        // while the grammar is still being built.
+        ListAllIfIdle();
+
         await RebuildForLanguageAsync();
 
         // The only thing this app asks the network for: whether a newer build
@@ -1796,10 +1801,6 @@ public sealed partial class MainForm : Form
         _settings.Wiki = SelectedWiki;
         _settings.Save();
 
-        // Rows read from a picture, or reached along a chain, came from neither
-        // the box nor the microphone, so searching again would find nothing to
-        // search for. They are kept and laid out again for the new wiki.
-        var kept = _fromImage || _inChain ? _lastRows : null;
         var selected = (_candidates.SelectedItem as CandidateRow)?.Match.Task;
 
         // The wiki decides which tasks exist, so the grammar, the typed search
@@ -1810,17 +1811,16 @@ public sealed partial class MainForm : Form
         _japaneseNames.Clear();
         _latinNames.Clear();
         _otherIndex.Clear();
-        _candidates.Items.Clear();
+
+        // Rows read from a picture, or reached along a chain, came from neither
+        // the box nor the microphone; they are laid out again for the new wiki.
+        // Everything except a spoken search is shown before the grammar is
+        // rebuilt, which is the three seconds the list used to sit empty for.
+        var heard = ShowListNow(selected);
+        if (heard) _candidates.Items.Clear();
 
         await RebuildForLanguageAsync();
-
-        if (kept is not null)
-        {
-            ShowOnThisWiki(kept, selected);
-            return;
-        }
-
-        SearchAgain();
+        if (heard) SearchAgain();
     }
 
     /// <summary>
@@ -1989,7 +1989,37 @@ public sealed partial class MainForm : Form
         // The reading column only exists in Japanese, and typing searches it.
         _latinNames.Clear();
 
+        var heard = ShowListNow((_candidates.SelectedItem as CandidateRow)?.Match.Task);
         await RebuildForLanguageAsync();
+        if (heard) SearchAgain();
+    }
+
+    /// <summary>
+    /// The list for the wiki and language now chosen, at once. Only the
+    /// microphone waits for the grammar; the list, the search box and a
+    /// picture's rows do not need it. Returns true for the one case that does:
+    /// what was last said has to be looked up again in the new grammar.
+    /// </summary>
+    private bool ShowListNow(WikiEntry? selected)
+    {
+        if (_collecting) return false;
+
+        if (_fromImage || _inChain)
+        {
+            ShowOnThisWiki(_lastRows, selected);
+            return false;
+        }
+
+        if (_typedBox.Text.Trim().Length > 0)
+        {
+            ShowCandidatesFor(_typedBox.Text);
+            return false;
+        }
+
+        if (_lastHeard is not null) return true;
+
+        ListAll();
+        return false;
     }
 
     private sealed record SpeechSetup(
@@ -2004,6 +2034,7 @@ public sealed partial class MainForm : Form
         var generation = ++_buildGeneration;
 
         _preparing = true;
+        _dial.Busy = true;
         SetMicState(true, Strings.MicPreparing);
         SetStatus(Strings.PreparingSpeech);
 
@@ -2095,13 +2126,16 @@ public sealed partial class MainForm : Form
                 setup.Rest.TaskCount + setup.Keys.TaskCount, setup.Note);
             ReportCoverage();
 
-            // The window has something to show from the moment it can search.
-            ListAllIfIdle();
+            // Only if nothing is showing yet: the list went up before the
+            // grammar was built, and putting it up again would lose the place
+            // someone had scrolled to in the meantime.
+            if (_candidates.Items.Count == 0 && !_collecting) ListAllIfIdle();
         }
 
         if (setup.Error == "recognizer-missing")
         {
             _preparing = false;
+            _dial.Busy = false;
             _waitingToStart = false;
             SetMicState(false, Strings.MicNoEngine, warn: true);
             SetStatus(Strings.NoRecognizer(language, SpeechService.InstalledRecognizerSummary()));
@@ -2111,6 +2145,7 @@ public sealed partial class MainForm : Form
         if (setup.Speech is null)
         {
             _preparing = false;
+            _dial.Busy = false;
             _waitingToStart = false;
             SetMicState(false, Strings.MicInitFailed, warn: true);
             if (setup.Error is not null) SetStatus(Strings.RecognizerFailed(setup.Error));
@@ -2130,6 +2165,7 @@ public sealed partial class MainForm : Form
             BeginInvoke(() => { if (_holding) _heardLabel.Text = Strings.SpeechDetected; });
 
         _preparing = false;
+        _dial.Busy = false;
         SetMicState(true, Strings.MicReady);
 
         // Held down through the whole rebuild: honour it now rather than making

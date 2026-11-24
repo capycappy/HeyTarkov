@@ -187,6 +187,53 @@ public sealed class LevelDial : Control
 
     // -------------------------------------------------------------- drawing
 
+    /// <summary>
+    /// The microphone is being made ready: a short arc runs round the ring
+    /// until it is. The list and the search box work meanwhile, so this is the
+    /// one place that says what is still being waited for. The timer only runs
+    /// while this is set - an idle window repaints nothing.
+    /// </summary>
+    [System.ComponentModel.DefaultValue(false)]
+    public bool Busy
+    {
+        get => _busy;
+        set
+        {
+            if (_busy == value) return;
+            _busy = value;
+
+            if (value)
+            {
+                _spin ??= new System.Windows.Forms.Timer { Interval = 33 };
+                _spin.Tick -= Spin;
+                _spin.Tick += Spin;
+                _spin.Start();
+            }
+            else
+            {
+                _spin?.Stop();
+            }
+
+            Invalidate();
+        }
+    }
+
+    private bool _busy;
+    private float _spinAngle;
+    private System.Windows.Forms.Timer? _spin;
+
+    private void Spin(object? sender, EventArgs e)
+    {
+        _spinAngle = (_spinAngle + 9f) % 360f;
+        Invalidate();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) _spin?.Dispose();
+        base.Dispose(disposing);
+    }
+
     protected override void OnPaint(PaintEventArgs e)
     {
         var g = e.Graphics;
@@ -218,6 +265,12 @@ public sealed class LevelDial : Control
 
         using (var pen = new Pen(ringColour, ring))
             g.DrawEllipse(pen, box.X + ring / 2f, box.Y + ring / 2f, side - ring, side - ring);
+
+        if (_busy && !_holding)
+        {
+            using var arc = new Pen(Theme.Accent, ring) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+            g.DrawArc(arc, box.X + ring / 2f, box.Y + ring / 2f, side - ring, side - ring, _spinAngle, 80f);
+        }
 
         var span = side * 0.575f;
         var stroke = Math.Max(1.4f, side * 0.028f);
